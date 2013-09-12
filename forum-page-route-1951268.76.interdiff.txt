@@ -1,0 +1,331 @@
+diff --git a/core/modules/forum/forum.admin.inc b/core/modules/forum/forum.admin.inc
+index b3accfb..e938918 100644
+--- a/core/modules/forum/forum.admin.inc
++++ b/core/modules/forum/forum.admin.inc
+@@ -29,7 +29,7 @@ function forum_overview($form, &$form_state) {
+       $term = $form['terms'][$key]['#term'];
+       $form['terms'][$key]['term']['#href'] = 'forum/' . $term->id();
+       unset($form['terms'][$key]['operations']['#links']['delete']);
+-      if (in_array($form['terms'][$key]['#term']->id(), $config->get('containers'))) {
++      if ($term->container->value) {
+         $form['terms'][$key]['operations']['#links']['edit']['title'] = t('edit container');
+         $form['terms'][$key]['operations']['#links']['edit']['href'] = 'admin/structure/forum/edit/container/' . $term->id();
+         // We don't want the redirect from the link so we can redirect the
+diff --git a/core/modules/forum/forum.module b/core/modules/forum/forum.module
+index 20e1d88..d0194ea 100644
+--- a/core/modules/forum/forum.module
++++ b/core/modules/forum/forum.module
+@@ -254,29 +254,6 @@ function forum_uri($forum) {
+ }
+ 
+ /**
+- * Implements hook_taxonomy_term_load().
+- *
+- * @param array $entities
+- *   An array of taxonomy term entities, indexed by tid.
+- */
+-function forum_taxonomy_term_load(array $entities) {
+-  $config = config('forum.settings');
+-  $vid = $config->get('vocabulary');
+-  foreach ($entities as $tid => $entity) {
+-    if ($entity->bundle() != $vid) {
+-      // Not a forum term.
+-      continue;
+-    }
+-
+-    // Determine if the requested term is a container.
+-    if (in_array($entity->id(), $config->get('containers'))) {
+-      $entity->container = TRUE;
+-    }
+-  }
+-  return $entities;
+-}
+-
+-/**
+  * Implements hook_node_validate().
+  *
+  * Checks in particular that the node is assigned only a "leaf" term in the
+@@ -288,7 +265,6 @@ function forum_node_validate(EntityInterface $node, $form) {
+     // vocabulary is selected, not a "container" term.
+     if (!empty($node->taxonomy_forums[$langcode])) {
+       // Extract the node's proper topic ID.
+-      $containers = config('forum.settings')->get('containers');
+       foreach ($node->taxonomy_forums[$langcode] as $delta => $item) {
+         // If no term was selected (e.g. when no terms exist yet), remove the
+         // item.
+@@ -305,7 +281,7 @@ function forum_node_validate(EntityInterface $node, $form) {
+           ':tid' => $term->id(),
+           ':vid' => $term->bundle(),
+         ))->fetchField();
+-        if ($used && in_array($term->id(), $containers)) {
++        if ($used && $term->container->value) {
+           form_set_error('taxonomy_forums', t('The item %forum is a forum container, not a forum. Select one of the forums below instead.', array('%forum' => $term->label())));
+         }
+       }
+@@ -457,14 +433,16 @@ function forum_permission() {
+  * Implements hook_taxonomy_term_delete().
+  */
+ function forum_taxonomy_term_delete(Term $term) {
+-  // For containers, remove the tid from the forum_containers variable.
+-  $config = config('forum.settings');
+-  $containers = $config->get('containers');
+-  $key = array_search($term->id(), $containers);
+-  if ($key !== FALSE) {
+-    unset($containers[$key]);
++  if ($term->container->value) {
++    // For containers, remove the tid from the forum_containers variable.
++    $config = config('forum.settings');
++    $containers = $config->get('containers');
++    $key = array_search($term->id(), $containers);
++    if ($key !== FALSE) {
++      unset($containers[$key]);
++    }
++    $config->set('containers', $containers)->save();
+   }
+-  $config->set('containers', $containers)->save();
+ }
+ 
+ /**
+@@ -756,7 +734,7 @@ function template_preprocess_forum_list(&$variables) {
+     $variables['forums'][$id]->description = filter_xss_admin($forum->description->value);
+     $variables['forums'][$id]->link = url("forum/" . $forum->id());
+     $variables['forums'][$id]->name = check_plain($forum->label());
+-    $variables['forums'][$id]->is_container = !empty($forum->container);
++    $variables['forums'][$id]->is_container = !empty($forum->container->value);
+     $variables['forums'][$id]->zebra = $row % 2 == 0 ? 'odd' : 'even';
+     $row++;
+ 
+@@ -936,3 +914,21 @@ function template_preprocess_forum_submitted(&$variables) {
+ function theme_forum_form(array $variables) {
+   return drupal_render_children($variables['form']);
+ }
++
++/**
++ * Implements hook_entity_field_info().
++ */
++function forum_entity_field_info($entity_type) {
++  $info = array();
++  if ($entity_type == 'taxonomy_term') {
++    $vid = Drupal::config('forum.settings')->get('vocabulary');
++    $info['optional']['container'] = array(
++      'type' => 'boolean_field',
++      'label' => t('Forum container'),
++      'computed' => TRUE,
++      'class' => '\Drupal\forum\ForumContainerItem',
++    );
++    $info['bundle map'][$vid][] = 'container';
++  }
++  return $info;
++}
+diff --git a/core/modules/forum/forum.pages.inc b/core/modules/forum/forum.pages.inc
+deleted file mode 100644
+index 6278bf3..0000000
+--- a/core/modules/forum/forum.pages.inc
++++ /dev/null
+@@ -1,62 +0,0 @@
+-<?php
+-
+-/**
+- * @file
+- * User page callbacks for the Forum module.
+- */
+-
+-/**
+- * Page callback: Prints a forum listing.
+- *
+- * @param $forum_term
+- *   A tree of all forums for a given taxonomy term ID. Defaults to NULL. See
+- *   the return object of forum_forum_load() for a complete definition.
+- *
+- * @return
+- *   A string containing HTML representing the themed forum listing.
+- *
+- * @see forum_menu()
+- */
+-function forum_page($forum_term = NULL) {
+-  $config = config('forum.settings');
+-  $vocabulary = entity_load('taxonomy_vocabulary', $config->get('vocabulary'));
+-
+-  if (!isset($forum_term)) {
+-    // On the main page, display all the top-level forums.
+-    $forum_term = forum_forum_load(0);
+-    // Set the page title to forum's vocabulary name.
+-    drupal_set_title($vocabulary->label());
+-  }
+-
+-  if ($forum_term->id() && array_search($forum_term->id(), $config->get('containers')) === FALSE) {
+-    // Add RSS feed for forums.
+-    drupal_add_feed('taxonomy/term/' . $forum_term->id() . '/feed', 'RSS - ' . $forum_term->label());
+-  }
+-
+-  if (empty($forum_term->forums) && empty($forum_term->parents)) {
+-    // Root of empty forum.
+-    drupal_set_title(t('No forums defined'));
+-  }
+-
+-  $forum_per_page = $config->get('topics.page_limit');
+-  $sort_by = $config->get('topics.order');
+-
+-  if (empty($forum_term->container)) {
+-    $topics = forum_get_topics($forum_term->id(), $sort_by, $forum_per_page);
+-  }
+-  else {
+-    $topics = '';
+-  }
+-
+-  $build = array(
+-    '#theme' => 'forums',
+-    '#forums' => $forum_term->forums,
+-    '#topics' => $topics,
+-    '#parents' => $forum_term->parents,
+-    '#tid' => $forum_term->id(),
+-    '#sortby' => $sort_by,
+-    '#forums_per_page' => $forum_per_page,
+-  );
+-  $build['#attached']['css'][] = drupal_get_path('module', 'forum') . '/css/forum.module.css';
+-  return $build;
+-}
+diff --git a/core/modules/forum/lib/Drupal/forum/Controller/ForumController.php b/core/modules/forum/lib/Drupal/forum/Controller/ForumController.php
+index 3fc3173..0795aed 100644
+--- a/core/modules/forum/lib/Drupal/forum/Controller/ForumController.php
++++ b/core/modules/forum/lib/Drupal/forum/Controller/ForumController.php
+@@ -116,12 +116,12 @@ public function forumPage(TermInterface $taxonomy_term) {
+     // Get forum details.
+     $taxonomy_term->forums = $this->forumManager->getChildren($this->config->get('vocabulary'), $taxonomy_term->id());
+     $taxonomy_term->parents = $this->forumManager->getParents($taxonomy_term->id());
+-    if ($taxonomy_term->container) {
++    if ($taxonomy_term->container->value) {
+       // Add RSS feed for forums.
+       drupal_add_feed('taxonomy/term/' . $taxonomy_term->id() . '/feed', 'RSS - ' . $taxonomy_term->label());
+     }
+ 
+-    if (!$taxonomy_term->container) {
++    if (!$taxonomy_term->container->value) {
+       $topics = $this->forumManager->getTopics($taxonomy_term->id());
+     }
+     else {
+diff --git a/core/modules/forum/lib/Drupal/forum/ForumContainerItem.php b/core/modules/forum/lib/Drupal/forum/ForumContainerItem.php
+new file mode 100644
+index 0000000..a2e1da6
+--- /dev/null
++++ b/core/modules/forum/lib/Drupal/forum/ForumContainerItem.php
+@@ -0,0 +1,41 @@
++<?php
++
++/**
++ * @file
++ * Contains \Drupal\forum\ForumContainer.
++ */
++
++namespace Drupal\forum;
++
++use Drupal\Core\Entity\Plugin\DataType\BooleanItem;
++
++/**
++ * The field item for the 'container' field.
++ */
++class ForumContainerItem extends BooleanItem {
++
++  /**
++   * Definitions of the contained properties.
++   *
++   * @see self::getPropertyDefinitions()
++   *
++   * @var array
++   */
++  static $propertyDefinitions;
++
++  /**
++   * Implements \Drupal\Core\TypedData\ComplexDataInterface::getPropertyDefinitions().
++   */
++  public function getPropertyDefinitions() {
++
++    if (!isset(static::$propertyDefinitions)) {
++      static::$propertyDefinitions['value'] = array(
++        'type' => 'boolean',
++        'label' => t('Boolean value'),
++        'class' => '\Drupal\forum\ForumContainerValue',
++        'computed' => TRUE,
++      );
++    }
++    return static::$propertyDefinitions;
++  }
++}
+diff --git a/core/modules/forum/lib/Drupal/forum/ForumContainerValue.php b/core/modules/forum/lib/Drupal/forum/ForumContainerValue.php
+new file mode 100644
+index 0000000..a9beda4
+--- /dev/null
++++ b/core/modules/forum/lib/Drupal/forum/ForumContainerValue.php
+@@ -0,0 +1,56 @@
++<?php
++
++/**
++ * @file
++ * Contains \Drupal\forum\ForumContainerValue.
++ */
++
++namespace Drupal\forum;
++
++use Drupal\Core\TypedData\TypedData;
++use Drupal\Core\TypedData\ReadOnlyException;
++use InvalidArgumentException;
++
++/**
++ * A computed property for the boolean value of the 'container' field.
++ */
++class ForumContainerValue extends TypedData {
++
++  /**
++   * Implements \Drupal\Core\TypedData\TypedDataInterface::getValue().
++   */
++  public function getValue() {
++    if (!isset($this->value)) {
++      if (!isset($this->parent)) {
++        throw new InvalidArgumentException('Computed properties require context for computation.');
++      }
++      $field = $this->parent->getParent();
++      $entity = $field->getParent();
++      $tid = $entity->tid->target_id;
++      $config = $this->getConfig();
++      $this->value = ($entity->bundle() == $config->get('vocabulary') && in_array($entity->id(), $config->get('containers')));
++    }
++    return $this->value;
++  }
++
++  /**
++   * Implements \Drupal\Core\TypedData\TypedDataInterface::setValue().
++   */
++  public function setValue($value, $notify = TRUE) {
++    if (isset($value)) {
++      throw new ReadOnlyException('Unable to set a computed property.');
++    }
++  }
++
++  /**
++   * Retrieves the forum settings config object.
++   *
++   * @todo Remove when TypedData objects can receive injected dependencies.
++   *   See https://drupal.org/node/2053415.
++   * @return
++   */
++  protected function getConfig() {
++    return \Drupal::config('forum.settings');
++  }
++
++}
+diff --git a/core/modules/forum/lib/Drupal/forum/ForumManager.php b/core/modules/forum/lib/Drupal/forum/ForumManager.php
+index 0bee43d..74ff0f1 100644
+--- a/core/modules/forum/lib/Drupal/forum/ForumManager.php
++++ b/core/modules/forum/lib/Drupal/forum/ForumManager.php
+@@ -424,11 +424,6 @@ public function getChildren($vid, $tid) {
+     $forums = array();
+     $_forums = taxonomy_get_tree($vid, $tid, NULL, TRUE);
+     foreach ($_forums as $forum) {
+-      // Determine if the child term is a container.
+-      if (in_array($forum->id(), $this->configFactory->get('forum.settings')->get('containers'))) {
+-        $forum->container = TRUE;
+-      }
+-
+       // Merge in the topic and post counters.
+       if (($count = $this->getForumStatistics($forum->id()))) {
+         $forum->num_topics = $count->topic_count;

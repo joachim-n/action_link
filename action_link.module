@@ -1,0 +1,91 @@
+<?php
+
+/**
+ * @file action_link.module
+ * TODO: Enter file description here.
+ */
+ 
+/*
+
+- 3 types of actionLink plugin:
+  - Confirm form
+  - page reload
+  - AJAX
+
+A derivative plugin (like blocks, apparently) is one of these with settings for:
+  - various text strings
+  - callbacks for validation
+  - callbacks for action
+  - toggling behaviour stuff
+  - all that jazz
+  
+So therefore Flag has a 'template' it applies for some of these properties, as 
+obviously things like the callbacks are not set by the admin user.
+
+
+*/ 
+
+/**
+ * Implements hook_menu().
+ */
+function action_link_menu() {
+  $items = array();
+
+  // Our admin page to list robots.
+  $items['admin/structure/action_link'] = array(
+    'title' => 'Config Entity Example',
+    'route_name' => 'action_link_list',
+  );
+
+  // Local action to add a robot.
+  $items['admin/structure/action_link/add'] = array(
+    'title' => 'Add robot',
+    'route_name' => 'action_link_add',
+    'type' => MENU_LOCAL_ACTION,
+    'weight' => 1,
+  );
+
+  return $items;
+}
+
+
+
+
+function action_link_page_confirm($action_link, $new_state, $entity_type, $entity_id) {  
+  dsm(func_get_args());
+  
+  /*
+  load the AL plugin
+  - does the new state make sense?
+  - is access allowed for the user?
+    - get the current state link controller
+    - return result appropriate
+  
+  
+  */
+  
+  
+  $vars = get_class_vars('Drupal\Core\Entity\Annotation\EntityType');
+  dsm($vars);
+  
+  return '!!!';
+}
+
+function action_link_page_four($one, $two, $three, $four) {
+  return '4!';
+}
+
+
+  
+  /*
+  $items['flag/confirm/%/%flag/%'] = array(
+    'title' => 'Flag confirm',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('flag_confirm', 2, 3, 4),
+    'access callback' => 'user_access',
+    'access arguments' => array('access content'),
+    'file' => 'includes/flag.pages.inc',
+    'type' => MENU_CALLBACK,
+  );
+  */
+

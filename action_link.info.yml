@@ -1,0 +1,6 @@
+name: 'Action link'
+type: module
+description: 'TODO: Description of module'
+core: 8.x
+files:
+  - tests/action_link.test

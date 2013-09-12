@@ -1,0 +1,34 @@
+action_link_list:
+  pattern: '/admin/structure/action_link'
+  defaults:
+    _entity_list: 'action_link'
+  requirements:
+    # TODO.
+    _access: 'TRUE'
+    
+action_link_add:
+  pattern: '/admin/structure/action_link/add'
+  defaults:
+    _entity_form: action_link.add
+  requirements:
+    # TODO.
+    _access: 'TRUE'
+
+
+# admin/structure/action_link
+
+# TODO: make these dynamic routes set by the plugin.
+# http://localhost:8888/8-drupal/action_link/confirm/toggle/flag/node/1
+action_link_confirm:
+  pattern: '/action_link/confirm/{action_link}/{new_state}/{entity_type}/{entity_id}'
+  defaults:
+    _content: 'action_link_page_confirm'
+  requirements:
+    _access: 'TRUE'
+
+action_link_four:
+  pattern: '/action_link_x/confirm/{one}/{two}/{three}/{four}'
+  defaults:
+    _content: 'action_link_page_four'
+  requirements:
+    _access: 'TRUE'

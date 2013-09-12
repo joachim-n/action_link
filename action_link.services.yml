@@ -1,0 +1,4 @@
+services:
+  plugin.manager.action_link:
+    class: Drupal\action_link\ActionLinkPluginManager
+    arguments: ['@container.namespaces', '@cache.cache', '@language_manager', '@module_handler']
