@@ -7,12 +7,12 @@
 
 namespace Drupal\action_link;
 
-use Drupal\Core\Entity\ActionLinkFormController;
+use Drupal\Core\Entity\EntityFormController;
 
 /**
  * Base form controller for robot edit forms.
  */
-class RobotFormController extends EntityFormController {
+class ActionLinkFormController extends EntityFormController {
 
   /**
    * Overrides Drupal\Core\Entity\EntityFormController::form().
