@@ -33,13 +33,13 @@ function action_link_menu() {
 
   // Our admin page to list robots.
   $items['admin/structure/action_link'] = array(
-    'title' => 'Config Entity Example',
+    'title' => 'Action links',
     'route_name' => 'action_link_list',
   );
 
-  // Local action to add a robot.
+  // TODO: will we even have this??
   $items['admin/structure/action_link/add'] = array(
-    'title' => 'Add robot',
+    'title' => 'Add action link',
     'route_name' => 'action_link_add',
     'type' => MENU_LOCAL_ACTION,
     'weight' => 1,
