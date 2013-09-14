@@ -91,3 +91,40 @@ function action_link_page_four($one, $two, $three, $four) {
   );
   */
 
+/**
+ * Implements hook_field_extra_fields().
+ */
+function action_link_field_extra_fields() {
+  dsm("extra fields!");
+  $extra['node']['article']['display']['action_link_foo'] = array(
+    'label' => t('Action link!'),
+    'description' => 'action link!! desc!',
+  );
+  
+  return $extra;
+}
+
+/**
+ * Implements hook_entity_view().
+ */
+function action_link_entity_view(\Drupal\Core\Entity\EntityInterface $entity, \Drupal\entity\Entity\EntityDisplay $display, $view_mode, $langcode) {
+  
+  $info = Drupal\field\Field::fieldInfo()->getBundleExtraFields($entity->entityType(), $entity->bundle());
+  dsm($info);
+  
+  // Fnd the things with our prefix. 
+  
+  // Only do the extra work if the component is configured to be displayed.
+  // This assumes a 'mymodule_addition' extra field has been defined for the
+  // entity bundle in hook_field_extra_fields().
+  if ($display->getComponent('action_link_foo')) {
+    $entity->content['action_link_foo'] = array(
+      // Here we need:
+      // - the action link
+      '#prefix' => '<div>',
+      '#markup' => 'Heyhyaction_link_entity_view!!',
+      '#suffix' => '</div>',
+      //'#theme' => 'mymodule_my_additional_field',
+    );
+  }
+}
