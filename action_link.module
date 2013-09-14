@@ -48,7 +48,9 @@ function action_link_menu() {
   return $items;
 }
 
-
+function action_link_load($action_link_id) {
+  return entity_load('action_link', $action_link_id);
+}
 
 
 function action_link_page_confirm($action_link, $new_state, $entity_type, $entity_id) {  
