@@ -1,3 +1,5 @@
+# admin UI. 
+# hopefully soon obsolete.
 action_link_list:
   pattern: '/admin/structure/action_link'
   defaults:
@@ -14,11 +16,31 @@ action_link_add:
     # TODO.
     _access: 'TRUE'
 
+action_link_edit:
+  pattern: '/admin/structure/action_link/manage/{action_link}'
+  defaults:
+    _entity_form: action_link.edit
+  requirements:
+    # This (TODO! does it?) uses our entity access controller.
+    _entity_access: action_link.update
 
 # admin/structure/action_link
 
-# TODO: make these dynamic routes set by the plugin.
-# http://localhost:8888/8-drupal/action_link/confirm/toggle/flag/node/1
+
+# TODO: make these dynamic routes defined by the plugin?
+# http://localhost:8888/8-drupal/
+# eg: action_link/confirm/cake/eatit/node/1
+
+# wacky thought: what if we just make ALL link type available, as a 
+# wildcard loader? {link_plugin_id}
+# then the config entity just checks to see use of that link is valid.
+action_link_normal:
+  pattern: '/action_link/{action_link_plugin_style_id}/{config_entity_type}/{config_id}/{entity_type}/{entity_id}/{new_state}'
+  defaults:
+    _content: '\Drupal\action_link\Controller\ActionLinkController::normal'
+  requirements:
+    _access: 'TRUE'
+
 action_link_confirm:
   pattern: '/action_link/confirm/{action_link}/{new_state}/{entity_type}/{entity_id}'
   defaults:

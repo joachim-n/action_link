@@ -68,7 +68,7 @@ class ActionLinkFormController extends EntityFormController {
   public function submit(array $form, array &$form_state) {
     // This is just here for the purposes of demonstration: the parent class
     // does everything we need.
-    parent::validate($form, $form_state);
+    parent::submit($form, $form_state);
   }
 
   /**
@@ -79,6 +79,7 @@ class ActionLinkFormController extends EntityFormController {
    */
   public function save(array $form, array &$form_state) {
     $action_link = $this->entity;
+    dsm($action_link);
     $status = $action_link->save();
 
     $uri = $action_link->uri();
@@ -91,7 +92,7 @@ class ActionLinkFormController extends EntityFormController {
       watchdog('contact', 'Robot %label has been added.', array('%label' => $action_link->label()), WATCHDOG_NOTICE, l(t('Edit'), $uri['path'] . '/edit'));
     }
 
-    $form_state['redirect'] = 'examples/config_entity_example';
+    $form_state['redirect'] = 'admin/structure/action_link';
   }
 
 }

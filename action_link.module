@@ -31,7 +31,7 @@ obviously things like the callbacks are not set by the admin user.
 function action_link_menu() {
   $items = array();
 
-  // Our admin page to list robots.
+  // Our admin page to list ALs.
   $items['admin/structure/action_link'] = array(
     'title' => 'Action links',
     'route_name' => 'action_link_list',
@@ -44,6 +44,15 @@ function action_link_menu() {
     'type' => MENU_LOCAL_ACTION,
     'weight' => 1,
   );
+  $items['admin/structure/action_link/manage/%robot'] = array(
+    'title' => 'Edit robot',
+    'route_name' => 'action_link_edit',
+  );
+  $items['admin/structure/action_link/manage/%robot/edit'] = array(
+    'title' => 'Edit',
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+  );
+  
 
   return $items;
 }
@@ -92,10 +101,30 @@ function action_link_page_four($one, $two, $three, $four) {
   */
 
 /**
+ * Implements hook_entity_field_info().
+ */
+function Xaction_link_entity_field_info($entity_type) {
+  /*
+  $info['definitions']['action_link_foo'] = array(
+    'type' => 'string_item',
+    'list' => FALSE,
+    'label' => t('The text'),
+    'description' => t('A text property added by mymodule.'),
+    'computed' => TRUE,
+    'configurable' => TRUE,
+    'class' => '\Drupal\mymodule\EntityComputedText',
+  );
+  
+  //dsm($info);
+  return $info;
+  */
+}  
+
+/**
  * Implements hook_field_extra_fields().
  */
 function action_link_field_extra_fields() {
-  dsm("extra fields!");
+  //dsm("extra fields!");
   $extra['node']['article']['display']['action_link_foo'] = array(
     'label' => t('Action link!'),
     'description' => 'action link!! desc!',
@@ -118,6 +147,9 @@ function action_link_entity_view(\Drupal\Core\Entity\EntityInterface $entity, \D
   // This assumes a 'mymodule_addition' extra field has been defined for the
   // entity bundle in hook_field_extra_fields().
   if ($display->getComponent('action_link_foo')) {
+    $action_link = action_link_load('cake');
+    dsm($action_link);
+    
     $entity->content['action_link_foo'] = array(
       // Here we need:
       // - the action link

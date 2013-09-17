@@ -41,13 +41,14 @@ use Drupal\Core\Annotation\Translation;
  *   module = "action_link",
  *   controllers = {
  *     "storage" = "Drupal\Core\Config\Entity\ConfigStorageController",
- *     "access" = "Drupal\Core\Entity\ConfigEntityAccessControllerBase",
- *     "list" = "Drupal\Core\Entity\ConfigEntityListControllerBase",
+ *     "access"  = "Drupal\action_link\ActionLinkAccessController",
+ *     "list"    = "Drupal\Core\Config\Entity\ConfigEntityListController",
  *     "form" = {
  *       "add" = "Drupal\action_link\ActionLinkFormController",
  *       "edit" = "Drupal\action_link\ActionLinkFormController"
  *     }
  *   },
+ *   access_controller_permission = "administer action links",
  *   config_prefix = "action_link.action_link",
  *   entity_keys = {
  *     "id" = "id",
@@ -57,6 +58,7 @@ use Drupal\Core\Annotation\Translation;
  * )
  */
 class ActionLink extends ConfigEntityBase {
+  // @todo: interface!
 
   /**
    * The action link ID.
@@ -83,6 +85,16 @@ class ActionLink extends ConfigEntityBase {
       'path' => 'admin/structure/action_link/manage/' . $this->id(),
       'options' => array(),
     );
+  }
+
+  /**
+   * Returns the action link plugin for this entity.
+   */
+  public function getLinkControllerPlugin() {
+    // @todo: plugin bag stuff.
+    // @todo: plugin manager etc
+    // Fake it for now!
+    return new \Drupal\action_link\Plugin\ActionLinkController\Flag($this);
   }
 
 }
