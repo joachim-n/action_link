@@ -71,7 +71,10 @@ class ActionLink extends ConfigEntityBase {
    * @var string
    */
   public $label;
-
+  
+  // CHEAT FOR NOW!
+  public $toggle_property = 'status';
+  
   /**
    * {@inheritdoc}
    *
@@ -93,7 +96,32 @@ class ActionLink extends ConfigEntityBase {
     // @todo: plugin manager etc
     // @todo: pass on our settings to the plugin
     // Fake it for now!
-    return new \Drupal\action_link\Plugin\ActionLinkController\Flag($this);
+    return new \Drupal\action_link\Plugin\ActionLinkController\EntityProperty($this);
+  }
+
+  /**
+   * Returns the path for a link.
+   */
+  public function getLinkPath($entity) {
+    // TODO: go through to the plugin!!!!
+    $config_entity_type = $this->entityType();
+    // TODO!
+    $config_id = 'cake';
+    
+    $entity_type = $entity->entityType();
+    $entity_id = $entity->id();
+    
+    // TODO!
+    $link_style = 'reload';
+    
+    $target_entity = entity_load($entity_type, $entity_id);
+    $current_property_value = $target_entity->get($this->toggle_property)->value;
+    dsm($target_entity->get($this->toggle_property)->value);
+    
+    dsm($current_property_value);
+    $new_property_value = (int) !$current_property_value;
+    
+    return "action_link/$link_style/$config_entity_type/$config_id/$entity_type/$entity_id/$new_property_value";
   }
 
 }
