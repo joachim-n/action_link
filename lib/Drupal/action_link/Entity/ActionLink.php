@@ -3,8 +3,6 @@
 /**
  * @file
  * Contains Drupal\action_link\Entity\ActionLink.
- *
- * This contains our entity class.
  */
 
 namespace Drupal\action_link\Entity;
@@ -93,6 +91,7 @@ class ActionLink extends ConfigEntityBase {
   public function getLinkControllerPlugin() {
     // @todo: plugin bag stuff.
     // @todo: plugin manager etc
+    // @todo: pass on our settings to the plugin
     // Fake it for now!
     return new \Drupal\action_link\Plugin\ActionLinkController\Flag($this);
   }
