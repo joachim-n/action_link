@@ -139,7 +139,7 @@ function action_link_field_extra_fields() {
 function action_link_entity_view(\Drupal\Core\Entity\EntityInterface $entity, \Drupal\entity\Entity\EntityDisplay $display, $view_mode, $langcode) {
   
   $info = Drupal\field\Field::fieldInfo()->getBundleExtraFields($entity->entityType(), $entity->bundle());
-  dsm($info);
+  //dsm($info);
   
   // Fnd the things with our prefix. 
   
@@ -148,13 +148,23 @@ function action_link_entity_view(\Drupal\Core\Entity\EntityInterface $entity, \D
   // entity bundle in hook_field_extra_fields().
   if ($display->getComponent('action_link_foo')) {
     $action_link = action_link_load('cake');
-    dsm($action_link);
+    //dsm($action_link);
+    
+    $config_entity_type = $action_link->entityType();
+    $config_id = 'cake';
+    
+    $entity_type = $entity->entityType();
+    $entity_id = $entity->id();
+    
+    $link_style = 'reload';
+    
+    $action_link_url = "action_link/$link_style/$config_entity_type/$config_id/$entity_type/$entity_id/flag";
     
     $entity->content['action_link_foo'] = array(
       // Here we need:
       // - the action link
       '#prefix' => '<div>',
-      '#markup' => 'Heyhyaction_link_entity_view!!',
+      '#markup' => l('link text!', $action_link_url, array('query' => array('destination' => current_path()))),
       '#suffix' => '</div>',
       //'#theme' => 'mymodule_my_additional_field',
     );

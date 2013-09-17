@@ -33,6 +33,7 @@ class ActionLinkController {
    *  DESC
    */
   // action_link/reload/flag/bookmarks/node/1/flag
+  // action_link/reload/action_link/cake/node/1/flag
   function normal($action_link_plugin_style_id, $config_entity_type, $config_id, $entity_type, $entity_id, $new_state) {
     // WTF, $action_link doesn't autoload, when the name of another entity type
     //// did and caused me hours of headdesking??? WTF, D8?
@@ -45,7 +46,8 @@ class ActionLinkController {
     //  - any strings we output, such as messages and link text
     //  - what style of link to return (?? or should we just return the same
     //    style we came in on?)
-    //$config_entity = entity_load('flag', 'bookmark');
+    $config_entity = entity_load($config_entity_type, $config_id);
+    dsm($config_entity);
     //$target_entity = entity_load('node', 1);
     
     // 2. Get the action link controller plugin from the config entity.
