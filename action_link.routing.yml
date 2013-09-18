@@ -47,10 +47,3 @@ action_link_confirm:
     _content: 'action_link_page_confirm'
   requirements:
     _access: 'TRUE'
-
-action_link_four:
-  pattern: '/action_link_x/confirm/{one}/{two}/{three}/{four}'
-  defaults:
-    _content: 'action_link_page_four'
-  requirements:
-    _access: 'TRUE'

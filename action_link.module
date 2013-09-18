@@ -88,10 +88,6 @@ function action_link_page_confirm($action_link, $new_state, $entity_type, $entit
   return '!!!';
 }
 
-function action_link_page_four($one, $two, $three, $four) {
-  return '4!';
-}
-
 
 
   /*
