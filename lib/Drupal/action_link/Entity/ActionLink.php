@@ -119,7 +119,7 @@ class ActionLink extends ConfigEntityBase implements ActionLinkConfigInterface {
    *  A render array containing the link.
    */
   public function buildLink($entity) {
-    // TODO moveALL TTHIS TO THE STYLE!
+    // TODO: move some or all of this to the style plugin.
     $action_link_url = $this->getLinkPath($entity);
 
     $build = array(
