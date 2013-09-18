@@ -15,7 +15,7 @@ Each plugin:
 - gets loaded on the router path
 - knows from the path the config entity it has to go and work with.
   thus:
-  action_link/CONF-TYPE/CONF-ID/TARGET-TYPE/TARGET-ID/NEW-STATE
+  action_link/LINK-STYLE/CONF-TYPE/CONF-ID/TARGET-TYPE/TARGET-ID/NEW-STATE
 
   This could be one of:
   - Flag
