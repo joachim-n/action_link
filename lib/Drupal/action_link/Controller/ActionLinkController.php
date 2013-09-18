@@ -102,15 +102,13 @@ class ActionLinkController {
     ));
 
     // Change the state of the target entity.
-    $action_link_plugin->changeState($new_state);
+    $next_state = $action_link_plugin->changeState($new_state);
 
-    // Argh, confirm form will def want something else, won't it?
-    // we output a whole damn form!!!
+    // Argh, confirm form will want something else, won't it?
+    // We output a form, BUT we have to do that BEFORE the state change!!!
 
     // Get the output from the link style plugin.
-    $action_link_style_plugin->getRequestOutput();
-
-    return $action_link_style_plugin->getRequestOutput();
+    return $action_link_style_plugin->getRequestOutput($next_state);
   }
 
 }

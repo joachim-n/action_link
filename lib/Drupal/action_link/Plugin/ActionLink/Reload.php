@@ -31,8 +31,12 @@ class Reload  {
    * Return the output for a request on an action link.
    *
    * The reload link style causes a reload of the page the link was on.
+   *
+   * @param $next_state
+   *  The state that the target entity can be advanced to next.
+   *  (This will be needed by ajax link type.)
    */
-  function getRequestOutput() {
+  function getRequestOutput($next_state) {
     return new RedirectResponse(url(current_path(), array('absolute' => TRUE)));
   }
 
