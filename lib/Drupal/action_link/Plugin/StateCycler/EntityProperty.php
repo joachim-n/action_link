@@ -10,7 +10,9 @@ namespace Drupal\action_link\Plugin\StateCycler;
 use Drupal\action_link\StateCyclerInterface;
 
 /**
- * Toggles an entity property, eg published / unpublished
+ * Toggles an entity property, eg published / unpublished.
+ *
+ * @todo: use strings 'true' and 'false' in the links for nicer URLs.
  */
 class EntityProperty implements StateCyclerInterface {
 
