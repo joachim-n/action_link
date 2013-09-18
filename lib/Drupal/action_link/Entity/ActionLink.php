@@ -107,9 +107,12 @@ class ActionLink extends ConfigEntityBase implements ActionLinkConfigInterface {
   }
 
   /**
-   * Returns the action link plugin for this entity.
+   * Returns the state cycler plugin for this entity.
+   *
+   * @param $target_entity
+   *  The target entity to act on.
    */
-  public function getStateCyclerPlugin() {
+  public function getStateCyclerPlugin($target_entity) {
     // @todo: plugin bag stuff.
     // @todo: plugin manager etc
     // @todo: pass on our settings to the plugin.
