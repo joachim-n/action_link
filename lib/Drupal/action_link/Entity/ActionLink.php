@@ -11,6 +11,7 @@ use Drupal\Core\Config\Entity\ConfigEntityBase;
 use Drupal\Core\Entity\EntityStorageControllerInterface;
 use Drupal\Core\Entity\Annotation\EntityType;
 use Drupal\Core\Annotation\Translation;
+use Drupal\action_link\ActionLinkConfigInterface;
 
 /**
  * Defines the ActionLink entity.
@@ -55,7 +56,7 @@ use Drupal\Core\Annotation\Translation;
  *   }
  * )
  */
-class ActionLink extends ConfigEntityBase {
+class ActionLink extends ConfigEntityBase implements ActionLinkConfigInterface {
   // @todo: interface!
 
   /**

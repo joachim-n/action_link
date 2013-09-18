@@ -11,7 +11,10 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
- * Controller routines for ...TODO.
+ * Default Response Controller for action links.
+ *
+ * This works with config entities to perform the action, which must implement
+ * the ActionLinkConfigInterface.
  */
 class ActionLinkController {
 
