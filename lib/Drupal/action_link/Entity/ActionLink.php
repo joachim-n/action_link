@@ -89,6 +89,23 @@ class ActionLink extends ConfigEntityBase implements ActionLinkConfigInterface {
     );
   }
 
+  public function getLinkStylePluginId() {
+    // TODO! this is faked!
+    $link_style_plugin_id = 'reload';
+    return $link_style_plugin_id;
+  }
+
+  /**
+   *
+   */
+  public function getLinkStylePlugin() {
+    // TODO! this is faked!
+    $link_style_plugin_id = $this->getLinkStylePlugin();
+
+    $link_style_plugin_manager = \Drupal::service('plugin.manager.action_link');
+    $action_link_style_plugin = $link_style_plugin_manager->createInstance($link_style_plugin_id, array());
+  }
+
   /**
    * Returns the action link plugin for this entity.
    */
@@ -111,6 +128,7 @@ class ActionLink extends ConfigEntityBase implements ActionLinkConfigInterface {
    *  A render array containing the link.
    */
   public function buildLink($entity) {
+    // TODO moveALL TTHIS TO THE STYLE!
     $action_link_url = $this->getLinkPath($entity);
 
     $build = array(
@@ -137,7 +155,7 @@ class ActionLink extends ConfigEntityBase implements ActionLinkConfigInterface {
     $entity_id = $entity->id();
 
     // TODO!
-    $link_style = 'reload';
+    $link_style_plugin_id = $this->getLinkStylePluginId();
 
     $target_entity = entity_load($entity_type, $entity_id);
     $current_property_value = $target_entity->get($this->toggle_property)->value;
@@ -146,7 +164,7 @@ class ActionLink extends ConfigEntityBase implements ActionLinkConfigInterface {
     dsm($current_property_value);
     $new_property_value = (int) !$current_property_value;
 
-    return "action_link/$link_style/$config_entity_type/$config_id/$entity_type/$entity_id/$new_property_value";
+    return "action_link/$link_style_plugin_id/$config_entity_type/$config_id/$entity_type/$entity_id/$new_property_value";
   }
 
 }
