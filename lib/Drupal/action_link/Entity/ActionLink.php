@@ -127,7 +127,7 @@ class ActionLink extends ConfigEntityBase implements ActionLinkConfigInterface {
       // Here we need:
       // - the action link
       '#prefix' => '<div>',
-      '#markup' => l('link text!', $action_link_url, array('query' => array('destination' => current_path()))),
+      '#markup' => l('action link!', $action_link_url, array('query' => array('destination' => current_path()))),
       '#suffix' => '</div>',
     );
 
