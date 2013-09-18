@@ -100,6 +100,30 @@ class ActionLink extends ConfigEntityBase implements ActionLinkConfigInterface {
     return new \Drupal\action_link\Plugin\StateCycler\EntityProperty($this);
   }
 
+
+  /**
+   * Generate the render array for the action link.
+   *
+   * @param $entity
+   *  The entity to create a link for.
+   *
+   * @return
+   *  A render array containing the link.
+   */
+  public function buildLink($entity) {
+    $action_link_url = $this->getLinkPath($entity);
+
+    $build = array(
+      // Here we need:
+      // - the action link
+      '#prefix' => '<div>',
+      '#markup' => l('link text!', $action_link_url, array('query' => array('destination' => current_path()))),
+      '#suffix' => '</div>',
+    );
+
+    return $build;
+  }
+
   /**
    * Returns the path for a link.
    */
