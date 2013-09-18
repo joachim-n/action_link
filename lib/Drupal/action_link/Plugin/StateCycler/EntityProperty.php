@@ -56,6 +56,7 @@ class EntityProperty implements StateCyclerInterface {
     // opposite of the current value.
     $current_property_value = $this->target_entity->get($this->toggle_property)->value;
 
+    // For boolean entity properties, use an integer value for the states.
     $next_state = (int) !$current_property_value;
 
     return $next_state;
@@ -77,9 +78,7 @@ class EntityProperty implements StateCyclerInterface {
     $this->target_entity->{$this->toggle_property} = $new_state;
     $this->target_entity->save();
 
-    // For boolean entity properties, return an integer value.
-    $next_state = (int) !$new_state;
-    return $next_state;
+    return $this->getNextState();
   }
 
 }
