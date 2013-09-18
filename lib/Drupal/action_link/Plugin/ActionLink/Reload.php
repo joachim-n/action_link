@@ -13,6 +13,11 @@ use Drupal\Component\Annotation\Plugin;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
+ * The reload action link style.
+ *
+ * This link style causes a reload of the page.
+ *
+ * TODO: token validation!
  *
  * @Plugin(
  *   id = "reload",
@@ -30,5 +35,5 @@ class Reload  {
   function getRequestOutput() {
     return new RedirectResponse(url(current_path(), array('absolute' => TRUE)));
   }
-  
+
 }
