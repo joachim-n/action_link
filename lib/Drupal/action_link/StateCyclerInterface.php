@@ -14,10 +14,14 @@ namespace Drupal\action_link;
  * when the user when follows an action link.
  *
  * Furthermore, the state cycler controls access to this, and thus should be
- * checked when outputting an action link. 
+ * checked when outputting an action link.
  */
 interface StateCyclerInterface {
 
+  function actionIsValid();
 
+  function userHasAccess();
+
+  function changeState($entity_type, $entity_id, $new_state);
 
 }
