@@ -14,25 +14,11 @@ use Drupal\Core\Annotation\Translation;
 use Drupal\action_link\ActionLinkConfigInterface;
 
 /**
- * Defines the ActionLink entity.
+ * Defines the ActionLink config entity type.
  *
- * The lines below are a plugin annotation. These define the entity type to the
- * entity type manager.
- *
- * The properties in the annotation are as follows:
- * TODO: add a @see to the annotation docs, assuming these exist!!!
- *  - id: The machine name of the entity type.
- *  - label: The human-readable label of the entity type.
- *    TODO: explain @Translation.
- *  - module: The name of the module that provides this.
- *    TODO: is this necessary?
- *  - controllers: An array specifying controller classes that handle various
- *    aspects of the entity type's functionality.
- *  - config_prefix: This tells the config system the prefix to use for
- *    filenames when storing entities. This means that the default entity we
- *    include in our module has the filename
- *    'action_link.action_link.marvin.yml'.
- *  - entity_keys: TODO.
+ * An action link config entity is a generalized user of action links: it may
+ * work with the EntityProperty toggler, or other state cyclers, including
+ * presumably one that does nothing except fire rules.
  *
  * @EntityType(
  *   id = "action_link",
