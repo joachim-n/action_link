@@ -42,6 +42,22 @@ class Flag implements StateCyclerInterface {
     return TRUE;
   }
 
+  /**
+   * Get the next state for the target entity.
+   *
+   * @return
+   *  The name of the next state the target entity can be advanced to.
+   */
+  function getNextState() {
+    // For the flag next statewe just flip flag/unflag.
+    // TODO: find out if the target entity is flagged.
+    $current_flagging_status = 'flag';
+
+    $next_state = 'unflag';
+
+    return $next_state;
+  }
+
   function changeState($entity_id, $entity, $parameters) {
     // TODO.
     // Load the flag, load or create a flagging entity, etc etc.
