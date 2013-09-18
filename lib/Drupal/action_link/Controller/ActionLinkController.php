@@ -37,6 +37,31 @@ class ActionLinkController {
    */
   // action_link/reload/flag/bookmarks/node/1/flag
   // action_link/reload/action_link/cake/node/1/flag
+  /**
+   * Return output for an action link page.
+   *
+   * @param $action_link_plugin_style_id
+   *  The style plugin ID. This determines the format of the output. For
+   *  example, the reload plugin will reload the page that the link was one; the
+   *  AJAX plugin will return AJAX, and so on. Note that we react to the path
+   *  that we're on rather than the action link's configuration.
+   * @param $config_entity_type
+   *  The type of the entity that holds configuration for this link.
+   * @param $config_id
+   *  The id of the entity that holds configuration for this link.
+   * @param $entity_type
+   *  The type of the entity that this link acts on.
+   * @param $entity_id
+   *  The id of the entity that this link acts on. This is known as the target
+   *  entity.
+   * @param $new_state
+   *  A string that describes the state on the target entity that this link
+   *  cycles to.
+   *
+   * @return
+   *  Output that is suitable for the link style requested by the
+   *  $action_link_plugin_style_id parameter.
+   */
   function normal($action_link_plugin_style_id, $config_entity_type, $config_id, $entity_type, $entity_id, $new_state) {
     // WTF, $action_link doesn't autoload, when the name of another entity type
     //// did and caused me hours of headdesking??? WTF, D8?
@@ -72,7 +97,7 @@ class ActionLinkController {
 
     // If either of those fail, bail with an error
     // we need to ask the link style plugin what to do about that.
-    
+
     $link_style_plugin_manager = \Drupal::service('plugin.manager.action_link');
     $action_link_style_plugin = $link_style_plugin_manager->createInstance($action_link_plugin_style_id, array(
       // No -- that expects too much of the target entity!
