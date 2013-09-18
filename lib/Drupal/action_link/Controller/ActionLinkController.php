@@ -62,7 +62,7 @@ class ActionLinkController {
     // if this were for a field widget, there'd be no config entity, and the
     // information on what to do would be in the field settings.
     //$action_link_plugin = new \Drupal\action_link\Plugin\ActionLinkController\Flag();
-    $action_link_plugin = $config_entity->getLinkControllerPlugin();
+    $action_link_plugin = $config_entity->getStateCyclerPlugin();
 
     // Find out if this route is valid. TODO
     $action_link_plugin->actionIsValid();
