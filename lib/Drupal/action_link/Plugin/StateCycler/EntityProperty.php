@@ -44,6 +44,22 @@ class EntityProperty implements StateCyclerInterface {
   }
 
   /**
+   * Get the next state for the target entity.
+   *
+   * @return
+   *  The name of the next state the target entity can be advanced to.
+   */
+  function getNextState() {
+    // For boolean entity properties, the next state is just the boolean
+    // opposite of the current value.
+    $current_property_value = $this->target_entity->get($this->toggle_property)->value;
+
+    $next_state = (int) !$current_property_value;
+
+    return $next_state;
+  }
+
+  /**
    * Perform the state change on the target entity.
    *
    * @param $new_state
