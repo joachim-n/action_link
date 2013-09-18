@@ -67,27 +67,6 @@ function action_link_load($action_link_id) {
   return entity_load('action_link', $action_link_id);
 }
 
-
-/**
- * Implements hook_entity_field_info().
- */
-function Xaction_link_entity_field_info($entity_type) {
-  /*
-  $info['definitions']['action_link_foo'] = array(
-    'type' => 'string_item',
-    'list' => FALSE,
-    'label' => t('The text'),
-    'description' => t('A text property added by mymodule.'),
-    'computed' => TRUE,
-    'configurable' => TRUE,
-    'class' => '\Drupal\mymodule\EntityComputedText',
-  );
-
-  //dsm($info);
-  return $info;
-  */
-}
-
 /**
  * Implements hook_field_extra_fields().
  */
