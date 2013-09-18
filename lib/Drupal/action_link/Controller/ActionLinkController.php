@@ -88,8 +88,8 @@ class ActionLinkController {
     $action_link_plugin->userHasAccess();
     // TODO return AccessDenied if no access
 
-    // If either of those fail, bail with an error
-    // we need to ask the link style plugin what to do about that.
+    // If either of those fail, bail with an error.
+    // We need to ask the link style plugin how to return the error message.
 
     // Get the link style plugin for the style ID that we've come in on, rather
     // than the one set in the config entity.
