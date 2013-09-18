@@ -4,7 +4,7 @@
  * @file action_link.module
  * TODO: Enter file description here.
  */
- 
+
 /*
 
 - 3 types of actionLink plugin:
@@ -18,12 +18,12 @@ A derivative plugin (like blocks, apparently) is one of these with settings for:
   - callbacks for action
   - toggling behaviour stuff
   - all that jazz
-  
-So therefore Flag has a 'template' it applies for some of these properties, as 
+
+So therefore Flag has a 'template' it applies for some of these properties, as
 obviously things like the callbacks are not set by the admin user.
 
 
-*/ 
+*/
 
 /**
  * Implements hook_menu().
@@ -52,7 +52,7 @@ function action_link_menu() {
     'title' => 'Edit',
     'type' => MENU_DEFAULT_LOCAL_TASK,
   );
-  
+
 
   return $items;
 }
@@ -62,23 +62,23 @@ function action_link_load($action_link_id) {
 }
 
 
-function action_link_page_confirm($action_link, $new_state, $entity_type, $entity_id) {  
+function action_link_page_confirm($action_link, $new_state, $entity_type, $entity_id) {
   dsm(func_get_args());
-  
+
   /*
   load the AL plugin
   - does the new state make sense?
   - is access allowed for the user?
     - get the current state link controller
     - return result appropriate
-  
-  
+
+
   */
-  
-  
+
+
   $vars = get_class_vars('Drupal\Core\Entity\Annotation\EntityType');
   dsm($vars);
-  
+
   return '!!!';
 }
 
@@ -87,7 +87,7 @@ function action_link_page_four($one, $two, $three, $four) {
 }
 
 
-  
+
   /*
   $items['flag/confirm/%/%flag/%'] = array(
     'title' => 'Flag confirm',
@@ -114,11 +114,11 @@ function Xaction_link_entity_field_info($entity_type) {
     'configurable' => TRUE,
     'class' => '\Drupal\mymodule\EntityComputedText',
   );
-  
+
   //dsm($info);
   return $info;
   */
-}  
+}
 
 /**
  * Implements hook_field_extra_fields().
@@ -129,7 +129,7 @@ function action_link_field_extra_fields() {
     'label' => t('Action link!'),
     'description' => 'action link!! desc!',
   );
-  
+
   return $extra;
 }
 
@@ -137,27 +137,27 @@ function action_link_field_extra_fields() {
  * Implements hook_entity_view().
  */
 function action_link_entity_view(\Drupal\Core\Entity\EntityInterface $entity, \Drupal\entity\Entity\EntityDisplay $display, $view_mode, $langcode) {
-  
+
   $info = Drupal\field\Field::fieldInfo()->getBundleExtraFields($entity->entityType(), $entity->bundle());
   //dsm($info);
-  
-  // Fnd the things with our prefix. 
-  
+
+  // Fnd the things with our prefix.
+
   // Only do the extra work if the component is configured to be displayed.
   // This assumes a 'mymodule_addition' extra field has been defined for the
   // entity bundle in hook_field_extra_fields().
   if ($display->getComponent('action_link_foo')) {
     $action_link = action_link_load('cake');
     //dsm($action_link);
-    
+
     $config_entity_type = $action_link->entityType();
     $config_id = 'cake';
-    
+
     $entity_type = $entity->entityType();
     $entity_id = $entity->id();
-    
+
     $link_style = 'reload';
-    
+
     // TODO: get this from the config entity.
     $config_entity = entity_load($config_entity_type, $config_id);
     $action_link_url = $config_entity->getLinkPath($entity);
