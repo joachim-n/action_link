@@ -2,10 +2,10 @@
 
 /**
  * @file
- * Contains \Drupal\action_link\Plugin\ActionLinkController\Flag.
+ * Contains \Drupal\action_link\Plugin\StateCycler\Flag.
  */
 
-namespace Drupal\action_link\Plugin\ActionLinkController;
+namespace Drupal\action_link\Plugin\StateCycler;
 
 use Drupal\action_link\ActionLinkControllerInterface;
 

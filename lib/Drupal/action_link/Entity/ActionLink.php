@@ -97,7 +97,7 @@ class ActionLink extends ConfigEntityBase implements ActionLinkConfigInterface {
     // @todo: plugin manager etc
     // @todo: pass on our settings to the plugin
     // Fake it for now!
-    return new \Drupal\action_link\Plugin\ActionLinkController\EntityProperty($this);
+    return new \Drupal\action_link\Plugin\StateCycler\EntityProperty($this);
   }
 
   /**

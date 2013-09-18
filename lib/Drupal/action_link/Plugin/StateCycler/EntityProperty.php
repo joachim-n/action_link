@@ -2,10 +2,10 @@
 
 /**
  * @file
- * Contains \Drupal\action_link\Plugin\ActionLinkController\EntityProperty.
+ * Contains \Drupal\action_link\Plugin\StateCycler\EntityProperty.
  */
 
-namespace Drupal\action_link\Plugin\ActionLinkController;
+namespace Drupal\action_link\Plugin\StateCycler;
 
 use Drupal\action_link\ActionLinkControllerInterface;
 
