@@ -33,25 +33,26 @@ class EntityProperty implements StateCyclerInterface {
   }
 
   function actionIsValid() {
-    // Does the action actually make sense? 
-    // eg. 
+    // TODO
+    // Does the action actually make sense?
     return TRUE;
   }
-  
+
   function userHasAccess() {
+    // TODO
     return TRUE;
   }
-  
+
+  /**
+   * Perform the state change.
+   */
   function changeState($entity_type, $entity_id, $new_state) {
     dsm('I am changing state now!');
-    
+
     $target_entity = entity_load($entity_type, $entity_id);
-    
-    $toggle_property = 'status';
-    
-    $target_entity->{$toggle_property} = $new_state;
+
+    $target_entity->{$this->toggle_property} = $new_state;
     $target_entity->save();
-    //$toggle_property;
   }
-  
+
 }
