@@ -136,30 +136,23 @@ class ActionLink extends ConfigEntityBase implements ActionLinkConfigInterface {
   /**
    * Returns the path for a link.
    */
-  public function getLinkPath($entity) {
+  public function getLinkPath($target_entity) {
     // TODO: go through to the plugin!!!!
     $config_entity_type = $this->entityType();
     // TODO!
     $config_id = 'cake';
 
-    $entity_type = $entity->entityType();
-    $entity_id = $entity->id();
+    $entity_type = $target_entity->entityType();
+    $entity_id = $target_entity->id();
 
     // We only need the plugin ID to form the link.
     $link_style_plugin_id = $this->getLinkStylePluginId();
 
-    // TODO: this moves to the state cycler!
-    $target_entity = entity_load($entity_type, $entity_id);
-    $current_property_value = $target_entity->get($this->toggle_property)->value;
-    //dsm($target_entity->get($this->toggle_property)->value);
+    // Get the next state the target entity can be advanced to.
+    $state_cycler_plugin = $this->getStateCyclerPlugin($target_entity);
+    $next_state = $state_cycler_plugin->getNextState();
 
-    //dsm($current_property_value);
-
-    // The toggling logic.
-
-    $new_property_value = (int) !$current_property_value;
-
-    return "action_link/$link_style_plugin_id/$config_entity_type/$config_id/$entity_type/$entity_id/$new_property_value";
+    return "action_link/$link_style_plugin_id/$config_entity_type/$config_id/$entity_type/$entity_id/$next_state";
   }
 
 }
