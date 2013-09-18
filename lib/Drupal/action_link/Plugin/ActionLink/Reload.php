@@ -37,6 +37,9 @@ class Reload  {
    *  (This will be needed by ajax link type.)
    */
   function getRequestOutput($next_state) {
+    // TODO: message text comes from config entity.
+    drupal_set_message("State has been changed.");
+
     return new RedirectResponse(url(current_path(), array('absolute' => TRUE)));
   }
 
