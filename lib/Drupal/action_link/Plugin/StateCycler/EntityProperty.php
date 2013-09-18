@@ -44,13 +44,26 @@ class EntityProperty implements StateCyclerInterface {
   }
 
   /**
-   * Perform the state change.
+   * Perform the state change on the target entity.
+   *
+   * @param $new_state
+   *  The name of the new state to advance the target entity to.
+   *
+   * @return
+   *  The name of the state that the target entity may move onto now that it has
+   *  been changed. With a boolean toggle, this will be the opposite of the
+   *  $new_state parameter, but there is nothing stopping an implementation of
+   *  this interface from having more than two states.
    */
   function changeState($new_state) {
     dsm('I am changing state now!');
 
     $this->target_entity->{$this->toggle_property} = $new_state;
     $this->target_entity->save();
+
+    // For boolean entity properties, return an integer value.
+    $next_state = (int) !$new_state;
+    return $next_state;
   }
 
 }
