@@ -26,24 +26,9 @@ class ActionLinkController {
   /**
    * Page controller for normal action links.
    *
-   * @param $action_link
-   *  DESC
-   * @param $new_state
-   *  DESC
-   * @param $entity_type
-   *  DESC
-   * @param $entity_id
-   *  DESC
-   @param
-    return link type: LINKPLUGINID
-   *
-   * @return
-   *  DESC
-   */
-  // action_link/reload/flag/bookmarks/node/1/flag
-  // action_link/reload/action_link/cake/node/1/flag
-  /**
-   * Return output for an action link page.
+   * Example paths:
+   *  - action_link/reload/flag/bookmarks/node/1/flag
+   *  - action_link/reload/action_link/cake/node/1/flag
    *
    * @param $action_link_plugin_style_id
    *  The style plugin ID. This determines the format of the output. For
