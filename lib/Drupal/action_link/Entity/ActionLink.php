@@ -120,7 +120,8 @@ class ActionLink extends ConfigEntityBase implements ActionLinkConfigInterface {
    *  A render array containing the link.
    */
   public function buildLink($entity) {
-    // TODO: move some or all of this to the style plugin.
+    // TODO: move some or all of this to the style plugin, as different style
+    // plugins may need different things, eg ajax.
     $action_link_url = $this->getLinkPath($entity);
 
     $build = array(
@@ -136,9 +137,12 @@ class ActionLink extends ConfigEntityBase implements ActionLinkConfigInterface {
 
   /**
    * Returns the path for a link.
+   *
+   * TODO: this can be inherited from a common base class for all config
+   * entities that work with ActionLinkController, since they need to use the
+   * same path format.
    */
   public function getLinkPath($target_entity) {
-    // TODO: go through to the plugin!!!!
     $config_entity_type = $this->entityType();
     // TODO!
     $config_id = 'cake';
