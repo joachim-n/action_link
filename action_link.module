@@ -158,10 +158,8 @@ function action_link_entity_view(\Drupal\Core\Entity\EntityInterface $entity, \D
 
     $link_style = 'reload';
 
-    // TODO: get this from the config entity.
+    // Load the config entity, and get the link from it.
     $config_entity = entity_load($config_entity_type, $config_id);
-    $action_link_url = $config_entity->getLinkPath($entity);
-
     $entity->content['action_link_foo'] = $config_entity->buildLink($entity);
   }
 }
