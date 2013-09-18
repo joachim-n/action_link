@@ -78,6 +78,7 @@ class ActionLink extends ConfigEntityBase implements ActionLinkConfigInterface {
   public function getLinkStylePluginId() {
     // TODO! this is faked!
     $link_style_plugin_id = 'reload';
+    //$link_style_plugin_id = 'confirm';
     return $link_style_plugin_id;
   }
 

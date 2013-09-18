@@ -53,10 +53,6 @@ class ActionLinkController {
    *  $action_link_plugin_style_id parameter.
    */
   function normal($action_link_plugin_style_id, $config_entity_type, $config_id, $entity_type, $entity_id, $new_state) {
-    // WTF, $action_link doesn't autoload, when the name of another entity type
-    //// did and caused me hours of headdesking??? WTF, D8?
-    //$action_link = entity_load('action_link', $action_link);
-
     // 1. Load the config entity involved.
     // Any config entity can be used here, provided it implements our interface.
     // The config entity is responsible for telling us about:
@@ -67,7 +63,7 @@ class ActionLinkController {
     $config_entity = entity_load($config_entity_type, $config_id);
     //dsm($config_entity);
     $target_entity = entity_load($entity_type, $entity_id);
-    dsm($target_entity);
+    //dsm($target_entity);
 
     // 2. Get the action link controller plugin from the config entity.
     // In D7 land, this would be the actual Flag handler object.
