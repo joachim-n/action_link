@@ -40,10 +40,3 @@ action_link_normal:
     _content: '\Drupal\action_link\Controller\ActionLinkController::normal'
   requirements:
     _access: 'TRUE'
-
-action_link_confirm:
-  pattern: '/action_link/confirm/{action_link}/{new_state}/{entity_type}/{entity_id}'
-  defaults:
-    _content: 'action_link_page_confirm'
-  requirements:
-    _access: 'TRUE'

@@ -68,28 +68,6 @@ function action_link_load($action_link_id) {
 }
 
 
-function action_link_page_confirm($action_link, $new_state, $entity_type, $entity_id) {
-  dsm(func_get_args());
-
-  /*
-  load the AL plugin
-  - does the new state make sense?
-  - is access allowed for the user?
-    - get the current state link controller
-    - return result appropriate
-
-
-  */
-
-
-  $vars = get_class_vars('Drupal\Core\Entity\Annotation\EntityType');
-  dsm($vars);
-
-  return '!!!';
-}
-
-
-
   /*
   $items['flag/confirm/%/%flag/%'] = array(
     'title' => 'Flag confirm',
