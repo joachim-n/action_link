@@ -89,15 +89,21 @@ class ActionLinkController {
     //$action_link_plugin = new \Drupal\action_link\Plugin\StateCycler\Flag();
     $action_link_plugin = $config_entity->getStateCyclerPlugin();
 
-    // Find out if this route is valid. TODO
+    // Check validity: find out if this request is valid for the combination
+    // of configuration, target entity, and destination state.
     $action_link_plugin->actionIsValid();
+    // TODO return 404 if not valid
 
-    // Find out if use has access. TODO
+    // Check access: find out if user is allowed to perform this change.
     $action_link_plugin->userHasAccess();
+    // TODO return AccessDenied if no access
 
     // If either of those fail, bail with an error
     // we need to ask the link style plugin what to do about that.
 
+    // Get the link style plugin for the style ID that we've come in on, rather
+    // than the one set in the config entity.
+    // (This is the same behaviour as Flag on D7.)
     $link_style_plugin_manager = \Drupal::service('plugin.manager.action_link');
     $action_link_style_plugin = $link_style_plugin_manager->createInstance($action_link_plugin_style_id, array(
       // No -- that expects too much of the target entity!
@@ -105,44 +111,16 @@ class ActionLinkController {
       //'target_entity' => $target_entity,
     ));
 
-    // Change state.
+    // Change the state of the target entity.
     $action_link_plugin->changeState($entity_type, $entity_id, $new_state);
 
     // Argh, confirm form will def want something else, won't it?
     // we output a whole damn form!!!
 
-    // Get the output from the AL link plugin.
-    // BUT!!! if the ALLP id is in the path, then youcould transform the
-    // link style just by hacking the path!
-    // (You can do that on flag already!!!)
-
-
+    // Get the output from the link style plugin.
     $action_link_style_plugin->getRequestOutput();
 
-    // DONE!!
-
-
-    // So what do we need to know at this point?
-
-    // 1. check validity
-
-    // $action_link->getPlugin->checkValidity()
-    // return 404 if not valid
-
-
-    // 2. check access
-
-    // $action_link->getPlugin->checkAccess()
-    // return AccessDenied if no access
-
-    // 3. make state transition.
-    //$action_link->getPlugin->changeState($new_state);
-
-
     return $action_link_style_plugin->getRequestOutput();
-
-    // TODO! redirect to the entity just acted upon.
-    //return new RedirectResponse(url('user'));
   }
 
 }
