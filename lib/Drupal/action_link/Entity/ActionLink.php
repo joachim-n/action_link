@@ -113,22 +113,31 @@ class ActionLink extends ConfigEntityBase implements ActionLinkConfigInterface {
   /**
    * Generate the render array for the action link.
    *
-   * @param $entity
+   * @param $target_entity
    *  The entity to create a link for.
    *
    * @return
    *  A render array containing the link.
    */
-  public function buildLink($entity) {
+  public function buildLink($target_entity) {
     // TODO: move some or all of this to the style plugin, as different style
     // plugins may need different things, eg ajax.
-    $action_link_url = $this->getLinkPath($entity);
+    $action_link_url = $this->getLinkPath($target_entity);
+
+    // Fake the UI strings!
+    $state_cycler_plugin = $this->getStateCyclerPlugin($target_entity);
+    $next_state = $state_cycler_plugin->getNextState();
+    $link_text = array(
+      0 => 'Unpublish',
+      1 => 'Publish',
+    );
+    $link_text = $link_text[$next_state];
 
     $build = array(
       // Here we need:
       // - the action link
       '#prefix' => '<div>',
-      '#markup' => l('action link!', $action_link_url, array('query' => array('destination' => current_path()))),
+      '#markup' => l($link_text, $action_link_url, array('query' => array('destination' => current_path()))),
       '#suffix' => '</div>',
     );
 
