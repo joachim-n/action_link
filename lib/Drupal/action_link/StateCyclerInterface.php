@@ -22,6 +22,6 @@ interface StateCyclerInterface {
 
   function userHasAccess();
 
-  function changeState($entity_type, $entity_id, $new_state);
+  function changeState($new_state);
 
 }
