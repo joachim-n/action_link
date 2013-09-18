@@ -68,18 +68,6 @@ function action_link_load($action_link_id) {
 }
 
 
-  /*
-  $items['flag/confirm/%/%flag/%'] = array(
-    'title' => 'Flag confirm',
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('flag_confirm', 2, 3, 4),
-    'access callback' => 'user_access',
-    'access arguments' => array('access content'),
-    'file' => 'includes/flag.pages.inc',
-    'type' => MENU_CALLBACK,
-  );
-  */
-
 /**
  * Implements hook_entity_field_info().
  */
