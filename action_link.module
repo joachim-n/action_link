@@ -27,6 +27,8 @@ obviously things like the callbacks are not set by the admin user.
 
 /**
  * Implements hook_menu().
+ *
+ * TODO: obsolete when d8 removes this.
  */
 function action_link_menu() {
   $items = array();
@@ -53,10 +55,14 @@ function action_link_menu() {
     'type' => MENU_DEFAULT_LOCAL_TASK,
   );
 
-
   return $items;
 }
 
+/**
+ * Menu loader.
+ *
+ * TODO: obsolete when hook_menu() dies?
+ */
 function action_link_load($action_link_id) {
   return entity_load('action_link', $action_link_id);
 }
