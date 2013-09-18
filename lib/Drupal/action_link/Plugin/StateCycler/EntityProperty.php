@@ -7,12 +7,12 @@
 
 namespace Drupal\action_link\Plugin\StateCycler;
 
-use Drupal\action_link\ActionLinkControllerInterface;
+use Drupal\action_link\StateCyclerInterface;
 
 /**
  * entity property toggle, eg published / unpublished
  */
-class EntityProperty implements ActionLinkControllerInterface {
+class EntityProperty implements StateCyclerInterface {
   
   function actionIsValid() {
     // Does the action actually make sense? 

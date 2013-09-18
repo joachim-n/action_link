@@ -7,12 +7,12 @@
 
 namespace Drupal\action_link\Plugin\StateCycler;
 
-use Drupal\action_link\ActionLinkControllerInterface;
+use Drupal\action_link\StateCyclerInterface;
 
 /**
  *
  */
-class Flag implements ActionLinkControllerInterface {
+class Flag implements StateCyclerInterface {
   
   // WORP WOPR WOPR
   // We need the flag name!!!!!
