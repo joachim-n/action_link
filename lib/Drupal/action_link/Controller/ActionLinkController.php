@@ -15,6 +15,11 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
  *
  * This works with config entities to perform the action, which must implement
  * the ActionLinkConfigInterface.
+ *
+ * Modules whose use of action links is different should implement their own
+ * routes and controller.
+ *
+ * @see \Drupal\action_link\ActionLinkConfigInterface
  */
 class ActionLinkController {
 

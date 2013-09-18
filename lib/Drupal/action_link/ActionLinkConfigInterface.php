@@ -10,6 +10,11 @@ namespace Drupal\action_link;
 /**
  * Interface for action link config entities.
  *
+ * This interface should be used by config entity types that provide
+ * configuration for action links whose routes are handled by the
+ * ActionLinkController.
+ *
+ * @see \Drupal\action_link\Controller\ActionLinkController
  */
 interface ActionLinkConfigInterface {
 
