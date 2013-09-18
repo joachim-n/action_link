@@ -46,13 +46,11 @@ class EntityProperty implements StateCyclerInterface {
   /**
    * Perform the state change.
    */
-  function changeState($entity_type, $entity_id, $new_state) {
+  function changeState($new_state) {
     dsm('I am changing state now!');
 
-    $target_entity = entity_load($entity_type, $entity_id);
-
-    $target_entity->{$this->toggle_property} = $new_state;
-    $target_entity->save();
+    $this->target_entity->{$this->toggle_property} = $new_state;
+    $this->target_entity->save();
   }
 
 }

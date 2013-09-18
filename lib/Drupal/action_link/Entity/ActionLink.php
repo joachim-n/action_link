@@ -120,9 +120,8 @@ class ActionLink extends ConfigEntityBase implements ActionLinkConfigInterface {
     //    state cycler plugins from the action link entity type.
     // Fake it for now!
     $parameters = array();
-    return new \Drupal\action_link\Plugin\StateCycler\EntityProperty($this, $parameters);
+    return new \Drupal\action_link\Plugin\StateCycler\EntityProperty($target_entity, $parameters);
   }
-
 
   /**
    * Generate the render array for the action link.

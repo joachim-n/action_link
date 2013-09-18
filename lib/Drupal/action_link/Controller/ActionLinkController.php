@@ -102,7 +102,7 @@ class ActionLinkController {
     ));
 
     // Change the state of the target entity.
-    $action_link_plugin->changeState($entity_type, $entity_id, $new_state);
+    $action_link_plugin->changeState($new_state);
 
     // Argh, confirm form will def want something else, won't it?
     // we output a whole damn form!!!
