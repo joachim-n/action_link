@@ -125,7 +125,7 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
     // $this->plugin_id = 'boolean_field';
 
 
-    if (!$this->actionLinkPluginCollection) {
+    if (!$this->actionLinkPluginCollection && $this->plugin_id) {
       $this->actionLinkPluginCollection = new DefaultSingleLazyPluginCollection(
         \Drupal::service('plugin.manager.action_link_state_action'),
         $this->plugin_id, $this->plugin_config
