@@ -18,10 +18,8 @@ class ActionLinkController {
   /**
    * Callback for the action_link.action_link route.
    */
-  public function action(UserInterface $user, ActionLinkInterface $action_link, string $state, string $parameters, string $param_2 = '', string $param_3 = '', string $param_4 = '') {
-    // TODO: Change this to explode $parameters on '/' when
-    // https://www.drupal.org/project/drupal/issues/2741939 is fixed.
-    $parameters = array_filter([$parameters, $param_2, $param_3, $param_4]);
+  public function action(UserInterface $user, ActionLinkInterface $action_link, string $state, string $parameters) {
+    $parameters = explode('/', $parameters);
 
     dsm($parameters);
 

@@ -1,6 +1,6 @@
 action_link.action_link:
-  # TODO: Remove surplus parameters when
-  # https://www.drupal.org/project/drupal/issues/2741939 is fixed.
+  # The numbered parameters are just dummies, as a workaround for
+  # https://www.drupal.org/project/drupal/issues/2741939.
   path: /action-link/{action_link}/{state}/{user}/{parameters}/{param_2}/{param_3}/{param_4}
   defaults:
     _title: 'Action Link'
@@ -10,8 +10,6 @@ action_link.action_link:
     param_4: ''
   requirements:
     _custom_access: '\Drupal\action_link\Controller\ActionLinkController::access'
-    # This doesn't work: see
-    # https://www.drupal.org/project/drupal/issues/2741939.
     # Allow the 'parameters' parameter to include a '/', mopping up multiple
     # path elements.
     parameters: '.+'
