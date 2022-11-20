@@ -1,0 +1,4 @@
+entity.action_link.edit_form:
+  title: Edit
+  route_name: entity.action_link.edit_form
+  base_route: entity.action_link.edit_form

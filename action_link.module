@@ -1,0 +1,21 @@
+<?php
+
+/**
+ * @file
+ * Contains hook implementations for the Action links module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function action_link_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    case 'help.page.action_link':
+      return t("TODO: Create admin help text.");
+
+    // OPTIONAL: Add additional cases for other paths that should display
+    // help text.
+  }
+}

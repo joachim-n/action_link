@@ -1,0 +1,4 @@
+name: 'Action links'
+type: module
+description: 'TODO: Description of module'
+core_version_requirement: '^8 || ^9'

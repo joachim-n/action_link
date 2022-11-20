@@ -1,0 +1,10 @@
+action_link.action_link:
+  path: /action-link/{action_link}/{state}/{user}/{parameters}
+  defaults:
+    _title: 'Action Link'
+    _controller: '\Drupal\action_link\Controller\ActionLinkController::action'
+  requirements:
+    _custom_access: '\Drupal\action_link\Controller\ActionLinkController::access'
+    # Allow the 'parameters' parameter to include a '/', mopping up multiple
+    # path elements.
+    parameters: .+
