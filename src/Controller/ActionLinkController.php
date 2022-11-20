@@ -24,7 +24,7 @@ class ActionLinkController {
     // TODO: operability - fail silently?
 
 
-    $action_link->advance($user, $state, ...$parameters);
+    $action_link->advanceState($user, $state, ...$parameters);
 
     // dsm($parameters);
 
