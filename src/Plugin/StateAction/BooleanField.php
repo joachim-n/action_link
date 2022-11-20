@@ -8,6 +8,7 @@ namespace Drupal\action_link\Plugin\StateAction;
  * @StateAction(
  *   id = "boolean_field",
  *   label = @Translation("Boolean field"),
+ *   description = @Translation("Boolean field TODO"),
  *   parameters = {
  *     "dynamic" = {
  *       "entity",
