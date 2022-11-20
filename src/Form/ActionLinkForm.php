@@ -16,24 +16,103 @@ class ActionLinkForm extends EntityForm {
   public function form(array $form, FormStateInterface $form_state) {
     $form = parent::form($form, $form_state);
 
+    $action_link = $this->entity;
+
     $form['label'] = [
-      '#type' => "textfield",
-      '#title' => $this->t("Name"),
-      '#description' => $this->t("The human-readable name of this entity"),
-      '#default_value' => $this->entity->get('label'),
+      '#type' => 'textfield',
+      '#title' => $this->t('Label'),
+      '#default_value' => $action_link->label(),
+      '#description' => $this->t('A short, descriptive title for this action link.'),
+      '#maxlength' => 255,
+      '#required' => TRUE,
+      '#weight' => -3,
     ];
+
     $form['id'] = [
-      '#type' => "machine_name",
-      '#title' => $this->t("Name"),
-      '#description' => $this->t("A unique machine-readable name for this entity. It must only contain lowercase letters, numbers, and underscores."),
-      '#default_value' => $this->entity->id(),
+      '#type' => 'machine_name',
+      '#title' => $this->t('Machine name'),
+      '#default_value' => $action_link->id(),
+      '#description' => $this->t('The machine-name for this action link. It may be up to 32 characters long and may only contain lowercase letters, underscores, and numbers. It will be used in URLs and in all API calls.'),
+      '#weight' => -2,
       '#machine_name' => [
         'exists' => ['Drupal\action_link\Entity\ActionLink', 'load'],
         'source' => ['label'],
       ],
+      '#disabled' => !$action_link->isNew(),
+      '#required' => TRUE,
     ];
 
+
+    $this->stateActionManager = \Drupal::service('plugin.manager.action_link_state_action');
+    // $state_actions_options [];
+
+    $form['state_action'] = [
+      '#type' => 'details',
+      '#open' => TRUE,
+      '#title' => $this->t('Action'),
+      // '#description' => $this->t('Flags are usually controlled through links that allow users to toggle their behavior. You can choose how users interact with flags by changing options here. It is legitimate to have none of the following checkboxes ticked, if, for some reason, you wish <a href="@placement-url">to place the the links on the page yourself</a>.', ['@placement-url' => 'http://drupal.org/node/295383']),
+      '#tree' => FALSE,
+      '#prefix' => '<div id="state-action-type-settings-wrapper">',
+      '#suffix' => '</div>',
+    ];
+
+    $form['state_action']['plugin_id'] = [
+      '#type' => 'radios',
+      '#title' => $this->t('Link type'),
+      '#options' => [],
+      // '#after_build' => array('flag_check_link_types'), ??
+      // '#default_value' => $flag->getLinkTypePlugin()->getPluginId(),
+      '#attributes' => [
+        // 'class' => ['flag-link-options'],
+      ],
+      '#required' => TRUE,
+      '#ajax' => [
+        'callback' => '::updateSelectedPluginType',
+        'wrapper' => 'state-action-type-settings-wrapper',
+        'event' => 'change',
+        'method' => 'replace',
+      ],
+    ];
+
+    // todo - descriptions
+    foreach ($this->stateActionManager->getDefinitions() as $plugin_id => $definition) {
+      $form['state_action']['plugin_id']['#options'][$plugin_id] = $definition['label'];
+      $form['state_action']['plugin_id'][$plugin_id]['#description'] = $definition['description'];
+    }
+
+
+    //debug($flag->getLinkTypePlugin()->getPluginId(), 'default value');
+    $form['display']['link_type_submit'] = [
+      '#type' => 'submit',
+      '#value' => $this->t('Update'),
+      '#submit' => ['::submitSelectPlugin'],
+      '#weight' => 20,
+      '#attributes' => ['class' => ['js-hide']],
+    ];
+
+    // $form['display']['settings'] = [
+    //   '#type' => 'container',
+    //   '#weight' => 21,
+    // ];
+
+    dsm($form_state->getValues());
+    $form['display']['plugin_config'] = [
+      '#parents' => ['configuration'],
+    ];
+    if (!$action_link->isNew()) {
+      $state_action_plugin = $action_link->getStateActionPlugin();
+      $form = $state_action_plugin->buildConfigurationForm($form['display']['plugin_config'], $form_state);
+    }
+
+
     return $form;
+  }
+
+  /**
+   * Ajax callback: switches the configuration type selector.
+   */
+  public function updateSelectedPluginType($form, FormStateInterface $form_state) {
+    return $form['state_action'];
   }
 
   /**
