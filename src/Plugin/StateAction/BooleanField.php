@@ -54,7 +54,10 @@ class BooleanField extends StateActionBase {
     // .
   }
 
-  public function advance($account, $state, $parameters) {
+  /**
+   * {@inheritdoc}
+   */
+  public function advanceState($account, $state, $parameters) {
     $parameters = $this->upcastRouteParameters($parameters);
     list($entity) = $parameters;
 
