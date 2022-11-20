@@ -37,8 +37,13 @@ class ActionLinkController {
   /**
    * Checks access for the action_link.action_link route.
    */
-  // todo wrong order!
-  public function access(ActionLinkInterface $action_link, string $state, string $parameters, UserInterface $user): AccessResultInterface {
+  public function access(UserInterface $user, ActionLinkInterface $action_link, string $state, string $parameters): AccessResultInterface {
+    // 1. validate token
+
+    // 2. validate $parameters, state, user with the plugin
+
+
+
     // dsm($parameters);
     // TODO.
     return AccessResult::allowed();
