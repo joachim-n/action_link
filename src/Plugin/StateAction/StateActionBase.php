@@ -9,6 +9,17 @@ use Drupal\Component\Plugin\PluginBase;
  */
 abstract class StateActionBase extends PluginBase implements StateActionInterface {
 
+  public function validateParameters(array $parameters) {
+    if (count($parameters) != count($this->pluginDefinition['parameters']['dynamic'])) {
+      throw new \LogicException(sprintf("State action plugin %s expects %s parameters, got %s",
+        $this->getPluginId(),
+        count($this->pluginDefinition['parameters']['dynamic']),
+        count($parameters),
+      ));
+    }
+  }
+
+
   // todo interface.
   public function convertParametersForRoute(array $parameters): array {
     $dynamic_parameter_indexes = array_flip($this->pluginDefinition['parameters']['dynamic']);

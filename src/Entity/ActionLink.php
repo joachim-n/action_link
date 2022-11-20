@@ -141,6 +141,9 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
   public function getLink(AccountInterface $user, ...$parameters): Link {
     $plugin = $this->getStateActionPlugin();
 
+    // validate param count!
+    $plugin->validateParameters($parameters);
+
     $route_parameters = $plugin->convertParametersForRoute($parameters);
     // ARGH convert a node entity to an ID??
 
