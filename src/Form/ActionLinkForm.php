@@ -16,7 +16,9 @@ class ActionLinkForm extends EntityForm {
   public function form(array $form, FormStateInterface $form_state) {
     $form = parent::form($form, $form_state);
 
+    /** @var \Drupal\action_link\Entity\ActionLinkInterface */
     $action_link = $this->entity;
+    dsm($action_link);
 
     $form['label'] = [
       '#type' => 'textfield',
@@ -60,11 +62,7 @@ class ActionLinkForm extends EntityForm {
       '#type' => 'radios',
       '#title' => $this->t('Link type'),
       '#options' => [],
-      // '#after_build' => array('flag_check_link_types'), ??
-      // '#default_value' => $flag->getLinkTypePlugin()->getPluginId(),
-      '#attributes' => [
-        // 'class' => ['flag-link-options'],
-      ],
+      '#default_value' => $action_link->get('plugin_id'),
       '#required' => TRUE,
       '#ajax' => [
         'callback' => '::updateSelectedPluginType',
@@ -74,18 +72,15 @@ class ActionLinkForm extends EntityForm {
       ],
     ];
 
-    // todo - descriptions
     foreach ($this->stateActionManager->getDefinitions() as $plugin_id => $definition) {
       $form['state_action']['plugin_id']['#options'][$plugin_id] = $definition['label'];
       $form['state_action']['plugin_id'][$plugin_id]['#description'] = $definition['description'];
     }
 
-
-    //debug($flag->getLinkTypePlugin()->getPluginId(), 'default value');
-    $form['display']['link_type_submit'] = [
+    $form['state_action']['plugin_id_submit'] = [
       '#type' => 'submit',
       '#value' => $this->t('Update'),
-      '#submit' => ['::submitSelectPlugin'],
+      // '#submit' => ['::submitSelectPlugin'],  TODO WTF
       '#weight' => 20,
       '#attributes' => ['class' => ['js-hide']],
     ];
@@ -96,12 +91,13 @@ class ActionLinkForm extends EntityForm {
     // ];
 
     dsm($form_state->getValues());
-    $form['display']['plugin_config'] = [
-      '#parents' => ['configuration'],
+    $form['state_action']['plugin_config'] = [
+      '#parents' => ['plugin_config'],
+      '#tree' => TRUE,
     ];
     if (!$action_link->isNew()) {
       $state_action_plugin = $action_link->getStateActionPlugin();
-      $form = $state_action_plugin->buildConfigurationForm($form['display']['plugin_config'], $form_state);
+      $form['state_action']['plugin_config'] = $state_action_plugin->buildConfigurationForm($form['state_action']['plugin_config'], $form_state);
     }
 
 
@@ -126,6 +122,8 @@ class ActionLinkForm extends EntityForm {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
+    dsm($form_state->getValues());
+
     parent::submitForm($form, $form_state);
   }
 
@@ -134,7 +132,7 @@ class ActionLinkForm extends EntityForm {
    */
   public function save(array $form, FormStateInterface $form_state) {
     $saved = parent::save($form, $form_state);
-    $form_state->setRedirectUrl($this->entity->toUrl('collection'));
+    // $form_state->setRedirectUrl($this->entity->toUrl('collection'));
 
     return $saved;
   }
