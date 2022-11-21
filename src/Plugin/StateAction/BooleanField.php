@@ -2,6 +2,8 @@
 
 namespace Drupal\action_link\Plugin\StateAction;
 
+use Drupal\Core\Form\FormStateInterface;
+
 /**
  * TODO: class docs.
  *
@@ -22,6 +24,24 @@ namespace Drupal\action_link\Plugin\StateAction;
  */
 // TODO: allow customising state names -- eg published, flagged, yes, no. for nicer URLs.
 class BooleanField extends StateActionBase {
+
+  public function buildConfigurationForm(array $plugin_form, FormStateInterface $form_state) {
+    $plugin_form['entity_type'] = [
+      '#type' => 'textfield', // todo options
+      '#title' => $this->t('Entity type'),
+      // '#options' => [],
+    ];
+
+    $plugin_form['field'] = [
+      '#type' => 'textfield', // todo options
+      '#title' => $this->t('field'),
+      // '#options' => [],
+    ];
+
+    // delta??
+
+    return $plugin_form;
+  }
 
   /**
    * {@inheritdoc}
