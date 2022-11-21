@@ -103,11 +103,6 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
 
 
   public function getPluginCollections() {
-  // TODO! config key =>
-  //    * @return \Drupal\Component\Plugin\LazyPluginCollection[]
-  //  *   An array of plugin collections, keyed by the property name they use to
-  //  *   store their configuration.
-
     return [
       'plugin_config' => $this->getActionLinkPluginCollection(),
     ];
@@ -153,7 +148,7 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
       'user' => $user->id(),
       'parameters' => implode('/', $route_parameters),
     ]);
-    return Link::fromTextAndUrl('TEXT', $url);
+    return Link::fromTextAndUrl('TEXT ' . $this->id(), $url);
   }
 
   public function getUrl(): string {
