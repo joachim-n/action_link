@@ -65,7 +65,7 @@ class BooleanField extends EntityStateActionBase {
   /**
    * {@inheritdoc}
    */
-  public function checkOperability(AccountInterface $account, string $state, EntityInterface $entity = NULL) {
+  public function checkOperability(AccountInterface $account, string $state, EntityInterface $entity = NULL): bool {
     // also sanity check $state is true/false!
 
     $field_name = $this->configuration['field'];

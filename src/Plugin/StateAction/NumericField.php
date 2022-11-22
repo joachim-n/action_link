@@ -72,8 +72,7 @@ class NumericField extends EntityStateActionBase {
   /**
    * {@inheritdoc}
    */
-  public function checkOperability(AccountInterface $account, string $state, EntityInterface $entity = NULL) {
-    // .
+  public function checkOperability(AccountInterface $account, string $state, EntityInterface $entity = NULL, string $direction = ''): bool {
   }
 
   /**
