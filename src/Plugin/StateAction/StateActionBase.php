@@ -19,7 +19,6 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
     }
   }
 
-
   // todo interface.
   public function convertParametersForRoute(array $parameters): array {
     $dynamic_parameter_indexes = array_flip($this->pluginDefinition['parameters']['dynamic']);
@@ -33,7 +32,10 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
   }
 
 
+  // upcast AND validate ???
   public function upcastRouteParameters(array $parameters): array {
+    $this->validateParameters($parameters);
+
     $entity_type_manager = \Drupal::service('entity_type.manager');
 
     $dynamic_parameter_indexes = array_flip($this->pluginDefinition['parameters']['dynamic']);

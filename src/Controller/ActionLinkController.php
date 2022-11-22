@@ -35,11 +35,11 @@ class ActionLinkController {
     // state they wish to take it to.
     $operable = $action_link->checkOperability($user, $state, ...$parameters);
 
-    // TODO: operability - fail silently?
     if ($operable) {
       $action_link->advanceState($user, $state, ...$parameters);
     }
 
+    // TODO:
     // $this->messenger->addMessage($message);
 
     if ($redirect_url = $action_link->getRedirectUrl($user, ...$parameters)) {

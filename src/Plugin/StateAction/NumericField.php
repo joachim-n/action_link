@@ -81,10 +81,6 @@ class NumericField extends EntityStateActionBase {
   }
 
   public function advanceState($account, $state, $parameters) {
-    dsm($parameters);
-    dsm($state);
-
-    // $parameters = $this->upcastRouteParameters($parameters);
     list($entity, $direction) = $parameters;
 
     // TODO:
