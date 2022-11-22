@@ -15,7 +15,7 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
 
   public function buildConfigurationForm(array $plugin_form, FormStateInterface $form_state);
 
-  public function getNextStateName($user, ...$parameters): string;
+  public function getNextStateName($user): string;
 
   public function advanceState($account, $state, $parameters);
 
