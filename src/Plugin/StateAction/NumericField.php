@@ -71,6 +71,12 @@ class NumericField extends EntityStateActionBase {
    * {@inheritdoc}
    */
   public function checkOperability(AccountInterface $account, string $state, EntityInterface $entity = NULL, string $direction = ''): bool {
+    $field_name = $this->configuration['field'];
+
+    // Check the desired state is the next state.
+    $next_state = $this->getNextStateName($account, $entity, $direction);
+
+    return ($next_state == $state);
   }
 
   /**
