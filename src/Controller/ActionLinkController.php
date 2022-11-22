@@ -7,6 +7,7 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\user\UserInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * TODO: class docs.
@@ -20,20 +21,40 @@ class ActionLinkController {
    */
   public function action(UserInterface $user, ActionLinkInterface $action_link, string $state, string $parameters) {
     $parameters = explode('/', $parameters);
+    $parameters = $action_link->getStateActionPlugin()->upcastRouteParameters($parameters);
 
-    dsm($parameters);
+    // Access is already checked, which covers whether the user is allowed to
+    // use the action link on the given parameters. We now check operability,
+    // which determines whether the state is valid. Unlike the access check,
+    // an operability check fails without error. This is because the user could
+    // simply have clicked an action link which was output before a change to
+    // the system made it obsolete. For example, user A loads a page on which
+    // is a 'publish node' action link. Meanwhile, user B publishes the node.
+    // User A then clicks the link. This should either fail silently, or tell
+    // the user the action has done nothing because the system is already in the
+    // state they wish to take it to.
+    $operable = $action_link->checkOperability($user, $state, ...$parameters);
 
     // TODO: operability - fail silently?
+    if ($operable) {
+      $action_link->advanceState($user, $state, ...$parameters);
+    }
 
+    // $this->messenger->addMessage($message);
 
-    $action_link->advanceState($user, $state, ...$parameters);
+    if ($redirect_url = $action_link->getRedirectUrl($user, ...$parameters)) {
+      // Redirect, typically back to the entity. A passed in destination query
+      // parameter will automatically override this.
+      $response = new RedirectResponse($redirect_url->toString());
+    }
+    else {
+      // TODO For entities that don't have a canonical URL (like paragraphs),
+      // redirect to the front page.
+      $redirect_url = Url::fromRoute('<front>');
+      $response = new RedirectResponse($redirect_url->toString());
+    }
 
-    // dsm($parameters);
-
-    // REdirect?! if no JS.
-    // magic if JS?
-
-    return [];
+    return $response;
   }
 
   /**
@@ -44,10 +65,6 @@ class ActionLinkController {
 
     // 2. validate $parameters, state, user with the plugin
 
-
-
-    // dsm($parameters);
-    // TODO.
     return AccessResult::allowed();
   }
 

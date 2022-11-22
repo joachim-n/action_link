@@ -2,7 +2,9 @@
 
 namespace Drupal\action_link\Plugin\StateAction;
 
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
@@ -25,7 +27,7 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
  *   },
  * )
  */
-class NumericField extends StateActionBase {
+class NumericField extends EntityStateActionBase {
 
   use StringTranslationTrait;
 
@@ -70,7 +72,7 @@ class NumericField extends StateActionBase {
   /**
    * {@inheritdoc}
    */
-  public function checkOperability() {
+  public function checkOperability(AccountInterface $account, string $state, EntityInterface $entity = NULL) {
     // .
   }
 
@@ -85,7 +87,7 @@ class NumericField extends StateActionBase {
     dsm($parameters);
     dsm($state);
 
-    $parameters = $this->upcastRouteParameters($parameters);
+    // $parameters = $this->upcastRouteParameters($parameters);
     list($entity, $direction) = $parameters;
 
     // TODO:

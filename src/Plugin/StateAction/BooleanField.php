@@ -2,7 +2,10 @@
 
 namespace Drupal\action_link\Plugin\StateAction;
 
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Url;
 
 /**
  * TODO: class docs.
@@ -23,7 +26,7 @@ use Drupal\Core\Form\FormStateInterface;
  * )
  */
 // TODO: allow customising state names -- eg published, flagged, yes, no. for nicer URLs.
-class BooleanField extends StateActionBase {
+class BooleanField extends EntityStateActionBase {
 
   public function buildConfigurationForm(array $plugin_form, FormStateInterface $form_state) {
     $plugin_form['entity_type'] = [
@@ -62,10 +65,19 @@ class BooleanField extends StateActionBase {
   /**
    * {@inheritdoc}
    */
-  public function checkOperability() {
-    // .
-
+  public function checkOperability(AccountInterface $account, string $state, EntityInterface $entity = NULL) {
     // also sanity check $state is true/false!
+
+    $field_name = $this->configuration['field'];
+
+    $value = $entity->get($field_name)->value;
+
+    $new_field_value = match($state) {
+      'true' => 1,
+      'false' => 0,
+    };
+
+    return ($value != $new_field_value);
   }
 
   /**
@@ -79,7 +91,7 @@ class BooleanField extends StateActionBase {
    * {@inheritdoc}
    */
   public function advanceState($account, $state, $parameters) {
-    $parameters = $this->upcastRouteParameters($parameters);
+    // $parameters = $this->upcastRouteParameters($parameters);
     list($entity) = $parameters;
 
     $field_name = $this->configuration['field'];

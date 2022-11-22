@@ -159,12 +159,16 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
     // if the system is alreayd in NEXT STATE then nothing happens.
   }
 
-  public function checkOperability() {
-    // ask plugin.
+  public function checkOperability(AccountInterface $account, string $state, ...$parameters) {
+    return $this->getStateActionPlugin()->checkOperability($account, $state, ...$parameters);
   }
 
   public function checkAccess() {
     //
+  }
+
+  public function getRedirectUrl(AccountInterface $account, ...$parameters) {
+    return $this->getStateActionPlugin()->getRedirectUrl($account, ...$parameters);
   }
 
 }

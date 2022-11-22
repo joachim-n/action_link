@@ -5,6 +5,8 @@ namespace Drupal\action_link\Plugin\StateAction;
 use Drupal\Component\Plugin\DerivativeInspectionInterface;
 use Drupal\Component\Plugin\PluginInspectionInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Url;
 
 /**
  * Interface for State Action plugins.
@@ -17,8 +19,10 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
 
   public function advanceState($account, $state, $parameters);
 
-  public function checkOperability();
+  public function checkOperability(AccountInterface $account, string $state);
 
   public function checkAccess();
+
+  public function getRedirectUrl(AccountInterface $account): ?Url;
 
 }
