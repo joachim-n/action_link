@@ -17,6 +17,15 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
 
   public function getNextStateName($user): string;
 
+  /**
+   * Undocumented function
+   *
+   * Also responsible for clearing any caches.
+   *
+   * @param [type] $account
+   * @param [type] $state
+   * @param [type] $parameters
+   */
   public function advanceState($account, $state, $parameters);
 
   public function checkOperability(AccountInterface $account, string $state): bool;
