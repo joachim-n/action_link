@@ -34,6 +34,8 @@ class StateAction extends Plugin {
    */
   public $description = '';
 
+  public $directions = [];
+
   // global
 
   // cyclical?

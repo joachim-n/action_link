@@ -9,6 +9,10 @@ use Drupal\Component\Plugin\PluginBase;
  */
 abstract class StateActionBase extends PluginBase implements StateActionInterface {
 
+  public function getDirections() {
+    return $this->pluginDefinition['directions'];
+  }
+
   public function validateParameters(array $parameters) {
     if (count($parameters) != count($this->pluginDefinition['parameters']['dynamic'])) {
       throw new \LogicException(sprintf("State action plugin %s expects %s parameters, got %s",

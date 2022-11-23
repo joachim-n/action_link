@@ -25,6 +25,10 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
  *       "step",
  *     },
  *   },
+ *   directions = {
+ *     "inc",
+ *     "dec",
+ *   },
  * )
  */
 class NumericField extends EntityStateActionBase {

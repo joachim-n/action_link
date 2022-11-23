@@ -129,10 +129,15 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
     return $this->actionLinkPluginCollection;
   }
 
+  // also rename this, ugly!
+  public function getAllLinks(AccountInterface $user, ...$parameters) {
+    // can't do this yet as it's skipping the $direction param, need to pass
+    // $parameters to the plugin as unpacking named arguments -- need PHP 8.1
+  }
 
-  // and params!
-  // but SOME params are live -> ONLY entity and user? or other shit too??
-  // and SOME params are config!
+  /**
+   * {@inheritdoc}
+   */
   public function getLink(AccountInterface $user, ...$parameters): Link {
     $plugin = $this->getStateActionPlugin();
 
