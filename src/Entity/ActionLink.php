@@ -165,13 +165,13 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
       }
     }
 
-    return $build;
+    return array_filter($build);
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getLink(AccountInterface $user, ...$parameters): Link {
+  public function getLink(AccountInterface $user, ...$parameters): ?Link {
     $plugin = $this->getStateActionPlugin();
 
     // validate param count!
@@ -180,13 +180,15 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
     $route_parameters = $plugin->convertParametersForRoute($parameters);
     // ARGH convert a node entity to an ID??
 
-    $url = Url::fromRoute('action_link.action_link', [
-      'action_link' => $this->id(),
-      'state' => $plugin->getNextStateName($user, ...$parameters),
-      'user' => $user->id(),
-      'parameters' => implode('/', $route_parameters),
-    ]);
-    return Link::fromTextAndUrl('TEXT ' . $this->id(), $url);
+    if ($next_state = $plugin->getNextStateName($user, ...$parameters)) {
+      $url = Url::fromRoute('action_link.action_link', [
+        'action_link' => $this->id(),
+        'state' => $next_state,
+        'user' => $user->id(),
+        'parameters' => implode('/', $route_parameters),
+      ]);
+      return Link::fromTextAndUrl('TEXT ' . $this->id(), $url);
+    }
   }
 
   public function getUrl(): string {

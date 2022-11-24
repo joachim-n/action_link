@@ -25,8 +25,9 @@ interface ActionLinkInterface extends ConfigEntityInterface, EntityWithPluginCol
    *   plugin.
    *
    * @return \Drupal\Core\Link
-   *   A link object.
+   *   A link object, or NULL if there is no valid link for the given
+   *   parameters.
    */
-  public function getLink(AccountInterface $user, ...$parameters): Link;
+  public function getLink(AccountInterface $user, ...$parameters): ?Link;
 
 }

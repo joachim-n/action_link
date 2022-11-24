@@ -15,7 +15,21 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
 
   public function buildConfigurationForm(array $plugin_form, FormStateInterface $form_state);
 
-  public function getNextStateName($user): string;
+  /**
+   * Gets the next state for the given parameters, or NULL if there is none.
+   *
+   * Subclasses will add parameters to this.
+   *
+   *
+   *
+   * @param [type] $user
+   *
+   * @return string|null
+   *   The name of the next state for the action, in the given direction if
+   *   this action defines directions. If there is no valid state, NULL is
+   *   returned.
+   */
+  public function getNextStateName($user): ?string;
 
   /**
    * Undocumented function
