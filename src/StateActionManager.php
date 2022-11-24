@@ -37,4 +37,6 @@ class StateActionManager extends DefaultPluginManager {
     $this->setCacheBackend($cache_backend, 'state_action_plugins');
   }
 
+  // TODO: check that if 'directions' is defined IFF there's also a 'direction' dynamic param defined.
+
 }
