@@ -129,10 +129,43 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
     return $this->actionLinkPluginCollection;
   }
 
-  // also rename this, ugly!
-  public function getAllLinks(AccountInterface $user, ...$parameters) {
+  /**
+   * Gets a render array of all the operable links for the user.
+   *
+   * @param \Drupal\Core\Session\AccountInterface $user
+   *   The user to get links for. TODO ARGH WANT TO ALLOW EASY DEFAULT TO MEAN CURRENT USER!
+   * @param [type] ...$parameters
+   */
+  public function buildLinkSet(AccountInterface $user, ...$parameters) {
     // can't do this yet as it's skipping the $direction param, need to pass
     // $parameters to the plugin as unpacking named arguments -- need PHP 8.1
+
+    $plugin = $this->getStateActionPlugin();
+    $directions = $plugin->getDirections();
+
+    $build = [];
+    if (empty($directions)) {
+      // There are no directions, which means the state action plugin only has
+      // one link to show.
+      $build['link'] = $this->getLink($user, ...$parameters)->toRenderable();
+    }
+    else {
+      // else, NEED TO KNOW how to add $direction to $parameters!
+      $definition = $plugin->getPluginDefinition();
+      $dynamic_parameters = $definition['parameters']['dynamic'];
+      // The plugin manager has checked that the 'direction' parameter exists
+      // at discovery time.
+      $direction_parameter_position = array_search('direction', $dynamic_parameters);
+
+      foreach ($directions as $direction) {
+        $link_parameters = $parameters;
+        array_splice($link_parameters, $direction_parameter_position, 0, $direction);
+
+        $build[$direction] = $this->getLink($user, ...$link_parameters)->toRenderable();
+      }
+    }
+
+    return $build;
   }
 
   /**
