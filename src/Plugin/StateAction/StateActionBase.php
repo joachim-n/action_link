@@ -10,7 +10,7 @@ use Drupal\Component\Plugin\PluginBase;
 abstract class StateActionBase extends PluginBase implements StateActionInterface {
 
   public function getDirections() {
-    return $this->pluginDefinition['directions'];
+    return $this->pluginDefinition['directions'] ?? NULL;
   }
 
   public function validateParameters(array $parameters) {
