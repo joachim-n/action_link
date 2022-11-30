@@ -33,6 +33,8 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
  */
 class NumericField extends EntityStateActionBase {
 
+  use RepeatableTrait;
+
   use StringTranslationTrait;
 
   public function buildConfigurationForm(array $plugin_form, FormStateInterface $form_state) {

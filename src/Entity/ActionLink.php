@@ -180,14 +180,18 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
     $route_parameters = $plugin->convertParametersForRoute($parameters);
     // ARGH convert a node entity to an ID??
 
+    // TODO - get labels!
+
     if ($next_state = $plugin->getNextStateName($user, ...$parameters)) {
+      $label = $plugin->getLinkLabel($next_state, ...$parameters);
+
       $url = Url::fromRoute('action_link.action_link', [
         'action_link' => $this->id(),
         'state' => $next_state,
         'user' => $user->id(),
         'parameters' => implode('/', $route_parameters),
       ]);
-      return Link::fromTextAndUrl('TEXT ' . $this->id(), $url);
+      return Link::fromTextAndUrl($label, $url);
     }
   }
 

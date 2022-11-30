@@ -34,6 +34,8 @@ use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
  */
 class DateField extends EntityStateActionBase {
 
+  use RepeatableTrait;
+
   use StringTranslationTrait;
 
   public function buildConfigurationForm(array $plugin_form, FormStateInterface $form_state) {
