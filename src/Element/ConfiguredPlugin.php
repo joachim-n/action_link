@@ -94,13 +94,11 @@ class ConfiguredPlugin extends FormElement {
       '#required' => $element['#required'],
       '#default_value' => $selected_plugin_id,
       '#ajax' => [
-        // When 'event' occurs, Drupal will perform an ajax request in the
-        // background. Usually the default value is sufficient (eg. change for
-        // select elements), but valid values include any jQuery event,
-        // most notably 'mousedown', 'blur', and 'submit'.
         'callback' => get_class() . '::pluginDropdownCallback',
         'wrapper' => $container_html_id,
         'options' => [
+          // Pass the array parents to the AJAX callback in a query parameter,
+          // so that it can determine where in the form our element is located.
           'query' => [
             'element_parents' => implode('/', $element['#array_parents']),
           ],
@@ -118,6 +116,7 @@ class ConfiguredPlugin extends FormElement {
       if (isset($element['#default_value']['plugin_id']) && $element['#default_value']['plugin_id'] == $selected_plugin_id) {
         foreach (Element::children($element['container']['plugin_configuration']) as $key) {
           if (isset($element['#default_value']['plugin_configuration'][$key])) {
+            // TODO: make this recursive to handle nested form elements!
             $element['container']['plugin_configuration'][$key]['#default_value'] = $element['#default_value']['plugin_configuration'][$key];
           }
         }
@@ -129,10 +128,6 @@ class ConfiguredPlugin extends FormElement {
 
   /**
    * AJAX callback for the plugin ID select element.
-   *
-   * @param [type] $form
-   * @param \Drupal\Core\Form\FormStateInterface $form_state
-   * @param \Symfony\Component\HttpFoundation\Request $request
    */
   public static function pluginDropdownCallback(&$form, FormStateInterface &$form_state, Request $request) {
     $form_parents = explode('/', $request->query->get('element_parents'));
