@@ -64,7 +64,8 @@ class ConfiguredPlugin extends FormElement {
     natcasesort($options);
 
     $element['container'] = [
-      '#type' => 'fieldset',
+      '#type' => 'details',
+      '#open' => TRUE,
       '#title' => $element['#title'] ?? '',
       // TODO! MUST BE UNIQUE IN PAGE!
       '#attributes' => ['id' => 'plugin-container'],
