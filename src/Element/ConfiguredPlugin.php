@@ -2,6 +2,7 @@
 
 namespace Drupal\action_link\Element;
 
+use Drupal\Component\Utility\Html as HtmlUtility;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
@@ -63,20 +64,17 @@ class ConfiguredPlugin extends FormElement {
     }
     natcasesort($options);
 
+    $element['#tree'] = TRUE;
+
+    $container_html_id = HtmlUtility::getUniqueId('ajax-link');
+
     $element['container'] = [
       '#type' => 'details',
       '#open' => TRUE,
       '#title' => $element['#title'] ?? '',
-      // TODO! MUST BE UNIQUE IN PAGE!
-      '#attributes' => ['id' => 'plugin-container'],
+      '#attributes' => ['id' => $container_html_id],
     ];
 
-    $element['#tree'] = TRUE;
-
-    // TODO!
-    // if (!isset($element['#id'])) {
-    //   $element['#id'] = $element['#options']['attributes']['id'] = HtmlUtility::getUniqueId('ajax-link');
-    // }
 
     $plugin_id_parents = $element['#array_parents'];
     $plugin_id_parents[] = 'plugin_id';
@@ -101,7 +99,7 @@ class ConfiguredPlugin extends FormElement {
         // select elements), but valid values include any jQuery event,
         // most notably 'mousedown', 'blur', and 'submit'.
         'callback' => get_class() . '::pluginDropdownCallback',
-        'wrapper' => 'plugin-container',
+        'wrapper' => $container_html_id,
         'options' => [
           'query' => [
             'element_parents' => implode('/', $element['#array_parents']),
