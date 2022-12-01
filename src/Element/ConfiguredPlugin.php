@@ -10,7 +10,7 @@ use Drupal\Core\Render\Element\FormElement;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * TODO: class docs.
+ * Form element for selecting and configuring a plugin.
  *
  * default value:
  * configuration
@@ -31,7 +31,7 @@ class ConfiguredPlugin extends FormElement {
     return [
       '#input' => TRUE,
       // '#element_validate' => [
-      //   [$class, 'validateDatetime'],
+      //   [$class, 'validatePluginConfiguration'],
       // ],
       '#process' => [
         [$class, 'processPlugin'],
