@@ -146,7 +146,7 @@ class ActionLinkPlugin extends FormElement {
    */
   public static function valueCallback(&$element, $input, FormStateInterface $form_state) {
     if ($input === FALSE) {
-      return $element['#default_value'];
+      return $element['#default_value'] ?? [];
     }
     else {
       return $input['container'];
