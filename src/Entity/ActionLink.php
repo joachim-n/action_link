@@ -103,9 +103,12 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
 
 
   public function getPluginCollections() {
-    return [
-      'plugin_config' => $this->getActionLinkPluginCollection(),
-    ];
+    if ($this->getActionLinkPluginCollection()) {
+      return [
+        'plugin_config' => $this->getActionLinkPluginCollection(),
+      ];
+    }
+    return [];
   }
 
   /**
