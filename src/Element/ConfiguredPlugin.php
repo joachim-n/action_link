@@ -11,9 +11,14 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * TODO: class docs.
  *
+ * default value:
+ * configuration
+ *
  * @FormElement("configured_plugin")
  */
 class ConfiguredPlugin extends FormElement {
+
+  // use CompositeFormElementTrait?
 
   /**
    * {@inheritdoc}
@@ -38,14 +43,6 @@ class ConfiguredPlugin extends FormElement {
       // ],
       // '#theme' => 'datetime_form',
       // '#theme_wrappers' => ['datetime_wrapper'],
-      // '#date_date_format' => $date_format,
-      // '#date_date_element' => 'date',
-      // '#date_date_callbacks' => [],
-      // '#date_time_format' => $time_format,
-      // '#date_time_element' => 'time',
-      // '#date_time_callbacks' => [],
-      // '#date_year_range' => '1900:2050',
-      // '#date_increment' => 1,
     ];
   }
 
@@ -56,6 +53,9 @@ class ConfiguredPlugin extends FormElement {
     // Sets a form element's class attribute.
   }
 
+  /**
+   * Process callback.
+   */
   public static function processPlugin(&$element, FormStateInterface $form_state, &$complete_form) {
     $options = [];
     foreach (static::getPluginManager()->getDefinitions() as $plugin_id => $plugin_definition) {
@@ -70,19 +70,22 @@ class ConfiguredPlugin extends FormElement {
       '#attributes' => ['id' => 'plugin-container'],
     ];
 
+    $element['#tree'] = TRUE;
+
     // TODO!
     // if (!isset($element['#id'])) {
     //   $element['#id'] = $element['#options']['attributes']['id'] = HtmlUtility::getUniqueId('ajax-link');
     // }
 
+    $plugin_id_parents = $element['#array_parents'];
+    $plugin_id_parents[] = 'plugin_id';
 
-    // NOPE! we might be in TREE! need PARENTS! from $element['#array_parents']!
-    if (empty($form_state->getValue('plugin_id'))) {
+    if (empty($form_state->getValue($plugin_id_parents))) {
       $selected_plugin_id = $element['#default_value']['plugin_id'] ?? '';
     }
     else {
       // Get the value if it already exists.
-      $selected_plugin_id = $form_state->getValue('plugin_id');
+      $selected_plugin_id = $form_state->getValue($plugin_id_parents);
     }
 
     $element['container']['plugin_id'] = [
@@ -110,11 +113,28 @@ class ConfiguredPlugin extends FormElement {
       $plugin = static::getPluginManager()->createInstance($selected_plugin_id);
 
       $element['container']['plugin_configuration'] = $plugin->buildConfigurationForm([], $form_state);
+
+      // If this is the original load of the form, set the default values on
+      // the plugin configuration.
+      if (isset($element['#default_value']['plugin_id']) && $element['#default_value']['plugin_id'] == $selected_plugin_id) {
+        foreach (Element::children($element['container']['plugin_configuration']) as $key) {
+          if (isset($element['#default_value']['plugin_configuration'][$key])) {
+            $element['container']['plugin_configuration'][$key]['#default_value'] = $element['#default_value']['plugin_configuration'][$key];
+          }
+        }
+      }
     }
 
     return $element;
   }
 
+  /**
+   * AJAX callback for the plugin ID select element.
+   *
+   * @param [type] $form
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   * @param \Symfony\Component\HttpFoundation\Request $request
+   */
   public static function pluginDropdownCallback(&$form, FormStateInterface &$form_state, Request $request) {
     $form_parents = explode('/', $request->query->get('element_parents'));
 
@@ -127,6 +147,24 @@ class ConfiguredPlugin extends FormElement {
     return $form;
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public static function valueCallback(&$element, $input, FormStateInterface $form_state) {
+    if ($input === FALSE) {
+      return $element['#default_value'];
+    }
+    else {
+      return $input['container'];
+    }
+  }
+
+  /**
+   * Gets the plugin manager.
+   *
+   * @return mixed
+   *   The plugin manager service for the plugin type.
+   */
   protected static function getPluginManager() {
     // Hardcoded for now, generalise later!
     return \Drupal::service('plugin.manager.action_link_state_action');

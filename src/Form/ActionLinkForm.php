@@ -3,6 +3,7 @@
 namespace Drupal\action_link\Form;
 
 use Drupal\Core\Entity\EntityForm;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
@@ -19,6 +20,10 @@ class ActionLinkForm extends EntityForm {
     /** @var \Drupal\action_link\Entity\ActionLinkInterface */
     $action_link = $this->entity;
     // dsm($action_link);
+
+    $form['#title'] = $this->t('Edit %action-link', [
+      '%action-link' => $action_link->label(),
+    ]);
 
     $form['label'] = [
       '#type' => 'textfield',
@@ -46,10 +51,14 @@ class ActionLinkForm extends EntityForm {
 
 
     // TEST!
-    $form['foo'] = [
+    $form['plugin'] = [
       '#type' => 'configured_plugin',
       '#title' => $this->t('Action plugin'),
       '#required' => TRUE,
+      '#default_value' => [
+        'plugin_id' => $action_link->get('plugin_id'),
+        'plugin_configuration' => $action_link->get('plugin_config'),
+      ],
     ];
 
     return $form;
@@ -136,6 +145,15 @@ class ActionLinkForm extends EntityForm {
     dsm($form_state->getValues());
 
     parent::submitForm($form, $form_state);
+  }
+
+  protected function copyFormValuesToEntity(EntityInterface $entity, array $form, FormStateInterface $form_state) {
+    parent::copyFormValuesToEntity($entity, $form, $form_state);
+
+    $this->entity->set('plugin_id', $form_state->getValue(['plugin', 'plugin_id']));
+    $this->entity->set('plugin_config', $form_state->getValue(['plugin', 'plugin_configuration']));
+
+    dsm($this->entity);
   }
 
   /**
