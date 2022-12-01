@@ -58,23 +58,15 @@ class ConfiguredPlugin extends FormElement {
    * Process callback.
    */
   public static function processPlugin(&$element, FormStateInterface $form_state, &$complete_form) {
-    $options = [];
-    foreach (static::getPluginManager()->getDefinitions() as $plugin_id => $plugin_definition) {
-      $options[$plugin_id] = $plugin_definition['label'];
-    }
-    natcasesort($options);
-
     $element['#tree'] = TRUE;
 
     $container_html_id = HtmlUtility::getUniqueId('ajax-link');
-
     $element['container'] = [
       '#type' => 'details',
       '#open' => TRUE,
       '#title' => $element['#title'] ?? '',
       '#attributes' => ['id' => $container_html_id],
     ];
-
 
     $plugin_id_parents = $element['#array_parents'];
     $plugin_id_parents[] = 'plugin_id';
@@ -86,6 +78,12 @@ class ConfiguredPlugin extends FormElement {
       // Get the value if it already exists.
       $selected_plugin_id = $form_state->getValue($plugin_id_parents);
     }
+
+    $options = [];
+    foreach (static::getPluginManager()->getDefinitions() as $plugin_id => $plugin_definition) {
+      $options[$plugin_id] = $plugin_definition['label'];
+    }
+    natcasesort($options);
 
     $element['container']['plugin_id'] = [
       '#type' => $element['#options_element_type'],
