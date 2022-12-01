@@ -18,7 +18,7 @@ class ActionLinkForm extends EntityForm {
 
     /** @var \Drupal\action_link\Entity\ActionLinkInterface */
     $action_link = $this->entity;
-    dsm($action_link);
+    // dsm($action_link);
 
     $form['label'] = [
       '#type' => 'textfield',
@@ -43,6 +43,17 @@ class ActionLinkForm extends EntityForm {
       '#disabled' => !$action_link->isNew(),
       '#required' => TRUE,
     ];
+
+
+    // TEST!
+    $form['foo'] = [
+      '#type' => 'configured_plugin',
+      '#title' => $this->t('Action plugin'),
+      '#required' => TRUE,
+    ];
+
+    return $form;
+
 
 
     $this->stateActionManager = \Drupal::service('plugin.manager.action_link_state_action');
