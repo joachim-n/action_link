@@ -15,7 +15,9 @@ use Symfony\Component\HttpFoundation\Request;
  * default value:
  * configuration
  *
- * @FormElement("configured_plugin")
+ * TODO: rename to avoid clash!
+ *
+ * @FormElement("action_plugin")
  */
 class ConfiguredPlugin extends FormElement {
 
