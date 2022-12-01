@@ -19,7 +19,7 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * @FormElement("action_plugin")
  */
-class ConfiguredPlugin extends FormElement {
+class ActionLinkPlugin extends FormElement {
 
   // use CompositeFormElementTrait?
 
