@@ -150,10 +150,11 @@ class ActionLinkForm extends EntityForm {
   protected function copyFormValuesToEntity(EntityInterface $entity, array $form, FormStateInterface $form_state) {
     parent::copyFormValuesToEntity($entity, $form, $form_state);
 
-    $this->entity->set('plugin_id', $form_state->getValue(['plugin', 'plugin_id']));
-    $this->entity->set('plugin_config', $form_state->getValue(['plugin', 'plugin_configuration']));
+    // dsm($form_state->getValue(['plugin', 'plugin_id']));
+    // dsm($form_state->getValue(['plugin', 'plugin_configuration']));
 
-    dsm($this->entity);
+    $entity->set('plugin_id', $form_state->getValue(['plugin', 'plugin_id']));
+    $entity->set('plugin_config', $form_state->getValue(['plugin', 'plugin_configuration']) ?? []);
   }
 
   /**
