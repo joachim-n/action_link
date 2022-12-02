@@ -2,6 +2,7 @@
 
 namespace Drupal\action_link\Element;
 
+use Drupal\action_link\Utility\NestedArrayRecursive;
 use Drupal\Component\Utility\Html as HtmlUtility;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Form\FormStateInterface;
@@ -10,12 +11,10 @@ use Drupal\Core\Render\Element\FormElement;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Form element for selecting and configuring a plugin.
+ * Form element for selecting and configuring a state action plugin.
  *
- * default value:
- * configuration
- *
- * TODO: rename to avoid clash!
+ * TODO: Replace this with Plugin module when
+ * https://www.drupal.org/project/plugin/issues/3197304 is fixed.
  *
  * @FormElement("action_plugin")
  */
@@ -27,7 +26,6 @@ class ActionLinkPlugin extends FormElement {
    * {@inheritdoc}
    */
   public function getInfo() {
-    // dsm("!!");
     $class = static::class;
 
     return [
@@ -114,12 +112,14 @@ class ActionLinkPlugin extends FormElement {
       // If this is the original load of the form, set the default values on
       // the plugin configuration.
       if (isset($element['#default_value']['plugin_id']) && $element['#default_value']['plugin_id'] == $selected_plugin_id) {
-        foreach (Element::children($element['container']['plugin_configuration']) as $key) {
-          if (isset($element['#default_value']['plugin_configuration'][$key])) {
-            // TODO: make this recursive to handle nested form elements!
-            $element['container']['plugin_configuration'][$key]['#default_value'] = $element['#default_value']['plugin_configuration'][$key];
-          }
-        }
+        $plugin_configuration_form = &$element['container']['plugin_configuration'];
+
+        // Recurse into nested configuration values.
+        NestedArrayRecursive::arrayWalkNested($element['#default_value']['plugin_configuration'], function($value, $parents) use (&$plugin_configuration_form) {
+          $default_value_parents = $parents;
+          $default_value_parents[] = '#default_value';
+          NestedArray::setValue($plugin_configuration_form, $default_value_parents, $value);
+        });
       }
     }
 
