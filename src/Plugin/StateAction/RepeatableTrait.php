@@ -19,10 +19,22 @@ trait RepeatableTrait {
 
   public function buildTextsConfigurationForm($labels_form, FormStateInterface $form_state) {
     foreach ($this->pluginDefinition['directions'] as $direction) {
+      $labels_form['direction'][$direction] = [
+        '#type' => 'details',
+        '#open' => TRUE,
+        // TODO: human labels for directions!
+        '#title' => t('Texts for ' . $direction),
+      ];
+
       $labels_form['direction'][$direction]['link_label'] = [
         '#type' => 'textfield',
         '#title' => t('Link label for ' . $direction),
         '#required' => TRUE,
+      ];
+
+      $labels_form['direction'][$direction]['message'] = [
+        '#type' => 'textfield',
+        '#title' => t('Message for ' . $direction),
       ];
     }
 
@@ -35,6 +47,12 @@ trait RepeatableTrait {
     $label = $this->configuration['labels']['direction'][$direction]['link_label'] ?? t("Change value");
 
     return $label;
+  }
+
+  public function getMessage(string $state, ...$parameters): string {
+    $direction = $this->getDynamicParameter($parameters, 'direction');
+
+    return $this->configuration['labels']['direction'][$direction]['message'] ?? '';
   }
 
 }
