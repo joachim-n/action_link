@@ -16,7 +16,7 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
   // }
 
   // overridden by traits.
-  public function getMessage(string $state, ...$parameters): ?string {
+  public function getMessage(string $state, ...$parameters): string {
   }
     //   // try states first, then direcions.
 
