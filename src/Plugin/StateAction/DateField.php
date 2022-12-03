@@ -51,7 +51,21 @@ class DateField extends EntityStateActionBase {
       // '#options' => [],
     ];
 
-    // delta??
+    $plugin_form['step'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Step interval'),
+      '#description' => $this->t('The amount of time to change the date by, as a PHP DateInterval string.'),
+      '#required' => TRUE,
+      // TODO: validation.
+    ];
+
+    $plugin_form['labels'] = [
+      '#tree' => TRUE,
+    ];
+    $plugin_form['labels'] = $this->buildTextsConfigurationForm($plugin_form['labels'], $form_state);
+
+    $plugin_form['labels']['direction']['inc']['link_label']['#title'] = $this->t('Link label for increasing the field value');
+    $plugin_form['labels']['direction']['dec']['link_label']['#title'] = $this->t('Link label for decreasing the field value');
 
     return $plugin_form;
   }
