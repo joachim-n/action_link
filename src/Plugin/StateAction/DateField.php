@@ -81,11 +81,10 @@ class DateField extends EntityStateActionBase {
     $date_interval = new \DateInterval($this->configuration['step']);
 
     $date = $entity->get($field_name)->date;
-    // dump($date);
-
+    $date_clone = clone($date);
     $next_date = match($direction) {
-      'inc' => $date->add($date_interval),
-      'dec' => $date->sub($date_interval),
+      'inc' => $date_clone->add($date_interval),
+      'dec' => $date_clone->sub($date_interval),
     };
 
     $next_value = $next_date->format(\DateTimeInterface::W3C);
