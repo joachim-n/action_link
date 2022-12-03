@@ -4,8 +4,7 @@ namespace Drupal\action_link\Plugin\StateAction;
 
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Session\AccountInterface;
-use Drupal\Core\Url;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
  * TODO: class docs.
@@ -28,6 +27,8 @@ use Drupal\Core\Url;
 // TODO: allow customising state names -- eg published, flagged, yes, no. for nicer URLs.
 class BooleanField extends EntityStateActionBase {
 
+  use ToggleTrait;
+
   public function buildConfigurationForm(array $plugin_form, FormStateInterface $form_state) {
     $plugin_form['entity_type'] = [
       '#type' => 'textfield', // todo options
@@ -41,7 +42,16 @@ class BooleanField extends EntityStateActionBase {
       // '#options' => [],
     ];
 
-    // delta??
+    // TODO: field delta????? ARGH!
+
+    $plugin_form['labels'] = [
+      // '#parents' => ['labels'],
+      '#tree' => TRUE,
+    ];
+    $plugin_form['labels'] = $this->buildLabelsConfigurationForm($plugin_form['labels'], $form_state);
+
+    $plugin_form['labels']['link_label_set']['#title'] = $this->t('Link label for setting the field value to TRUE');
+    $plugin_form['labels']['link_label_unset']['#title'] = $this->t('Link label for setting the field value to FALSE');
 
     return $plugin_form;
   }
