@@ -11,7 +11,7 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
  */
 trait ToggleTrait {
 
-  public function buildLabelsConfigurationForm($labels_form, FormStateInterface $form_state) {
+  public function buildTextsConfigurationForm($labels_form, FormStateInterface $form_state) {
     $labels_form['state']['true']['link_label'] = [
       '#type' => 'textfield',
       '#title' => t('Link label for setting the toggle'),

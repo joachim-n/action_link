@@ -48,7 +48,7 @@ class BooleanField extends EntityStateActionBase {
       // '#parents' => ['labels'],
       '#tree' => TRUE,
     ];
-    $plugin_form['labels'] = $this->buildLabelsConfigurationForm($plugin_form['labels'], $form_state);
+    $plugin_form['labels'] = $this->buildTextsConfigurationForm($plugin_form['labels'], $form_state);
 
     $plugin_form['labels']['state']['true']['link_label']['#title'] = $this->t('Link label for setting the field value to TRUE');
     $plugin_form['labels']['state']['false']['link_label']['#title'] = $this->t('Link label for setting the field value to FALSE');
