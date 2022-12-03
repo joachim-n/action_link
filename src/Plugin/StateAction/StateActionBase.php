@@ -30,6 +30,14 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
     }
   }
 
+  protected function getDynamicParameter(array $parameters, string $name) {
+    $dynamic_parameters_definition = $this->pluginDefinition['parameters']['dynamic'];
+
+    $parameter_position = array_search($name, $dynamic_parameters_definition);
+    return $parameters[$parameter_position];
+  }
+
+
   // todo interface.
   public function convertParametersForRoute(array $parameters): array {
     $dynamic_parameter_indexes = array_flip($this->pluginDefinition['parameters']['dynamic']);

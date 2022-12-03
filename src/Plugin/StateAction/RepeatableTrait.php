@@ -19,7 +19,7 @@ trait RepeatableTrait {
 
   public function buildTextsConfigurationForm($labels_form, FormStateInterface $form_state) {
     foreach ($this->pluginDefinition['directions'] as $direction) {
-      $labels_form['state'][$direction]['link_label'] = [
+      $labels_form['direction'][$direction]['link_label'] = [
         '#type' => 'textfield',
         '#title' => t('Link label for ' . $direction),
         '#required' => TRUE,
@@ -30,8 +30,9 @@ trait RepeatableTrait {
   }
 
   public function getLinkLabel(string $state, ...$parameters): string {
+    $direction = $this->getDynamicParameter($parameters, 'direction');
 
-    $label = $this->configuration['labels']['link'][$state] ?? t("Change state");
+    $label = $this->configuration['labels']['direction'][$direction]['link_label'] ?? t("Change value");
 
     return $label;
   }
