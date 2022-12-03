@@ -10,7 +10,7 @@ use Drupal\Component\Plugin\PluginBase;
 abstract class StateActionBase extends PluginBase implements StateActionInterface {
 
   // implemented in traits.
-  // public function getLinkLabel(string $state, ...$parameters): TranslatableMarkup {
+  // public function getLinkLabel(string $state, ...$parameters): string {
   //   // try states first, then direcions.
 
   // }
