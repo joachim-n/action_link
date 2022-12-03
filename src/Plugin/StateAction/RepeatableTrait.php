@@ -18,7 +18,7 @@ trait RepeatableTrait {
 
   // labels for each direction
 
-  public function getLinkLabel(string $state, ...$parameters): TranslatableMarkup {
+  public function getLinkLabel(string $state, ...$parameters): string {
 
     $label = $this->configuration['labels']['link'][$state] ?? t("Change state");
 
