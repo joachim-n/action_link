@@ -15,6 +15,13 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
 
   // }
 
+  // overridden by traits.
+  public function getMessage(string $state, ...$parameters): ?string {
+  }
+    //   // try states first, then direcions.
+
+  //
+
 
   public function getDirections() {
     return $this->pluginDefinition['directions'] ?? NULL;
