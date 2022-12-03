@@ -52,6 +52,12 @@ class NumericField extends EntityStateActionBase {
 
     // delta??
 
+    $plugin_form['step'] = [
+      '#type' => 'number',
+      '#title' => $this->t('Step'),
+      '#required' => TRUE,
+    ];
+
     return $plugin_form;
   }
 
