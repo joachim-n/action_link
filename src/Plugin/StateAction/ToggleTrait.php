@@ -50,7 +50,6 @@ trait ToggleTrait {
     return $labels_form;
   }
 
-  // labels for each state.
 
   public function getLinkLabel(string $state, ...$parameters): string {
     $label = $this->configuration['labels']['state'][$state]['link_label'] ?? t("Change state");
@@ -58,7 +57,7 @@ trait ToggleTrait {
     return $label;
   }
 
-  public function getMessage(string $state, ...$parameters): ?string {
+  public function getMessage(string $state, ...$parameters): string {
     return $this->configuration['labels']['state'][$state]['message'] ?? '';
   }
 

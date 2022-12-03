@@ -48,4 +48,17 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
 
   public function getRedirectUrl(AccountInterface $account): ?Url;
 
+  /**
+   * Gets the message to show the user after an action is complete.
+   *
+   * @param string $state
+   *   The state that has been arrived at.
+   * @param mixed ...$parameters
+   *   The parameters.
+   *
+   * @return string
+   *   The message string. If this is empty then no message should be shown.
+   */
+  public function getMessage(string $state, ...$parameters): string;
+
 }
