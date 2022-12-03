@@ -2,6 +2,7 @@
 
 namespace Drupal\action_link\Plugin\StateAction;
 
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 
@@ -16,7 +17,17 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
  */
 trait RepeatableTrait {
 
-  // labels for each direction
+  public function buildTextsConfigurationForm($labels_form, FormStateInterface $form_state) {
+    foreach ($this->pluginDefinition['directions'] as $direction) {
+      $labels_form['state'][$direction]['link_label'] = [
+        '#type' => 'textfield',
+        '#title' => t('Link label for ' . $direction),
+        '#required' => TRUE,
+      ];
+    }
+
+    return $labels_form;
+  }
 
   public function getLinkLabel(string $state, ...$parameters): string {
 

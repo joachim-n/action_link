@@ -58,6 +58,14 @@ class NumericField extends EntityStateActionBase {
       '#required' => TRUE,
     ];
 
+    $plugin_form['labels'] = [
+      '#tree' => TRUE,
+    ];
+    $plugin_form['labels'] = $this->buildTextsConfigurationForm($plugin_form['labels'], $form_state);
+
+    $plugin_form['labels']['state']['inc']['link_label']['#title'] = $this->t('Link label for increasing the field value');
+    $plugin_form['labels']['state']['dec']['link_label']['#title'] = $this->t('Link label for decreasing the field value');
+
     return $plugin_form;
   }
 
