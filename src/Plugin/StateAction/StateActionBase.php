@@ -30,6 +30,17 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
     }
   }
 
+  /**
+   * Gets a specific parameter that was passed to the action link.
+   *
+   * @param array $parameters
+   *   The original array of parameters.
+   * @param string $name
+   *   The name of the parameter to get.
+   *
+   * @return mixed
+   *   The parameter value from the array.
+   */
   protected function getDynamicParameter(array $parameters, string $name) {
     $dynamic_parameters_definition = $this->pluginDefinition['parameters']['dynamic'];
 
