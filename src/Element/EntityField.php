@@ -32,15 +32,8 @@ class EntityField extends FormElement {
       // ],
       '#process' => [
         [$class, 'processEntityType'],
-        // [$class, 'processAjaxForm'],
-        // [$class, 'processGroup'],
       ],
       '#options_element_type' => 'select',
-      // '#pre_render' => [
-      //   [$class, 'preRenderGroup'],
-      // ],
-      // '#theme' => 'datetime_form',
-      // '#theme_wrappers' => ['datetime_wrapper'],
     ];
   }
 
@@ -59,24 +52,18 @@ class EntityField extends FormElement {
 
     $container_html_id = HtmlUtility::getUniqueId('cake');
     $element['container'] = [
-      // '#type' => 'container',
       '#type' => 'details',
       '#open' => TRUE,
-      // '#open' => TRUE,
-      '#title' => $element['#title'] ?? 'Entity type',
+      '#title' => $element['#title'] ?? 'Entity type and field',
       '#attributes' => ['id' => $container_html_id],
-    ];
-
-    $element['container']['time'] = [
-      '#markup' => REQUEST_TIME,
     ];
 
     // Try to get a default value for the entity_type_id element.
     $entity_type_id_parents = $element['#array_parents'];
+    // TODO: why do we need 'container' here but not in the plugin form element????
     $entity_type_id_parents[] = 'container';
     $entity_type_id_parents[] = 'entity_type_id';
 
-    $values = $form_state->getValues();
     if ($selected_entity_type_id = $form_state->getValue($entity_type_id_parents)) {
       // A value set in the form by the user prior to an AJAX submission takes
       // precedence.
@@ -86,13 +73,9 @@ class EntityField extends FormElement {
       $selected_entity_type_id = $element['#default_value']['entity_type_id'];
     }
     else {
-      // Finally, an empty value.
+      // If we still don't have anything, use an empty value.
       $selected_entity_type_id = '';
     }
-
-    $element['container']['et'] = [
-      '#markup' => 'SELECTED: ' . $selected_entity_type_id,
-    ];
 
 
     $options = [];
@@ -106,7 +89,7 @@ class EntityField extends FormElement {
 
     $element['container']['entity_type_id'] = [
       '#type' => $element['#options_element_type'],
-      '#title' => t("Entity type ELEMENT"),
+      '#title' => t('Entity type'),
       '#options' => $options,
       '#empty_value' => '',
       '#required' => $element['#required'],
@@ -124,10 +107,8 @@ class EntityField extends FormElement {
       ],
     ];
 
-    // $selected_entity_type_id = 'node';
     if ($selected_entity_type_id) {
       $field_storage_definitions = \Drupal::service('entity_field.manager')->getFieldStorageDefinitions($selected_entity_type_id);
-      // dsm($field_storage_definitions);
 
       $field_options = [];
       foreach ($field_storage_definitions as $field_id => $field_storage_definition) {
@@ -165,7 +146,7 @@ class EntityField extends FormElement {
   /**
    * {@inheritdoc}
    */
-  public static function XvalueCallback(&$element, $input, FormStateInterface $form_state) {
+  public static function valueCallback(&$element, $input, FormStateInterface $form_state) {
     if ($input === FALSE) {
       return $element['#default_value'] ?? [];
     }
