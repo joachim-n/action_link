@@ -57,17 +57,26 @@ class EntityField extends FormElement {
   public static function processEntityType(&$element, FormStateInterface $form_state, &$complete_form) {
     $element['#tree'] = TRUE;
 
-    $container_html_id = HtmlUtility::getUniqueId('entity-type-id');
+    $container_html_id = HtmlUtility::getUniqueId('cake');
     $element['container'] = [
-      // '#type' => 'details',
+      // '#type' => 'container',
+      '#type' => 'details',
+      '#open' => TRUE,
       // '#open' => TRUE,
-      '#title' => $element['#title'] ?? '',
+      '#title' => $element['#title'] ?? 'Entity type',
       '#attributes' => ['id' => $container_html_id],
+    ];
+
+    $element['container']['time'] = [
+      '#markup' => REQUEST_TIME,
     ];
 
     // Try to get a default value for the entity_type_id element.
     $entity_type_id_parents = $element['#array_parents'];
+    $entity_type_id_parents[] = 'container';
     $entity_type_id_parents[] = 'entity_type_id';
+
+    $values = $form_state->getValues();
     if ($selected_entity_type_id = $form_state->getValue($entity_type_id_parents)) {
       // A value set in the form by the user prior to an AJAX submission takes
       // precedence.
@@ -81,6 +90,11 @@ class EntityField extends FormElement {
       $selected_entity_type_id = '';
     }
 
+    $element['container']['et'] = [
+      '#markup' => 'SELECTED: ' . $selected_entity_type_id,
+    ];
+
+
     $options = [];
     foreach (\Drupal::service('entity_type.manager')->getDefinitions() as $entity_type_id => $entity_type) {
       if ($entity_type->getGroup() != 'content') {
@@ -92,7 +106,7 @@ class EntityField extends FormElement {
 
     $element['container']['entity_type_id'] = [
       '#type' => $element['#options_element_type'],
-      '#title' => t("Entity type"),
+      '#title' => t("Entity type ELEMENT"),
       '#options' => $options,
       '#empty_value' => '',
       '#required' => $element['#required'],
