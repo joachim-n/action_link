@@ -49,6 +49,15 @@ class ActionLinkForm extends EntityForm {
       '#required' => TRUE,
     ];
 
+    $form['foo'] = [
+      '#type' => 'entity_field',
+      '#default_value' => [
+        'entity_type_id' => 'node',
+      ],
+    ];
+
+
+
     $form['plugin'] = [
       '#type' => 'action_plugin',
       '#title' => $this->t('Action plugin'),
