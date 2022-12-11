@@ -13,7 +13,7 @@ use Drupal\Core\Url;
  */
 interface StateActionInterface extends PluginInspectionInterface, DerivativeInspectionInterface {
 
-  public function buildConfigurationForm(array $plugin_form, FormStateInterface $form_state);
+  public function buildConfigurationForm(array $element, FormStateInterface $form_state);
 
   /**
    * Gets the next state for the given parameters, or NULL if there is none.

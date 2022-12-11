@@ -108,7 +108,7 @@ class ActionLinkPlugin extends FormElement {
     if ($selected_plugin_id) {
       $plugin = static::getPluginManager()->createInstance($selected_plugin_id);
 
-      $element['container']['plugin_configuration'] = $plugin->buildConfigurationForm([], $form_state);
+      $element['container']['plugin_configuration'] = $plugin->buildConfigurationForm($element, $form_state);
 
       // If this is the original load of the form, set the default values on
       // the plugin configuration.
@@ -119,7 +119,14 @@ class ActionLinkPlugin extends FormElement {
         NestedArrayRecursive::arrayWalkNested($element['#default_value']['plugin_configuration'], function($value, $parents) use (&$plugin_configuration_form) {
           $default_value_parents = $parents;
           $default_value_parents[] = '#default_value';
-          NestedArray::setValue($plugin_configuration_form, $default_value_parents, $value);
+
+          // Allow plugin forms to set default values themselves.
+          $default_value_key_exists = NULL;
+          NestedArray::getValue($plugin_configuration_form, $default_value_parents, $default_value_key_exists);
+
+          if (!$default_value_key_exists) {
+            NestedArray::setValue($plugin_configuration_form, $default_value_parents, $value);
+          }
         });
       }
     }

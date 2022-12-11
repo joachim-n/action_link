@@ -29,18 +29,38 @@ class BooleanField extends EntityStateActionBase {
 
   use ToggleTrait;
 
-  public function buildConfigurationForm(array $plugin_form, FormStateInterface $form_state) {
-    $plugin_form['entity_type'] = [
-      '#type' => 'textfield', // todo options
-      '#title' => $this->t('Entity type'),
-      // '#options' => [],
+  public function buildConfigurationForm(array $element, FormStateInterface $form_state) {
+    $plugin_form = [];
+
+    $plugin_form['entity_type_field'] = [
+      '#type' => 'entity_type_field',
+      '#title' => $this->t('Entity field'),
+      '#field_types' => ['boolean'],
+
+      '#element_validate' => [
+        [static::class, 'entityFieldElementValidate'],
+      ],
+      '#default_value' => [
+        'entity_type_id' => $element['#default_value']['plugin_configuration']['entity_type_id'],
+        'field' => $element['#default_value']['plugin_configuration']['field'],
+      ],
     ];
 
-    $plugin_form['field'] = [
-      '#type' => 'textfield', // todo options
-      '#title' => $this->t('field'),
-      // '#options' => [],
-    ];
+    // dsm($element);
+
+
+    // $plugin_form['entity_type'] = [
+
+    //   '#type' => 'textfield', // todo options
+    //   '#title' => $this->t('Entity type'),
+    //   // '#options' => [],
+    // ];
+
+    // $plugin_form['field'] = [
+    //   '#type' => 'textfield', // todo options
+    //   '#title' => $this->t('field'),
+    //   // '#options' => [],
+    // ];
 
     // TODO: field delta????? ARGH!
 

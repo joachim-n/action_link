@@ -38,7 +38,8 @@ class DateField extends EntityStateActionBase {
 
   use StringTranslationTrait;
 
-  public function buildConfigurationForm(array $plugin_form, FormStateInterface $form_state) {
+  public function buildConfigurationForm(array $element, FormStateInterface $form_state) {
+    $plugin_form = [];
     $plugin_form['entity_type'] = [
       '#type' => 'textfield', // todo options
       '#title' => $this->t('Entity type'),
