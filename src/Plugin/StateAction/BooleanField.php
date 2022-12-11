@@ -41,8 +41,8 @@ class BooleanField extends EntityStateActionBase {
         [static::class, 'entityFieldElementValidate'],
       ],
       '#default_value' => [
-        'entity_type_id' => $element['#default_value']['plugin_configuration']['entity_type_id'],
-        'field' => $element['#default_value']['plugin_configuration']['field'],
+        'entity_type_id' => $element['#default_value']['plugin_configuration']['entity_type_id'] ?? '',
+        'field' => $element['#default_value']['plugin_configuration']['field'] ?? '',
       ],
     ];
 
