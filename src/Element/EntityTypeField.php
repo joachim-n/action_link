@@ -13,9 +13,9 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * Form element for selecting an entity type and field.
  *
- * @FormElement("entity_field")
+ * @FormElement("entity_type_field")
  */
-class EntityField extends FormElement {
+class EntityTypeField extends FormElement {
 
   // use CompositeFormElementTrait?
 
