@@ -139,6 +139,7 @@ class EntityTypeField extends FormElement {
         '#title' => t('Entity field'),
         '#options' => $field_options,
         '#empty_value' => '',
+        '#default_value' => $element['#default_value']['field'] ?? NULL,
         '#required' => $element['#required'],
       ];
     }
