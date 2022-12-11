@@ -119,10 +119,17 @@ class EntityTypeField extends FormElement {
     ];
 
     if ($selected_entity_type_id) {
+      /** @var \Drupal\Core\Field\FieldStorageDefinitionInterface[] */
       $field_storage_definitions = \Drupal::service('entity_field.manager')->getFieldStorageDefinitions($selected_entity_type_id);
 
       $field_options = [];
       foreach ($field_storage_definitions as $field_id => $field_storage_definition) {
+        if (!empty($element['#field_types'])) {
+          if (!in_array($field_storage_definition->getType(), $element['#field_types'])) {
+            continue;
+          }
+        }
+
         $field_options[$field_id] = $field_storage_definition->getLabel();
       }
       natcasesort($field_options);
