@@ -150,7 +150,10 @@ class EntityTypeField extends FormElement {
    * Element validate callback.
    */
   public static function validateEntityType($element, FormStateInterface &$form_state, $form) {
-    $form_state->setRebuild();
+    $triggering_element = $form_state->getTriggeringElement();
+
+    // dsm($triggering_element);
+    // $form_state->setRebuild(); // argh prevents save! but needed to handle no-JS button!
   }
 
   /**

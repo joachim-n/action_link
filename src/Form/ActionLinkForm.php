@@ -67,13 +67,14 @@ class ActionLinkForm extends EntityForm {
    */
   public function validateForm(array &$form, FormStateInterface $form_state) {
     parent::validateForm($form, $form_state);
+
+    $this->entity->getStateActionPlugin()->validateConfigurationForm($form, $form_state);
   }
 
   /**
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    dsm($form_state->getValues());
 
     parent::submitForm($form, $form_state);
   }
@@ -86,6 +87,8 @@ class ActionLinkForm extends EntityForm {
 
     $entity->set('plugin_id', $form_state->getValue(['plugin', 'plugin_id']));
     $entity->set('plugin_config', $form_state->getValue(['plugin', 'plugin_configuration']) ?? []);
+
+    $entity->getStateActionPlugin()->copyFormValuesToEntity($entity, $form, $form_state);
   }
 
   /**

@@ -15,6 +15,13 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
 
   // }
 
+  public function validateConfigurationForm(array &$form, FormStateInterface $form_state) {
+
+  }
+
+  public function copyFormValuesToEntity($entity, array &$form, FormStateInterface $form_state) {
+  }
+
   // overridden by traits.
   public function getMessage(string $state, ...$parameters): string {
   }
