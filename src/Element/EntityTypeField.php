@@ -13,6 +13,10 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * Form element for selecting an entity type and field.
  *
+ * Available properties:
+ *  - '#field_types': (optional) An array of field types to include. If empty,
+ *    fields of all types are shown.
+ *
  * @FormElement("entity_type_field")
  */
 class EntityTypeField extends FormElement {
@@ -27,9 +31,10 @@ class EntityTypeField extends FormElement {
 
     return [
       '#input' => TRUE,
-      // '#element_validate' => [
-      //   [$class, 'validatePluginConfiguration'],
-      // ],
+      '#field_types' => [],
+      '#element_validate' => [
+        [$class, 'validateEntityType'],
+      ],
       '#process' => [
         [$class, 'processEntityType'],
       ],
@@ -59,9 +64,9 @@ class EntityTypeField extends FormElement {
     ];
 
     // Try to get a default value for the entity_type_id element.
-    $entity_type_id_parents = $element['#array_parents'];
+    $entity_type_id_parents = $element['#parents'];
     // TODO: why do we need 'container' here but not in the plugin form element????
-    $entity_type_id_parents[] = 'container';
+    // $entity_type_id_parents[] = 'container';
     $entity_type_id_parents[] = 'entity_type_id';
 
     if ($selected_entity_type_id = $form_state->getValue($entity_type_id_parents)) {
@@ -107,6 +112,12 @@ class EntityTypeField extends FormElement {
       ],
     ];
 
+    $element['container']['choose_entity_type_id'] = [
+      '#type' => 'submit',
+      '#value' => t('Choose entity type'),
+      // '#attributes' => ['class' => ['ajax-example-hide', 'ajax-example-inline']],
+    ];
+
     if ($selected_entity_type_id) {
       $field_storage_definitions = \Drupal::service('entity_field.manager')->getFieldStorageDefinitions($selected_entity_type_id);
 
@@ -126,6 +137,13 @@ class EntityTypeField extends FormElement {
     }
 
     return $element;
+  }
+
+  public static function validateEntityType($element, FormStateInterface &$form_state, $form) {
+    $form_state->setRebuild();
+
+    dsm($element);
+    // $value =
   }
 
   /**
