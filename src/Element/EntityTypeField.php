@@ -32,9 +32,6 @@ class EntityTypeField extends FormElement {
     return [
       '#input' => TRUE,
       '#field_types' => [],
-      '#element_validate' => [
-        [$class, 'validateEntityType'],
-      ],
       '#process' => [
         [$class, 'processEntityType'],
       ],
@@ -99,6 +96,9 @@ class EntityTypeField extends FormElement {
       '#empty_value' => '',
       '#required' => $element['#required'],
       '#default_value' => $selected_entity_type_id,
+      '#element_validate' => [
+        [static::class, 'validateEntityType'],
+      ],
       '#ajax' => [
         'callback' => get_class() . '::entityTypeDropdownCallback',
         'wrapper' => $container_html_id,
@@ -146,11 +146,11 @@ class EntityTypeField extends FormElement {
     return $element;
   }
 
+  /**
+   * Element validate callback.
+   */
   public static function validateEntityType($element, FormStateInterface &$form_state, $form) {
     $form_state->setRebuild();
-
-    dsm($element);
-    // $value =
   }
 
   /**
