@@ -13,6 +13,25 @@ class ActionLinkBrowserTestController {
   public function content() {
     $entity_type_manager = \Drupal::service('entity_type.manager');
 
+    $user = \Drupal::currentUser();
+    $node = $entity_type_manager->getStorage('node')->load(1);
+
+    $action_links = $entity_type_manager->getStorage('action_link')->loadMultiple();
+
+    foreach ($action_links as $action_link_id => $action_link) {
+      // dsm($action_link);
+      $build[$action_link_id] = [
+        '#type' => 'container',
+      ];
+
+      $build[$action_link_id]['links'] = $action_link->buildLinkSet($user, $node);
+
+      // break;
+    }
+
+    return $build;
+
+
     $action_link = $entity_type_manager->getStorage('action_link')->load('test_action_link');
     // dsm($action_link);
     // $action_link->set('plugin_id', 'boolean_field');
