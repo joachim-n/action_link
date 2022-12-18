@@ -28,6 +28,6 @@ interface ActionLinkInterface extends ConfigEntityInterface, EntityWithPluginCol
    *   A link object, or NULL if there is no valid link for the given
    *   parameters.
    */
-  public function getLink(AccountInterface $user, ...$parameters): ?Link;
+  // public function getLink(AccountInterface $user, ...$parameters): ?Link;
 
 }

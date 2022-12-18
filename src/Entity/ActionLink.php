@@ -140,62 +140,9 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
    * @param [type] ...$parameters
    */
   public function buildLinkSet(AccountInterface $user, ...$parameters) {
-    // can't do this yet as it's skipping the $direction param, need to pass
-    // $parameters to the plugin as unpacking named arguments -- need PHP 8.1
-
     $plugin = $this->getStateActionPlugin();
-    $directions = $plugin->getDirections();
-
-    $build = [];
-    if (empty($directions)) {
-      // There are no directions, which means the state action plugin only has
-      // one link to show.
-      $build['link'] = $this->getLink($user, ...$parameters)->toRenderable();
-    }
-    else {
-      // else, NEED TO KNOW how to add $direction to $parameters!
-      $definition = $plugin->getPluginDefinition();
-      $dynamic_parameters = $definition['parameters']['dynamic'];
-      // The plugin manager has checked that the 'direction' parameter exists
-      // at discovery time.
-      $direction_parameter_position = array_search('direction', $dynamic_parameters);
-
-      foreach ($directions as $direction) {
-        $link_parameters = $parameters;
-        array_splice($link_parameters, $direction_parameter_position, 0, $direction);
-
-        $build[$direction] = $this->getLink($user, ...$link_parameters)->toRenderable();
-      }
-    }
-
-    return array_filter($build);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getLink(AccountInterface $user, ...$parameters): ?Link {
-    $plugin = $this->getStateActionPlugin();
-
-    // validate param count!
-    $plugin->validateParameters($parameters);
-
-    $route_parameters = $plugin->convertParametersForRoute($parameters);
-    // ARGH convert a node entity to an ID??
-
-    // TODO - get labels!
-
-    if ($next_state = $plugin->getNextStateName($user, ...$parameters)) {
-      $label = $plugin->getLinkLabel($next_state, ...$parameters);
-
-      $url = Url::fromRoute('action_link.action_link', [
-        'action_link' => $this->id(),
-        'state' => $next_state,
-        'user' => $user->id(),
-        'parameters' => implode('/', $route_parameters),
-      ]);
-      return Link::fromTextAndUrl($label, $url);
-    }
+    // ARGH need to pass entity to plugin!
+    return $plugin->buildLinkSet($this, $user, ...$parameters);
   }
 
   public function getUrl(): string {
