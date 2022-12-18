@@ -4,13 +4,52 @@ namespace Drupal\action_link\Plugin\StateAction;
 
 use Drupal\action_link\Entity\ActionLinkInterface;
 use Drupal\Component\Plugin\PluginBase;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
 
 /**
  * Base class for State Action plugins.
+ *
+ * Remove methods for ConfigurableInterface when
+ * https://www.drupal.org/project/drupal/issues/2852463 gets in.
  */
 abstract class StateActionBase extends PluginBase implements StateActionInterface {
+
+  use StringTranslationTrait;
+
+  /**
+   * {@inheritdoc}
+   */
+  public function __construct(array $configuration, $this_id, $this_definition) {
+    parent::__construct($configuration, $this_id, $this_definition);
+
+    $this->setConfiguration($configuration);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function defaultConfiguration() {
+    return [];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getConfiguration() {
+    return $this->configuration;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setConfiguration(array $configuration) {
+    $this->configuration = $configuration + $this->defaultConfiguration();
+  }
 
   /**
    * Gets a render array of all the operable links for the user.

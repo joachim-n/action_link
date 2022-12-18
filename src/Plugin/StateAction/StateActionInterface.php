@@ -2,6 +2,7 @@
 
 namespace Drupal\action_link\Plugin\StateAction;
 
+use Drupal\Component\Plugin\ConfigurableInterface;
 use Drupal\Component\Plugin\DerivativeInspectionInterface;
 use Drupal\Component\Plugin\PluginInspectionInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -11,7 +12,7 @@ use Drupal\Core\Url;
 /**
  * Interface for State Action plugins.
  */
-interface StateActionInterface extends PluginInspectionInterface, DerivativeInspectionInterface {
+interface StateActionInterface extends PluginInspectionInterface, DerivativeInspectionInterface, ConfigurableInterface {
 
   public function buildConfigurationForm(array $element, FormStateInterface $form_state);
 
