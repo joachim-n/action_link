@@ -145,14 +145,6 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
     return $plugin->buildLinkSet($this, $user, ...$parameters);
   }
 
-  public function getUrl(): string {
-    // URL includes name of next state:
-    // /action-link/ENTITY_ID/NEXT_STATE/PARAMETERS.../TOKEN
-    // PARAMETERS up to plugin - could include user ID, entity to act on, etc.
-    //
-    // if the system is alreayd in NEXT STATE then nothing happens.
-  }
-
   public function checkOperability(AccountInterface $account, string $state, ...$parameters) {
     return $this->getStateActionPlugin()->checkOperability($account, $state, ...$parameters);
   }
