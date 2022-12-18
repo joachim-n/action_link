@@ -11,15 +11,7 @@ use Drupal\Core\Url;
  */
 abstract class EntityStateActionBase extends StateActionBase {
 
-  /**
-   * {@inheritdoc}
-   */
-  public function checkOperability(AccountInterface $account, string $state, ...$parameters): bool {
-    // Check the desired state is the next state.
-    $next_state = $this->getNextStateName($account, ...$parameters);
 
-    return ($next_state == $state);
-  }
 
   /**
    * {@inheritdoc}

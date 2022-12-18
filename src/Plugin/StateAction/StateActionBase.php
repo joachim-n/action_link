@@ -115,6 +115,20 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
     }
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function checkOperability(AccountInterface $account, string $state, ...$parameters): bool {
+    // Check the desired state is the next state.
+
+    // ARGH this won't work for generating links, it's just tautology!!!
+
+
+    $next_state = $this->getNextStateName($account, ...$parameters);
+
+    return ($next_state == $state);
+  }
+
   // implemented in traits.
   // public function getLinkLabel(string $state, ...$parameters): string {
   //   // try states first, then direcions.
