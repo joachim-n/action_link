@@ -69,7 +69,8 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
     if (empty($directions)) {
       // There are no directions, which means the state action plugin only has
       // one link to show.
-      $build['link'] = $this->getLink($user, ...$parameters)->toRenderable();
+      // // EH! default direction!???
+      $build['link'] = $this->getLink('action', $action_link, $user, ...$parameters)->toRenderable();
     }
     else {
       // else, NEED TO KNOW how to add $direction to $parameters!
@@ -83,7 +84,7 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
         $link_parameters = $parameters;
         array_splice($link_parameters, $direction_parameter_position, 0, $direction);
 
-        $build[$direction] = $this->getLink($action_link, $user, ...$link_parameters)->toRenderable();
+        $build[$direction] = $this->getLink($direction, $action_link, $user, ...$link_parameters)->toRenderable();
       }
     }
 
@@ -93,7 +94,7 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
   /**
    * {@inheritdoc}
    */
-  public function getLink(ActionLinkInterface $action_link, AccountInterface $user, ...$parameters): ?Link {
+  public function getLink(string $direction, ActionLinkInterface $action_link, AccountInterface $user, ...$parameters): ?Link {
     // validate param count!
     $this->validateParameters($parameters);
 
@@ -102,7 +103,7 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
 
     // TODO - get labels!
 
-    if ($next_state = $this->getNextStateName($user, ...$parameters)) {
+    if ($next_state = $this->getNextStateName($direction, $user, ...$parameters)) {
       $label = $this->getLinkLabel($next_state, ...$parameters);
 
       $url = Url::fromRoute('action_link.action_link', [

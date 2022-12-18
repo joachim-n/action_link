@@ -98,7 +98,7 @@ class BooleanField extends EntityStateActionBase {
   /**
    * {@inheritdoc}
    */
-  public function getNextStateName($user, EntityInterface $entity = NULL): ?string {
+  public function getNextStateName(string $direction, AccountInterface $user, EntityInterface $entity = NULL): ?string {
     // dump($this);
 
     $field_name = $this->configuration['field'];
