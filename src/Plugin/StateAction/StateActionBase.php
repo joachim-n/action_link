@@ -77,7 +77,7 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
       $link_parameters = $parameters;
       array_splice($link_parameters, $direction_parameter_position, 0, $direction);
 
-      $build[$direction] = $this->getLink($direction, $action_link, $user, ...$link_parameters)->toRenderable();
+      $build[$direction] = $this->getLink($action_link, $direction, $user, ...$link_parameters)->toRenderable();
     }
 
     return array_filter($build);
@@ -86,7 +86,7 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
   /**
    * {@inheritdoc}
    */
-  public function getLink(string $direction, ActionLinkInterface $action_link, AccountInterface $user, ...$parameters): ?Link {
+  public function getLink(ActionLinkInterface $action_link, string $direction, AccountInterface $user, ...$parameters): ?Link {
     // validate param count!
     $this->validateParameters($parameters);
 
