@@ -43,7 +43,7 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
    */
   public function advanceState($account, $state, $parameters);
 
-  public function checkOperability(AccountInterface $account, string $state): bool;
+  public function checkOperability(string $direction, string $state, AccountInterface $account): bool;
 
   public function checkAccess();
 

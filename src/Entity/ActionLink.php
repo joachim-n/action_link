@@ -145,8 +145,8 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
     return $plugin->buildLinkSet($this, $user, ...$parameters);
   }
 
-  public function checkOperability(AccountInterface $account, string $state, ...$parameters) {
-    return $this->getStateActionPlugin()->checkOperability($account, $state, ...$parameters);
+  public function checkOperability(string $direction, string $state, AccountInterface $account, ...$parameters) {
+    return $this->getStateActionPlugin()->checkOperability($direction, $state, $account, ...$parameters);
   }
 
   public function checkAccess() {

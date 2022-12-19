@@ -112,13 +112,13 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
   /**
    * {@inheritdoc}
    */
-  public function checkOperability(AccountInterface $account, string $state, ...$parameters): bool {
+  public function checkOperability(string $direction, string $state, AccountInterface $account, ...$parameters): bool {
     // Check the desired state is the next state.
 
     // ARGH this won't work for generating links, it's just tautology!!!
 
 
-    $next_state = $this->getNextStateName($account, ...$parameters);
+    $next_state = $this->getNextStateName($direction, $account, ...$parameters);
 
     return ($next_state == $state);
   }
