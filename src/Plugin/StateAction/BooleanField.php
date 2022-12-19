@@ -23,6 +23,9 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
  *       "field",
  *     },
  *   },
+ *   directions = {
+ *     "toggle",
+ *   },
  * )
  */
 // TODO: allow customising state names -- eg published, flagged, yes, no. for nicer URLs.
