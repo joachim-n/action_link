@@ -41,9 +41,7 @@ trait RepeatableTrait {
     return $labels_form;
   }
 
-  public function getLinkLabel(string $state, ...$parameters): string {
-    $direction = $this->getDynamicParameter($parameters, 'direction');
-
+  public function getLinkLabel(string $direction, string $state, ...$parameters): string {
     $label = $this->configuration['labels']['direction'][$direction]['link_label'] ?? t("Change value");
 
     return $label;

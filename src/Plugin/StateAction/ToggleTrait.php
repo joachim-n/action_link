@@ -51,7 +51,7 @@ trait ToggleTrait {
   }
 
 
-  public function getLinkLabel(string $state, ...$parameters): string {
+  public function getLinkLabel(string $direction, string $state, ...$parameters): string {
     $label = $this->configuration['labels']['state'][$state]['link_label'] ?? t("Change state");
 
     return $label;

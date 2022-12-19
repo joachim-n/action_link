@@ -67,17 +67,17 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
     $build = [];
 
   // else, NEED TO KNOW how to add $direction to $parameters!
-    $definition = $this->getPluginDefinition();
-    $dynamic_parameters = $definition['parameters']['dynamic'];
+    // $definition = $this->getPluginDefinition();
+    // $dynamic_parameters = $definition['parameters']['dynamic'];
     // The plugin manager has checked that the 'direction' parameter exists
     // at discovery time.
-    $direction_parameter_position = array_search('direction', $dynamic_parameters);
+    // $direction_parameter_position = array_search('direction', $dynamic_parameters);
 
     foreach ($directions as $direction) {
-      $link_parameters = $parameters;
-      array_splice($link_parameters, $direction_parameter_position, 0, $direction);
+      // $link_parameters = $parameters;
+      // array_splice($link_parameters, $direction_parameter_position, 0, $direction);
 
-      $build[$direction] = $this->getLink($action_link, $direction, $user, ...$link_parameters)->toRenderable();
+      $build[$direction] = $this->getLink($action_link, $direction, $user, ...$parameters)->toRenderable();
     }
 
     return array_filter($build);
@@ -96,7 +96,7 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
     // TODO - get labels!
 
     if ($next_state = $this->getNextStateName($direction, $user, ...$parameters)) {
-      $label = $this->getLinkLabel($next_state, ...$parameters);
+      $label = $this->getLinkLabel($direction, $next_state, ...$parameters);
 
       $url = Url::fromRoute('action_link.action_link', [
         'action_link' => $action_link->id(),
