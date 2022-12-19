@@ -17,7 +17,6 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
  *   parameters = {
  *     "dynamic" = {
  *       "entity",
- *       "direction",
  *     },
  *     "configuration" = {
  *       "entity_type",

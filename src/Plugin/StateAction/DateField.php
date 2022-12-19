@@ -18,7 +18,6 @@ use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
  *   parameters = {
  *     "dynamic" = {
  *       "entity",
- *       "direction",
  *     },
  *     "configuration" = {
  *       "entity_type",
