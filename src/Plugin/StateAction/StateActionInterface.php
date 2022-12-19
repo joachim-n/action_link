@@ -16,6 +16,25 @@ use Drupal\Core\Url;
  */
 interface StateActionInterface extends PluginInspectionInterface, DerivativeInspectionInterface, ConfigurableInterface {
 
+  /**
+   * Undocumented function
+   *
+   * @internal This is liable to change if I work out a way for the plugin to be
+   * aware of the action_link entity. Use
+   * \Drupal\action_link\Entity\ActionLinkInterface::getLinkSet() instead.
+   *
+   * @param \Drupal\action_link\Entity\ActionLinkInterface $action_link
+   *   The action link entity.
+   * @param string $direction
+   *   The direction of the link.
+   * @param \Drupal\Core\Session\AccountInterface $user
+   *   The user to get the link for.
+   * @param ...
+   *   Additional parameters depending on the plugin.
+   *
+   * @return \Drupal\Core\Link|null
+   *   The link object, or NULL if no link is applicable.
+   */
   public function getLink(ActionLinkInterface $action_link, string $direction, AccountInterface $user): ?Link;
 
   public function buildConfigurationForm(array $element, FormStateInterface $form_state);
