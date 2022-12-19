@@ -65,27 +65,19 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
     $directions = $this->getDirections();
 
     $build = [];
-    // TODO - remove!
-    if (empty($directions)) {
-      // There are no directions, which means the state action plugin only has
-      // one link to show.
-      // // EH! default direction!???
-      $build['link'] = $this->getLink('action', $action_link, $user, ...$parameters)->toRenderable();
-    }
-    else {
-      // else, NEED TO KNOW how to add $direction to $parameters!
-      $definition = $this->getPluginDefinition();
-      $dynamic_parameters = $definition['parameters']['dynamic'];
-      // The plugin manager has checked that the 'direction' parameter exists
-      // at discovery time.
-      $direction_parameter_position = array_search('direction', $dynamic_parameters);
 
-      foreach ($directions as $direction) {
-        $link_parameters = $parameters;
-        array_splice($link_parameters, $direction_parameter_position, 0, $direction);
+  // else, NEED TO KNOW how to add $direction to $parameters!
+    $definition = $this->getPluginDefinition();
+    $dynamic_parameters = $definition['parameters']['dynamic'];
+    // The plugin manager has checked that the 'direction' parameter exists
+    // at discovery time.
+    $direction_parameter_position = array_search('direction', $dynamic_parameters);
 
-        $build[$direction] = $this->getLink($direction, $action_link, $user, ...$link_parameters)->toRenderable();
-      }
+    foreach ($directions as $direction) {
+      $link_parameters = $parameters;
+      array_splice($link_parameters, $direction_parameter_position, 0, $direction);
+
+      $build[$direction] = $this->getLink($direction, $action_link, $user, ...$link_parameters)->toRenderable();
     }
 
     return array_filter($build);
