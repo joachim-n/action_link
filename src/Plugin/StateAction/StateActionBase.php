@@ -209,7 +209,7 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
     if (isset($dynamic_parameter_indexes['entity'])) {
       $index = $dynamic_parameter_indexes['entity'];
       // TODO: validate and throw?
-      $parameters[$index] = $entity_type_manager->getStorage($this->configuration['entity_type'])->load($parameters[$index]);
+      $parameters[$index] = $entity_type_manager->getStorage($this->configuration['entity_type_id'])->load($parameters[$index]);
     }
 
     return $parameters;
