@@ -2,10 +2,12 @@
 
 namespace Drupal\action_link\Plugin\StateAction;
 
+use Drupal\action_link\Entity\ActionLinkInterface;
 use Drupal\Component\Plugin\ConfigurableInterface;
 use Drupal\Component\Plugin\DerivativeInspectionInterface;
 use Drupal\Component\Plugin\PluginInspectionInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Link;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 
@@ -13,6 +15,8 @@ use Drupal\Core\Url;
  * Interface for State Action plugins.
  */
 interface StateActionInterface extends PluginInspectionInterface, DerivativeInspectionInterface, ConfigurableInterface {
+
+  public function getLink(ActionLinkInterface $action_link, string $direction, AccountInterface $user): ?Link;
 
   public function buildConfigurationForm(array $element, FormStateInterface $form_state);
 
