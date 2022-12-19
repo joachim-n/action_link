@@ -19,7 +19,7 @@ class ActionLinkController {
   /**
    * Callback for the action_link.action_link route.
    */
-  public function action(UserInterface $user, ActionLinkInterface $action_link, string $state, string $parameters) {
+  public function action(ActionLinkInterface $action_link, string $direction, string $state, UserInterface $user, string $parameters) {
     $parameters = explode('/', $parameters);
     $parameters = $action_link->getStateActionPlugin()->upcastRouteParameters($parameters);
 

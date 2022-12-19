@@ -1,7 +1,7 @@
 action_link.action_link:
   # The numbered parameters are just dummies, as a workaround for
   # https://www.drupal.org/project/drupal/issues/2741939.
-  path: /action-link/{action_link}/{state}/{user}/{parameters}/{param_2}/{param_3}/{param_4}
+  path: /action-link/{action_link}/{direction}/{state}/{user}/{parameters}/{param_2}/{param_3}/{param_4}
   defaults:
     _title: 'Action Link'
     _controller: '\Drupal\action_link\Controller\ActionLinkController::action'

@@ -108,6 +108,7 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
 
       $url = Url::fromRoute('action_link.action_link', [
         'action_link' => $action_link->id(),
+        'direction' => $direction,
         'state' => $next_state,
         'user' => $user->id(),
         'parameters' => implode('/', $route_parameters),
