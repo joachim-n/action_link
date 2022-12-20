@@ -81,18 +81,20 @@ class BooleanField extends EntityStateActionBase {
   }
 
   public static function entityFieldElementValidate(&$element, FormStateInterface $form_state, &$complete_form) {
-    $value = $form_state->getValue($element['#parents']);
+    $element_value = $form_state->getValue($element['#parents']);
 
     // ARGH hardcoded array structure :(
     // Can't get this from slicing up $element['#parents'] because of the
     // 'container' from the plugin form element.
-    $form_state->setValue(['plugin', 'plugin_configuration'], $value);
-    // $form_state->setValue('cake', 'value');
-    // dsm($form_state->getValues());
+    $plugin_configuration_values = $form_state->getValue(['plugin', 'plugin_configuration']);
+
+    $merged_values = $plugin_configuration_values + $element_value;
+
+    $form_state->setValue(['plugin', 'plugin_configuration'], $merged_values);
   }
 
   public function validateConfigurationForm(array &$form, FormStateInterface $form_state) {
-    dsm($form_state->getValues());
+    // dsm($form_state->getValues());
   }
 
   public function copyFormValuesToEntity($entity, array &$form, FormStateInterface $form_state) {
