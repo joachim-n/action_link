@@ -44,7 +44,7 @@ class ActionLinkBrowserTestController {
     $node = $entity_type_manager->getStorage('node')->load(1);
 
     // This action link is a toggle, so it can deduce next state automatically.
-    $build['link'] = $action_link->getLink($user, $node)->toRenderable();
+    $build['link'] = $action_link->getStateActionPlugin()->getLink($user, $node)->toRenderable();
 
     $action_link = $entity_type_manager->getStorage('action_link')->load('test_numeric');
     // $action_link->set('plugin_config', [
