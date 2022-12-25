@@ -95,7 +95,7 @@ class NumericField extends EntityStateActionBase {
   }
 
   public function advanceState($account, $state, $parameters) {
-    list($entity, $direction) = $parameters;
+    list($entity) = $parameters;
 
     // TODO:
 
