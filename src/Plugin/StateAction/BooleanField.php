@@ -34,21 +34,9 @@ class BooleanField extends EntityStateActionBase {
   use ToggleTrait;
 
   public function buildConfigurationForm(array $element, FormStateInterface $form_state) {
-    $plugin_form = [];
+    $plugin_form = parent::buildConfigurationForm($element, $form_state);
 
-    $plugin_form['entity_type_field'] = [
-      '#type' => 'entity_type_field',
-      '#title' => $this->t('Entity field'),
-      '#field_types' => ['boolean'],
-
-      '#element_validate' => [
-        [static::class, 'entityFieldElementValidate'],
-      ],
-      '#default_value' => [
-        'entity_type_id' => $element['#default_value']['plugin_configuration']['entity_type_id'] ?? '',
-        'field' => $element['#default_value']['plugin_configuration']['field'] ?? '',
-      ],
-    ];
+    $plugin_form['entity_type_field']['#field_types'] = ['boolean'];
 
     // dsm($element);
 
@@ -78,19 +66,6 @@ class BooleanField extends EntityStateActionBase {
     $plugin_form['labels']['state']['false']['link_label']['#title'] = $this->t('Link label for setting the field value to FALSE');
 
     return $plugin_form;
-  }
-
-  public static function entityFieldElementValidate(&$element, FormStateInterface $form_state, &$complete_form) {
-    $element_value = $form_state->getValue($element['#parents']);
-
-    // ARGH hardcoded array structure :(
-    // Can't get this from slicing up $element['#parents'] because of the
-    // 'container' from the plugin form element.
-    $plugin_configuration_values = $form_state->getValue(['plugin', 'plugin_configuration']);
-
-    $merged_values = $plugin_configuration_values + $element_value;
-
-    $form_state->setValue(['plugin', 'plugin_configuration'], $merged_values);
   }
 
   public function validateConfigurationForm(array &$form, FormStateInterface $form_state) {
