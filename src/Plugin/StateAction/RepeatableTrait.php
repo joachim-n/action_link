@@ -47,9 +47,7 @@ trait RepeatableTrait {
     return $label;
   }
 
-  public function getMessage(string $state, ...$parameters): string {
-    $direction = $this->getDynamicParameter($parameters, 'direction');
-
+  public function getMessage(string $direction, string $state, ...$parameters): string {
     return $this->configuration['labels']['direction'][$direction]['message'] ?? '';
   }
 

@@ -57,7 +57,7 @@ trait ToggleTrait {
     return $label;
   }
 
-  public function getMessage(string $state, ...$parameters): string {
+  public function getMessage(string $direction, string $state, ...$parameters): string {
     return $this->configuration['labels']['state'][$state]['message'] ?? '';
   }
 

@@ -83,6 +83,6 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
    * @return string
    *   The message string. If this is empty then no message should be shown.
    */
-  public function getMessage(string $state, ...$parameters): string;
+  public function getMessage(string $direction, string $state, ...$parameters): string;
 
 }
