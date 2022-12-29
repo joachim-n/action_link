@@ -1,5 +1,5 @@
 entity.action_link.collection:
-  title: 'Action Links'
+  title: 'Action links'
   description: 'Create and manage fields, forms, and display settings for Action Links.'
   route_name: entity.action_link.collection
   parent: system.admin_structure
