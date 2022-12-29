@@ -38,7 +38,7 @@ class ActionLinkController {
     if ($operable) {
       $action_link->advanceState($user, $state, ...$parameters);
 
-      $message = $action_link->getStateActionPlugin()->getMessage($state, ...$parameters);
+      $message = $action_link->getStateActionPlugin()->getMessage($direction, $state, ...$parameters);
       if ($message) {
         \Drupal::messenger()->addMessage($message);
       }
