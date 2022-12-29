@@ -8,4 +8,9 @@
     label:
       type: label
       label: Name
-
+    plugin_id:
+      type: text
+      label: 'Plugin ID'
+    plugin_config:
+      type: ignore
+      label: 'Plugin configuration'
