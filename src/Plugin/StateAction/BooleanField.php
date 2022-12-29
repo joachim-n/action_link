@@ -5,10 +5,14 @@ namespace Drupal\action_link\Plugin\StateAction;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
  * TODO: class docs.
+ *
+ * Defines just a single direction, so internally this is actually a 2-state
+ * loop rather than a toggle.
  *
  * @StateAction(
  *   id = "boolean_field",
@@ -26,9 +30,15 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
  *   directions = {
  *     "toggle",
  *   },
+ *   states = {
+ *     "true",
+ *     "false",
+ *   },
  * )
  */
 // TODO: allow customising state names -- eg published, flagged, yes, no. for nicer URLs.
+// two directions, but also only two states.
+// how does getAllLinks know which one? OPERABILITY!
 class BooleanField extends EntityStateActionBase {
 
   use ToggleTrait;
@@ -79,11 +89,27 @@ class BooleanField extends EntityStateActionBase {
    * {@inheritdoc}
    */
   public function getNextStateName(string $direction, AccountInterface $user, EntityInterface $entity = NULL): ?string {
+    // dsm($direction);
     // dump($this);
+    // to get the next state name we have to look at the current value of the field
+    // and do calculation on it.
+    //
+    // to chec if next state is operable, we have to look at... THE CURRENT VALUE OF THE FIELD!
+    // for entity actions it's a bit repetitive.
+    // what about non entity ones?
+    // like... FLAG!
+    // next state: get current flagging - is there one? -> tells you unflag/flag
+    // operable: stuff to do with bundles?? does flag apply to given entity? etc.
+    // which is stuff that should/could be checked BEFORE we try loading a flagging, probably!
 
     $field_name = $this->configuration['field'];
+    // dump($this->configuration);
 
     $value = $entity->get($field_name)->value;
+
+
+
+
     return match ((bool) $value) {
       FALSE => 'true',
       TRUE  => 'false',
@@ -101,7 +127,6 @@ class BooleanField extends EntityStateActionBase {
    * {@inheritdoc}
    */
   public function advanceState($account, $state, $parameters) {
-    // $parameters = $this->upcastRouteParameters($parameters);
     list($entity) = $parameters;
 
     $field_name = $this->configuration['field'];
