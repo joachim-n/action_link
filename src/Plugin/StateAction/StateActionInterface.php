@@ -17,7 +17,7 @@ use Drupal\Core\Url;
 interface StateActionInterface extends PluginInspectionInterface, DerivativeInspectionInterface, ConfigurableInterface {
 
   /**
-   * Undocumented function
+   * Gets the action link for a specific direction.
    *
    * @internal This is liable to change if I work out a way for the plugin to be
    * aware of the action_link entity. Use
