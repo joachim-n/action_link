@@ -4,6 +4,7 @@ namespace Drupal\action_link\Plugin\StateAction;
 
 use Drupal\action_link\Entity\ActionLinkInterface;
 use Drupal\Component\Plugin\PluginBase;
+use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Session\AccountInterface;
@@ -107,6 +108,10 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
       ]);
       return Link::fromTextAndUrl($label, $url);
     }
+  }
+
+  public function checkAccess(string $direction, string $state, AccountInterface $account, ...$parameters): AccessResult {
+    // $permission = ARGH we need the action link!
   }
 
   /**

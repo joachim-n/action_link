@@ -2,6 +2,7 @@
 
 namespace Drupal\action_link\Plugin\StateAction;
 
+use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
@@ -86,8 +87,8 @@ class DateField extends EntityStateActionBase {
   /**
    * {@inheritdoc}
    */
-  public function checkAccess() {
-    // .
+  public function checkAccess(string $direction, string $state, AccountInterface $account, ...$parameters): AccessResult {
+    return AccessResult::allowed();
   }
 
   public function advanceState($account, $state, $parameters) {

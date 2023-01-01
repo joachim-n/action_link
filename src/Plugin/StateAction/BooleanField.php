@@ -3,6 +3,7 @@
 namespace Drupal\action_link\Plugin\StateAction;
 
 use Drupal\Component\Utility\NestedArray;
+use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
@@ -119,8 +120,8 @@ class BooleanField extends EntityStateActionBase {
   /**
    * {@inheritdoc}
    */
-  public function checkAccess() {
-    // .
+  public function checkAccess(string $direction, string $state, AccountInterface $account, ...$parameters): AccessResult {
+    return AccessResult::allowed();
   }
 
   /**

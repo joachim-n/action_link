@@ -6,6 +6,7 @@ use Drupal\action_link\Entity\ActionLinkInterface;
 use Drupal\Component\Plugin\ConfigurableInterface;
 use Drupal\Component\Plugin\DerivativeInspectionInterface;
 use Drupal\Component\Plugin\PluginInspectionInterface;
+use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Session\AccountInterface;
@@ -68,7 +69,7 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
 
   public function checkOperability(string $direction, string $state, AccountInterface $account, ...$parameters): bool;
 
-  public function checkAccess();
+  public function checkAccess(string $direction, string $state, AccountInterface $account, ...$parameters): AccessResult;
 
   public function getRedirectUrl(AccountInterface $account): ?Url;
 
