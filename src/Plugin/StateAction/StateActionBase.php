@@ -78,7 +78,7 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
       // $link_parameters = $parameters;
       // array_splice($link_parameters, $direction_parameter_position, 0, $direction);
 
-      $build[$direction] = $this->getLink($action_link, $direction, $user, ...$parameters)->toRenderable();
+      $build[$direction] = $this->getLink($action_link, $direction, $user, ...$parameters)?->toRenderable();
     }
 
     return array_filter($build);
