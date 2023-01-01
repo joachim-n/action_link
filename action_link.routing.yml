@@ -13,6 +13,7 @@ action_link.action_link:
     # Allow the 'parameters' parameter to include a '/', mopping up multiple
     # path elements.
     parameters: '.+'
-    # TODO: Doesn't work, denies access.
-    # _csrf_token: 'TRUE'
+    # WARNING: Requires Drupal core patch from
+    # https://www.drupal.org/project/drupal/issues/2987987 to work.
+    _csrf_token: 'TRUE'
 
