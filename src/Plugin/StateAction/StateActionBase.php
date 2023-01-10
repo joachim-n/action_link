@@ -242,38 +242,6 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
   }
 
 
-  /**
-   * Upcasts route parameters.
-   *
-   * This is necessary because dynamic parameters which are specific to a plugin
-   * can't be declared on the route.
-   *
-   * (This can't be done with dynamic routes, declaring one for each state
-   * action plugin, because they would need to share a controller with a
-   * variadic parameter which isn't possible: see
-   * https://www.drupal.org/project/drupal/issues/3329122.)
-   *
-   * @param array $parameters
-   *   The dynamic parameters.
-   *
-   * @return array
-   *   The parameters with objects upcased where necessary.
-   */
-  public function upcastRouteParameters(array $parameters): array {
-    $this->validateParameters($parameters);
-
-    $entity_type_manager = \Drupal::service('entity_type.manager');
-
-    $dynamic_parameter_indexes = array_flip($this->pluginDefinition['parameters']['dynamic']);
-
-    if (isset($dynamic_parameter_indexes['entity'])) {
-      $index = $dynamic_parameter_indexes['entity'];
-      // TODO: validate and throw?
-      $parameters[$index] = $entity_type_manager->getStorage($this->configuration['entity_type_id'])->load($parameters[$index]);
-    }
-
-    return $parameters;
-  }
 
   public function getActionRoute(): Route {
     $path = '/action-link/{action_link}/{direction}/{state}/{user}';

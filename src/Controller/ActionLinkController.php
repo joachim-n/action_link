@@ -38,7 +38,6 @@ class ActionLinkController {
     // dump($parameters);
 
     // TODO: validate!
-    // $parameters = $action_link->getStateActionPlugin()->upcastRouteParameters($parameters);
 
     // Access is already checked, which covers whether the user is allowed to
     // use the action link on the given parameters. We now check operability,
