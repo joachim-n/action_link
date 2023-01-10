@@ -246,9 +246,6 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
   public function getActionRoute(): Route {
     $path = '/action-link/{action_link}/{direction}/{state}/{user}';
 
-    // $routes_method = new \ReflectionMethod($this, 'routeController');
-    // $route_method_extra_parameters = array_slice($routes_method->getParameters(), 6);
-
     $dynamic_parameters_definition = $this->pluginDefinition['parameters']['dynamic'];
     foreach ($dynamic_parameters_definition as $parameter_name) {
       $path .= '/{' . $parameter_name . '}';
