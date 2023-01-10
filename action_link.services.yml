@@ -2,3 +2,6 @@ services:
   plugin.manager.action_link_state_action:
     class: Drupal\action_link\StateActionManager
     parent: default_plugin_manager
+  action_link.route_provider:
+    class: Drupal\action_link\Routing\ActionLinkRouteProvider
+    arguments: ['@entity_type.manager']

@@ -6,6 +6,7 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
+use Symfony\Component\Routing\Route;
 
 /**
  * Base class for State Action plugins that operate on an entity.
@@ -52,6 +53,18 @@ abstract class EntityStateActionBase extends StateActionBase {
 
 
   */
+
+  public function getActionRoute(): Route {
+    $route = parent::getActionRoute();
+
+    $route->setOption('parameters', [
+      'entity' => [
+        'type' => 'entity:node', // TODO!!!
+      ],
+    ]);
+
+    return $route;
+  }
 
   /**
    * {@inheritdoc}

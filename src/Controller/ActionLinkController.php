@@ -5,6 +5,8 @@ namespace Drupal\action_link\Controller;
 use Drupal\action_link\Entity\ActionLinkInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\user\UserInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -19,10 +21,24 @@ class ActionLinkController {
 
   /**
    * Callback for the action_link.action_link route.
+   *
+   *    * !!! $user is the user passed IN THE ROUTE PARAMS, NOT CURRENT USER!
    */
-  public function action(Request $request, ActionLinkInterface $action_link, string $direction, string $state, UserInterface $user, string $parameters) {
-    $parameters = explode('/', $parameters);
-    $parameters = $action_link->getStateActionPlugin()->upcastRouteParameters($parameters);
+  public function action(Request $request, RouteMatchInterface $route_match, ActionLinkInterface $action_link, string $direction, string $state, UserInterface $user) {
+    $state_action_plugin = $action_link->getStateActionPlugin();
+
+
+
+    $parameters = $state_action_plugin->getDynamicParametersFromRouteMatch($route_match);
+
+
+    // array_slice($route_match->getParameters()->all(), 4);
+
+    // dump($route_match->getParameters()->all());
+    // dump($parameters);
+
+    // TODO: validate!
+    // $parameters = $action_link->getStateActionPlugin()->upcastRouteParameters($parameters);
 
     // Access is already checked, which covers whether the user is allowed to
     // use the action link on the given parameters. We now check operability,
@@ -65,9 +81,18 @@ class ActionLinkController {
 
   /**
    * Checks access for the action_link.action_link route.
+   *
+   * !!! $user is the user passed IN THE ROUTE PARAMS, NOT CURRENT USER!
+   *
+   * $account is the account operating the route.
    */
-  public function access(UserInterface $user, ActionLinkInterface $action_link, string $state, string $parameters): AccessResultInterface {
-    // 1. validate token
+  public function access(RouteMatchInterface $route_match, ActionLinkInterface $action_link, string $direction, string $state, UserInterface $user, AccountInterface $account): AccessResultInterface {
+    // dump($account);
+    // dsm($user);
+    if ($account->isAnonymous()) {
+      return AccessResult::forbidden();
+    }
+
 
     // 2. validate $parameters, state, user with the plugin
 

@@ -7,10 +7,14 @@ use Drupal\Component\Plugin\PluginBase;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
+use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
+use Drupal\user\Entity\User;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Route;
 
 /**
  * Base class for State Action plugins.
@@ -91,23 +95,55 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
     // validate param count!
     $this->validateParameters($parameters);
 
-    $route_parameters = $this->convertParametersForRoute($parameters);
-    // ARGH convert a node entity to an ID??
+    // todo access!
 
     // TODO - get labels!
 
     if ($next_state = $this->getNextStateName($direction, $user, ...$parameters)) {
       $label = $this->getLinkLabel($direction, $next_state, ...$parameters);
 
-      $url = Url::fromRoute('action_link.action_link', [
+      $route_parameters = [
         'action_link' => $action_link->id(),
         'direction' => $direction,
         'state' => $next_state,
         'user' => $user->id(),
-        'parameters' => implode('/', $route_parameters),
-      ]);
-      return Link::fromTextAndUrl($label, $url);
+      ];
+
+      $parameters = $this->convertParametersForRoute($parameters);
+      $dynamic_parameters_definition = $this->pluginDefinition['parameters']['dynamic'];
+      foreach ($dynamic_parameters_definition as $parameter_name) {
+        $route_parameters[$parameter_name] = array_shift($parameters);
+      }
+
+      $url = Url::fromRoute('action_link.action_link.' . $action_link->id(), $route_parameters);
+
+      // Check access for the current user.
+      if ($url->access()) {
+        // FUCK WHY THIS FAILING???
+        return Link::fromTextAndUrl($label, $url);
+      }
+
+      // // TODO: If logged out, and an authenticated user would have access, show a log
+      // // in CTA? HOW?
+      // if (\Drupal::currentUser()->isAnonymous()) {
+      //   $dummy_authenticated_user = User::create([
+      //     'roles' => [
+      //       AccountInterface::AUTHENTICATED_ROLE,
+      //     ],
+      //   ]);
+      //  DOESN"T WORK -- isAuthenticated checks the uid!
+      //   dump($dummy_authenticated_user->isAuthenticated());
+
+
+      //   // doesn't work - wrong user gets to the controller access. HOW?
+      //   if ($url->access($dummy_authenticated_user)) {
+      //     return Link::fromTextAndUrl("Log in!", $url);
+      //   }
+      // }
+
     }
+
+    return NULL;
   }
 
   public function checkAccess(string $direction, string $state, AccountInterface $account, ...$parameters): AccessResult {
@@ -194,6 +230,17 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
     return $parameters;
   }
 
+  public function getDynamicParametersFromRouteMatch(RouteMatchInterface $route_match): array {
+    $dynamic_parameters = [];
+    $parameters = $route_match->getParameters()->all();
+    dump($parameters);
+    foreach ($this->pluginDefinition['parameters']['dynamic'] as $name) {
+      $dynamic_parameters[] = $parameters[$name];
+    }
+
+    return $dynamic_parameters;
+  }
+
 
   /**
    * Upcasts route parameters.
@@ -226,6 +273,36 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
     }
 
     return $parameters;
+  }
+
+  public function getActionRoute(): Route {
+    $path = '/action-link/{action_link}/{direction}/{state}/{user}';
+
+    // $routes_method = new \ReflectionMethod($this, 'routeController');
+    // $route_method_extra_parameters = array_slice($routes_method->getParameters(), 6);
+
+    $dynamic_parameters_definition = $this->pluginDefinition['parameters']['dynamic'];
+    foreach ($dynamic_parameters_definition as $parameter_name) {
+      $path .= '/{' . $parameter_name . '}';
+    }
+
+    $route = new Route(
+      $path,
+      [
+        '_controller' => '\Drupal\action_link\Controller\ActionLinkController::action',
+      ],
+      [
+        '_custom_access'  => '\Drupal\action_link\Controller\ActionLinkController::access',
+      ],
+      // [
+      //   'parameters' => [
+      //     'entity' =>
+      //     type: entity:foobar
+      //   ],
+      // ],
+    );
+
+    return $route;
   }
 
 }
