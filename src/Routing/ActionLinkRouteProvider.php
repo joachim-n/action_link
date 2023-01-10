@@ -43,36 +43,6 @@ class ActionLinkRouteProvider {
       $state_action_plugin = $action_link_entity->getStateActionPlugin();
 
       $routes['action_link.action_link.' . $action_link_id] = $state_action_plugin->getActionRoute();
-      continue;
-
-      $path = $base_path;
-
-      $routes_method = new \ReflectionMethod($state_action_plugin, 'routeController');
-      $route_method_extra_parameters = array_slice($routes_method->getParameters(), 6);
-
-      foreach ($route_method_extra_parameters as $route_method_parameter) {
-        $path .= '/{' . $route_method_parameter->getName() . '}';
-      }
-
-      $routes['action_link.action_link.' . $action_link_id] = new Route(
-        $path,
-        [
-          '_controller' => $state_action_plugin::class . '::routeController',
-          'callback_type' => 'controller',
-        ],
-        [
-          '_custom_access'  => $state_action_plugin::class . '::routeAccess',
-          // '_csrf_token' => TRUE,
-        ],
-        [
-          // 'parameters' => [
-          //   'entity' =>
-          //   type: entity:foobar
-          // ],
-        ],
-      );
-
-      // hand over to plugin for alteration?
     }
 
     return $routes;
