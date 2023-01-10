@@ -2,6 +2,7 @@
 
 namespace Drupal\action_link\Plugin\StateAction;
 
+use Drupal\action_link\Entity\ActionLinkInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
@@ -54,8 +55,8 @@ abstract class EntityStateActionBase extends StateActionBase {
 
   */
 
-  public function getActionRoute(): Route {
-    $route = parent::getActionRoute();
+  public function getActionRoute(ActionLinkInterface $action_link, string $path): Route {
+    $route = parent::getActionRoute($action_link, $path);
 
     $route->setOption('parameters', [
       'entity' => [

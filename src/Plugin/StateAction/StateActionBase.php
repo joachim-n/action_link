@@ -243,9 +243,7 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
 
 
 
-  public function getActionRoute(): Route {
-    $path = '/action-link/{action_link}/{direction}/{state}/{user}';
-
+  public function getActionRoute(ActionLinkInterface $action_link, string $path): Route {
     $dynamic_parameters_definition = $this->pluginDefinition['parameters']['dynamic'];
     foreach ($dynamic_parameters_definition as $parameter_name) {
       $path .= '/{' . $parameter_name . '}';
@@ -255,6 +253,7 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
       $path,
       [
         '_controller' => '\Drupal\action_link\Controller\ActionLinkController::action',
+        'action_link' => $action_link->id(),
       ],
       [
         '_custom_access'  => '\Drupal\action_link\Controller\ActionLinkController::access',
