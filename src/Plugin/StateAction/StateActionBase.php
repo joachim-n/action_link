@@ -253,6 +253,7 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
       ],
       [
         '_custom_access'  => '\Drupal\action_link\Controller\ActionLinkController::access',
+        '_csrf_token' => 'TRUE',
       ],
     );
 
