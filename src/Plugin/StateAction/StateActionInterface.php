@@ -48,7 +48,7 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
    * @param \Drupal\Core\Session\AccountInterface $user
    *   The user to get the link for.
    * @param ...
-   *   Additional parameters depending on the plugin.
+   *   Dynamic parameters specific to the action link's state action plugin.
    *
    * @return \Drupal\Core\Link|null
    *   The link object, or NULL if no link is applicable.
