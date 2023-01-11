@@ -55,8 +55,8 @@ abstract class EntityStateActionBase extends StateActionBase {
 
   */
 
-  public function getActionRoute(ActionLinkInterface $action_link, string $path): Route {
-    $route = parent::getActionRoute($action_link, $path);
+  public function getActionRoute(ActionLinkInterface $action_link): Route {
+    $route = parent::getActionRoute($action_link);
 
     $route->setOption('parameters', [
       'entity' => [
