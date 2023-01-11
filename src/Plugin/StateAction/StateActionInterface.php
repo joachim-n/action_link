@@ -20,6 +20,21 @@ use Symfony\Component\Routing\Route;
 interface StateActionInterface extends PluginInspectionInterface, DerivativeInspectionInterface, ConfigurableInterface {
 
   /**
+   * Gets a render array of all the operable links for the user.
+   *
+   * @param \Drupal\action_link\Entity\ActionLinkInterface $action_link
+   *   The action link entity.
+   * @param \Drupal\Core\Session\AccountInterface $user
+   *   The user to get links for. TODO ARGH WANT TO ALLOW EASY DEFAULT TO MEAN CURRENT USER!
+   * @param [type] ...$parameters
+   *   Dynamic parameters specific to the action link's state action plugin.
+   *
+   * @return array
+   *   A render array of links. This may be empty if no links are available.
+   */
+  public function buildLinkSet(ActionLinkInterface $action_link, AccountInterface $user, ...$parameters): array;
+
+  /**
    * Gets the action link for a specific direction.
    *
    * @internal This is liable to change if I work out a way for the plugin to be

@@ -57,13 +57,9 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
   }
 
   /**
-   * Gets a render array of all the operable links for the user.
-   *
-   * @param \Drupal\Core\Session\AccountInterface $user
-   *   The user to get links for. TODO ARGH WANT TO ALLOW EASY DEFAULT TO MEAN CURRENT USER!
-   * @param [type] ...$parameters
+   * {@inheritdoc}
    */
-  public function buildLinkSet(ActionLinkInterface $action_link, AccountInterface $user, ...$parameters) {
+  public function buildLinkSet(ActionLinkInterface $action_link, AccountInterface $user, ...$parameters): array {
     $directions = $this->getDirections();
 
     $build = [];
