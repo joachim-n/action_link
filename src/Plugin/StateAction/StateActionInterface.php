@@ -11,6 +11,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
+use Symfony\Component\Routing\Route;
 
 /**
  * Interface for State Action plugins.
@@ -86,4 +87,17 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
    */
   public function getMessage(string $direction, string $state, ...$parameters): string;
 
+  /**
+   * Defines the route for an action link entity.
+   *
+   * @param \Drupal\action_link\Entity\ActionLinkInterface $action_link
+   *   The action link entity.
+   *
+   * @return \Symfony\Component\Routing\Route
+   *   The route for the action link. This is added to the router with the route
+   *   name 'action_link.action_link.ACTION_LINK_ID'.
+   *
+   * @see \Drupal\action_link\Routing\ActionLinkRouteProvider
+   */
+  public function getActionRoute(ActionLinkInterface $action_link): Route;
 }
