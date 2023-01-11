@@ -64,28 +64,17 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
    * @param [type] ...$parameters
    */
   public function buildLinkSet(ActionLinkInterface $action_link, AccountInterface $user, ...$parameters) {
-    // can't do this yet as it's skipping the $direction param, need to pass
-    // $parameters to the plugin as unpacking named arguments -- need PHP 8.1
-
     $directions = $this->getDirections();
 
     $build = [];
 
-  // else, NEED TO KNOW how to add $direction to $parameters!
-    // $definition = $this->getPluginDefinition();
-    // $dynamic_parameters = $definition['parameters']['dynamic'];
-    // The plugin manager has checked that the 'direction' parameter exists
-    // at discovery time.
-    // $direction_parameter_position = array_search('direction', $dynamic_parameters);
-
     foreach ($directions as $direction) {
-      // $link_parameters = $parameters;
-      // array_splice($link_parameters, $direction_parameter_position, 0, $direction);
-
-      $build[$direction] = $this->getLink($action_link, $direction, $user, ...$parameters)?->toRenderable();
+      if ($link = $this->getLink($action_link, $direction, $user, ...$parameters)) {
+        $build[$direction] = $link->toRenderable();
+      }
     }
 
-    return array_filter($build);
+    return $build;
   }
 
   /**
