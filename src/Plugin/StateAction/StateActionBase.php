@@ -230,10 +230,12 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
     return $parameters;
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function getDynamicParametersFromRouteMatch(RouteMatchInterface $route_match): array {
     $dynamic_parameters = [];
     $parameters = $route_match->getParameters()->all();
-    dump($parameters);
     foreach ($this->pluginDefinition['parameters']['dynamic'] as $name) {
       $dynamic_parameters[] = $parameters[$name];
     }
@@ -241,8 +243,9 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
     return $dynamic_parameters;
   }
 
-
-
+  /**
+   * {@inheritdoc}
+   */
   public function getActionRoute(ActionLinkInterface $action_link): Route {
     $action_link_id = $action_link->id();
 

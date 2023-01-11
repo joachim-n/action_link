@@ -9,6 +9,7 @@ use Drupal\Component\Plugin\PluginInspectionInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
+use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Symfony\Component\Routing\Route;
@@ -67,6 +68,25 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
    * @param [type] $parameters
    */
   public function advanceState($account, $state, $parameters);
+
+  /**
+   * Gets the dynamic parameters from the route match.
+   *
+   * Helper for route controller and access callbacks.
+   *
+   * This is needed because route callbacks in a common controller don't work
+   * with variadic parameters, and the callbacks can't be on the plugin class
+   * because the routing system doesn't know how to instantiate plugins.
+   *
+   * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
+   *   The route match.
+   *
+   * @return array
+   *   An array of parameters, in the same order that they are defined in the
+   *   plugin annotation. Set route options in self::getActionRoute() to have
+   *   parameters upcasted by the routing system.
+   */
+  public function getDynamicParametersFromRouteMatch(RouteMatchInterface $route_match): array;
 
   public function checkOperability(string $direction, string $state, AccountInterface $account, ...$parameters): bool;
 
