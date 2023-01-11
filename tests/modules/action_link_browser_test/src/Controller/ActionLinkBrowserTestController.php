@@ -3,7 +3,7 @@
 namespace Drupal\action_link_browser_test\Controller;
 
 /**
- * TODO: class docs.
+ * Controller that outputs all action links for testing.
  */
 class ActionLinkBrowserTestController {
 
