@@ -22,12 +22,21 @@ class ActionLinkController {
   /**
    * Callback for the action_link.action_link route.
    *
-   *    * !!! $user is the user passed IN THE ROUTE PARAMS, NOT CURRENT USER!
+   * @param \Symfony\Component\HttpFoundation\Request $request
+   *   The current request.
+   * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
+   *   The route match.
+   * @param \Drupal\action_link\Entity\ActionLinkInterface $action_link
+   *   The action link entity.
+   * @param string $direction
+   *   The direction for the action.
+   * @param string $state
+   *   The target state for the action.
+   * @param \Drupal\user\UserInterface $user
+   *   The user to perform the action. This is not necessarily the current user.
    */
   public function action(Request $request, RouteMatchInterface $route_match, ActionLinkInterface $action_link, string $direction, string $state, UserInterface $user) {
     $state_action_plugin = $action_link->getStateActionPlugin();
-
-
 
     $parameters = $state_action_plugin->getDynamicParametersFromRouteMatch($route_match);
 
