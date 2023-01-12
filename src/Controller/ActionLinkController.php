@@ -69,10 +69,14 @@ class ActionLinkController {
       }
     }
 
-    // TODO:
-    // $this->messenger->addMessage($message);
+    // Redirect to the referrer.
+    $response = new RedirectResponse($request->headers->get('referer'));
+    return $response;
 
+    // Do we want redirect URL at all???
     if ($redirect_url = $action_link->getRedirectUrl($user, ...$parameters)) {
+      // no wait, redirect to where the user clicked the link!
+
       // Redirect, typically back to the entity. A passed in destination query
       // parameter will automatically override this.
       $response = new RedirectResponse($redirect_url->toString());
