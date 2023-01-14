@@ -5,3 +5,6 @@ services:
   action_link.route_provider:
     class: Drupal\action_link\Routing\ActionLinkRouteProvider
     arguments: ['@entity_type.manager']
+  plugin.manager.action_link_action_link_style:
+    class: Drupal\action_link\ActionLinkStyleManager
+    parent: default_plugin_manager
