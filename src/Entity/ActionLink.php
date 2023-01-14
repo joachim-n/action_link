@@ -3,6 +3,7 @@
 namespace Drupal\action_link\Entity;
 
 use Drupal\action_link\Plugin\StateAction\StateActionInterface;
+use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Config\Entity\ConfigEntityBase;
 use Drupal\Core\Link;
 use Drupal\Core\Plugin\DefaultSingleLazyPluginCollection;
@@ -149,8 +150,8 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
     return $this->getStateActionPlugin()->checkOperability($direction, $state, $account, ...$parameters);
   }
 
-  public function checkAccess() {
-    //
+  public function checkAccess(string $direction, string $state, AccountInterface $account, ...$parameters): AccessResult {
+    return $this->getStateActionPlugin()->checkAccess($direction, $state, $account, ...$parameters);
   }
 
   public function getRedirectUrl(AccountInterface $account, ...$parameters) {
