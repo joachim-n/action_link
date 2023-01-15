@@ -60,6 +60,8 @@ class Plugin extends FormElement {
 
     $element['#tree'] = TRUE;
 
+    // This needs to be a nested element so the radio or select element
+    // processing and theming takes place.
     $element['plugin_id'] = [
       // TODO: enforce either select or radios.
       '#type' => $element['#options_element_type'],
@@ -83,7 +85,7 @@ class Plugin extends FormElement {
     natcasesort($options);
     $element['plugin_id']['#options'] = $options;
 
-    $element['#element_validate'] = [[static::class, 'validatePasswordConfirm']];
+    $element['#element_validate'] = [[static::class, 'validatePlugin']];
 
     return $element;
   }
@@ -103,11 +105,10 @@ class Plugin extends FormElement {
     }
   }
 
-  public static function validatePasswordConfirm(&$element, FormStateInterface $form_state, &$complete_form) {
+  public static function validatePlugin(&$element, FormStateInterface $form_state, &$complete_form) {
     $pass1 = trim($element['plugin_id']['#value']);
 
-    // Password field must be converted from a two-element array into a single
-    // string regardless of validation results.
+    // Set the value at the top level of the element.
     $form_state->setValueForElement($element['plugin_id'], NULL);
     $form_state->setValueForElement($element, $pass1);
 
