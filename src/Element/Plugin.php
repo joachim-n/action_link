@@ -38,10 +38,6 @@ class Plugin extends FormElement {
 
     return [
       '#input' => TRUE,
-      // TODO: validate the plugin configuration with the plugibn class.
-      // '#element_validate' => [
-      //   [$class, 'validatePluginConfiguration'],
-      // ],
       '#process' => [
         [$class, 'processPlugin'],
       ],
@@ -106,11 +102,11 @@ class Plugin extends FormElement {
   }
 
   public static function validatePlugin(&$element, FormStateInterface $form_state, &$complete_form) {
-    $pass1 = trim($element['plugin_id']['#value']);
+    $plugin_id = $element['plugin_id']['#value'];
 
     // Set the value at the top level of the element.
     $form_state->setValueForElement($element['plugin_id'], NULL);
-    $form_state->setValueForElement($element, $pass1);
+    $form_state->setValueForElement($element, $plugin_id);
 
     return $element;
   }
