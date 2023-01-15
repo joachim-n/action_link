@@ -95,6 +95,7 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
 
       $route_parameters = [
         'action_link' => $action_link->id(),
+        'link_style' => $action_link->getLinkStylePlugin()->getPluginId(),
         'direction' => $direction,
         'state' => $next_state,
         'user' => $user->id(),
