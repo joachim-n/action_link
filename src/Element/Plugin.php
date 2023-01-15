@@ -58,6 +58,8 @@ class Plugin extends FormElement {
     $plugin_id_parents = $element['#array_parents'];
     $plugin_id_parents[] = 'plugin_id';
 
+    $element['#tree'] = TRUE;
+
     $element['plugin_id'] = [
       // TODO: enforce either select or radios.
       '#type' => $element['#options_element_type'],
@@ -65,7 +67,7 @@ class Plugin extends FormElement {
       '#options' => [],
       '#empty_value' => '',
       '#required' => $element['#required'],
-      '#default_value' => $element['#default_value'],
+      '#default_value' => $element['#default_value'] ?? '',
     ];
 
     // Build the plugin options.
@@ -81,6 +83,8 @@ class Plugin extends FormElement {
     natcasesort($options);
     $element['plugin_id']['#options'] = $options;
 
+    $element['#element_validate'] = [[static::class, 'validatePasswordConfirm']];
+
     return $element;
   }
 
@@ -91,9 +95,23 @@ class Plugin extends FormElement {
     if ($input === FALSE) {
       return $element['#default_value'] ?? '';
     }
+    elseif (is_null($input)) {
+      return $element['#default_value'] ?? '';
+    }
     else {
       return $input['plugin_id'];
     }
+  }
+
+  public static function validatePasswordConfirm(&$element, FormStateInterface $form_state, &$complete_form) {
+    $pass1 = trim($element['plugin_id']['#value']);
+
+    // Password field must be converted from a two-element array into a single
+    // string regardless of validation results.
+    $form_state->setValueForElement($element['plugin_id'], NULL);
+    $form_state->setValueForElement($element, $pass1);
+
+    return $element;
   }
 
 }
