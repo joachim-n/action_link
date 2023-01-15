@@ -236,7 +236,7 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
 
     // Hardcode the action link ID in the path, so each route has a distinct
     // path in the routing table.
-    $path = "/action-link/$action_link_id/{direction}/{state}/{user}";
+    $path = "/action-link/$action_link_id/{link_style}/{direction}/{state}/{user}";
 
     $dynamic_parameters_definition = $this->pluginDefinition['parameters']['dynamic'];
     foreach ($dynamic_parameters_definition as $parameter_name) {

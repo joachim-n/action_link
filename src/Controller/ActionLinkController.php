@@ -28,6 +28,8 @@ class ActionLinkController {
    *   The route match.
    * @param \Drupal\action_link\Entity\ActionLinkInterface $action_link
    *   The action link entity.
+   * @param string $link_style
+   *   The link style plugin ID.
    * @param string $direction
    *   The direction for the action.
    * @param string $state
@@ -35,10 +37,14 @@ class ActionLinkController {
    * @param \Drupal\user\UserInterface $user
    *   The user to perform the action. This is not necessarily the current user.
    */
-  public function action(Request $request, RouteMatchInterface $route_match, ActionLinkInterface $action_link, string $direction, string $state, UserInterface $user) {
+  public function action(Request $request, RouteMatchInterface $route_match, ActionLinkInterface $action_link, string $link_style, string $direction, string $state, UserInterface $user) {
     $state_action_plugin = $action_link->getStateActionPlugin();
 
     $parameters = $state_action_plugin->getDynamicParametersFromRouteMatch($route_match);
+
+    // Use the given link style rather than the one configured in the action l
+    // link entity. This allows for graceful degradation of JS links.
+    $link_style_plugin = \Drupal::service('plugin.manager.action_link_style')->createInstance($link_style);
 
 
     // array_slice($route_match->getParameters()->all(), 4);
