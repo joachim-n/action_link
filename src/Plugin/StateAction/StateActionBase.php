@@ -70,6 +70,12 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
       }
     }
 
+    // Allow the link style plugin for this action link entity to modify the
+    // render array for the links.
+    if ($build) {
+      $action_link->getLinkStylePlugin()->alterLinksBuild($build, $action_link, $user, ...$parameters);
+    }
+
     return $build;
   }
 
