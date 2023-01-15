@@ -59,6 +59,15 @@ class ActionLinkForm extends EntityForm {
       ],
     ];
 
+    $form['link_style'] = [
+      '#type' => 'action_link_plugin',
+      '#title' => $this->t('Link style'),
+      '#required' => TRUE,
+      '#default_value' => $action_link->get('link_style'),
+      '#plugin_type' => 'action_link.link_style',
+      '#options_element_type' => 'radios',
+    ];
+
     return $form;
   }
 

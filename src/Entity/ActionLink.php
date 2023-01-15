@@ -2,6 +2,7 @@
 
 namespace Drupal\action_link\Entity;
 
+use Drupal\action_link\Plugin\ActionLinkStyle\ActionLinkStyleInterface;
 use Drupal\action_link\Plugin\StateAction\StateActionInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Config\Entity\ConfigEntityBase;
@@ -44,6 +45,7 @@ use Drupal\Core\Url;
  *     "label",
  *     "plugin_id",
  *     "plugin_config",
+ *     "link_style",
  *   },
  *   links = {
  *     "add-form" = "/admin/structure/action_link/add",
@@ -81,6 +83,10 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
 
   protected $actionLinkPluginCollection;
 
+  protected $linkStylePluginCollection;
+
+  protected $link_style;
+
   /*
 
   - state action plugin
@@ -102,14 +108,20 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
     return $this->getActionLinkPluginCollection()->get($this->plugin_id);
   }
 
+  public function getLinkStylePlugin(): ActionLinkStyleInterface {
+    return $this->getLinkStylePluginCollection()->get($this->link_style);
+  }
+
 
   public function getPluginCollections() {
+    $collections = [];
     if ($this->getActionLinkPluginCollection()) {
-      return [
-        'plugin_config' => $this->getActionLinkPluginCollection(),
-      ];
+      $collections['plugin_config'] = $this->getActionLinkPluginCollection();
     }
-    return [];
+    if ($this->getLinkStylePluginCollection()) {
+      $collections['link_style_collection'] = $this->getLinkStylePluginCollection();
+    }
+    return $collections;
   }
 
   /**
@@ -131,6 +143,26 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
       );
     }
     return $this->actionLinkPluginCollection;
+  }
+
+  protected function getLinkStylePluginCollection() {
+    // Horrible workaround for the form element's inner element's value getting
+    // set and then the resulting value *array* for the outer element being used
+    // by copyFormValuesToEntity().
+    // See https://drupal.stackexchange.com/questions/314389/interaction-between-form-element-plugins-and-config-entity-plugin-collections
+    if (is_array($this->link_style)) {
+      return NULL;
+    }
+    // dsm($this->link_style);
+    // return;
+    if (!$this->linkStylePluginCollection && $this->link_style) {
+      $this->linkStylePluginCollection = new DefaultSingleLazyPluginCollection(
+        \Drupal::service('plugin.manager.action_link_style'),
+        $this->link_style,
+        []
+      );
+    }
+    return $this->linkStylePluginCollection;
   }
 
   /**
