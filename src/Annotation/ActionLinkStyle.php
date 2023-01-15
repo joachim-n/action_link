@@ -27,4 +27,11 @@ class ActionLinkStyle extends Plugin {
    */
   public $label = '';
 
+  /**
+   * The human-readable description of the plugin.
+   *
+   * @var \Drupal\Core\Annotation\Translation
+   */
+  public $description = '';
+
 }
