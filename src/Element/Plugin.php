@@ -55,35 +55,17 @@ class Plugin extends FormElement {
   public static function processPlugin(&$element, FormStateInterface $form_state, &$complete_form) {
     $plugin_manager = \Drupal::service('plugin.plugin_type_manager')->getPluginType($element['#plugin_type'])->getPluginManager();
 
-    $element['#tree'] = TRUE;
-
-    $container_html_id = HtmlUtility::getUniqueId('ajax-link');
-    $element['container'] = [
-      '#type' => 'details',
-      '#open' => TRUE,
-      '#title' => $element['#title'] ?? '',
-      '#attributes' => ['id' => $container_html_id],
-    ];
-
     $plugin_id_parents = $element['#array_parents'];
     $plugin_id_parents[] = 'plugin_id';
 
-    if (empty($form_state->getValue($plugin_id_parents))) {
-      $selected_plugin_id = $element['#default_value'] ?? '';
-    }
-    else {
-      // Get the value if it already exists.
-      $selected_plugin_id = $form_state->getValue($plugin_id_parents);
-    }
-
-    $element['container']['plugin_id'] = [
+    $element['plugin_id'] = [
       // TODO: enforce either select or radios.
       '#type' => $element['#options_element_type'],
-      '#title' => t("Plugin"),
+      '#title' => $element['#title'],
       '#options' => [],
       '#empty_value' => '',
       '#required' => $element['#required'],
-      '#default_value' => $selected_plugin_id,
+      '#default_value' => $element['#default_value'],
     ];
 
     // Build the plugin options.
@@ -93,11 +75,11 @@ class Plugin extends FormElement {
 
       // Add plugin descriptions to radios, if they exist.
       if (isset($plugin_definition['description']) && $element['#options_element_type'] == 'radios') {
-        $element['container']['plugin_id'][$plugin_id]['#description'] = $plugin_definition['description'];
+        $element['plugin_id'][$plugin_id]['#description'] = $plugin_definition['description'];
       }
     }
     natcasesort($options);
-    $element['container']['plugin_id']['#options'] = $options;
+    $element['plugin_id']['#options'] = $options;
 
     return $element;
   }
@@ -110,7 +92,7 @@ class Plugin extends FormElement {
       return $element['#default_value'] ?? '';
     }
     else {
-      return $input['container']['plugin_id'];
+      return $input['plugin_id'];
     }
   }
 
