@@ -16,7 +16,8 @@ class ActionLinkListBuilder extends EntityListBuilder {
   public function buildHeader() {
     $header = [];
     $header['name'] = $this->t('Name');
-    $header['plugin'] = $this->t('Action');
+    $header['state_action'] = $this->t('Action');
+    $header['link_style'] = $this->t('Link style');
     return $header + parent::buildHeader();
   }
 
@@ -26,7 +27,8 @@ class ActionLinkListBuilder extends EntityListBuilder {
   public function buildRow(EntityInterface $entity) {
     $row = [];
     $row['name'] = $entity->label();
-    $row['plugin'] = $entity->getStateActionPlugin()->getPluginDefinition()['label'];
+    $row['state_action'] = $entity->getStateActionPlugin()->getPluginDefinition()['label'];
+    $row['link_style'] = $entity->getLinkStylePlugin()?->getPluginDefinition()['label'] ?? '';
     return $row + parent::buildRow($entity);
   }
 
