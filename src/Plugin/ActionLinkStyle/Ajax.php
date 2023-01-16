@@ -30,10 +30,60 @@ class Ajax extends ActionLinkStyleBase {
   public function alterLinksBuild(&$build, ActionLinkInterface $action_link, AccountInterface $user, ...$parameters) {
     foreach ($build as $direction => $direction_link_build) {
       $build[$direction]['#attributes']['class'][] = 'use-ajax';
+      $build[$direction]['#attributes']['class'][] = $this->createCssIdentifier($action_link, $direction, $user, ...$parameters);
     }
 
     // TODO!
     // $build['#attached']['library'][] = 'action_link/action_link.ajax';
+  }
+
+  protected function createCssIdentifier(ActionLinkInterface $action_link, string $direction, AccountInterface $user, ...$parameters): string {
+    return Html::cleanCssIdentifier(implode(
+      '-', [
+        'action-link',
+        $action_link->id(),
+        $direction,
+        $user->id(),
+        // ARGH! params!?! YES. but SCALAR!
+      ]
+    ));
+  }
+
+
+  public function handleActionRequest(bool $action_completed, Request $request, RouteMatchInterface $route_match, ActionLinkInterface $action_link, string $direction, string $state, UserInterface $user, ...$parameters): Response {
+    $state_action_plugin = $action_link->getStateActionPlugin();
+
+    $link = $state_action_plugin->getLink($action_link, $direction, $user, ...$parameters);
+
+    $build = $link->toRenderable();
+    $build['#attributes']['class'][] = 'use-ajax';
+
+
+
+    // TODO!
+    // Generate a CSS selector to use in a JQuery Replace command.
+    $selector = $this->createCssIdentifier($action_link, $direction, $user, ...$parameters);
+
+    // Create a new AJAX response.
+    $response = new AjaxResponse();
+
+    // Create a new JQuery Replace command to update the link display.
+    $replace = new ReplaceCommand($selector, $this->renderer->renderPlain($build));
+    $response->addCommand($replace);
+
+    if ($action_completed) {
+      $message = $action_link->getStateActionPlugin()->getMessage($direction, $state, ...$parameters);
+      if ($message) {
+        // TODO! THIS IS FROM FLAG!
+        // Push a message pulsing command onto the stack.
+        $pulse = new ActionLinkFlashCommand($selector, $message);
+        $response->addCommand($pulse);
+      }
+    }
+
+
+
+    return $response;
   }
 
 }
