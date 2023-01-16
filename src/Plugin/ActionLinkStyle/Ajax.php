@@ -6,7 +6,6 @@ use Drupal\action_link\Ajax\ActionLinkMessageCommand;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\ReplaceCommand;
-use Drupal\flag\Ajax\ActionLinkFlashCommand;
 use Drupal\action_link\Entity\ActionLinkInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
