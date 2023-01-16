@@ -2,6 +2,7 @@
 
 namespace Drupal\action_link\Plugin\ActionLinkStyle;
 
+use Drupal\action_link\Ajax\ActionLinkMessageCommand;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\ReplaceCommand;
@@ -78,6 +79,7 @@ class Ajax extends ActionLinkStyleBase implements ContainerFactoryPluginInterfac
       // plugin.
       $build[$direction]['#attributes']['class'][] = 'use-ajax';
 
+      // Add a unique class for the AJAX replacement.
       $build[$direction]['#attributes']['class'][] = $this->createCssIdentifier($action_link, $direction, $user, ...$parameters);
     }
 
@@ -97,7 +99,9 @@ class Ajax extends ActionLinkStyleBase implements ContainerFactoryPluginInterfac
     ));
   }
 
-
+  /**
+   * {@inheritdoc}
+   */
   public function handleActionRequest(bool $action_completed, Request $request, RouteMatchInterface $route_match, ActionLinkInterface $action_link, string $direction, string $state, UserInterface $user, ...$parameters): Response {
     $state_action_plugin = $action_link->getStateActionPlugin();
 
@@ -122,7 +126,7 @@ class Ajax extends ActionLinkStyleBase implements ContainerFactoryPluginInterfac
       if ($message) {
         // TODO! THIS IS FROM FLAG!
         // Push a message pulsing command onto the stack.
-        $pulse = new ActionLinkFlashCommand($selector, $message);
+        $pulse = new ActionLinkMessageCommand($selector, $message);
         $response->addCommand($pulse);
       }
     }
