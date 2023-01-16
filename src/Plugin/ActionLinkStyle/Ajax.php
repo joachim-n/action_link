@@ -87,6 +87,18 @@ class Ajax extends ActionLinkStyleBase implements ContainerFactoryPluginInterfac
     $build['#attached']['library'][] = 'action_link/link_style.ajax';
   }
 
+  /**
+   * Creates a unique HTML class for an action link.
+   *
+   * @param \Drupal\action_link\Entity\ActionLinkInterface $action_link
+   *   The action link entity.
+   * @param string $direction
+   * @param \Drupal\Core\Session\AccountInterface $user
+   * @param [type] ...$parameters
+   *
+   * @return string
+   *   A CSS class.
+   */
   protected function createCssIdentifier(ActionLinkInterface $action_link, string $direction, AccountInterface $user, ...$parameters): string {
     return Html::cleanCssIdentifier(implode(
       '-', [
