@@ -97,6 +97,7 @@ class Ajax extends ActionLinkStyleBase implements ContainerFactoryPluginInterfac
   public function handleActionRequest(bool $action_completed, Request $request, RouteMatchInterface $route_match, ActionLinkInterface $action_link, string $direction, string $state, UserInterface $user, ...$parameters): Response {
     $state_action_plugin = $action_link->getStateActionPlugin();
 
+    // This gets the next link, as the action link has been activated.
     $link = $state_action_plugin->getLink($action_link, $direction, $user, ...$parameters);
 
     $build = $link->toRenderable();
