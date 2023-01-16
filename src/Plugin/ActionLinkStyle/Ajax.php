@@ -73,7 +73,11 @@ class Ajax extends ActionLinkStyleBase implements ContainerFactoryPluginInterfac
    */
   public function alterLinksBuild(&$build, ActionLinkInterface $action_link, AccountInterface $user, ...$parameters) {
     foreach ($build as $direction => $direction_link_build) {
+      // Add the 'use-ajax' class. This makes core handle the link using a JS
+      // request and degrades gracefully to be handled by the nojs link style
+      // plugin.
       $build[$direction]['#attributes']['class'][] = 'use-ajax';
+
       $build[$direction]['#attributes']['class'][] = $this->createCssIdentifier($action_link, $direction, $user, ...$parameters);
     }
 
