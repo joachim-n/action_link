@@ -1,7 +1,10 @@
 link_style.ajax:
   version: 1.x
   js:
-    js/link-style-ajax.js: {  }
+    js/link-style-ajax.js: {}
+  css:
+    theme:
+      css/link-style-ajax.css: {}
   dependencies:
     - core/drupal
     - core/drupal.ajax

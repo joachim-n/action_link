@@ -31,7 +31,7 @@
       const para = document.createElement('P');
       para.innerText = response.message;
       // Adding this class will initiate a CSS transition.
-      para.setAttribute('class', 'js-flag-message'); // TODO!
+      para.setAttribute('class', 'action-link-ajax-message');
       // As the transition ends delete the message from the DOM.
       para.addEventListener('animationend', event => event.target.remove(), false);
 

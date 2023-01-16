@@ -1,0 +1,17 @@
+/**
+ * @file
+ * TODO specific styles for actio links.
+ *
+ * TODO @see flag.html.twig. TODO
+ */
+.action-link-ajax-message {
+  display: inline;
+  margin-left: 1.2em;
+  animation: action-link-message 3s ease-in-out 1;
+}
+
+@keyframes action-link-message {
+    0% { opacity: 0; }
+    50% { opacity: 1; }
+    100% { opacity: 0; }
+}
