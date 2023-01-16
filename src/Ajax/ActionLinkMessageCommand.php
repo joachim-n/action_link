@@ -5,9 +5,11 @@ namespace Drupal\action_link\Ajax;
 use Drupal\Core\Ajax\CommandInterface;
 
 /**
- * TODO Flash a message as an action link is updated.
+ * Shows a message when an AJAX action link is updated.
  *
- * TODO The client side code can be found in js/flag-action_link_flash.js.
+ * The client side code can be found in js/link-style-ajax.js.
+ *
+ * @todo Cribbed from flag module. Needs work!
  */
 class ActionLinkMessageCommand implements CommandInterface {
 
