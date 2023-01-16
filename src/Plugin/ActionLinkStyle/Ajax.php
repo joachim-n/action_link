@@ -12,6 +12,9 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\user\UserInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\Render\RendererInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * TODO: class docs.
@@ -22,7 +25,48 @@ use Symfony\Component\HttpFoundation\Response;
  *   description = @Translation("A link which makes an AJAX JavaScript request without reloading the page.")
  * )
  */
-class Ajax extends ActionLinkStyleBase {
+class Ajax extends ActionLinkStyleBase implements ContainerFactoryPluginInterface {
+
+  /**
+   * The renderer service.
+   *
+   * @var \Drupal\Core\Render\RendererInterface
+   */
+  protected $renderer;
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    return new static(
+      $configuration,
+      $plugin_id,
+      $plugin_definition,
+      $container->get('renderer'),
+    );
+  }
+
+  /**
+   * Creates a Ajax instance.
+   *
+   * @param array $configuration
+   *   A configuration array containing information about the plugin instance.
+   * @param string $plugin_id
+   *   The plugin_id for the plugin instance.
+   * @param mixed $plugin_definition
+   *   The plugin implementation definition.
+   * @param \Drupal\Core\Render\RendererInterface $renderer
+   *   The renderer service.
+   */
+  public function __construct(
+    array $configuration,
+    $plugin_id,
+    $plugin_definition,
+    RendererInterface $renderer
+  ) {
+    parent::__construct($configuration, $plugin_id, $plugin_definition);
+    $this->renderer = $renderer;
+  }
 
   /**
    * {@inheritdoc}
