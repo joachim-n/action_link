@@ -88,30 +88,6 @@ class Ajax extends ActionLinkStyleBase implements ContainerFactoryPluginInterfac
   }
 
   /**
-   * Creates a unique HTML class for an action link.
-   *
-   * @param \Drupal\action_link\Entity\ActionLinkInterface $action_link
-   *   The action link entity.
-   * @param string $direction
-   * @param \Drupal\Core\Session\AccountInterface $user
-   * @param [type] ...$parameters
-   *
-   * @return string
-   *   A CSS class.
-   */
-  protected function createCssIdentifier(ActionLinkInterface $action_link, string $direction, AccountInterface $user, ...$parameters): string {
-    return Html::cleanCssIdentifier(implode(
-      '-', [
-        'action-link',
-        $action_link->id(),
-        $direction,
-        $user->id(),
-        // ARGH! params!?! YES. but SCALAR!
-      ]
-    ));
-  }
-
-  /**
    * {@inheritdoc}
    */
   public function handleActionRequest(bool $action_completed, Request $request, RouteMatchInterface $route_match, ActionLinkInterface $action_link, string $direction, string $state, UserInterface $user, ...$parameters): Response {
@@ -147,6 +123,30 @@ class Ajax extends ActionLinkStyleBase implements ContainerFactoryPluginInterfac
 
 
     return $response;
+  }
+
+  /**
+   * Creates a unique HTML class for an action link.
+   *
+   * @param \Drupal\action_link\Entity\ActionLinkInterface $action_link
+   *   The action link entity.
+   * @param string $direction
+   * @param \Drupal\Core\Session\AccountInterface $user
+   * @param [type] ...$parameters
+   *
+   * @return string
+   *   A CSS class.
+   */
+  protected function createCssIdentifier(ActionLinkInterface $action_link, string $direction, AccountInterface $user, ...$parameters): string {
+    return Html::cleanCssIdentifier(implode(
+      '-', [
+        'action-link',
+        $action_link->id(),
+        $direction,
+        $user->id(),
+        // ARGH! params!?! YES. but SCALAR!
+      ]
+    ));
   }
 
 }
