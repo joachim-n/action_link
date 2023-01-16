@@ -2,14 +2,16 @@
 
 namespace Drupal\action_link\Plugin\ActionLinkStyle;
 
+use Drupal\action_link\Entity\ActionLinkInterface;
 use Drupal\Component\Plugin\PluginBase;
+use Drupal\Core\Session\AccountInterface;
 
 /**
  * Base class for Action Link Style plugins.
  */
 abstract class ActionLinkStyleBase extends PluginBase implements ActionLinkStyleInterface {
 
-  public function alterLinksBuild($build, $action_link, $user, ...$parameters) {
+  public function alterLinksBuild(&$build, ActionLinkInterface $action_link, AccountInterface $user, ...$parameters) {
     // Do nothing by default.
   }
 

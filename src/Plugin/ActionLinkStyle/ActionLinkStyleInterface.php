@@ -2,8 +2,10 @@
 
 namespace Drupal\action_link\Plugin\ActionLinkStyle;
 
+use Drupal\action_link\Entity\ActionLinkInterface;
 use Drupal\Component\Plugin\DerivativeInspectionInterface;
 use Drupal\Component\Plugin\PluginInspectionInterface;
+use Drupal\Core\Session\AccountInterface;
 
 /**
  * Interface for Action Link Style plugins.
@@ -20,5 +22,21 @@ use Drupal\Component\Plugin\PluginInspectionInterface;
  * degradation of JavaScript line.
  */
 interface ActionLinkStyleInterface extends PluginInspectionInterface, DerivativeInspectionInterface {
+
+  /**
+   * Alters the render array for an action link entity's set of links.
+   *
+   * This is only called if the render array has at least one link.
+   *
+   * @param array &$build
+   *   The render array, passed by reference. The keys are direction names.
+   * @param \Drupal\action_link\Entity\ActionLinkInterface $action_link
+   *   The action link entity.
+   * @param \Drupal\user\UserInterface $user
+   *   The user account the links are for.
+   * @param mixed ...$parameters
+   *   Additional parameter specific to the action link's state action plugin.
+   */
+  public function alterLinksBuild(&$build, ActionLinkInterface $action_link, AccountInterface $user, ...$parameters);
 
 }
