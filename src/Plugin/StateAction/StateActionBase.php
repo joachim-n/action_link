@@ -67,6 +67,9 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
     foreach ($directions as $direction) {
       if ($link = $this->getLink($action_link, $direction, $user, ...$parameters)) {
         $build[$direction] = $link->toRenderable();
+
+        // Set nofollow to prevent search bots from crawling anonymous flag links.
+        $build[$direction]['#attributes']['rel'][] = 'nofollow';
       }
     }
 
