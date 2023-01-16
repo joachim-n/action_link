@@ -82,7 +82,7 @@ class Ajax extends ActionLinkStyleBase implements ContainerFactoryPluginInterfac
     }
 
     // TODO!
-    // $build['#attached']['library'][] = 'action_link/action_link.ajax';
+    $build['#attached']['library'][] = 'action_link/link_style.ajax';
   }
 
   protected function createCssIdentifier(ActionLinkInterface $action_link, string $direction, AccountInterface $user, ...$parameters): string {
