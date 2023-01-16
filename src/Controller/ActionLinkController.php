@@ -68,31 +68,18 @@ class ActionLinkController {
 
     if ($operable) {
       $action_link->advanceState($user, $state, ...$parameters);
-
-      $message = $action_link->getStateActionPlugin()->getMessage($direction, $state, ...$parameters);
-      if ($message) {
-        \Drupal::messenger()->addMessage($message);
-      }
     }
 
-    // Redirect to the referrer.
-    $response = new RedirectResponse($request->headers->get('referer'));
-    return $response;
-
-    // Do we want redirect URL at all???
-    if ($redirect_url = $action_link->getRedirectUrl($user, ...$parameters)) {
-      // no wait, redirect to where the user clicked the link!
-
-      // Redirect, typically back to the entity. A passed in destination query
-      // parameter will automatically override this.
-      $response = new RedirectResponse($redirect_url->toString());
-    }
-    else {
-      // TODO For entities that don't have a canonical URL (like paragraphs),
-      // redirect to the front page.
-      $redirect_url = Url::fromRoute('<front>');
-      $response = new RedirectResponse($redirect_url->toString());
-    }
+    return $action_link->getLinkStylePlugin()->handleActionRequest(
+      $operable,
+      $request,
+      $route_match,
+      $action_link,
+      $direction,
+      $state,
+      $user,
+      ...$parameters
+    );
 
     return $response;
   }

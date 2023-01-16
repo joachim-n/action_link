@@ -5,6 +5,12 @@ namespace Drupal\action_link\Plugin\ActionLinkStyle;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\action_link\Entity\ActionLinkInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\user\UserInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * TODO: class docs.
@@ -56,6 +62,19 @@ class Nojs extends ActionLinkStyleBase implements ContainerFactoryPluginInterfac
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->messenger = $messenger;
+  }
+
+  public function handleActionRequest(bool $action_completed, Request $request, RouteMatchInterface $route_match, ActionLinkInterface $action_link, string $direction, string $state, UserInterface $user, ...$parameters): Response {
+    if ($action_completed) {
+      $message = $action_link->getStateActionPlugin()->getMessage($direction, $state, ...$parameters);
+      if ($message) {
+        $this->messenger->addMessage($message);
+      }
+    }
+
+    // Redirect to the referrer.
+    $response = new RedirectResponse($request->headers->get('referer'));
+    return $response;
   }
 
 }
