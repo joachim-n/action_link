@@ -19,3 +19,20 @@ function action_link_help($route_name, RouteMatchInterface $route_match) {
     // help text.
   }
 }
+
+/**
+ * Implements hook_theme().
+ */
+function action_link_theme($existing, $type, $theme, $path) {
+  return [
+    'action_link' => [
+      'variables' => [
+        'link' => [],
+        'action_link' => NULL,
+        'direction' => NULL,
+        'user' => NULL,
+        'dynamic_parameters' => [],
+      ],
+    ],
+  ];
+}
