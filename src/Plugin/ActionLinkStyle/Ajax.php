@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Render\RendererInterface;
+use Drupal\Core\Template\Attribute;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -74,12 +75,13 @@ class Ajax extends ActionLinkStyleBase implements ContainerFactoryPluginInterfac
    */
   public function alterLinksBuild(&$build, ActionLinkInterface $action_link, AccountInterface $user, ...$parameters) {
     foreach ($build as $direction => $direction_link_build) {
-      // Add the 'use-ajax' class. This makes core handle the link using a JS
+      // Add the 'use-ajax' class to the link. This makes core handle the link using a JS
       // request and degrades gracefully to be handled by the nojs link style
       // plugin.
-      $build[$direction]['#attributes']['class'][] = 'use-ajax';
+      $build[$direction]['#link']['#attributes']['class'][] = 'use-ajax';
 
-      // Add a unique class for the AJAX replacement.
+      // Add a unique class to the outer HTML for the AJAX replacement.
+      // $build[$direction]['#attributes']['class'] = [];
       $build[$direction]['#attributes']['class'][] = $this->createCssIdentifier($action_link, $direction, $user, ...$parameters);
     }
 
@@ -96,9 +98,19 @@ class Ajax extends ActionLinkStyleBase implements ContainerFactoryPluginInterfac
     // This gets the next link, as the action link has been activated.
     $link = $state_action_plugin->getLink($action_link, $direction, $user, ...$parameters);
 
-    $build = $link->toRenderable();
-    $build['#attributes']['class'][] = 'use-ajax';
-    $build['#attributes']['class'][] = $this->createCssIdentifier($action_link, $direction, $user, ...$parameters);
+    $build = [
+      '#theme' => 'action_link',
+      '#link' => $link->toRenderable(),
+      '#direction' => $direction,
+      '#user' => $user,
+      '#dynamic_parameters' => $parameters,
+      '#attributes' => new Attribute([
+        'class' => [
+          $this->createCssIdentifier($action_link, $direction, $user, ...$parameters),
+        ],
+      ]),
+    ];
+    $build['#link']['#attributes']['class'][] = 'use-ajax';
 
     // Generate a CSS selector to use in a JQuery Replace command.
     $selector = '.' . $this->createCssIdentifier($action_link, $direction, $user, ...$parameters);
@@ -119,8 +131,6 @@ class Ajax extends ActionLinkStyleBase implements ContainerFactoryPluginInterfac
         $response->addCommand($pulse);
       }
     }
-
-
 
     return $response;
   }

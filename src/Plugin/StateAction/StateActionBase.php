@@ -11,6 +11,7 @@ use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\Core\Template\Attribute;
 use Drupal\Core\Url;
 use Drupal\user\Entity\User;
 use Symfony\Component\HttpFoundation\Request;
@@ -72,17 +73,18 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
           '#direction' => $direction,
           '#user' => $user,
           '#dynamic_parameters' => $parameters,
+          '#attributes' => new Attribute(['class' => []]),
         ];
 
         // Set nofollow to prevent search bots from crawling anonymous flag links.
-        $build[$direction]['link']['#attributes']['rel'][] = 'nofollow';
+        $build[$direction]['#link']['#attributes']['rel'][] = 'nofollow';
       }
     }
 
     // Allow the link style plugin for this action link entity to modify the
     // render array for the links.
     if ($build) {
-      //$action_link->getLinkStylePlugin()->alterLinksBuild($build, $action_link, $user, ...$parameters);
+      $action_link->getLinkStylePlugin()->alterLinksBuild($build, $action_link, $user, ...$parameters);
     }
 
     return $build;
