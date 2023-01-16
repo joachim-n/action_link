@@ -102,11 +102,8 @@ class Ajax extends ActionLinkStyleBase implements ContainerFactoryPluginInterfac
     $build = $link->toRenderable();
     $build['#attributes']['class'][] = 'use-ajax';
 
-
-
-    // TODO!
     // Generate a CSS selector to use in a JQuery Replace command.
-    $selector = $this->createCssIdentifier($action_link, $direction, $user, ...$parameters);
+    $selector = '.' . $this->createCssIdentifier($action_link, $direction, $user, ...$parameters);
 
     // Create a new AJAX response.
     $response = new AjaxResponse();
