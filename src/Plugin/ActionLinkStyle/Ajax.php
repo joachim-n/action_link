@@ -80,11 +80,9 @@ class Ajax extends ActionLinkStyleBase implements ContainerFactoryPluginInterfac
       $build[$direction]['#link']['#attributes']['class'][] = 'use-ajax';
 
       // Add a unique class to the outer HTML for the AJAX replacement.
-      // $build[$direction]['#attributes']['class'] = [];
       $build[$direction]['#attributes']['class'][] = $this->createCssIdentifier($action_link, $direction, $user, ...$parameters);
     }
 
-    // TODO!
     $build['#attached']['library'][] = 'action_link/link_style.ajax';
   }
 
