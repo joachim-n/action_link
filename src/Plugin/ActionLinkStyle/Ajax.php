@@ -13,6 +13,7 @@ use Drupal\user\UserInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\Render\Element;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Template\Attribute;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -102,19 +103,24 @@ class Ajax extends ActionLinkStyleBase implements ContainerFactoryPluginInterfac
     // We have to replace all links for this action link, not just the clicked
     // one, as the next state will change for all directions.
     $links = $action_link->buildLinkSet($user, ...$parameters);
-    foreach ($links as $link_direction => $link) {
+    foreach (Element::children($links) as $link_direction) {
       // Generate a CSS selector to use in a JQuery Replace command.
       $selector = '.' . $this->createCssIdentifier($action_link, $link_direction, $user, ...$scalar_parameters);
 
       // Create a new JQuery Replace command to update the link display. This
       // will update all copies of the same link if there are more than one.
-      $replace = new ReplaceCommand($selector, $this->renderer->renderPlain($link));
+      $replace = new ReplaceCommand($selector, $this->renderer->renderPlain($links[$link_direction]));
       $response->addCommand($replace);
+      // It doesn't matter that we only render the children, and not the whole
+      // thing. This skips any attachments, but these are already on the page
+      // from its initial load.
     }
 
     if ($action_completed) {
       $message = $action_link->getStateActionPlugin()->getMessage($direction, $state, ...$parameters);
       if ($message) {
+        $selector = '.' . $this->createCssIdentifier($action_link, $direction, $user, ...$scalar_parameters);
+
         // Add a message command to the stack.
         $message_command = new ActionLinkMessageCommand($selector, $message);
         $response->addCommand($message_command);
