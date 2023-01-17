@@ -53,7 +53,7 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
    * @return \Drupal\Core\Link|null
    *   The link object, or NULL if no link is applicable.
    */
-  public function getLink(ActionLinkInterface $action_link, string $direction, AccountInterface $user): ?Link;
+  public function buildSingleLink(ActionLinkInterface $action_link, string $direction, AccountInterface $user): array;
 
   public function buildConfigurationForm(array $element, FormStateInterface $form_state);
 

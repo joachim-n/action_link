@@ -101,10 +101,58 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
     return $build;
   }
 
+  // TODO!
+  public function buildSingleLink(ActionLinkInterface $action_link, string $direction, AccountInterface $user, ...$parameters): array {
+    $build = [];
+
+    // Validate the number of dynamic parameters. This must be done before they
+    // are validated by the specific plugin class.
+    if (count($parameters) != count($this->pluginDefinition['parameters']['dynamic'])) {
+      throw new \ArgumentCountError(sprintf("State action plugin %s expects %s dynamic parameters (%s), got %s",
+        $this->getPluginId(),
+        count($this->pluginDefinition['parameters']['dynamic']),
+        implode(', ', $this->pluginDefinition['parameters']['dynamic']),
+        count($parameters),
+      ));
+    }
+
+    if ($link = $this->getLink($action_link, $direction, $user, ...$parameters)) {
+      $build = [
+        '#theme' => 'action_link',
+        '#link' => $link->toRenderable(),
+        '#direction' => $direction,
+        '#user' => $user,
+        '#dynamic_parameters' => $parameters,
+        '#attributes' => new Attribute(['class' => []]),
+      ];
+
+      // Set nofollow to prevent search bots from crawling anonymous flag links.
+      $build['#link']['#attributes']['rel'][] = 'nofollow';
+    }
+    // ARGH need AJAX alteration and KEY IS WRONG!
+    // TODO!
+
+    return $build;
+  }
+
   /**
-   * {@inheritdoc}
+   * Gets a link object for the action link.
+   *
+   * @param \Drupal\action_link\Entity\ActionLinkInterface $action_link
+   *   The action link entity.
+   * @param string $direction
+   *   The direction for the link.
+   * @param \Drupal\Core\Session\AccountInterface $user
+   *   The user to get the link for.
+   * @param mixed ...$parameters
+   *   The parameters for the link. These are specific to the state action
+   *   plugin.
+   *
+   * @return \Drupal\Core\Link
+   *   A link object, or NULL if there is no valid link for the given
+   *   parameters.
    */
-  public function getLink(ActionLinkInterface $action_link, string $direction, AccountInterface $user, ...$parameters): ?Link {
+  protected function getLink(ActionLinkInterface $action_link, string $direction, AccountInterface $user, ...$parameters): ?Link {
     // Get the associative indexes for the dynamic parameters.
     // TODO RENAME!
     $indexed_parameters = $this->getDynamicParametersByName($parameters);
