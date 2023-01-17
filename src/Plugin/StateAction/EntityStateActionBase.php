@@ -104,6 +104,8 @@ abstract class EntityStateActionBase extends StateActionBase {
    * {@inheritdoc}
    */
   public function convertParametersForRoute(array $parameters): array {
+    $parameters = parent::convertParametersForRoute($parameters);
+
     // Convert the entity parameter to an entity ID.
     // TODO: this needs to be able to complain if a param is bad.
     // e.g. no node exists.
