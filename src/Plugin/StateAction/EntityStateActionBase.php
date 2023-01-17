@@ -88,6 +88,21 @@ abstract class EntityStateActionBase extends StateActionBase {
   /**
    * {@inheritdoc}
    */
+  public function validateParameters(array $parameters) {
+    parent::validateParameters($parameters);
+
+    if ($parameters['entity']->getEntityTypeId() != $this->configuration['entity_type_id']) {
+      throw new \ArgumentCountError(sprintf("Wrong entity type for state action plugin %s, expects %s, got %s",
+        $this->getPluginId(),
+        $this->configuration['entity_type_id'],
+        $parameters['entity']->getEntityTypeId(),
+      ));
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function convertParametersForRoute(array $parameters): array {
     // Convert the entity parameter to an entity ID.
     // TODO: this needs to be able to complain if a param is bad.
