@@ -114,8 +114,7 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
     }
 
     // Validate parameters.
-    // DOCS: PARAMS MUST BE IN RIGHT ORDER!
-    $this->validateParameters($parameters);
+    $this->validateParameters($indexed_parameters);
 
     // Downcast dynamic parameters.
     $scalar_parameters = $this->convertParametersForRoute($indexed_parameters);
@@ -208,6 +207,13 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
     return $this->pluginDefinition['directions'] ?? NULL;
   }
 
+  /**
+   * Validates the dynamic parameters.
+   *
+   * @param array $parameters
+   *   The dynamic parameters, keyed by the names defined in the plugin
+   *   annotation.
+   */
   public function validateParameters(array $parameters) {
 
   }
