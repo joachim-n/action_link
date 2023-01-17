@@ -51,9 +51,6 @@ class Plugin extends FormElement {
   public static function processPlugin(&$element, FormStateInterface $form_state, &$complete_form) {
     $plugin_manager = \Drupal::service('plugin.plugin_type_manager')->getPluginType($element['#plugin_type'])->getPluginManager();
 
-    $plugin_id_parents = $element['#array_parents'];
-    $plugin_id_parents[] = 'plugin_id';
-
     $element['#tree'] = TRUE;
 
     // This needs to be a nested element so the radio or select element
