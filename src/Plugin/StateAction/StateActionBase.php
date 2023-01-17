@@ -106,6 +106,8 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
     }
 
     // Get the associative indexes for the dynamic parameters.
+    // TODO RENAME!
+    $indexed_parameters = [];
     $dynamic_parameters_definition = $this->pluginDefinition['parameters']['dynamic'];
     $index = 0;
     foreach ($dynamic_parameters_definition as $parameter_name) {
