@@ -61,6 +61,17 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
    * {@inheritdoc}
    */
   public function buildLinkSet(ActionLinkInterface $action_link, AccountInterface $user, ...$parameters): array {
+    // Validate the number of dynamic parameters. This must be done before they
+    // are validated by the specific plugin class.
+    if (count($parameters) != count($this->pluginDefinition['parameters']['dynamic'])) {
+      throw new \ArgumentCountError(sprintf("State action plugin %s expects %s dynamic parameters (%s), got %s",
+        $this->getPluginId(),
+        count($this->pluginDefinition['parameters']['dynamic']),
+        implode(', ', $this->pluginDefinition['parameters']['dynamic']),
+        count($parameters),
+      ));
+    }
+
     $directions = $this->getDirections();
 
     $build = [];
@@ -94,17 +105,6 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
    * {@inheritdoc}
    */
   public function getLink(ActionLinkInterface $action_link, string $direction, AccountInterface $user, ...$parameters): ?Link {
-    // Validate the number of dynamic parameters. This must be done before they
-    // are validated by the specific plugin class.
-    if (count($parameters) != count($this->pluginDefinition['parameters']['dynamic'])) {
-      throw new \ArgumentCountError(sprintf("State action plugin %s expects %s dynamic parameters (%s), got %s",
-        $this->getPluginId(),
-        count($this->pluginDefinition['parameters']['dynamic']),
-        implode(', ', $this->pluginDefinition['parameters']['dynamic']),
-        count($parameters),
-      ));
-    }
-
     // Get the associative indexes for the dynamic parameters.
     // TODO RENAME!
     $indexed_parameters = $this->getDynamicParametersByName($parameters);
