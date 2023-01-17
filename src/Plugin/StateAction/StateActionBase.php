@@ -97,9 +97,10 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
     // Validate the number of dynamic parameters. This must be done before they
     // are validated by the specific plugin class.
     if (count($parameters) != count($this->pluginDefinition['parameters']['dynamic'])) {
-      throw new \LogicException(sprintf("State action plugin %s expects %s parameters, got %s",
+      throw new \ArgumentCountError(sprintf("State action plugin %s expects %s dynamic parameters (%s), got %s",
         $this->getPluginId(),
         count($this->pluginDefinition['parameters']['dynamic']),
+        implode(', ', $this->pluginDefinition['parameters']['dynamic']),
         count($parameters),
       ));
     }
