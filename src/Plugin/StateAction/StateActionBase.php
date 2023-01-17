@@ -72,12 +72,21 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
       ));
     }
 
+    // Get the associative indexes for the dynamic parameters.
+    $named_parameters = $this->getDynamicParametersByName($parameters);
+
+    // Validate parameters.
+    $this->validateParameters($named_parameters);
+
+    // Downcast dynamic parameters.
+    $scalar_parameters = $this->convertParametersForRoute($named_parameters);
+
     $directions = $this->getDirections();
 
     $build = [];
 
     foreach ($directions as $direction) {
-      if ($link = $this->getLink($action_link, $direction, $user, ...$parameters)) {
+      if ($link = $this->getLink($action_link, $direction, $user, $named_parameters, $scalar_parameters)) {
         $build[$direction] = [
           '#theme' => 'action_link',
           '#link' => $link->toRenderable(),
@@ -95,7 +104,7 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
     // Allow the link style plugin for this action link entity to modify the
     // render array for the links.
     if ($build) {
-      $action_link->getLinkStylePlugin()->alterLinksBuild($build, $action_link, $user, ...$parameters);
+      $action_link->getLinkStylePlugin()->alterLinksBuild($build, $action_link, $user, $named_parameters, $scalar_parameters);
     }
 
     return $build;
@@ -144,7 +153,7 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
    *   The direction for the link.
    * @param \Drupal\Core\Session\AccountInterface $user
    *   The user to get the link for.
-   * @param mixed ...$parameters
+   * @param mixed ...$parameters TODO!
    *   The parameters for the link. These are specific to the state action
    *   plugin.
    *
@@ -152,19 +161,9 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
    *   A link object, or NULL if there is no valid link for the given
    *   parameters.
    */
-  protected function getLink(ActionLinkInterface $action_link, string $direction, AccountInterface $user, ...$parameters): ?Link {
-    // Get the associative indexes for the dynamic parameters.
-    // TODO RENAME!
-    $indexed_parameters = $this->getDynamicParametersByName($parameters);
-
-    // Validate parameters.
-    $this->validateParameters($indexed_parameters);
-
-    // Downcast dynamic parameters.
-    $scalar_parameters = $this->convertParametersForRoute($indexed_parameters);
-
-    if ($next_state = $this->getNextStateName($direction, $user, ...$parameters)) {
-      $label = $this->getLinkLabel($direction, $next_state, ...$parameters);
+  protected function getLink(ActionLinkInterface $action_link, string $direction, AccountInterface $user, $named_parameters, $scalar_parameters): ?Link {
+    if ($next_state = $this->getNextStateName($direction, $user, ...$named_parameters)) {
+      $label = $this->getLinkLabel($direction, $next_state, ...$named_parameters);
 
       $route_parameters = [
         'action_link' => $action_link->id(),

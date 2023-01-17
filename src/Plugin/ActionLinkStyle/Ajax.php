@@ -72,7 +72,7 @@ class Ajax extends ActionLinkStyleBase implements ContainerFactoryPluginInterfac
   /**
    * {@inheritdoc}
    */
-  public function alterLinksBuild(&$build, ActionLinkInterface $action_link, AccountInterface $user, ...$parameters) {
+  public function alterLinksBuild(&$build, ActionLinkInterface $action_link, AccountInterface $user, $named_parameters, $scalar_parameters) {
     foreach ($build as $direction => $direction_link_build) {
       // Add the 'use-ajax' class to the link. This makes core handle the link using a JS
       // request and degrades gracefully to be handled by the nojs link style
@@ -80,7 +80,7 @@ class Ajax extends ActionLinkStyleBase implements ContainerFactoryPluginInterfac
       $build[$direction]['#link']['#attributes']['class'][] = 'use-ajax';
 
       // Add a unique class to the outer HTML for the AJAX replacement.
-      $build[$direction]['#attributes']['class'][] = $this->createCssIdentifier($action_link, $direction, $user, ...$parameters);
+      $build[$direction]['#attributes']['class'][] = $this->createCssIdentifier($action_link, $direction, $user, ...$scalar_parameters);
     }
 
     $build['#attached']['library'][] = 'action_link/link_style.ajax';
@@ -93,12 +93,18 @@ class Ajax extends ActionLinkStyleBase implements ContainerFactoryPluginInterfac
     // Create a new AJAX response.
     $response = new AjaxResponse();
 
+
+    $state_action_plugin = $action_link->getStateActionPlugin();
+    // Downcast dynamic parameters.
+    $named_parameters = $state_action_plugin->getDynamicParametersByName($parameters);
+    $scalar_parameters = $state_action_plugin->convertParametersForRoute($named_parameters);
+
     // We have to replace all links for this action link, not just the clicked
     // one, as the next state will change for all directions.
     $links = $action_link->buildLinkSet($user, ...$parameters);
     foreach ($links as $link_direction => $link) {
       // Generate a CSS selector to use in a JQuery Replace command.
-      $selector = '.' . $this->createCssIdentifier($action_link, $link_direction, $user, ...$parameters);
+      $selector = '.' . $this->createCssIdentifier($action_link, $link_direction, $user, ...$scalar_parameters);
 
       // Create a new JQuery Replace command to update the link display. This
       // will update all copies of the same link if there are more than one.
@@ -125,19 +131,19 @@ class Ajax extends ActionLinkStyleBase implements ContainerFactoryPluginInterfac
    *   The action link entity.
    * @param string $direction
    * @param \Drupal\Core\Session\AccountInterface $user
-   * @param [type] ...$parameters
+   * @param [type] ...$scalar_parameters
    *
    * @return string
    *   A CSS class.
    */
-  protected function createCssIdentifier(ActionLinkInterface $action_link, string $direction, AccountInterface $user, ...$parameters): string {
+  protected function createCssIdentifier(ActionLinkInterface $action_link, string $direction, AccountInterface $user, ...$scalar_parameters): string {
     return Html::cleanCssIdentifier(implode(
       '-', [
         'action-link',
         $action_link->id(),
         $direction,
         $user->id(),
-        // ARGH! params!?! YES. but SCALAR!
+        ...array_values($scalar_parameters),
       ]
     ));
   }
