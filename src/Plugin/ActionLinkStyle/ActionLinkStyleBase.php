@@ -11,7 +11,7 @@ use Drupal\Core\Session\AccountInterface;
  */
 abstract class ActionLinkStyleBase extends PluginBase implements ActionLinkStyleInterface {
 
-  public function alterLinksBuild(&$build, ActionLinkInterface $action_link, AccountInterface $user, ...$parameters) {
+  public function alterLinksBuild(&$build, ActionLinkInterface $action_link, AccountInterface $user, $named_parameters, $scalar_parameters) {
     // Do nothing by default.
   }
 
