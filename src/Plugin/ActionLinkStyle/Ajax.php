@@ -102,7 +102,8 @@ class Ajax extends ActionLinkStyleBase implements ContainerFactoryPluginInterfac
       // Generate a CSS selector to use in a JQuery Replace command.
       $selector = '.' . $this->createCssIdentifier($action_link, $link_direction, $user, ...$parameters);
 
-      // Create a new JQuery Replace command to update the link display.
+      // Create a new JQuery Replace command to update the link display. This
+      // will update all copies of the same link if there are more than one.
       $replace = new ReplaceCommand($selector, $this->renderer->renderPlain($link));
       $response->addCommand($replace);
     }
