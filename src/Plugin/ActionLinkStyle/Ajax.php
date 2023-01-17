@@ -124,10 +124,9 @@ class Ajax extends ActionLinkStyleBase implements ContainerFactoryPluginInterfac
     if ($action_completed) {
       $message = $action_link->getStateActionPlugin()->getMessage($direction, $state, ...$parameters);
       if ($message) {
-        // TODO! THIS IS FROM FLAG!
-        // Push a message pulsing command onto the stack.
-        $pulse = new ActionLinkMessageCommand($selector, $message);
-        $response->addCommand($pulse);
+        // Add a message command to the stack.
+        $message_command = new ActionLinkMessageCommand($selector, $message);
+        $response->addCommand($message_command);
       }
     }
 
