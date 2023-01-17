@@ -92,34 +92,20 @@ class Ajax extends ActionLinkStyleBase implements ContainerFactoryPluginInterfac
    * {@inheritdoc}
    */
   public function handleActionRequest(bool $action_completed, Request $request, RouteMatchInterface $route_match, ActionLinkInterface $action_link, string $direction, string $state, UserInterface $user, ...$parameters): Response {
-    $state_action_plugin = $action_link->getStateActionPlugin();
-
-    // This gets the next link, as the action link has been activated.
-    $link = $state_action_plugin->getLink($action_link, $direction, $user, ...$parameters);
-
-    $build = [
-      '#theme' => 'action_link',
-      '#link' => $link->toRenderable(),
-      '#direction' => $direction,
-      '#user' => $user,
-      '#dynamic_parameters' => $parameters,
-      '#attributes' => new Attribute([
-        'class' => [
-          $this->createCssIdentifier($action_link, $direction, $user, ...$parameters),
-        ],
-      ]),
-    ];
-    $build['#link']['#attributes']['class'][] = 'use-ajax';
-
-    // Generate a CSS selector to use in a JQuery Replace command.
-    $selector = '.' . $this->createCssIdentifier($action_link, $direction, $user, ...$parameters);
-
     // Create a new AJAX response.
     $response = new AjaxResponse();
 
-    // Create a new JQuery Replace command to update the link display.
-    $replace = new ReplaceCommand($selector, $this->renderer->renderPlain($build));
-    $response->addCommand($replace);
+    // We have to replace all links for this action link, not just the clicked
+    // one, as the next state will change for all directions.
+    $links = $action_link->buildLinkSet($user, ...$parameters);
+    foreach ($links as $link_direction => $link) {
+      // Generate a CSS selector to use in a JQuery Replace command.
+      $selector = '.' . $this->createCssIdentifier($action_link, $link_direction, $user, ...$parameters);
+
+      // Create a new JQuery Replace command to update the link display.
+      $replace = new ReplaceCommand($selector, $this->renderer->renderPlain($link));
+      $response->addCommand($replace);
+    }
 
     if ($action_completed) {
       $message = $action_link->getStateActionPlugin()->getMessage($direction, $state, ...$parameters);
