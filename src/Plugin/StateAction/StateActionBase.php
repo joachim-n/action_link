@@ -94,12 +94,30 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
    * {@inheritdoc}
    */
   public function getLink(ActionLinkInterface $action_link, string $direction, AccountInterface $user, ...$parameters): ?Link {
-    // validate param count!
+    // Validate the number of dynamic parameters. This must be done before they
+    // are validated by the specific plugin class.
+    if (count($parameters) != count($this->pluginDefinition['parameters']['dynamic'])) {
+      throw new \LogicException(sprintf("State action plugin %s expects %s parameters, got %s",
+        $this->getPluginId(),
+        count($this->pluginDefinition['parameters']['dynamic']),
+        count($parameters),
+      ));
+    }
+
+    // Get the associative indexes for the dynamic parameters.
+    $dynamic_parameters_definition = $this->pluginDefinition['parameters']['dynamic'];
+    $index = 0;
+    foreach ($dynamic_parameters_definition as $parameter_name) {
+      $indexed_parameters[$parameter_name] = $parameters[$index];
+      $index++;
+    }
+
+    // Validate parameters.
+    // DOCS: PARAMS MUST BE IN RIGHT ORDER!
     $this->validateParameters($parameters);
 
-    // todo access!
-
-    // TODO - get labels!
+    // Downcast dynamic parameters.
+    $scalar_parameters = $this->convertParametersForRoute($indexed_parameters);
 
     if ($next_state = $this->getNextStateName($direction, $user, ...$parameters)) {
       $label = $this->getLinkLabel($direction, $next_state, ...$parameters);
@@ -111,14 +129,6 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
         'state' => $next_state,
         'user' => $user->id(),
       ];
-
-      // Get the associative indexes for the dynamic parameters.
-      $dynamic_parameters_definition = $this->pluginDefinition['parameters']['dynamic'];
-      foreach ($dynamic_parameters_definition as $parameter_name) {
-        $indexed_parameters[$parameter_name] = array_shift($parameters);
-      }
-      // Downcast dynamic parameters.
-      $scalar_parameters = $this->convertParametersForRoute($indexed_parameters);
 
       // Add the dynamic parameters to the route parameters.
       $route_parameters += $scalar_parameters;
@@ -198,13 +208,7 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
   }
 
   public function validateParameters(array $parameters) {
-    if (count($parameters) != count($this->pluginDefinition['parameters']['dynamic'])) {
-      throw new \LogicException(sprintf("State action plugin %s expects %s parameters, got %s",
-        $this->getPluginId(),
-        count($this->pluginDefinition['parameters']['dynamic']),
-        count($parameters),
-      ));
-    }
+
   }
 
   /**
