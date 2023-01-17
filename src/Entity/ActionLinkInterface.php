@@ -30,19 +30,4 @@ interface ActionLinkInterface extends ConfigEntityInterface, EntityWithPluginCol
    */
   public function getLinkStylePlugin(): ActionLinkStyleInterface;
 
-  /**
-   * Gets a link for the action link.
-   *
-   * @param \Drupal\Core\Session\AccountInterface $user
-   *   The user to get the link for.
-   * @param mixed ...$parameters
-   *   The parameters for the link. These are specific to the state action
-   *   plugin.
-   *
-   * @return \Drupal\Core\Link
-   *   A link object, or NULL if there is no valid link for the given
-   *   parameters.
-   */
-  // public function getLink(AccountInterface $user, ...$parameters): ?Link;
-
 }
