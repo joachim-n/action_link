@@ -11,6 +11,8 @@ use Symfony\Component\Routing\Route;
 
 /**
  * Base class for State Action plugins that operate on an entity.
+ *
+ * This expects an 'entity' dynamic parameter.
  */
 abstract class EntityStateActionBase extends StateActionBase {
 
@@ -81,6 +83,18 @@ abstract class EntityStateActionBase extends StateActionBase {
 
       return $url;
     }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function convertParametersForRoute(array $parameters): array {
+    // Convert the entity parameter to an entity ID.
+    // TODO: this needs to be able to complain if a param is bad.
+    // e.g. no node exists.
+    $parameters['entity'] = $parameters['entity']->id();
+
+    return $parameters;
   }
 
 }

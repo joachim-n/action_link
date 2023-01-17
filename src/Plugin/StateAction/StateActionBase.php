@@ -112,11 +112,16 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
         'user' => $user->id(),
       ];
 
-      $parameters = $this->convertParametersForRoute($parameters);
+      // Get the associative indexes for the dynamic parameters.
       $dynamic_parameters_definition = $this->pluginDefinition['parameters']['dynamic'];
       foreach ($dynamic_parameters_definition as $parameter_name) {
-        $route_parameters[$parameter_name] = array_shift($parameters);
+        $indexed_parameters[$parameter_name] = array_shift($parameters);
       }
+      // Downcast dynamic parameters.
+      $scalar_parameters = $this->convertParametersForRoute($indexed_parameters);
+
+      // Add the dynamic parameters to the route parameters.
+      $route_parameters += $scalar_parameters;
 
       $url = Url::fromRoute('action_link.action_link.' . $action_link->id(), $route_parameters);
 
@@ -221,15 +226,18 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
   }
 
 
-  // todo interface.
+
+  /**
+   * Downcasts object parameters for use in routes and identifiers.
+   *
+   * @param array $parameters
+   *   The array of dynamic parameters.
+   *
+   * @return array
+   *   The array of raw parameters.
+   */
   public function convertParametersForRoute(array $parameters): array {
-    $dynamic_parameter_indexes = array_flip($this->pluginDefinition['parameters']['dynamic']);
-
-    if (isset($dynamic_parameter_indexes['entity'])) {
-      $index = $dynamic_parameter_indexes['entity'];
-      $parameters[$index] = $parameters[$index]->id();
-    }
-
+    // Do nothing by default.
     return $parameters;
   }
 
