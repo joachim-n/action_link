@@ -9,7 +9,7 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
- * TODO: class docs.
+ * State action for incrementing or decrementing a numeric field on an entity.
  *
  * @StateAction(
  *   id = "numeric_field",

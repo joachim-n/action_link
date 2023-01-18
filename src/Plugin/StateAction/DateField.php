@@ -10,7 +10,7 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
 
 /**
- * TODO: class docs.
+ * State action for incrementing or decrementing a date field on an entity.
  *
  * @StateAction(
  *   id = "date_field",

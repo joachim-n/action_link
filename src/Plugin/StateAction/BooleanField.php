@@ -10,7 +10,7 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
- * TODO: class docs.
+ * State action for toggling a boolean field on an entity.
  *
  * Defines just a single direction, so internally this is actually a 2-state
  * loop rather than a toggle.
