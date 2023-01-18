@@ -112,7 +112,7 @@ class EntityTypeField extends FormElement {
       ],
     ];
 
-    $element['container']['choose_entity_type_id'] = [
+    $elementX['container']['choose_entity_type_id'] = [
       '#type' => 'submit',
       '#value' => t('Choose entity type'),
       // '#attributes' => ['class' => ['ajax-example-hide', 'ajax-example-inline']],
@@ -178,6 +178,10 @@ class EntityTypeField extends FormElement {
   public static function valueCallback(&$element, $input, FormStateInterface $form_state) {
     if ($input === FALSE) {
       return $element['#default_value'] ?? [];
+    }
+    elseif ($input === NULL) {
+      // Not sure how this happens.
+      return '';
     }
     else {
       return $input['container'];
