@@ -94,6 +94,8 @@ class Ajax extends ActionLinkStyleBase implements ContainerFactoryPluginInterfac
     // Create a new AJAX response.
     $response = new AjaxResponse();
 
+    // TODO, just get raw from the route match!
+    $raw_parameters = $route_match->getRawParameters();
 
     $state_action_plugin = $action_link->getStateActionPlugin();
     // Downcast dynamic parameters.
