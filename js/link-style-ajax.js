@@ -41,7 +41,7 @@
     else {
       // If the XHR failed, assume the replace command that would normally make
       // the styling disapear has also failed and remove the temporary styling.
-      const links = [...document.querySelectAll('.flag-waiting')];
+      const links = [...document.querySelectAll('.flag-waiting')]; // TODO
       links.forEach(link => link.classList.remove('flag-waiting'));
     }
   };
