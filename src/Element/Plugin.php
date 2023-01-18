@@ -91,7 +91,7 @@ class Plugin extends FormElement {
       return $element['#default_value'] ?? '';
     }
     elseif (is_null($input)) {
-      return $element['#default_value'] ?? '';
+      return '';
     }
     else {
       return $input['plugin_id'];
