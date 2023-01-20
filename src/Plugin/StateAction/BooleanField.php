@@ -127,7 +127,7 @@ class BooleanField extends EntityStateActionBase {
   /**
    * {@inheritdoc}
    */
-  public function advanceState($account, $state, $parameters) {
+  public function advanceState(AccountInterface $account, string $state, array $parameters) {
     list($entity) = $parameters;
 
     $field_name = $this->configuration['field'];

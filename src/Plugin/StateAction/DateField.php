@@ -95,7 +95,7 @@ class DateField extends EntityStateActionBase {
     return AccessResult::allowed();
   }
 
-  public function advanceState($account, $state, $parameters) {
+  public function advanceState(AccountInterface $account, string $state, array $parameters) {
     list($entity) = $parameters;
 
     // TODO:
