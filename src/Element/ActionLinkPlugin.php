@@ -81,16 +81,11 @@ class ActionLinkPlugin extends FormElement {
       $selected_plugin_id = $form_state->getValue($plugin_id_parents);
     }
 
-    $options = [];
-    foreach (static::getPluginManager()->getDefinitions() as $plugin_id => $plugin_definition) {
-      $options[$plugin_id] = $plugin_definition['label'];
-    }
-    natcasesort($options);
-
     $element['container']['plugin_id'] = [
       '#type' => $element['#options_element_type'],
       '#title' => t("Action type"),
       '#options' => $options,
+      '#options' => [],
       '#empty_value' => '',
       '#required' => $element['#required'],
       '#default_value' => $selected_plugin_id,
@@ -107,29 +102,54 @@ class ActionLinkPlugin extends FormElement {
       ],
     ];
 
+    // Build the plugin options.
+    $options = [];
+
+    $plugins_method = $element['#plugins_method'] ?? 'getDefinitions';
+    foreach ($plugin_manager->{$plugins_method}() as $plugin_id => $plugin_definition) {
+      $options[$plugin_id] = $plugin_definition['label'];
+
+      // Add plugin descriptions to radios, if they exist.
+      if (isset($plugin_definition['description']) && $element['#options_element_type'] == 'radios') {
+        $element['container']['plugin_id'][$plugin_id]['#description'] = $plugin_definition['description'];
+      }
+    }
+    natcasesort($options);
+    $element['container']['plugin_id']['#options'] = $options;
+
+    // Add the plugin's configuration form, if it provides one.
     if ($selected_plugin_id) {
       $plugin = static::getPluginManager()->createInstance($selected_plugin_id);
+      if ($plugin instanceof PluginFormInterface) {
+        $plugin_subform = [];
+        $element['container']['plugin_configuration'] = $plugin->buildConfigurationForm($plugin_subform, SubformState::createForSubform($plugin_subform, $element, $form_state));
 
-      $element['container']['plugin_configuration'] = $plugin->buildConfigurationForm($element, $form_state);
+        // If this is the original load of the form, set the default values on
+        // the plugin configuration.
+        if (isset($element['#default_value']['plugin_id']) && $element['#default_value']['plugin_id'] == $selected_plugin_id) {
+          $plugin_configuration_form = &$element['container']['plugin_configuration'];
 
-      // If this is the original load of the form, set the default values on
-      // the plugin configuration.
-      if (isset($element['#default_value']['plugin_id']) && $element['#default_value']['plugin_id'] == $selected_plugin_id) {
-        $plugin_configuration_form = &$element['container']['plugin_configuration'];
+          // Recurse into nested configuration values.
+          NestedArrayRecursive::arrayWalkNested($element['#default_value']['plugin_configuration'], function($value, $parents) use (&$plugin_configuration_form) {
+            $default_value_parents = $parents;
+            $default_value_parents[] = '#default_value';
 
-        // Recurse into nested configuration values.
-        NestedArrayRecursive::arrayWalkNested($element['#default_value']['plugin_configuration'], function($value, $parents) use (&$plugin_configuration_form) {
-          $default_value_parents = $parents;
-          $default_value_parents[] = '#default_value';
+            // Allow plugin forms to set default values themselves.
+            $default_value_key_exists = NULL;
+            NestedArray::getValue($plugin_configuration_form, $default_value_parents, $default_value_key_exists);
 
-          // Allow plugin forms to set default values themselves.
-          $default_value_key_exists = NULL;
-          NestedArray::getValue($plugin_configuration_form, $default_value_parents, $default_value_key_exists);
-
-          if (!$default_value_key_exists) {
-            NestedArray::setValue($plugin_configuration_form, $default_value_parents, $value);
-          }
-        });
+            if (!$default_value_key_exists) {
+              NestedArray::setValue($plugin_configuration_form, $default_value_parents, $value);
+            }
+          });
+        }
+      }
+      else {
+        $element['container']['plugin_configuration'] = [
+          '#markup' => t("The @label plugin has no configuration.", [
+            '@label' => $plugin->getPluginDefinition()['label'],
+          ]),
+        ];
       }
     }
 
@@ -172,6 +192,10 @@ class ActionLinkPlugin extends FormElement {
   public static function valueCallback(&$element, $input, FormStateInterface $form_state) {
     if ($input === FALSE) {
       return $element['#default_value'] ?? [];
+    }
+    elseif ($input === NULL) {
+      // Not sure how this happens.
+      return '';
     }
     else {
       return $input['container'];
