@@ -30,9 +30,9 @@ class ActionLinkPlugin extends FormElement {
 
     return [
       '#input' => TRUE,
-      // '#element_validate' => [
-      //   [$class, 'validatePluginConfiguration'],
-      // ],
+      '#element_validate' => [
+        [$class, 'validatePluginConfiguration'],
+      ],
       '#process' => [
         [$class, 'processPlugin'],
         // [$class, 'processAjaxForm'],
@@ -147,6 +147,21 @@ class ActionLinkPlugin extends FormElement {
     $form = NestedArray::getValue($form, $form_parents);
 
     return $form;
+  }
+
+  /**
+   * Element validate callback.
+   */
+  public static function validatePluginConfiguration($element, FormStateInterface &$form_state, $form) {
+    $plugin_id_parents = $element['#array_parents'];
+    $plugin_id_parents[] = 'plugin_id';
+    $selected_plugin_id = $form_state->getValue($plugin_id_parents);
+    if ($selected_plugin_id) {
+      $plugin = static::getPluginManager()->createInstance($selected_plugin_id);
+      if ($plugin instanceof PluginFormInterface) {
+        $plugin->validateConfigurationForm($element, $form_state);
+      }
+    }
   }
 
   /**
