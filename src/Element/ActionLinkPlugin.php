@@ -3,7 +3,7 @@
 namespace Drupal\action_link\Element;
 
 use Drupal\action_link\Utility\NestedArrayRecursive;
-use Drupal\Component\Utility\Html as HtmlUtility;
+use Drupal\Component\Utility\Html;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
@@ -60,7 +60,7 @@ class ActionLinkPlugin extends FormElement {
   public static function processPlugin(&$element, FormStateInterface $form_state, &$complete_form) {
     $element['#tree'] = TRUE;
 
-    $container_html_id = HtmlUtility::getUniqueId('ajax-link');
+    $container_html_id = Html::getUniqueId('ajax-link');
     $element['container'] = [
       '#type' => 'details',
       '#open' => TRUE,
