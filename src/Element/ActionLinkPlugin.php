@@ -106,7 +106,7 @@ class ActionLinkPlugin extends FormElement {
     $options = [];
 
     $plugins_method = $element['#plugins_method'] ?? 'getDefinitions';
-    foreach (static::getPluginManager->{$plugins_method}() as $plugin_id => $plugin_definition) {
+    foreach (static::getPluginManager()->{$plugins_method}() as $plugin_id => $plugin_definition) {
       $options[$plugin_id] = $plugin_definition['label'];
 
       // Add plugin descriptions to radios, if they exist.
