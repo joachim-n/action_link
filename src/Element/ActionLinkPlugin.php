@@ -84,7 +84,6 @@ class ActionLinkPlugin extends FormElement {
     $element['container']['plugin_id'] = [
       '#type' => $element['#options_element_type'],
       '#title' => t("Action type"),
-      '#options' => $options,
       '#options' => [],
       '#empty_value' => '',
       '#required' => $element['#required'],
