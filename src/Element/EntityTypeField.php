@@ -80,19 +80,19 @@ class EntityTypeField extends FormElement {
       $selected_entity_type_id = '';
     }
 
-    $options = [];
+    $entity_type_options = [];
     foreach (\Drupal::service('entity_type.manager')->getDefinitions() as $entity_type_id => $entity_type) {
       if ($entity_type->getGroup() != 'content') {
         continue;
       }
-      $options[$entity_type_id] = $entity_type->getLabel();
+      $entity_type_options[$entity_type_id] = $entity_type->getLabel();
     }
-    natcasesort($options);
+    natcasesort($entity_type_options);
 
     $element['container']['entity_type_id'] = [
       '#type' => $element['#options_element_type'],
       '#title' => t('Entity type'),
-      '#options' => $options,
+      '#options' => $entity_type_options,
       '#empty_value' => '',
       '#required' => $element['#required'],
       '#default_value' => $selected_entity_type_id,
@@ -145,7 +145,7 @@ class EntityTypeField extends FormElement {
 
       if (empty($field_options)) {
         $element['container']['field']['#empty_option'] = t('No suitable fields on the @entity-type entity type. Please select another.', [
-          '@entity-type' => $options[$selected_entity_type_id],
+          '@entity-type' => $entity_type_options[$selected_entity_type_id],
         ]);
       }
     }
