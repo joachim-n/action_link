@@ -180,7 +180,7 @@ class ActionLinkPlugin extends FormElement {
     if ($selected_plugin_id) {
       $plugin = static::getPluginManager()->createInstance($selected_plugin_id);
       if ($plugin instanceof PluginFormInterface) {
-        $plugin->validateConfigurationForm($element, $form_state);
+        $plugin->validateConfigurationForm($element, SubformState::createForSubform($element['container']['plugin_configuration'], $form_state->getCompleteForm(), $form_state));
       }
     }
   }
