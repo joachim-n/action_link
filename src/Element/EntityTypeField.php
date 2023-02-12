@@ -130,6 +130,7 @@ class EntityTypeField extends FormElement {
           }
         }
 
+        // @todo Labels for config field storages are ugly!
         $field_options[$field_id] = $field_storage_definition->getLabel();
       }
       natcasesort($field_options);
