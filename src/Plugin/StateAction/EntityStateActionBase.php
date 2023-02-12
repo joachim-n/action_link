@@ -29,6 +29,7 @@ abstract class EntityStateActionBase extends StateActionBase {
         'entity_type_id' => $element['#default_value']['entity_type_id'] ?? '',
         'field' => $element['#default_value']['field'] ?? '',
       ],
+      '#required' => TRUE,
     ];
 
     return $plugin_form;
