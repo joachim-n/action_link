@@ -121,7 +121,7 @@ class ActionLinkPlugin extends FormElement {
       $plugin = static::getPluginManager()->createInstance($selected_plugin_id);
       if ($plugin instanceof PluginFormInterface) {
         $plugin_subform = [];
-        $element['container']['plugin_configuration'] = $plugin->buildConfigurationForm($plugin_subform, SubformState::createForSubform($plugin_subform, $element, $form_state));
+        $element['container']['plugin_configuration'] = $plugin->buildConfigurationForm($plugin_subform, SubformState::createForSubform($plugin_subform, $form_state->getCompleteForm(), $form_state));
 
         // If this is the original load of the form, set the default values on
         // the plugin configuration.
@@ -180,7 +180,7 @@ class ActionLinkPlugin extends FormElement {
     if ($selected_plugin_id) {
       $plugin = static::getPluginManager()->createInstance($selected_plugin_id);
       if ($plugin instanceof PluginFormInterface) {
-        $plugin->validateConfigurationForm($element, SubformState::createForSubform($element['container']['plugin_configuration'], $form_state->getCompleteForm(), $form_state));
+        $plugin->validateConfigurationForm($element['container']['plugin_configuration'], SubformState::createForSubform($element['container']['plugin_configuration'], $form_state->getCompleteForm(), $form_state));
       }
     }
   }
