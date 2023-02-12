@@ -17,6 +17,9 @@ class ActionLinkForm extends EntityForm {
   public function form(array $form, FormStateInterface $form_state) {
     $form = parent::form($form, $form_state);
 
+    // Workaround for https://www.drupal.org/project/drupal/issues/2360639.
+    $form_state->disableCache();
+
     /** @var \Drupal\action_link\Entity\ActionLinkInterface */
     $action_link = $this->entity;
     // dsm($action_link);
