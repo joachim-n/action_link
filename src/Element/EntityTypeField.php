@@ -142,6 +142,12 @@ class EntityTypeField extends FormElement {
         '#default_value' => $element['#default_value']['field'] ?? NULL,
         '#required' => $element['#required'],
       ];
+
+      if (empty($field_options)) {
+        $element['container']['field']['#empty_option'] = t('No suitable fields on the @entity-type entity type. Please select another.', [
+          '@entity-type' => $options[$selected_entity_type_id],
+        ]);
+      }
     }
 
     return $element;
