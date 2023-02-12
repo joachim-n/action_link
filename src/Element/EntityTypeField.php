@@ -17,6 +17,14 @@ use Symfony\Component\HttpFoundation\Request;
  *  - '#field_types': (optional) An array of field types to include. If empty,
  *    fields of all types are shown.
  *
+ * The #default_value property may be set in the format:
+ * @code
+ * [
+ *  'entity_type_id' => $entity_type_id,
+ *  'field' => $field_name,
+ * ]
+ * @endcode
+ *
  * @FormElement("entity_type_field")
  */
 class EntityTypeField extends FormElement {
