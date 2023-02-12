@@ -63,10 +63,6 @@ abstract class EntityStateActionBase extends StateActionBase {
 
   public function validateConfigurationForm(array &$form, FormStateInterface $form_state) {
     $values = $form_state->getValues();
-    $r = $values;
-
-    $element_parents = $form['#parents'];
-    $plugin_form_parents = $element_parents;
 
     // @todo Setting values on the subform state, which is the correct way,
     // doesn't work because SubformState sees that we are in the 'container'
