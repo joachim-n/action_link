@@ -80,8 +80,6 @@ class ActionLinkController {
       $user,
       ...$parameters
     );
-
-    return $response;
   }
 
   /**
