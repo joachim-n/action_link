@@ -48,13 +48,6 @@ class EntityTypeField extends FormElement {
   }
 
   /**
-   * {@inheritdoc}
-   */
-  public static function setAttributes(&$element, $class = []) {
-    // Sets a form element's class attribute.
-  }
-
-  /**
    * Process callback.
    */
   public static function processEntityType(&$element, FormStateInterface $form_state, &$complete_form) {
@@ -86,7 +79,6 @@ class EntityTypeField extends FormElement {
       // If we still don't have anything, use an empty value.
       $selected_entity_type_id = '';
     }
-
 
     $options = [];
     foreach (\Drupal::service('entity_type.manager')->getDefinitions() as $entity_type_id => $entity_type) {
