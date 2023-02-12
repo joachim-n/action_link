@@ -13,10 +13,7 @@ use Drupal\Core\Routing\RouteMatchInterface;
 function action_link_help($route_name, RouteMatchInterface $route_match) {
   switch ($route_name) {
     case 'help.page.action_link':
-      return t("TODO: Create admin help text.");
-
-    // OPTIONAL: Add additional cases for other paths that should display
-    // help text.
+      return t("The Action Link module can be used to create links which users can click on to perform actions.");
   }
 }
 
