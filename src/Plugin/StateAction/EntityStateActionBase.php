@@ -35,16 +35,50 @@ abstract class EntityStateActionBase extends StateActionBase {
   }
 
   public static function entityFieldElementValidate(&$element, FormStateInterface $form_state, &$complete_form) {
-    $element_value = $form_state->getValue($element['#parents']);
+    $element_parents = $element['#parents'];
+    $plugin_form_parents = $element_parents;
+    array_pop($plugin_form_parents);
 
-    // ARGH hardcoded array structure :(
-    // Can't get this from slicing up $element['#parents'] because of the
-    // 'container' from the plugin form element.
-    $plugin_configuration_values = $form_state->getValue(['plugin', 'plugin_configuration']);
+    $element_value = $form_state->getValue($element_parents);
 
-    $merged_values = $plugin_configuration_values + $element_value;
+    if ($element_value) {
+      // This doesn't work, because it goes into the 'container' level for the
+      // plugin form element, and that copies that up one level, but the
+      // copying happens later. ARGH.
+      // $form_state->setValue([...$plugin_form_parents, 'entity_type_id'], $element_value['entity_type_id']);
+      // $form_state->setValue([...$plugin_form_parents, 'field'], $element_value['field']);
+    }
 
-    $form_state->setValue(['plugin', 'plugin_configuration'], $merged_values);
+    // // ARGH hardcoded array structure :(
+    // // Can't get this from slicing up $element['#parents'] because of the
+    // // 'container' from the plugin form element.
+    // $plugin_configuration_values = $form_state->getValue(['plugin', 'plugin_configuration']);
+
+    // $merged_values = $plugin_configuration_values + $element_value;
+
+    // $form_state->setValue(['plugin', 'plugin_configuration'], $merged_values);
+  }
+
+
+  public function validateConfigurationForm(array &$form, FormStateInterface $form_state) {
+    $values = $form_state->getValues();
+    $r = $values;
+
+    $element_parents = $form['#parents'];
+    $plugin_form_parents = $element_parents;
+
+    // @todo Setting values on the subform state, which is the correct way,
+    // doesn't work because SubformState sees that we are in the 'container'
+    // element in the 'action_plugin' form element, and so the values get set
+    // there. That apparently happens later than the 'action_plugin' form
+    // element's valueCallback() setting the form values one level up to get rid
+    // of the surplus 'container' nesting.
+    // $form_state->setValue(['entity_type_id'], $values['entity_type_field']['entity_type_id']);
+    // $form_state->setValue(['field'], $values['entity_type_field']['field']);
+    // Therefore we do it directly, which is a hack, as this plugin shouldn't
+    // be aware of the form structure it's used in.
+    $form_state->getCompleteFormState()->setValue(['plugin', 'plugin_configuration', 'entity_type_id'], $values['entity_type_field']['entity_type_id']);
+    $form_state->getCompleteFormState()->setValue(['plugin', 'plugin_configuration', 'field'], $values['entity_type_field']['field']);
   }
 
   /*
