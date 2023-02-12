@@ -120,7 +120,9 @@ class ActionLinkPlugin extends FormElement {
     if ($selected_plugin_id) {
       $plugin = static::getPluginManager()->createInstance($selected_plugin_id);
       if ($plugin instanceof PluginFormInterface) {
-        $plugin_subform = [];
+        $plugin_subform = [
+          '#default_value' => $element['#default_value']['plugin_configuration'],
+        ];
         $element['container']['plugin_configuration'] = $plugin->buildConfigurationForm($plugin_subform, SubformState::createForSubform($plugin_subform, $form_state->getCompleteForm(), $form_state));
 
         // If this is the original load of the form, set the default values on
