@@ -1,4 +1,4 @@
 name: 'Action links'
 type: module
-description: 'TODO: Description of module'
-core_version_requirement: '^8 || ^9'
+description: 'Create customised links which perform actions on your site.'
+core_version_requirement: '^9 || ^10'

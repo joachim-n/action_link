@@ -2,4 +2,4 @@ name: 'Action Link Browser Test'
 type: module
 description: 'TODO: Description of module'
 package: Testing
-core_version_requirement: '^8 || ^9'
+core_version_requirement: '^9 || ^10'
