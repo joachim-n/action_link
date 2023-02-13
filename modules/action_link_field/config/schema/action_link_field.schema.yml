@@ -1,0 +1,5 @@
+field.formatter.settings.action_link_field_action_link_ajax:
+  type: mapping
+  label: action_link_field_action_link_ajax
+  mapping: {  }
+
