@@ -8,7 +8,27 @@ use Drupal\Core\Render\Element\RenderElement;
 use Drupal\action_link\ActionLinkStyleManager;
 
 /**
- * TODO: class docs.
+ * Render element for an action link's linkset.
+ *
+ * Properties:
+ *   - #action_link: The action link entity ID.
+ *   - #user: (optional) The user to get the links for. Defaults to the current
+ *     user.
+ *   - #parameters: (optional) The parameters for the action link's state
+ *     action plugin. These should be raw values as used in the action link
+ *     URLs, not upcasted objects.
+ *   - TODO link style.
+ *
+ * Usage example:
+ * @code
+ * $build['action_link'] = [
+ *   '#type' => 'action_linkset',
+ *   '#action_link' => 'my_action_link,
+ *   '#parameters' => [
+ *     42,
+ *   ],
+ * ];
+ * @endcode
  *
  * @RenderElement("action_linkset")
  */
