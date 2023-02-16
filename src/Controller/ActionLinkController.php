@@ -42,8 +42,9 @@ class ActionLinkController {
 
     $parameters = $state_action_plugin->getDynamicParametersFromRouteMatch($route_match);
 
-    // Use the given link style rather than the one configured in the action l
-    // link entity. This allows for graceful degradation of JS links.
+    // Use the given link style rather than the one configured in the action
+    // link entity. This allows for graceful degradation of JS links, and for
+    // overriding the action link's configured style in theming.
     $link_style_plugin = \Drupal::service('plugin.manager.action_link_style')->createInstance($link_style);
 
 
@@ -70,7 +71,7 @@ class ActionLinkController {
       $action_link->advanceState($user, $state, ...$parameters);
     }
 
-    return $action_link->getLinkStylePlugin()->handleActionRequest(
+    return $link_style_plugin->handleActionRequest(
       $operable,
       $request,
       $route_match,
