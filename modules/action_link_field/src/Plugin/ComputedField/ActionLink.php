@@ -28,7 +28,9 @@ class ActionLink extends ComputedFieldBase {
   public function singleComputeValue(EntityInterface $host_entity, ComputedFieldDefinitionWithValuePluginInterface $computed_field_definition): mixed {
     $build['links'] = [
       '#type' => 'action_linkset',
-      '#action_link' => 'test_date', // !!!! from derivative plugin ID!
+      // The plugin derivative ID is set to the action link entity ID in the
+      // deriver.
+      '#action_link' => $this->getDerivativeId(),
       '#parameters' => [
         $host_entity,
       ],
