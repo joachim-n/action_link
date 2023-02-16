@@ -14,7 +14,7 @@ use Drupal\Core\Entity\EntityInterface;
  * @ComputedField(
  *   id = "action_link",
  *   label = @Translation("Action link"),
- *   field_type = "action_link_field",
+ *   field_type = "action_linkset",
  *   deriver = "Drupal\action_link_field\Plugin\Derivative\ActionLinkDeriver"
  * )
  */

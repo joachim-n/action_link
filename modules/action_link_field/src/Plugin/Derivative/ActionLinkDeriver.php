@@ -54,7 +54,7 @@ class ActionLinkDeriver extends DeriverBase implements ContainerDeriverInterface
     // return;
 
     $action_link_entities = $this->entityTypeManager->getStorage('action_link')->loadMultiple();
-    foreach ($action_link_entities as $id => $action_link_entity) {
+    foreach ($action_link_entities as $action_link_entity_id => $action_link_entity) {
       $action_link_state_action_plugin = $action_link_entity->getStateActionPlugin();
 
       // Only act for EntityStateActionBase.
@@ -62,20 +62,24 @@ class ActionLinkDeriver extends DeriverBase implements ContainerDeriverInterface
         continue;
       }
 
+      if (empty($action_link_state_action_plugin->getConfiguration()['entity_type_id'])) {
+        throw new \Exception("BAD! $action_link_entity_id");
+      }
+      // dump($action_link_state_action_plugin->getConfiguration()['entity_type_id']);
+
       // Skip badly-formed plugins. Or throw?
       // $action_link_state_action_plugin->getConfiguration()['entity_type_id']
 
       // dump($action_link_state_action_plugin);
 
-      $this->derivatives[$id] = $base_plugin_definition + [
+      $this->derivatives[$action_link_entity_id] = [
         'label' => $action_link_state_action_plugin->getPluginDefinition()['label'],
-        'field_type' => 'computed_render_array', // todo
         'scope' => 'base', // TODO, match the action link's field.
-        'field_name' => "action_link_$id",
+        'field_name' => "action_link_{$action_link_entity_id}",
         'entity_types' => [
           $action_link_state_action_plugin->getConfiguration()['entity_type_id'] => [],
         ],
-      ];
+      ] + $base_plugin_definition;
     }
     // dump($this->derivatives);
 
