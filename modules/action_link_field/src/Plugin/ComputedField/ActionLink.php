@@ -2,80 +2,58 @@
 
 namespace Drupal\action_link_field\Plugin\ComputedField;
 
-use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\action_link\ActionLinkStyleManager;
-use Drupal\computed_field_plugin\Plugin\ComputedFieldBase;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\computed_field\Field\ComputedFieldDefinitionWithValuePluginInterface;
+use Drupal\computed_field\Plugin\ComputedField\ComputedFieldBase;
+use Drupal\computed_field\Plugin\ComputedField\SingleValueTrait;
+use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\Core\Entity\EntityInterface;
 
 /**
  * TODO: class docs.
  *
  * @ComputedField(
- *   id = "action_link_field_action_link",
- *   label = @Translation("Action Link"),
- *   type = "TODO: replace this with a value",
- *   entity_types = {
- *     "TODO" = "array values",
- *   },
- *   bundles = {
- *     "TODO" = "array values",
- *   },
+ *   id = "action_link",
+ *   label = @Translation("Action link"),
+ *   field_type = "action_link_field",
+ *   deriver = "Drupal\action_link_field\Plugin\Derivative\ActionLinkDeriver"
  * )
  */
-class ActionLink extends ComputedFieldBase implements ContainerFactoryPluginInterface {
+class ActionLink extends ComputedFieldBase {
 
-  /**
-   * The entity type manager.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
-   * The action link style manager.
-   *
-   * @var \Drupal\action_link\ActionLinkStyleManager
-   */
-  protected $actionLinkStyleManager;
+  use SingleValueTrait;
 
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-    return new static(
-      $configuration,
-      $plugin_id,
-      $plugin_definition,
-      $container->get('entity_type.manager'),
-      $container->get('plugin.manager.action_link_action_link_style'),
-    );
+  public function singleComputeValue(EntityInterface $host_entity, ComputedFieldDefinitionWithValuePluginInterface $computed_field_definition): mixed {
+    $build['links'] = [
+      '#type' => 'action_linkset',
+      '#action_link' => 'test_date', // !!!! from derivative plugin ID!
+      '#parameters' => [
+        $host_entity,
+      ],
+    ];
+
+    return $build;
   }
 
   /**
-   * Creates a ActionLink instance.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $plugin_id
-   *   The plugin_id for the plugin instance.
-   * @param mixed $plugin_definition
-   *   The plugin implementation definition.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager.
-   * @param \Drupal\action_link\ActionLinkStyleManager $action_link_style_manager
-   *   The action link style manager.
+   * {@inheritdoc}
    */
-  public function __construct(
-    array $configuration,
-    $plugin_id,
-    $plugin_definition,
-    EntityTypeManagerInterface $entity_type_manager,
-    ActionLinkStyleManager $action_link_style_manager
-  ) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition);
-    $this->entityTypeManager = $entity_type_manager;
-    $this->actionLinkStyleManager = $action_link_style_manager;
+  public function useLazyBuilder(EntityInterface $host_entity, ComputedFieldDefinitionWithValuePluginInterface $computed_field_definition): bool {
+    return TRUE;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheability(EntityInterface $host_entity, ComputedFieldDefinitionWithValuePluginInterface $computed_field_definition): ?CacheableMetadata {
+    $cacheability = new CacheableMetadata();
+
+    $cacheability->setCacheContexts(['user']);
+    $cacheability->setCacheMaxAge(0);
+
+    return $cacheability;
   }
 
 }
