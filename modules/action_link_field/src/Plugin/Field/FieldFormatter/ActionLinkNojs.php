@@ -13,14 +13,14 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * TODO: class docs.
  *
  * @FieldFormatter(
- *   id = "action_linkset_ajax",
- *   label = @Translation("AJAX links"),
+ *   id = "action_linkset_nojs",
+ *   label = @Translation("Reload links"),
  *   field_types = {
  *     "action_linkset",
  *   },
  * )
  */
-class ActionLinkAjax extends ActionLinkDefault {
+class ActionLinkNojs extends ActionLinkDefault {
 
   /**
    * {@inheritdoc}
@@ -32,7 +32,8 @@ class ActionLinkAjax extends ActionLinkDefault {
       $elements[$delta] = $item->getValue();
 
       // Change the link style.
-      $elements[$delta]['links']['#link_style'] = 'ajax';
+      // DOESN"T WORK - get wrong response!
+      $elements[$delta]['links']['#link_style'] = 'nojs';
     }
     return $elements;
   }

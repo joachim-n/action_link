@@ -10,17 +10,18 @@ use Drupal\action_link\ActionLinkStyleManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * TODO: class docs.
+ * Action linkset formatter that just shows the option from the action link.
  *
  * @FieldFormatter(
- *   id = "action_linkset_ajax",
- *   label = @Translation("AJAX links"),
+ *   id = "action_linkset_default",
+ *   label = @Translation("Default"),
  *   field_types = {
  *     "action_linkset",
  *   },
+ *   weight = -10,
  * )
  */
-class ActionLinkAjax extends ActionLinkDefault {
+class ActionLinkDefault extends FormatterBase {
 
   /**
    * {@inheritdoc}
@@ -30,9 +31,6 @@ class ActionLinkAjax extends ActionLinkDefault {
     foreach ($items as $delta => $item) {
 
       $elements[$delta] = $item->getValue();
-
-      // Change the link style.
-      $elements[$delta]['links']['#link_style'] = 'ajax';
     }
     return $elements;
   }
