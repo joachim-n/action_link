@@ -46,11 +46,13 @@ interface ActionLinkStyleInterface extends PluginInspectionInterface, Derivative
   /**
    * Handle the request for an action link.
    *
-   * This is called by the controller after the action has been carried out, if
-   * it is possible to do so.
+   * This is called by the action link controller. It is only called if the
+   * user has access to the route, but is called both if the action link is
+   * operable and if it is not.
    *
    * Action link style plugins should produce feedback which either announces
-   * success or that the action could not be carried out.
+   * success or that the action could not be carried out. The status of this is
+   * given by the $action_completed parameter.
    *
    * An action not being operable happens typically when the link is out of date
    * and the site no longer in the state that the link's parameters assume.
@@ -79,4 +81,5 @@ interface ActionLinkStyleInterface extends PluginInspectionInterface, Derivative
    *   The response.
    */
   public function handleActionRequest(bool $action_completed, Request $request, RouteMatchInterface $route_match, ActionLinkInterface $action_link, string $direction, string $state, UserInterface $user, ...$parameters): Response;
+
 }
