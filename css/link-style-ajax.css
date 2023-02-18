@@ -1,8 +1,8 @@
 /**
  * @file
- * TODO specific styles for actio links.
+ * Specific styles for action links.
  *
- * TODO @see flag.html.twig. TODO
+ * @see action-link.html.twig.
  */
 .action-link-ajax-message {
   display: inline;
