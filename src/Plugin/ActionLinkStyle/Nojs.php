@@ -13,7 +13,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * TODO: class docs.
+ * Link style which reloads the page.
+ *
+ * The action link message is shown as a standard Drupal status message.
  *
  * @ActionLinkStyle(
  *   id = "nojs",

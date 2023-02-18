@@ -19,7 +19,12 @@ use Drupal\Core\Template\Attribute;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * TODO: class docs.
+ * Link style which uses a JavaScript link without reloading the page.
+ *
+ * The action link message is shown briefly alongside the clicked link.
+ *
+ * This gracefully degrades to the Nojs link style if JavaScript is not
+ * available.
  *
  * @ActionLinkStyle(
  *   id = "ajax",
