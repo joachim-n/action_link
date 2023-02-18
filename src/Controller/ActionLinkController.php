@@ -13,7 +13,11 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * TODO: class docs.
+ * Controller for action links.
+ *
+ * This causes the action link to advance the state if access and operability
+ * are allowed. It then hands over to the link style plugin specified in the
+ * request path, which determines the response.
  */
 class ActionLinkController {
 
