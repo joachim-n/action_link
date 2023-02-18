@@ -10,7 +10,7 @@ use Drupal\action_link\ActionLinkStyleManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * TODO: class docs.
+ * Action linkset formatter that shows action links as AJAX links.
  *
  * @FieldFormatter(
  *   id = "action_linkset_ajax",
