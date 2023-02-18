@@ -9,7 +9,7 @@ use Drupal\Core\Ajax\CommandInterface;
  *
  * The client side code can be found in js/link-style-ajax.js.
  *
- * @todo Cribbed from flag module. Needs work!
+ * @todo Cribbed from flag module.
  */
 class ActionLinkMessageCommand implements CommandInterface {
 
@@ -28,10 +28,10 @@ class ActionLinkMessageCommand implements CommandInterface {
   protected $message;
 
   /**
-   * Construct a message Flasher.
+   * Constructs a message command.
    *
    * @param string $selector
-   *   Identifies the action link to be flashed.
+   *   Identifies the action link receive the message.
    * @param string $message
    *   The message to be displayed.
    */
