@@ -91,6 +91,9 @@ class ActionLinkForm extends EntityForm {
     parent::submitForm($form, $form_state);
   }
 
+  /**
+   * {@inheritdoc}
+   */
   protected function copyFormValuesToEntity(EntityInterface $entity, array $form, FormStateInterface $form_state) {
     parent::copyFormValuesToEntity($entity, $form, $form_state);
 
