@@ -9,7 +9,9 @@ use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Entity\EntityInterface;
 
 /**
- * TODO: class docs.
+ * Computed field that shows an action link's linkset.
+ *
+ * The deriver creates a plugin for each action link that has this enabled.
  *
  * @ComputedField(
  *   id = "action_link",
