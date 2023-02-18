@@ -110,10 +110,17 @@ class ActionLinkForm extends EntityForm {
    * {@inheritdoc}
    */
   public function save(array $form, FormStateInterface $form_state) {
-    $saved = parent::save($form, $form_state);
-    // $form_state->setRedirectUrl($this->entity->toUrl('collection'));
+    $status = parent::save($form, $form_state);
 
-    return $saved;
+    $t_args = ['%name' => $this->entity->label()];
+    if ($status == SAVED_UPDATED) {
+      $this->messenger()->addStatus($this->t('The action link %name has been updated.', $t_args));
+    }
+    elseif ($status == SAVED_NEW) {
+      $this->messenger()->addStatus($this->t('The action link %name has been added.', $t_args));
+    }
+
+    return $status;
   }
 
 }
