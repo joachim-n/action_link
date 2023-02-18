@@ -74,10 +74,12 @@ class ActionLinkDeriver extends DeriverBase implements ContainerDeriverInterface
 
       $this->derivatives[$action_link_entity_id] = [
         'label' => $action_link_state_action_plugin->getPluginDefinition()['label'],
-        'scope' => 'base', // TODO, match the action link's field.
-        'field_name' => "action_link_{$action_link_entity_id}",
-        'entity_types' => [
-          $action_link_state_action_plugin->getConfiguration()['entity_type_id'] => [],
+        'attach' => [
+          'scope' => 'base', // TODO, match the action link's field.
+          'field_name' => "action_link_{$action_link_entity_id}",
+          'entity_types' => [
+            $action_link_state_action_plugin->getConfiguration()['entity_type_id'] => [],
+          ],
         ],
       ] + $base_plugin_definition;
     }
