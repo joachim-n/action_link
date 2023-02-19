@@ -15,8 +15,9 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * Form element for selecting and configuring a state action plugin.
  *
- * TODO: Replace this with Plugin module when
- * https://www.drupal.org/project/plugin/issues/3197304 is fixed.
+ * @todo Replace this with Plugin module when
+ * https://www.drupal.org/project/plugin/issues/3197304 is fixed. Any changes to
+ * this class should be submitted to the merge request on that issue.
  *
  * @FormElement("action_plugin")
  */
