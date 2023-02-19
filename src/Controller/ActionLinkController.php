@@ -90,21 +90,26 @@ class ActionLinkController {
   /**
    * Checks access for the action_link.action_link.* routes.
    *
-   * !!! $user is the user passed IN THE ROUTE PARAMS, NOT CURRENT USER!
-   *
-   * $account is the account operating the route.
+   * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
+   *   The route match.
+   * @param \Drupal\action_link\Entity\ActionLinkInterface $action_link
+   *   The action link entity.
+   * @param string $direction
+   *   The direction for the action.
+   * @param string $state
+   *   The target state for the action.
+   * @param \Drupal\user\UserInterface $user
+   *   The user to perform the action. This is not necessarily the current user.
    */
-  public function access(RouteMatchInterface $route_match, ActionLinkInterface $action_link, string $direction, string $state, UserInterface $user, AccountInterface $account): AccessResultInterface {
-    // dump($account);
-    // dsm($user);
-    if ($account->isAnonymous()) {
-      return AccessResult::forbidden();
-    }
+  public function access(RouteMatchInterface $route_match, ActionLinkInterface $action_link, string $direction, string $state, UserInterface $user): AccessResultInterface {
+    $state_action_plugin = $action_link->getStateActionPlugin();
 
+    $parameters = $state_action_plugin->getDynamicParametersFromRouteMatch($route_match);
 
-    // 2. validate $parameters, state, user with the plugin
+    // TODO. validate $parameters, state, user with the plugin?
+    // or is that done above??
 
-    return AccessResult::allowed();
+    return $action_link->checkAccess($direction, $state, $user, ...$parameters);
   }
 
 }
