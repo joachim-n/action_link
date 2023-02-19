@@ -12,5 +12,13 @@
       type: text
       label: 'Plugin ID'
     plugin_config:
+      # @todo expand!
       type: ignore
       label: 'Plugin configuration'
+    link_style:
+      type: text
+      label: 'Link style'
+    # TODO! TEMP! will move to 3rd party
+    computed_field:
+      type: text
+      label: 'Plugin ID'
