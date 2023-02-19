@@ -24,7 +24,7 @@ class ActionLinkController {
   use StringTranslationTrait;
 
   /**
-   * Callback for the action_link.action_link route.
+   * Callback for the action_link.action_link.* routes.
    *
    * @param \Symfony\Component\HttpFoundation\Request $request
    *   The current request.
@@ -88,7 +88,7 @@ class ActionLinkController {
   }
 
   /**
-   * Checks access for the action_link.action_link route.
+   * Checks access for the action_link.action_link.* routes.
    *
    * !!! $user is the user passed IN THE ROUTE PARAMS, NOT CURRENT USER!
    *
