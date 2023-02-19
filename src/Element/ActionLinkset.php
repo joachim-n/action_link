@@ -2,10 +2,7 @@
 
 namespace Drupal\action_link\Element;
 
-use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Render\Element\RenderElement;
-use Drupal\action_link\ActionLinkStyleManager;
 
 /**
  * Render element for an action link's linkset.
