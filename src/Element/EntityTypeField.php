@@ -2,7 +2,6 @@
 
 namespace Drupal\action_link\Element;
 
-use Drupal\action_link\Utility\NestedArrayRecursive;
 use Drupal\Component\Utility\Html as HtmlUtility;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Form\FormStateInterface;
@@ -17,7 +16,7 @@ use Symfony\Component\HttpFoundation\Request;
  *  - '#field_types': (optional) An array of field types to include. If empty,
  *    fields of all types are shown.
  *
- * The #default_value property may be set in the format:
+ * The #default_value property may be set in the following format:
  * @code
  * [
  *  'entity_type_id' => $entity_type_id,
@@ -28,8 +27,6 @@ use Symfony\Component\HttpFoundation\Request;
  * @FormElement("entity_type_field")
  */
 class EntityTypeField extends FormElement {
-
-  // use CompositeFormElementTrait?
 
   /**
    * {@inheritdoc}
