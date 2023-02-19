@@ -63,11 +63,12 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
   public function buildLinkSet(ActionLinkInterface $action_link, AccountInterface $user, ...$parameters): array {
     // Validate the number of dynamic parameters. This must be done before they
     // are validated by the specific plugin class.
-    if (count($parameters) != count($this->pluginDefinition['parameters']['dynamic'])) {
+    $dynamic_parameter_names = $this->getDynamicParameterNames();
+    if (count($parameters) != count($dynamic_parameter_names)) {
       throw new \ArgumentCountError(sprintf("State action plugin %s expects %s dynamic parameters (%s), got %s",
         $this->getPluginId(),
-        count($this->pluginDefinition['parameters']['dynamic']),
-        implode(', ', $this->pluginDefinition['parameters']['dynamic']),
+        count($dynamic_parameter_names),
+        implode(', ', $dynamic_parameter_names),
         count($parameters),
       ));
     }
@@ -116,11 +117,12 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
 
     // Validate the number of dynamic parameters. This must be done before they
     // are validated by the specific plugin class.
-    if (count($parameters) != count($this->pluginDefinition['parameters']['dynamic'])) {
+    $dynamic_parameter_names = $this->getDynamicParameterNames();
+    if (count($parameters) != count($dynamic_parameter_names)) {
       throw new \ArgumentCountError(sprintf("State action plugin %s expects %s dynamic parameters (%s), got %s",
         $this->getPluginId(),
-        count($this->pluginDefinition['parameters']['dynamic']),
-        implode(', ', $this->pluginDefinition['parameters']['dynamic']),
+        count($dynamic_parameter_names),
+        implode(', ', $dynamic_parameter_names),
         count($parameters),
       ));
     }
@@ -269,11 +271,21 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
    */
   public function getDynamicParametersByName(array $parameters) {
     $named_parameters = [];
-    $dynamic_parameters_definition = $this->pluginDefinition['parameters']['dynamic'];
+    $dynamic_parameters_definition = $this->getDynamicParameterNames();
     foreach ($dynamic_parameters_definition as $parameter_name) {
       $named_parameters[$parameter_name] = array_shift($parameters);
     }
     return $named_parameters;
+  }
+
+  /**
+   * Gets the names of the plugin's dynamic parameters.
+   *
+   * @return array
+   *   An array of names.
+   */
+  public function getDynamicParameterNames(): array {
+    return $this->pluginDefinition['parameters']['dynamic'] ?? [];
   }
 
   /**
@@ -299,7 +311,7 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
    *   The parameter value from the array.
    */
   protected function getDynamicParameter(array $parameters, string $name) {
-    $dynamic_parameters_definition = $this->pluginDefinition['parameters']['dynamic'];
+    $dynamic_parameters_definition = $this->getDynamicParameterNames();
 
     $parameter_position = array_search($name, $dynamic_parameters_definition);
     return $parameters[$parameter_position];
@@ -328,7 +340,8 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
   public function getDynamicParametersFromRouteMatch(RouteMatchInterface $route_match): array {
     $dynamic_parameters = [];
     $parameters = $route_match->getParameters()->all();
-    foreach ($this->pluginDefinition['parameters']['dynamic'] as $name) {
+
+    foreach ($this->getDynamicParameterNames() as $name) {
       $dynamic_parameters[] = $parameters[$name];
     }
 
@@ -345,7 +358,7 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
     // path in the routing table.
     $path = "/action-link/$action_link_id/{link_style}/{direction}/{state}/{user}";
 
-    $dynamic_parameters_definition = $this->pluginDefinition['parameters']['dynamic'];
+    $dynamic_parameters_definition = $this->getDynamicParameterNames();
     foreach ($dynamic_parameters_definition as $parameter_name) {
       $path .= '/{' . $parameter_name . '}';
     }
