@@ -63,6 +63,7 @@ class ActionLinkKernelTest extends KernelTestBase {
     $this->stateActionManager = $this->container->get('plugin.manager.action_link_state_action');
     // $this->actionLinkStorage = $this->container->get('storage:action_link');
 
+    $this->setUpCurrentUser();
   }
 
   /**
@@ -92,17 +93,16 @@ class ActionLinkKernelTest extends KernelTestBase {
     ]);
     $action_link->save();
 
+    // Deny access.
     $this->state->set('test_mocked_access:access', FALSE);
     $links = $action_link->buildLinkSet($user_no_access);
     $this->assertEmpty($links);
 
+    // Grant access.
     $this->state->set('test_mocked_access:access', TRUE);
     $links = $action_link->buildLinkSet($user_no_access);
     $this->assertNotEmpty($links);
 
-    //
-
-    dump($links);
 
     // no access, BUT operable and access to auth: 'log in to FOO'
     // no access, and neither: nothing
