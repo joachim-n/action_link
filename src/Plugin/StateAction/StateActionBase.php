@@ -20,7 +20,7 @@ use Symfony\Component\Routing\Route;
 /**
  * Base class for State Action plugins.
  *
- * Remove methods for ConfigurableInterface when
+ * @todo Remove methods for ConfigurableInterface when
  * https://www.drupal.org/project/drupal/issues/2852463 gets in.
  */
 abstract class StateActionBase extends PluginBase implements StateActionInterface {
