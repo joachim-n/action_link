@@ -125,7 +125,7 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
   }
 
   /**
-   * Encapsulates the creation of the flag type's plugin collection.
+   * Encapsulates the creation of the action link plugin collection.
    *
    * @return \Drupal\Component\Plugin\DefaultSingleLazyPluginCollection
    *   The flag type's plugin collection.
