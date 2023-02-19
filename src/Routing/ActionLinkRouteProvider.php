@@ -3,10 +3,14 @@
 namespace Drupal\action_link\Routing;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Symfony\Component\Routing\Route;
 
 /**
- * Defines dynamic routes.
+ * Defines dynamic routes for action links.
+ *
+ * This allows each action_link entity to return its own route. Using a
+ * different route for each action link allows the dynamic parameters defined by
+ * the action link's state action plugin to be defined on the route, and thus
+ * upcasted by the routing system.
  */
 class ActionLinkRouteProvider {
 
