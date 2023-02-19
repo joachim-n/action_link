@@ -20,6 +20,8 @@ use Symfony\Component\Routing\Route;
 /**
  * Base class for State Action plugins.
  *
+ * Use one of the traits to provide the abstract methods.
+ *
  * @todo Remove methods for ConfigurableInterface when
  * https://www.drupal.org/project/drupal/issues/2852463 gets in.
  */
@@ -208,6 +210,11 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
 
     return NULL;
   }
+
+  /**
+   * {@inheritdoc}
+   */
+  abstract public function getLinkLabel(string $direction, string $state, ...$parameters): string;
 
   public function checkAccess(string $direction, string $state, AccountInterface $account, ...$parameters): AccessResult {
     // $permission = ARGH we need the action link!

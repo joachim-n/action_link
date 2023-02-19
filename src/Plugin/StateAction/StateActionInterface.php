@@ -109,6 +109,8 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
 
   public function getRedirectUrl(AccountInterface $account): ?Url;
 
+  public function getLinkLabel(string $direction, string $state, ...$parameters): string;
+
   /**
    * Gets the message to show the user after an action is complete.
    *
