@@ -69,7 +69,7 @@ class ActionLinkKernelTest extends KernelTestBase {
   }
 
   /**
-   * Tests the access to links.
+   * Tests building action links, and that access is checked.
    */
   public function testLinkGeneration() {
     $action_link = $this->actionLinkStorage->create([
@@ -105,7 +105,18 @@ class ActionLinkKernelTest extends KernelTestBase {
     $this->assertNotEmpty($links);
   }
 
+  /**
+   * Tests access to an action link's route.
+   */
   public function testRouteAccess() {
+    // Mock the CSRF token access check so we don't need to pass them in to
+    // our requests.
+    $csrf_access = $this->prophesize(CsrfAccessCheck::class);
+    $csrf_access->access(Argument::cetera())->willReturn(AccessResult::allowed());
+    $this->container->set('access_check.csrf', $csrf_access->reveal());
+
+    $http_kernel = $this->container->get('http_kernel');
+
     $action_link = $this->actionLinkStorage->create([
       'id' => 'test_mocked_access',
       'label' => 'Test',
@@ -115,28 +126,22 @@ class ActionLinkKernelTest extends KernelTestBase {
     ]);
     $action_link->save();
 
-    // Mock the CSRF token access check so we don't need to pass them in to
-    // our requests.
-    $csrf_access = $this->prophesize(CsrfAccessCheck::class);
-    $csrf_access->access(Argument::cetera())->willReturn(AccessResult::allowed());
-    $this->container->set('access_check.csrf', $csrf_access->reveal());
-
     // Deny access.
     $this->state->set('test_mocked_access:access', FALSE);
 
     $request = Request::create("/action-link/test_mocked_access/nojs/change/cake/{$this->user->id()}");
 
-    $http_kernel = $this->container->get('http_kernel');
-
-    // this causes issues - kernel test, repeat request ARGH
-    // $response = $http_kernel->handle($request);
-    // $this->assertEquals(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+    $response = $http_kernel->handle($request);
+    $this->assertEquals(Response::HTTP_FORBIDDEN, $response->getStatusCode());
 
     // Grant access.
     $this->state->set('test_mocked_access:access', TRUE);
 
     $response = $http_kernel->handle($request);
     $this->assertEquals(Response::HTTP_FOUND, $response->getStatusCode());
+
+    $messages = $this->container->get('messenger')->messagesByType(MessengerInterface::TYPE_STATUS);
+    $this->assertEquals([0 => 'Changed'], $messages);
   }
 
 

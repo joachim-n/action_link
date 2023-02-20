@@ -67,4 +67,11 @@ class TestMockedAccess extends StateActionBase {
     return 'Change';
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getMessage(string $direction, string $state, ...$parameters): string {
+    return 'Changed';
+  }
+
 }
