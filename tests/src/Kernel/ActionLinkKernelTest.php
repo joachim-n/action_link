@@ -117,6 +117,60 @@ class ActionLinkKernelTest extends KernelTestBase {
 
     $http_kernel = $this->container->get('http_kernel');
 
+    // Test that the router is kept in sync with action link entities.
+    $action_link = $this->actionLinkStorage->create([
+      'id' => 'test_always_1',
+      'label' => 'Test',
+      'plugin_id' => 'test_always',
+      'plugin_config' => [],
+      'link_style' => 'nojs',
+    ]);
+    $action_link->save();
+    \Drupal::service('router.builder')->rebuildIfNeeded();
+
+    $request = Request::create("/action-link/test_always_1/nojs/change/cake/{$this->user->id()}");
+    $response = $http_kernel->handle($request);
+    // Simulate the kernel shutdown rebuilding the router.
+    $this->assertEquals(Response::HTTP_FOUND, $response->getStatusCode());
+
+    // Test a new action link gets a route.
+    $action_link = $this->actionLinkStorage->create([
+      'id' => 'test_always_2',
+      'label' => 'Test',
+      'plugin_id' => 'test_always',
+      'plugin_config' => [],
+      'link_style' => 'nojs',
+    ]);
+    $action_link->save();
+    \Drupal::service('router.builder')->rebuildIfNeeded();
+
+    $request = Request::create("/action-link/test_always_2/nojs/change/cake/{$this->user->id()}");
+    $response = $http_kernel->handle($request);
+    $this->assertEquals(Response::HTTP_FOUND, $response->getStatusCode());
+
+    // Test that changing the ID causes the old route to no longer exist and a
+    // new one to exist in its place.
+    $action_link->set('id', 'test_always_2b');
+    $action_link->save();
+    \Drupal::service('router.builder')->rebuildIfNeeded();
+
+    $request = Request::create("/action-link/test_always_2/nojs/change/cake/{$this->user->id()}");
+    $response = $http_kernel->handle($request);
+    $this->assertEquals(Response::HTTP_NOT_FOUND, $response->getStatusCode());
+
+    $request = Request::create("/action-link/test_always_2b/nojs/change/cake/{$this->user->id()}");
+    $response = $http_kernel->handle($request);
+    $this->assertEquals(Response::HTTP_FOUND, $response->getStatusCode());
+
+    // Test that deleting causes the route to no longer exist.
+    $action_link->delete();
+    \Drupal::service('router.builder')->rebuildIfNeeded();
+
+    $request = Request::create("/action-link/test_always_2b/nojs/change/cake/{$this->user->id()}");
+    $response = $http_kernel->handle($request);
+    $this->assertEquals(Response::HTTP_NOT_FOUND, $response->getStatusCode());
+
+    // Test access on action link routes.
     $action_link = $this->actionLinkStorage->create([
       'id' => 'test_mocked_access',
       'label' => 'Test',
@@ -125,6 +179,7 @@ class ActionLinkKernelTest extends KernelTestBase {
       'link_style' => 'nojs',
     ]);
     $action_link->save();
+    \Drupal::service('router.builder')->rebuildIfNeeded();
 
     // Deny access.
     $this->state->set('test_mocked_access:access', FALSE);
@@ -142,6 +197,34 @@ class ActionLinkKernelTest extends KernelTestBase {
 
     $messages = $this->container->get('messenger')->messagesByType(MessengerInterface::TYPE_STATUS);
     $this->assertEquals([0 => 'Changed'], $messages);
+
+    // TODO: access per user?
+
+    $action_link = $this->actionLinkStorage->create([
+      'id' => 'test_mocked_operability',
+      'label' => 'Test',
+      'plugin_id' => 'test_mocked_operability',
+      'plugin_config' => [],
+      'link_style' => 'nojs',
+    ]);
+    $action_link->save();
+    \Drupal::service('router.builder')->rebuildIfNeeded();
+
+    // Set to inoperable.
+    $this->state->set('test_mocked_operability:operability', FALSE);
+
+    $request = Request::create("/action-link/test_mocked_operability/nojs/change/cake/{$this->user->id()}");
+
+    $response = $http_kernel->handle($request);
+    $this->assertEquals(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+
+    // Set to operable.
+    $this->state->set('test_mocked_operability:operability', TRUE);
+
+    $request = Request::create("/action-link/test_mocked_operability/nojs/change/cake/{$this->user->id()}");
+
+    $response = $http_kernel->handle($request);
+    $this->assertEquals(Response::HTTP_FOUND, $response->getStatusCode());
   }
 
 

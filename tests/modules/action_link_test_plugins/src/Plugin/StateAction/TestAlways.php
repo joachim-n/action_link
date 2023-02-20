@@ -8,22 +8,24 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Url;
 
 /**
- * Test action which has no directions and no states.
+ * Test action which is always usable.
  *
  * @StateAction(
- *   id = "test_null",
- *   label = @Translation("Test Null"),
- *   description = @Translation("Does nothing"),
- *   directions = {},
+ *   id = "test_always",
+ *   label = @Translation("Test Always"),
+ *   description = @Translation("Test Always"),
+ *   directions = {
+ *     "change",
+ *   },
  * )
  */
-class TestNull extends StateActionBase {
+class TestAlways extends StateActionBase {
 
   /**
    * {@inheritdoc}
    */
   public function getNextStateName(string $direction, AccountInterface $user): ?string {
-    return NULL;
+    return 'cake';
   }
 
   /**
@@ -36,14 +38,14 @@ class TestNull extends StateActionBase {
    * {@inheritdoc}
    */
   public function checkOperability(string $direction, string $state, AccountInterface $account,  ...$parameters): bool {
-    return FALSE;
+    return TRUE;
   }
 
   /**
    * {@inheritdoc}
    */
   public function checkAccess(string $direction, string $state, AccountInterface $account, ...$parameters): AccessResult {
-    return AccessResult::neutral();
+    return AccessResult::allowed();
   }
 
   /**
