@@ -79,8 +79,6 @@ class ActionLinkForm extends EntityForm {
    */
   public function validateForm(array &$form, FormStateInterface $form_state) {
     parent::validateForm($form, $form_state);
-
-    $this->entity->getStateActionPlugin()->validateConfigurationForm($form, $form_state);
   }
 
   /**
