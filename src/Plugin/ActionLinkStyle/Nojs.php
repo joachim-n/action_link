@@ -7,6 +7,7 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\action_link\Entity\ActionLinkInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Url;
 use Drupal\user\UserInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -76,9 +77,20 @@ class Nojs extends ActionLinkStyleBase implements ContainerFactoryPluginInterfac
         $this->messenger->addMessage($message);
       }
     }
+    else {
+      // @todo Make this customizable.
+      $this->messenger->addMessage('Unable to perform the action. The link may be outdated.');
+    }
 
     // Redirect to the referrer.
-    $response = new RedirectResponse($request->headers->get('referer'));
+    if ($request->headers->get('referer')) {
+      $response = new RedirectResponse($request->headers->get('referer'));
+    }
+    else {
+      // This shouldn't happen outside of tests.
+      $response = new RedirectResponse(Url::fromRoute('<front>')->toString());
+    }
+
     return $response;
   }
 
