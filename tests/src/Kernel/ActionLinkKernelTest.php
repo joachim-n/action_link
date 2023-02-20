@@ -61,17 +61,18 @@ class ActionLinkKernelTest extends KernelTestBase {
     $this->state = $this->container->get('state');
     $this->entityTypeManager = $this->container->get('entity_type.manager');
     $this->stateActionManager = $this->container->get('plugin.manager.action_link_state_action');
-    // $this->actionLinkStorage = $this->container->get('storage:action_link');
+    $this->actionLinkStorage = $this->entityTypeManager->getStorage('action_link');
 
-    $this->setUpCurrentUser();
+    // Checking access to routes requires the current user to be set up.
+    $this->user = $this->setUpCurrentUser();
+
   }
 
   /**
-   * Tests the TODO.
+   * Tests the access to links.
    */
   public function testLinkGeneration() {
-    $action_link_storage = $this->entityTypeManager->getStorage('action_link');
-    $action_link = $action_link_storage->create([
+    $action_link = $this->actionLinkStorage->create([
       'id' => 'test_null',
       'label' => 'Test',
       'plugin_id' => 'test_null',
@@ -84,7 +85,7 @@ class ActionLinkKernelTest extends KernelTestBase {
     $links = $action_link->buildLinkSet($user_no_access);
     $this->assertEmpty($links);
 
-    $action_link = $action_link_storage->create([
+    $action_link = $this->actionLinkStorage->create([
       'id' => 'test_mocked_access',
       'label' => 'Test',
       'plugin_id' => 'test_mocked_access',
@@ -102,6 +103,43 @@ class ActionLinkKernelTest extends KernelTestBase {
     $this->state->set('test_mocked_access:access', TRUE);
     $links = $action_link->buildLinkSet($user_no_access);
     $this->assertNotEmpty($links);
+  }
+
+  public function testRouteAccess() {
+    $action_link = $this->actionLinkStorage->create([
+      'id' => 'test_mocked_access',
+      'label' => 'Test',
+      'plugin_id' => 'test_mocked_access',
+      'plugin_config' => [],
+      'link_style' => 'nojs',
+    ]);
+    $action_link->save();
+
+    // Mock the CSRF token access check so we don't need to pass them in to
+    // our requests.
+    $csrf_access = $this->prophesize(CsrfAccessCheck::class);
+    $csrf_access->access(Argument::cetera())->willReturn(AccessResult::allowed());
+    $this->container->set('access_check.csrf', $csrf_access->reveal());
+
+    // Deny access.
+    $this->state->set('test_mocked_access:access', FALSE);
+
+    $request = Request::create("/action-link/test_mocked_access/nojs/change/cake/{$this->user->id()}");
+
+    $http_kernel = $this->container->get('http_kernel');
+
+    // this causes issues - kernel test, repeat request ARGH
+    // $response = $http_kernel->handle($request);
+    // $this->assertEquals(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+
+    // Grant access.
+    $this->state->set('test_mocked_access:access', TRUE);
+
+    $response = $http_kernel->handle($request);
+    $this->assertEquals(Response::HTTP_FOUND, $response->getStatusCode());
+  }
+
+
 
 
     // no access, BUT operable and access to auth: 'log in to FOO'
@@ -116,6 +154,5 @@ class ActionLinkKernelTest extends KernelTestBase {
     // no link for bad dynamic params
     // access???
     //
-  }
 
 }
