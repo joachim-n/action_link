@@ -156,14 +156,12 @@ abstract class EntityStateActionBase extends StateActionBase {
 
     $entity_access = $entity->access('edit', $account, TRUE);
 
-    // access needs to check entity edit access
-    // AND fieldAccess().
-
     $field_name = $this->configuration['field'];
 
+    // TODO: inject.
     $this->entityTypeManager = \Drupal::service('entity_type.manager');
-    $access_control_handler = $this->entityTypeManager->getAccessControlHandler($entity->getEntityType());
-    $field_access = $access_control_handler->fieldAccess('edit', $entity->getFieldDefinition($field_name), $account);
+    $access_control_handler = $this->entityTypeManager->getAccessControlHandler($entity->getEntityTypeId());
+    $field_access = $access_control_handler->fieldAccess('edit', $entity->getFieldDefinition($field_name), $account, NULL, TRUE);
 
     return $entity_access->andIf($field_access);
   }
