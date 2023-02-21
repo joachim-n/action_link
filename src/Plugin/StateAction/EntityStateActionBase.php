@@ -3,6 +3,7 @@
 namespace Drupal\action_link\Plugin\StateAction;
 
 use Drupal\action_link\Entity\ActionLinkInterface;
+use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
@@ -143,6 +144,43 @@ abstract class EntityStateActionBase extends StateActionBase {
     $parameters['entity'] = $parameters['entity']->id();
 
     return $parameters;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function checkAccess(string $direction, string $state, AccountInterface $account, ...$parameters): AccessResult {
+    // Check access both to edit the entity, and to edit the specific field.
+    /** @var \Drupal\Core\Entity\ContentEntityInterface $entity */
+    list($entity) = $parameters;
+
+    $entity_access = $entity->access('edit', $account, TRUE);
+
+    // access needs to check entity edit access
+    // AND fieldAccess().
+
+    $field_name = $this->configuration['field'];
+
+    $this->entityTypeManager = \Drupal::service('entity_type.manager');
+    $access_control_handler = $this->entityTypeManager->getAccessControlHandler($entity->getEntityType());
+    $field_access = $access_control_handler->fieldAccess('edit', $entity->getFieldDefinition($field_name), $account);
+
+    return $entity_access->andIf($field_access);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function checkOperability(string $direction, string $state, AccountInterface $account, ...$parameters): bool {
+    // Fail operability if the action link's affected field is empty.
+    list($entity) = $parameters;
+    $field_name = $this->configuration['field'];
+
+    if ($entity->get($field_name)->isEmpty()) {
+      return FALSE;
+    }
+
+    return parent::checkOperability($direction, $state, $account, ...$parameters);
   }
 
 }
