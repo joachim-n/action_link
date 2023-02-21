@@ -40,7 +40,7 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 // TODO: allow customising state names -- eg published, flagged, yes, no. for nicer URLs.
 // two directions, but also only two states.
 // how does getAllLinks know which one? OPERABILITY!
-class BooleanField extends EntityStateActionBase {
+class BooleanField extends EntityFieldStateActionBase {
 
   use ToggleTrait;
 

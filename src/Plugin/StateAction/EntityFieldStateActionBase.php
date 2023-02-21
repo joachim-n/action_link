@@ -17,7 +17,7 @@ use Symfony\Component\Routing\Route;
  *
  * This expects an 'entity' dynamic parameter.
  */
-abstract class EntityStateActionBase extends StateActionBase {
+abstract class EntityFieldStateActionBase extends StateActionBase {
 
   public function buildConfigurationForm(array $element, FormStateInterface $form_state) {
     $plugin_form = [];

@@ -31,7 +31,7 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
  *   },
  * )
  */
-class NumericField extends EntityStateActionBase {
+class NumericField extends EntityFieldStateActionBase {
 
   use RepeatableTrait;
 

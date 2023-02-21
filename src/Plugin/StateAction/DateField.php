@@ -32,7 +32,7 @@ use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
  *   },
  * )
  */
-class DateField extends EntityStateActionBase {
+class DateField extends EntityFieldStateActionBase {
 
   use RepeatableTrait;
 
