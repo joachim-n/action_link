@@ -216,6 +216,9 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
    */
   abstract public function getLinkLabel(string $direction, string $state, ...$parameters): string;
 
+  /**
+   * {@inheritdoc}
+   */
   public function checkAccess(string $direction, string $state, AccountInterface $account, ...$parameters): AccessResult {
     // $permission = ARGH we need the action link!
   }
