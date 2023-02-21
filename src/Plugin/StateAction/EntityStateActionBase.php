@@ -13,6 +13,8 @@ use Symfony\Component\Routing\Route;
 /**
  * Base class for State Action plugins that operate on an entity.
  *
+ * TODO rename EntityFieldStateActionBase
+ *
  * This expects an 'entity' dynamic parameter.
  */
 abstract class EntityStateActionBase extends StateActionBase {
