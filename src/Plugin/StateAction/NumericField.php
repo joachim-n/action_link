@@ -79,13 +79,6 @@ class NumericField extends EntityStateActionBase {
     return $next_value;
   }
 
-  /**
-   * {@inheritdoc}
-   */
-  public function checkAccess(string $direction, string $state, AccountInterface $account, ...$parameters): AccessResult {
-    return AccessResult::allowed();
-  }
-
   public function advanceState(AccountInterface $account, string $state, array $parameters) {
     list($entity) = $parameters;
 

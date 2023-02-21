@@ -120,13 +120,6 @@ class BooleanField extends EntityStateActionBase {
   /**
    * {@inheritdoc}
    */
-  public function checkAccess(string $direction, string $state, AccountInterface $account, ...$parameters): AccessResult {
-    return AccessResult::allowed();
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function advanceState(AccountInterface $account, string $state, array $parameters) {
     list($entity) = $parameters;
 
