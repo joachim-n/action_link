@@ -71,6 +71,7 @@ class ActionLinkKernelTest extends KernelTestBase {
     $this->installEntitySchema('user');
 
     $this->state = $this->container->get('state');
+    $this->messenger = $this->container->get('messenger');
     $this->entityTypeManager = $this->container->get('entity_type.manager');
     $this->stateActionManager = $this->container->get('plugin.manager.action_link_state_action');
     $this->actionLinkStorage = $this->entityTypeManager->getStorage('action_link');
