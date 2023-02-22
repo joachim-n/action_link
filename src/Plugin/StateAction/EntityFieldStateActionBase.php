@@ -154,7 +154,7 @@ abstract class EntityFieldStateActionBase extends StateActionBase {
     /** @var \Drupal\Core\Entity\ContentEntityInterface $entity */
     list($entity) = $parameters;
 
-    $entity_access = $entity->access('edit', $account, TRUE);
+    $entity_access = $entity->access('update', $account, TRUE);
 
     $field_name = $this->configuration['field'];
 
