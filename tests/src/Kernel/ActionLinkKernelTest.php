@@ -95,6 +95,9 @@ class ActionLinkKernelTest extends KernelTestBase {
     $action_link->save();
 
     $user_no_access = $this->createUser();
+    // We need to set the user we check for as the current user, as route access
+    // is checked when generating links.
+    $this->setCurrentUser($user_no_access);
     $links = $action_link->buildLinkSet($user_no_access);
     $this->assertEmpty($links);
 
