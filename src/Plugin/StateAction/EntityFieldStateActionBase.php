@@ -11,9 +11,7 @@ use Drupal\Core\Url;
 use Symfony\Component\Routing\Route;
 
 /**
- * Base class for State Action plugins that operate on an entity.
- *
- * TODO rename EntityFieldStateActionBase
+ * Base class for State Action plugins that operate on an entity field.
  *
  * This expects an 'entity' dynamic parameter.
  */
