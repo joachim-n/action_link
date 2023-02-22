@@ -100,11 +100,21 @@ class ActionLinkController {
    *   The target state for the action.
    * @param \Drupal\user\UserInterface $user
    *   The user to perform the action. This is not necessarily the current user.
+   * @param \Drupal\Core\Session\AccountInterface $account
+   *   The current user.
+   *
+   * @return \Drupal\Core\Access\AccessResultInterface
+   *   The access for the route.
    */
-  public function access(RouteMatchInterface $route_match, ActionLinkInterface $action_link, string $direction, string $state, UserInterface $user): AccessResultInterface {
+  public function access(RouteMatchInterface $route_match, ActionLinkInterface $action_link, string $direction, string $state, UserInterface $user, AccountInterface $account): AccessResultInterface {
     $state_action_plugin = $action_link->getStateActionPlugin();
 
     $parameters = $state_action_plugin->getDynamicParametersFromRouteMatch($route_match);
+
+    if ($user->id() != $account->id()) {
+      // TODO: Implement!
+      return AccessResult::forbidden();
+    }
 
     // TODO. validate $parameters, state, user with the plugin?
     // or is that done above??
