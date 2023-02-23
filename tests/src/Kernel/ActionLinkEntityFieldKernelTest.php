@@ -80,7 +80,7 @@ class ActionLinkEntityFieldKernelTest extends KernelTestBase {
     $this->stateActionManager = $this->container->get('plugin.manager.action_link_state_action');
     $this->actionLinkStorage = $this->entityTypeManager->getStorage('action_link');
 
-    // Checking access to routes requires the current user to be set up.
+    // Checking access to routes requires the extra setup this does.
     $this->user = $this->setUpCurrentUser();
 
     // Mock the CSRF token access check so we don't need to pass them in to
