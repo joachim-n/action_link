@@ -103,6 +103,14 @@ class ActionLinkEntityFieldKernelTest extends KernelTestBase {
 
     $node_storage = $this->entityTypeManager->getStorage('node');
 
+    $node = $node_storage->create([
+      'type' => 'alpha',
+      'title' => '1',
+    ]);
+    $node->save();
+
+    // Test the boolean field plugin with the 'status' field, which requires
+    // admin access.
     $action_link = $this->actionLinkStorage->create([
       'id' => 'test_status',
       'label' => 'Test',
@@ -115,12 +123,6 @@ class ActionLinkEntityFieldKernelTest extends KernelTestBase {
     ]);
     $action_link->save();
     \Drupal::service('router.builder')->rebuildIfNeeded();
-
-    $node = $node_storage->create([
-      'type' => 'alpha',
-      'title' => '1',
-    ]);
-    $node->save();
 
     // User has no access to an action link that toggles the 'status' boolean
     // field, because it is an admin-restricted field.
