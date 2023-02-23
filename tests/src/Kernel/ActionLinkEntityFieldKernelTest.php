@@ -155,7 +155,8 @@ class ActionLinkEntityFieldKernelTest extends KernelTestBase {
     $node = $this->reloadEntity($node);
     $this->assertEquals(FALSE, $node->isPublished());
 
-    // Repeating the action has no effect.
+    // Repeating the action with the same parameters has no effect, because the
+    // node is already in the target state, and so the action is not operable.
     $request = Request::create("/action-link/test_status/nojs/toggle/false/{$user_with_access->id()}/{$node->id()}");
     $response = $http_kernel->handle($request);
     $this->assertEquals(Response::HTTP_FOUND, $response->getStatusCode());
