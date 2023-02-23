@@ -82,24 +82,24 @@ class ActionLinkEntityFieldKernelTest extends KernelTestBase {
 
     // Checking access to routes requires the current user to be set up.
     $this->user = $this->setUpCurrentUser();
-  }
 
-  /**
-   * Tests TODO.
-   */
-  public function testEntityFieldActions() {
     // Mock the CSRF token access check so we don't need to pass them in to
     // our requests.
     $csrf_access = $this->prophesize(CsrfAccessCheck::class);
     $csrf_access->access(Argument::cetera())->willReturn(AccessResult::allowed());
     $this->container->set('access_check.csrf', $csrf_access->reveal());
 
-    $http_kernel = $this->container->get('http_kernel');
-
     $node_type = $this->entityTypeManager->getStorage('node_type')->create([
       'type' => 'alpha',
     ]);
     $node_type->save();
+  }
+
+  /**
+   * Tests TODO.
+   */
+  public function testEntityFieldActions() {
+    $http_kernel = $this->container->get('http_kernel');
 
     $node_storage = $this->entityTypeManager->getStorage('node');
 
