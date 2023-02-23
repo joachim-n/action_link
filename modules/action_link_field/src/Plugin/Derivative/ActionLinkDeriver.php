@@ -2,7 +2,7 @@
 
 namespace Drupal\action_link_field\Plugin\Derivative;
 
-use Drupal\action_link\Plugin\StateAction\EntityStateActionBase;
+use Drupal\action_link\Plugin\StateAction\EntityFieldStateActionBase;
 use Drupal\Component\Plugin\Derivative\DeriverBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Plugin\Discovery\ContainerDeriverInterface;
@@ -57,8 +57,8 @@ class ActionLinkDeriver extends DeriverBase implements ContainerDeriverInterface
     foreach ($action_link_entities as $action_link_entity_id => $action_link_entity) {
       $action_link_state_action_plugin = $action_link_entity->getStateActionPlugin();
 
-      // Only act for EntityStateActionBase.
-      if (!$action_link_state_action_plugin instanceof EntityStateActionBase) {
+      // Only act for EntityFieldStateActionBase.
+      if (!$action_link_state_action_plugin instanceof EntityFieldStateActionBase) {
         continue;
       }
 
