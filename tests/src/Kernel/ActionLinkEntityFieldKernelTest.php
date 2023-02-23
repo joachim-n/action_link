@@ -89,6 +89,7 @@ class ActionLinkEntityFieldKernelTest extends KernelTestBase {
     $csrf_access->access(Argument::cetera())->willReturn(AccessResult::allowed());
     $this->container->set('access_check.csrf', $csrf_access->reveal());
 
+    // Create a node type.
     $node_type = $this->entityTypeManager->getStorage('node_type')->create([
       'type' => 'alpha',
     ]);
