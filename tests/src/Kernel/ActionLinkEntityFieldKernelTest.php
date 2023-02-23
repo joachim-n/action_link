@@ -6,6 +6,7 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\CsrfAccessCheck;
 use Drupal\Core\DependencyInjection\ContainerBuilder;
 use Drupal\Core\DependencyInjection\ServiceModifierInterface;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\Tests\user\Traits\UserCreationTrait;
@@ -130,18 +131,59 @@ class ActionLinkEntityFieldKernelTest extends KernelTestBase {
     $links = $action_link->buildLinkSet($user_no_access, $node);
     $this->assertEmpty($links);
 
+    // Access is denied because the user doesn't have access to edit the node.
+    $request = Request::create("/action-link/test_status/nojs/toggle/false/{$user_no_access->id()}/{$node->id()}");
+    $response = $http_kernel->handle($request);
+    $this->assertEquals(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+
+    // User who can edit the node but not change published status.
+    $user_with_edit_access = $this->createUser(['access content', 'edit any alpha content']);
+    $this->setCurrentUser($user_with_edit_access);
+    $links = $action_link->buildLinkSet($user_no_access, $node);
+    $this->assertEmpty($links);
+
+    // User with admin access who can publish and unpublish nodes.
     $user_with_access = $this->createUser(['access content', 'bypass node access', 'administer nodes']);
     $this->setCurrentUser($user_with_access);
     $links = $action_link->buildLinkSet($user_with_access, $node);
     $this->assertNotEmpty($links);
 
-    // dump($links);
-    $url = $links['toggle']["#link"]['#url'];
-    dump($url->toString());
+    $request = Request::create("/action-link/test_status/nojs/toggle/false/{$user_with_access->id()}/{$node->id()}");
+    $response = $http_kernel->handle($request);
+    $this->assertEquals(Response::HTTP_FOUND, $response->getStatusCode());
 
-    // $request = Request::create("/action-link/test_status/nojs/change/cake/{$this->user->id()}");
-    // $response = $http_kernel->handle($request);
+    $node = $this->reloadEntity($node);
+    $this->assertEquals(FALSE, $node->isPublished());
 
+    // Repeating the action has no effect.
+    $request = Request::create("/action-link/test_status/nojs/toggle/false/{$user_with_access->id()}/{$node->id()}");
+    $response = $http_kernel->handle($request);
+    $this->assertEquals(Response::HTTP_FOUND, $response->getStatusCode());
+
+    $node = $this->reloadEntity($node);
+    $this->assertEquals(FALSE, $node->isPublished());
+
+    $request = Request::create("/action-link/test_status/nojs/toggle/true/{$user_with_access->id()}/{$node->id()}");
+    $response = $http_kernel->handle($request);
+    $this->assertEquals(Response::HTTP_FOUND, $response->getStatusCode());
+
+    $node = $this->reloadEntity($node);
+    $this->assertEquals(TRUE, $node->isPublished());
+  }
+
+  /**
+   * Reloads the given entity from the storage and returns it.
+   *
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   *   The entity to be reloaded.
+   *
+   * @return \Drupal\Core\Entity\EntityInterface
+   *   The reloaded entity.
+   */
+  protected function reloadEntity(EntityInterface $entity) {
+    $controller = $this->entityTypeManager->getStorage($entity->getEntityTypeId());
+    $controller->resetCache([$entity->id()]);
+    return $controller->load($entity->id());
   }
 
 }
