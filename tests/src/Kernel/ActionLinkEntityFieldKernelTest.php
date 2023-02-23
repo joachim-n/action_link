@@ -124,8 +124,8 @@ class ActionLinkEntityFieldKernelTest extends KernelTestBase {
     $action_link->save();
     \Drupal::service('router.builder')->rebuildIfNeeded();
 
-    // User has no access to an action link that toggles the 'status' boolean
-    // field, because it is an admin-restricted field.
+    // User has no access to an action link that toggles the 'status'
+    // boolean field, because it is an admin-restricted field.
     $user_no_access = $this->createUser(['access content']);
     // We need to set the user we check for as the current user, as route access
     // is checked when generating links.
