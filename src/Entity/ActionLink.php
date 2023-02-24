@@ -186,9 +186,12 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
    * {@inheritdoc}
    */
   public function checkAccess(string $direction, string $state, AccountInterface $account, ...$parameters): AccessResult {
+    // todo check perm here, so always happens
+
     return $this->getStateActionPlugin()->checkAccess($direction, $state, $account, ...$parameters);
   }
 
+  // TODO remove
   public function getRedirectUrl(AccountInterface $account, ...$parameters) {
     return $this->getStateActionPlugin()->getRedirectUrl($account, ...$parameters);
   }
