@@ -65,7 +65,7 @@ trait ToggleTrait {
   public function XXgetStateActionPermissions(ActionLinkInterface $action_link): array {
     // TODO: need getStates()
     $permissions = [];
-    foreach ($this->pluginDefinition['directions'] as $direction) {
+    foreach ($this->getDirections() as $direction) {
       $permissions["use {$action_link->id()} action links in {$direction} direction"] = [
         'title' => t('Use %label action links to @direction', [
           '%label' => $action_link->label(),

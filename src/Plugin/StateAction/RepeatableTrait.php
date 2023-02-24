@@ -19,7 +19,7 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
 trait RepeatableTrait {
 
   public function buildTextsConfigurationForm($labels_form, FormStateInterface $form_state) {
-    foreach ($this->pluginDefinition['directions'] as $direction) {
+    foreach ($this->getDirections() as $direction) {
       $labels_form['direction'][$direction] = [
         '#type' => 'details',
         '#open' => TRUE,
@@ -54,7 +54,7 @@ trait RepeatableTrait {
 
   public function getStateActionPermissions(ActionLinkInterface $action_link): array {
     $permissions = [];
-    foreach ($this->pluginDefinition['directions'] as $direction) {
+    foreach ($this->getDirections() as $direction) {
       $permissions["use {$action_link->id()} action links in {$direction} direction"] = [
         'title' => t('Use %label action links to @direction', [
           '%label' => $action_link->label(),
