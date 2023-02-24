@@ -390,4 +390,12 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
     return $route;
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getStateActionPermissions(ActionLinkInterface $action_link): array {
+    // Overridden by traits.
+    return [];
+  }
+
 }

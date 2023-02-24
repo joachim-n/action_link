@@ -221,6 +221,8 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
       ]),
     ];
 
+    $permissions += $this->getStateActionPlugin()->getStateActionPermissions($this);
+
     foreach ($permissions as &$permission) {
       $permission['dependencies']['config'][] = $this->getConfigDependencyName();
 

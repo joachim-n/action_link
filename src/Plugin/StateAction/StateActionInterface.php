@@ -137,4 +137,18 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
    * @see \Drupal\action_link\Routing\ActionLinkRouteProvider
    */
   public function getActionRoute(ActionLinkInterface $action_link): Route;
+
+  /**
+   * Gets permissions for an action link using this plugin.
+   *
+   * @param \Drupal\action_link\Entity\ActionLinkInterface $action_link
+   *   The action link entity.
+   *
+   * @return array
+   *   An array of permissions specific to this plugin. These do not need to set
+   *   dependencies for the action_link entity or the plugin: those are filled
+   *   in by the caller.
+   */
+  public function getStateActionPermissions(ActionLinkInterface $action_link): array;
+
 }
