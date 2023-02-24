@@ -49,4 +49,6 @@ interface ActionLinkInterface extends ConfigEntityInterface, EntityWithPluginCol
    */
   public function getLinkStylePlugin(): ActionLinkStyleInterface;
 
+  public function getPermissions(): array;
+
 }

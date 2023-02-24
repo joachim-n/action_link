@@ -211,4 +211,23 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
     \Drupal::service('router.builder')->setRebuildNeeded();
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getPermissions(): array {
+    $permissions["use {$this->id()} action links"] = [
+      'title' => t('Use %label action links', [
+        '%label' => $this->label(),
+      ]),
+    ];
+
+    foreach ($permissions as &$permission) {
+      $permission['dependencies']['config'][] = $this->getConfigDependencyName();
+
+      $permission['dependencies'] += $this->getDependencies();
+    }
+
+    return $permissions;
+  }
+
 }

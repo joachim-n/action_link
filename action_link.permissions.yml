@@ -1,3 +1,6 @@
 'administer action_link entities':
   title: 'Administer Action link entities'
-  description: 'Administer Action link entities'
+  restrict access: TRUE
+
+permission_callbacks:
+  - Drupal\action_link\ActionLinkPermissions::permissions
