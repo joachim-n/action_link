@@ -2,6 +2,7 @@
 
 namespace Drupal\action_link\Plugin\StateAction;
 
+use Drupal\action_link\Entity\ActionLinkInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
@@ -59,6 +60,21 @@ trait ToggleTrait {
 
   public function getMessage(string $direction, string $state, ...$parameters): string {
     return $this->configuration['labels']['state'][$state]['message'] ?? '';
+  }
+
+  public function XXgetStateActionPermissions(ActionLinkInterface $action_link): array {
+    // TODO: need getStates()
+    $permissions = [];
+    foreach ($this->pluginDefinition['directions'] as $direction) {
+      $permissions["use {$action_link->id()} action links in {$direction} direction"] = [
+        'title' => t('Use %label action links to @direction', [
+          '%label' => $action_link->label(),
+          // TODO direction labels!
+          '@direction' => $direction,
+        ]),
+      ];
+    }
+    return $permissions;
   }
 
 }
