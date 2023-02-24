@@ -175,6 +175,44 @@ class ActionLinkEntityFieldKernelTest extends KernelTestBase {
     $this->assertEquals(TRUE, $node->isPublished());
   }
 
+  public function testNumeric() {
+    $node_storage = $this->entityTypeManager->getStorage('node');
+    $node = $node_storage->create([
+      'type' => 'alpha',
+      'title' => '1',
+    ]);
+    $node->save();
+
+    // Test the numeric_field plugin with the 'changed' field, which doesn't
+    // require admin access. (The numeric_field plugin isn't really meant to be
+    // used with a timestamp field but nothing will complain.)
+    $action_link = $this->actionLinkStorage->create([
+      'id' => 'test_changed',
+      'label' => 'Test',
+      'plugin_id' => 'numeric_field',
+      'plugin_config' => [
+        'entity_type_id' => 'node',
+        'field' => 'changed',
+        'step' => '1',
+      ],
+      'link_style' => 'nojs',
+    ]);
+    $action_link->save();
+    \Drupal::service('router.builder')->rebuildIfNeeded();
+
+    // User has no access to the action link, because they can't edit content.
+    $user_no_access = $this->createUser(['access content']);
+    $this->setCurrentUser($user_no_access);
+    $links = $action_link->buildLinkSet($user_no_access, $node);
+    $this->assertEmpty($links);
+
+    // User who can edit the node has access to the action link.
+    $user_with_edit_access = $this->createUser(['access content', 'edit any alpha content']);
+    $this->setCurrentUser($user_with_edit_access);
+    $links = $action_link->buildLinkSet($user_with_edit_access, $node);
+    $this->assertNotEmpty($links);
+  }
+
   /**
    * Reloads the given entity from the storage and returns it.
    *
