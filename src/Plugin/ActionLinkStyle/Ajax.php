@@ -99,20 +99,26 @@ class Ajax extends ActionLinkStyleBase implements ContainerFactoryPluginInterfac
     // Create a new AJAX response.
     $response = new AjaxResponse();
 
-    // TODO, just get raw from the route match!
+    $state_action_plugin = $action_link->getStateActionPlugin();
+
+    // Get the raw values of the dynamic parameters. The $parameters array will
+    // contain the upcasted values, but we need the raw values to create CSS
+    // identifiers.
     $raw_parameters = $route_match->getRawParameters();
 
-    $state_action_plugin = $action_link->getStateActionPlugin();
-    // Downcast dynamic parameters.
-    $named_parameters = $state_action_plugin->getDynamicParametersByName($parameters);
-    $scalar_parameters = $state_action_plugin->convertParametersForRoute($named_parameters);
+    $dynamic_parameter_names = $state_action_plugin->getDynamicParameterNames();
+
+    $raw_dynamic_parameters = [];
+    foreach ($dynamic_parameter_names as $name) {
+      $raw_dynamic_parameters[] = $raw_parameters->get($name);
+    }
 
     // We have to replace all links for this action link, not just the clicked
     // one, as the next state will change for all directions.
     $links = $action_link->buildLinkSet($user, ...$parameters);
     foreach (Element::children($links) as $link_direction) {
       // Generate a CSS selector to use in a JQuery Replace command.
-      $selector = '.' . $this->createCssIdentifier($action_link, $link_direction, $user, ...$scalar_parameters);
+      $selector = '.' . $this->createCssIdentifier($action_link, $link_direction, $user, ...$raw_dynamic_parameters);
 
       // Create a new JQuery Replace command to update the link display. This
       // will update all copies of the same link if there are more than one.
@@ -126,7 +132,7 @@ class Ajax extends ActionLinkStyleBase implements ContainerFactoryPluginInterfac
     if ($action_completed) {
       $message = $action_link->getStateActionPlugin()->getMessage($direction, $state, ...$parameters);
       if ($message) {
-        $selector = '.' . $this->createCssIdentifier($action_link, $direction, $user, ...$scalar_parameters);
+        $selector = '.' . $this->createCssIdentifier($action_link, $direction, $user, ...$raw_dynamic_parameters);
 
         // Add a message command to the stack.
         $message_command = new ActionLinkMessageCommand($selector, $message);
