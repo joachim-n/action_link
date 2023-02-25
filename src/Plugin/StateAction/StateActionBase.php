@@ -96,7 +96,13 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
           '#direction' => $direction,
           '#user' => $user,
           '#dynamic_parameters' => $parameters,
-          '#attributes' => new Attribute(['class' => []]),
+          '#attributes' => new Attribute([
+            'class' => [
+              'action-link',
+              'action-link-id-' . $action_link->id(),
+              'action-link-plugin-' . $this->getPluginId(),
+            ],
+          ]),
         ];
 
         // Set nofollow to prevent search bots from crawling anonymous flag links.
