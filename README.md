@@ -25,6 +25,16 @@ information, see
 1. Go to
 
 
+## Permissions
+
+granularity
+
+
+For example, with an
+ action link which toggles the published status of an entity, a user could
+ have permission only to unpublish an entity, and not to access the link to
+publish it.
+
 
 ## Developers
 
