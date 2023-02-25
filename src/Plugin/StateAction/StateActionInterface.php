@@ -110,11 +110,12 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
    * the state of the site makes the action logically possible.
    *
    * For example:
-   *  - The action is to publish a node, and the node is currently published,
+   *  - The action is to publish a node, and the node is currently published:
    *    the operability is FALSE because the node is already in the desired
    *    state.
    *  - The action is to increment a numeric field on an entity, but the field
-   *    value is empty.
+   *    value is empty: the operability is FALSE because a NULL value can't be
+   *    incremented.
    *
    * @param string $direction
    * @param string $state
@@ -240,6 +241,8 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
    *   An array of permissions specific to this plugin. These do not need to set
    *   dependencies for the action_link entity or the plugin: those are filled
    *   in by the caller.
+   *
+   * @see self::checkPermissionAccess()
    */
   public function getStateActionPermissions(ActionLinkInterface $action_link): array;
 
