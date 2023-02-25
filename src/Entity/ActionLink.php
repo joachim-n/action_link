@@ -199,11 +199,6 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
     return $action_access;
   }
 
-  // TODO remove
-  public function getRedirectUrl(AccountInterface $account, ...$parameters) {
-    return $this->getStateActionPlugin()->getRedirectUrl($account, ...$parameters);
-  }
-
   /**
    * {@inheritdoc}
    */

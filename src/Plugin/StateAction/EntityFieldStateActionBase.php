@@ -104,22 +104,6 @@ abstract class EntityFieldStateActionBase extends StateActionBase {
   /**
    * {@inheritdoc}
    */
-  public function getRedirectUrl(AccountInterface $account, EntityInterface $entity = NULL): ?Url {
-    if ($entity->hasLinkTemplate('canonical')) {
-      // Redirect back to the entity. A passed in destination query parameter
-      // will automatically override this.
-      $url_info = $entity->toUrl();
-
-      $options['absolute'] = TRUE;
-      $url = Url::fromRoute($url_info->getRouteName(), $url_info->getRouteParameters(), $options);
-
-      return $url;
-    }
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function validateParameters(array $parameters) {
     parent::validateParameters($parameters);
 

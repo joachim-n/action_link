@@ -52,13 +52,6 @@ class TestAlways extends StateActionBase {
   /**
    * {@inheritdoc}
    */
-  public function getRedirectUrl(AccountInterface $account): ?Url {
-    return NULL;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function getLinkLabel(string $direction, string $state, ...$parameters): string {
     return 'Change';
   }

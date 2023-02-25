@@ -200,8 +200,6 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
    */
   public function checkOperandAccess(ActionLinkInterface $action_link, string $direction, string $state, AccountInterface $account, ...$parameters): AccessResult;
 
-  public function getRedirectUrl(AccountInterface $account): ?Url;
-
   public function getLinkLabel(string $direction, string $state, ...$parameters): string;
 
   /**
