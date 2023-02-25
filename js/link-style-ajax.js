@@ -6,8 +6,13 @@
 (function ($, Drupal, drupalSettings) {
   'use strict';
 
-  Drupal.behaviors.actionLink = {
+  // As flag action links are added to the DOM attach a click handler to each
+  // link so that styles can be applied while the XHR is in flight.
+  Drupal.behaviors.actionLinkAttach = {
     attach: function (context, settings) {
+      // TODO: SPAN needs this class!
+      const links = [...context.querySelectorAll('.action-link a')];
+      links.forEach(link => link.addEventListener('click', event => event.target.parentNode.classList.add('flag-waiting')));
     }
   };
 
