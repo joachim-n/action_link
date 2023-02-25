@@ -117,6 +117,8 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
    *    value is empty: the operability is FALSE because a NULL value can't be
    *    incremented.
    *
+   * @param \Drupal\action_link\Entity\ActionLinkInterface $action_link
+   *   The action link entity.
    * @param string $direction
    *   The direction for the action.
    * @param string $state
@@ -129,7 +131,7 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
    * @return bool
    *   TRUE if the link is operable, FALSE if not.
    */
-  public function checkOperability(string $direction, string $state, AccountInterface $account, ...$parameters): bool;
+  public function checkOperability(ActionLinkInterface $action_link, string $direction, string $state, AccountInterface $account, ...$parameters): bool;
 
   /**
    * Checks the user's access based on this plugin's permissions.

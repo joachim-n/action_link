@@ -38,7 +38,7 @@ class TestMockedOperability extends StateActionBase {
   /**
    * {@inheritdoc}
    */
-  public function checkOperability(string $direction, string $state, AccountInterface $account,  ...$parameters): bool {
+  public function checkOperability(ActionLinkInterface $action_link, string $direction, string $state, AccountInterface $account,  ...$parameters): bool {
     $operability = \Drupal::state()->get('test_mocked_operability:operability');
     return $operability;
   }
