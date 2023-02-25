@@ -118,11 +118,16 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
    *    incremented.
    *
    * @param string $direction
+   *   The direction for the action.
    * @param string $state
-   * @param \Drupal\Core\Session\AccountInterface $account
-   * @param [type] ...$parameters
+   *   The target state for the action.
+   * @param \Drupal\user\UserInterface $user
+   *   The user to perform the action. This is not necessarily the current user.
+   * @param mixed ...$parameters
+   *   The dynamic parameters.
    *
    * @return bool
+   *   TRUE if the link is operable, FALSE if not.
    */
   public function checkOperability(string $direction, string $state, AccountInterface $account, ...$parameters): bool;
 
@@ -140,8 +145,6 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
    *
    * @param \Drupal\action_link\Entity\ActionLinkInterface $action_link
    *   The action link entity.
-   * @param string $link_style
-   *   The link style plugin ID.
    * @param string $direction
    *   The direction for the action.
    * @param string $state
