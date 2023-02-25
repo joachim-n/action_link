@@ -112,10 +112,11 @@ class ActionLinkController {
     $parameters = $state_action_plugin->getDynamicParametersFromRouteMatch($route_match);
 
     if ($user->id() != $account->id()) {
-      // TODO: Implement!
+      // @todo Implement proxy use of action links.
       return AccessResult::forbidden();
     }
 
+    // @todo Validate direction and parameters
     // TODO. validate $parameters, state, user with the plugin?
     // or is that done above??
 
