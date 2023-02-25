@@ -219,8 +219,27 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
   /**
    * {@inheritdoc}
    */
-  public function checkAccess(string $direction, string $state, AccountInterface $account, ...$parameters): AccessResult {
-    // $permission = ARGH we need the action link!
+  public function checkPermissionAccess(ActionLinkInterface $action_link, string $direction, string $state, AccountInterface $account, ...$parameters): AccessResult {
+
+    // check getDirections and params.
+
+    // // NO WAIT, direction and states!
+    // if (!$account->hasPermission("use {$this->id()} action links"))
+    // OR specific plugin permission(s)
+    //
+    //   // return AccessResult::forbidden()->addCacheableDependency($account);
+    // }
+
+    // two permissions to pass:
+    //  A. 'can you use this action link?'
+    //  B. 'do you have access to the thing the AL wants to change?'
+
+    // TODO!
+    return AccessResult::neutral();
+  }
+
+  public function checkOperandAccess(ActionLinkInterface $action_link, string $direction, string $state, AccountInterface $account, ...$parameters): AccessResult {
+    return AccessResult::neutral();
   }
 
   /**

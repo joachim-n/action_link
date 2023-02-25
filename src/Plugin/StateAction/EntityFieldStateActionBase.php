@@ -149,7 +149,7 @@ abstract class EntityFieldStateActionBase extends StateActionBase {
   /**
    * {@inheritdoc}
    */
-  public function checkAccess(string $direction, string $state, AccountInterface $account, ...$parameters): AccessResult {
+  public function checkOperandAccess(ActionLinkInterface $action_link, string $direction, string $state, AccountInterface $account, ...$parameters): AccessResult {
     // Check access both to edit the entity, and to edit the specific field.
     /** @var \Drupal\Core\Entity\ContentEntityInterface $entity */
     list($entity) = $parameters;

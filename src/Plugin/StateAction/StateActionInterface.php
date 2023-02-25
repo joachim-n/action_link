@@ -105,7 +105,36 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
 
   public function checkOperability(string $direction, string $state, AccountInterface $account, ...$parameters): bool;
 
-  public function checkAccess(string $direction, string $state, AccountInterface $account, ...$parameters): AccessResult;
+  public function checkPermissionAccess(ActionLinkInterface $action_link, string $direction, string $state, AccountInterface $account, ...$parameters): AccessResult;
+
+  /**
+   * Checks access to the action's operand: what the action wants to do.
+   *
+   * This checks whether the thing that the action does is accessible to the
+   * user. For example, if the action changes a value on an entity, this should
+   * check the user has access to edit the entity.
+   *
+   * This is distinct from self::checkOperability() which checks whether the
+   * action on the operand is logically possible. For example, if an action
+   * publishes a node, operability checks whether the node is currently
+   * unpublished, and operand access checks whether the user has admin access to
+   * publish the node.
+   *
+   * This does not need to check permissions based on action_link entities, as
+   * that is covered by self::checkPermissionAccess().
+   *
+   * @param \Drupal\action_link\Entity\ActionLinkInterface $action_link
+   *   The action link entity.
+   * @param string $direction
+   * @param string $state
+   * @param \Drupal\Core\Session\AccountInterface $account
+   * @param [type] ...$parameters
+   *
+   * @return \Drupal\Core\Access\AccessResult
+   *
+   * @see self::checkPermissionAccess()
+   */
+  public function checkOperandAccess(ActionLinkInterface $action_link, string $direction, string $state, AccountInterface $account, ...$parameters): AccessResult;
 
   public function getRedirectUrl(AccountInterface $account): ?Url;
 

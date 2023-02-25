@@ -2,6 +2,7 @@
 
 namespace Drupal\action_link_test_plugins\Plugin\StateAction;
 
+use Drupal\action_link\Entity\ActionLinkInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\action_link\Plugin\StateAction\StateActionBase;
 use Drupal\Core\Access\AccessResult;
@@ -44,7 +45,7 @@ class TestAlways extends StateActionBase {
   /**
    * {@inheritdoc}
    */
-  public function checkAccess(string $direction, string $state, AccountInterface $account, ...$parameters): AccessResult {
+  public function checkOperandAccess(ActionLinkInterface $action_link, string $direction, string $state, AccountInterface $account, ...$parameters): AccessResult {
     return AccessResult::allowed();
   }
 

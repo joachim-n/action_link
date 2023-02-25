@@ -186,9 +186,17 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
    * {@inheritdoc}
    */
   public function checkAccess(string $direction, string $state, AccountInterface $account, ...$parameters): AccessResult {
-    // todo check perm here, so always happens
+    $main_permission_access = AccessResult::allowedIfHasPermission($account, "use {$this->id()} action links");
 
-    return $this->getStateActionPlugin()->checkAccess($direction, $state, $account, ...$parameters);
+    $specific_permission_access = $this->getStateActionPlugin()->checkPermissionAccess($this, $direction, $state, $account, ...$parameters);
+
+    $action_access = $this->getStateActionPlugin()->checkOperandAccess($this, $direction, $state, $account, ...$parameters);
+
+    $access_result = $main_permission_access;
+    $access_result->orIf($specific_permission_access);
+    $access_result->andIf($action_access);
+
+    return $action_access;
   }
 
   // TODO remove
