@@ -103,8 +103,60 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
    */
   public function getDynamicParametersFromRouteMatch(RouteMatchInterface $route_match): array;
 
+  /**
+   * Checks whether the action is logically possible.
+   *
+   * This should not check any kind of user access, it is merely about whether
+   * the state of the site makes the action logically possible.
+   *
+   * For example:
+   *  - The action is to publish a node, and the node is currently published,
+   *    the operability is FALSE because the node is already in the desired
+   *    state.
+   *  - The action is to increment a numeric field on an entity, but the field
+   *    value is empty.
+   *
+   * @param string $direction
+   * @param string $state
+   * @param \Drupal\Core\Session\AccountInterface $account
+   * @param [type] ...$parameters
+   *
+   * @return bool
+   */
   public function checkOperability(string $direction, string $state, AccountInterface $account, ...$parameters): bool;
 
+  /**
+   * Checks the user's access based on this plugin's permissions.
+   *
+   * This allows a plugin to check access to the permissions it defines in
+   * self::getStateActionPermissions(). This allows permissions to use more
+   * granular access than the main 'use ID action links'. For example, with an
+   * action link which toggles the published status of an entity, a user could
+   * have permission only to unpublish an entity, and not to access the link to
+   * publish it.
+   *
+   * The permission access is ORed with the main permission.
+   *
+   * @param \Drupal\action_link\Entity\ActionLinkInterface $action_link
+   *   The action link entity.
+   * @param string $link_style
+   *   The link style plugin ID.
+   * @param string $direction
+   *   The direction for the action.
+   * @param string $state
+   *   The target state for the action.
+   * @param \Drupal\user\UserInterface $user
+   *   The user to perform the action. This is not necessarily the current user.
+   * @param mixed ...$parameters
+   *   The dynamic parameters.
+   *
+   * @return \Drupal\Core\Access\AccessResult
+   *   The access result.
+   *
+   * @see \Drupal\action_link\Entity\ActionLinkInterface::checkAccess()
+   * @see self::checkOperandAccess()
+   * @see self::getStateActionPermissions()
+   */
   public function checkPermissionAccess(ActionLinkInterface $action_link, string $direction, string $state, AccountInterface $account, ...$parameters): AccessResult;
 
   /**
@@ -123,15 +175,26 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
    * This does not need to check permissions based on action_link entities, as
    * that is covered by self::checkPermissionAccess().
    *
+   * The operand access is ANDed with access based on permissions for the action
+   * link entity.
+   *
    * @param \Drupal\action_link\Entity\ActionLinkInterface $action_link
    *   The action link entity.
+   * @param string $link_style
+   *   The link style plugin ID.
    * @param string $direction
+   *   The direction for the action.
    * @param string $state
-   * @param \Drupal\Core\Session\AccountInterface $account
-   * @param [type] ...$parameters
+   *   The target state for the action.
+   * @param \Drupal\user\UserInterface $user
+   *   The user to perform the action. This is not necessarily the current user.
+   * @param mixed ...$parameters
+   *   The dynamic parameters.
    *
    * @return \Drupal\Core\Access\AccessResult
+   *   The access result.
    *
+   * @see \Drupal\action_link\Entity\ActionLinkInterface::checkAccess()
    * @see self::checkPermissionAccess()
    */
   public function checkOperandAccess(ActionLinkInterface $action_link, string $direction, string $state, AccountInterface $account, ...$parameters): AccessResult;
