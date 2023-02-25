@@ -17,17 +17,60 @@ class ActionLinkBrowserTestController {
     $node = $entity_type_manager->getStorage('node')->load(1);
 
     $action_links = $entity_type_manager->getStorage('action_link')->loadMultiple();
+    // $action_links = [$action_links['test_date']];
 
+    /** @var \Drupal\action_link\Entity\ActionLinkInterface */
     foreach ($action_links as $action_link_id => $action_link) {
       // dsm($action_link);
       $build[$action_link_id] = [
         '#type' => 'container',
       ];
 
-      $build[$action_link_id]['links'] = $action_link->buildLinkSet($user, $node);
+      $dynamic_parameter_names = $action_link->getStateActionPlugin()->getDynamicParameterNames();
+      // dump($dynamic_parameter_names);
+      $parameters = [];
+      if ($dynamic_parameter_names) {
+        // QUick and dirty! Assume just entity.
+        $parameters[] = $node;
+      }
+
+      $build[$action_link_id]['links'] = $action_link->buildLinkSet($user, ...$parameters);
 
       // break;
     }
+
+    // dsm($build);
+    return $build;
+
+
+    // Other node.
+    $node = $entity_type_manager->getStorage('node')->load(4);
+    $build['other'] = $action_link->buildLinkSet($user, $node);
+
+    return $build;
+
+    // $action_links = $entity_type_manager->getStorage('action_link')->loadMultiple();
+    // $action_links = [$action_links['test_date']];
+
+    foreach ($action_links as $action_link_id => $action_link) {
+      // dsm($action_link);
+      $build[$action_link_id . '4'] = [
+        '#type' => 'container',
+      ];
+
+      $build[$action_link_id . '4']['links'] = $action_link->buildLinkSet($user, $node);
+
+      // break;
+    }
+
+
+    // Test repeat links!
+    // $build['repeat'] = [
+    //   '#type' => 'container',
+    // ];
+
+    // $build['repeat']['links'] = $action_link->buildLinkSet($user, $node);
+
 
     return $build;
 
