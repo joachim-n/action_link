@@ -135,6 +135,7 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
       ));
     }
 
+    // TODO: outdated call!
     if ($link = $this->getLink($action_link, $direction, $user, ...$parameters)) {
       $build = [
         '#theme' => 'action_link',
@@ -163,9 +164,13 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
    *   The direction for the link.
    * @param \Drupal\Core\Session\AccountInterface $user
    *   The user to get the link for.
-   * @param mixed ...$parameters TODO!
-   *   The parameters for the link. These are specific to the state action
-   *   plugin.
+   * @param array $named_parameters
+   *   An array of the dynamic parameters for the link, keyed by the parameter
+   *   name.
+   * @param array $scalar_parameters
+   *   An array of the dynamic parameters for the link, keyed by the parameter
+   *   name, with any object values downcasted to the scalar values they would
+   *   have in the route path.
    *
    * @return \Drupal\Core\Link
    *   A link object, or NULL if there is no valid link for the given
@@ -193,6 +198,10 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
         // FUCK WHY THIS FAILING???
         return Link::fromTextAndUrl($label, $url);
       }
+
+      // @todo Show a link to log in if the user doesn't have access but an
+      // authenticated user would. Determining this appears to be rather
+      // complicated.
 
       // // TODO: If logged out, and an authenticated user would have access, show a log
       // // in CTA? HOW?
