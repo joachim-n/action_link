@@ -16,7 +16,7 @@ use Drupal\Core\Url;
  *   label = @Translation("Test mocked access"),
  *   description = @Translation("Mocked access"),
  *   directions = {
- *     "change",
+ *     "change" = "change",
  *   },
  * )
  */

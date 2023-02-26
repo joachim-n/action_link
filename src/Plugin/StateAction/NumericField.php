@@ -26,8 +26,8 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
  *     },
  *   },
  *   directions = {
- *     "inc",
- *     "dec",
+ *     "dec" = "decrease",
+ *     "inc" = "increase",
  *   },
  * )
  */

@@ -19,23 +19,28 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
 trait RepeatableTrait {
 
   public function buildTextsConfigurationForm($labels_form, FormStateInterface $form_state) {
-    foreach ($this->getDirections() as $direction) {
+    foreach ($this->getDirections() as $direction => $direction_label) {
       $labels_form['direction'][$direction] = [
         '#type' => 'details',
         '#open' => TRUE,
-        // TODO: human labels for directions!
-        '#title' => t('Texts for ' . $direction),
+        '#title' => t('Texts for @direction', [
+          '@direction' => $direction_label,
+        ]),
       ];
 
       $labels_form['direction'][$direction]['link_label'] = [
         '#type' => 'textfield',
-        '#title' => t('Link label for ' . $direction),
+        '#title' => t('Link label for @direction', [
+          '@direction' => $direction_label,
+        ]),
         '#required' => TRUE,
       ];
 
       $labels_form['direction'][$direction]['message'] = [
         '#type' => 'textfield',
-        '#title' => t('Message for ' . $direction),
+        '#title' => t('Message for @direction', [
+          '@direction' => $direction_label,
+        ]),
       ];
     }
 
@@ -54,12 +59,11 @@ trait RepeatableTrait {
 
   public function getStateActionPermissions(ActionLinkInterface $action_link): array {
     $permissions = [];
-    foreach ($this->getDirections() as $direction) {
+    foreach ($this->getDirections() as $direction => $direction_label) {
       $permissions["use {$action_link->id()} action links in {$direction} direction"] = [
         'title' => t('Use %label action links to @direction', [
           '%label' => $action_link->label(),
-          // TODO direction labels!
-          '@direction' => $direction,
+          '@direction' => $direction_label,
         ]),
       ];
     }

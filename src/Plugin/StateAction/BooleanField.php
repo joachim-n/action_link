@@ -29,7 +29,7 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
  *     },
  *   },
  *   directions = {
- *     "toggle",
+ *     "toggle" = "toggle",
  *   },
  *   states = {
  *     "true",

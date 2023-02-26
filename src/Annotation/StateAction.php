@@ -34,6 +34,13 @@ class StateAction extends Plugin {
    */
   public $description = '';
 
+  /**
+   * The directions for the plugin's links.
+   *
+   * Array keys are machine names, array values are labels.
+   *
+   * @var array
+   */
   public $directions = [];
 
   // global

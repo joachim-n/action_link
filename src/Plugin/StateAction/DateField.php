@@ -27,8 +27,8 @@ use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
  *     },
  *   },
  *   directions = {
- *     "dec",
- *     "inc",
+ *     "dec" = "decrease",
+ *     "inc" = "increase",
  *   },
  * )
  */

@@ -299,8 +299,15 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
   //
 
 
-  public function getDirections() {
-    return $this->pluginDefinition['directions'] ?? NULL;
+  /**
+   * Gets the directions for this plugin.
+   *
+   * @return array
+   *   An array of the directions defined in the plugin definition. Keys are
+   *   direction machine names, and values are the labels.
+   */
+  public function getDirections(): array {
+    return $this->pluginDefinition['directions'] ?? [];
   }
 
   /**

@@ -16,7 +16,7 @@ use Drupal\Core\Url;
  *   label = @Translation("Test Always"),
  *   description = @Translation("Test Always"),
  *   directions = {
- *     "change",
+ *     "change" = "change",
  *   },
  * )
  */
