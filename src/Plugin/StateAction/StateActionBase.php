@@ -88,7 +88,7 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
 
     $build = [];
 
-    foreach ($directions as $direction) {
+    foreach ($directions as $direction => $direction_label) {
       if ($link = $this->getLink($action_link, $direction, $user, $named_parameters, $scalar_parameters)) {
         $build[$direction] = [
           '#theme' => 'action_link',
