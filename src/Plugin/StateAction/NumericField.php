@@ -37,6 +37,9 @@ class NumericField extends EntityFieldStateActionBase {
 
   use StringTranslationTrait;
 
+  /**
+   * {@inheritdoc}
+   */
   public function buildConfigurationForm(array $element, FormStateInterface $form_state) {
     $plugin_form = parent::buildConfigurationForm($element, $form_state);
 
@@ -79,10 +82,11 @@ class NumericField extends EntityFieldStateActionBase {
     return $next_value;
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function advanceState(AccountInterface $account, string $state, array $parameters) {
     list($entity) = $parameters;
-
-    // TODO:
 
     $field_name = $this->configuration['field'];
 
