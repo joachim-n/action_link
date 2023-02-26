@@ -83,9 +83,6 @@ class BooleanField extends EntityFieldStateActionBase {
     // dsm($form_state->getValues());
   }
 
-  public function copyFormValuesToEntity($entity, array &$form, FormStateInterface $form_state) {
-  }
-
   /**
    * {@inheritdoc}
    */
