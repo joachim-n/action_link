@@ -27,10 +27,6 @@ class ActionLinkForm extends EntityForm {
     $action_link = $this->entity;
     // dsm($action_link);
 
-    $form['#title'] = $this->t('Edit %action-link', [
-      '%action-link' => $action_link->label(),
-    ]);
-
     $form['label'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Label'),
