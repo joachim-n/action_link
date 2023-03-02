@@ -37,4 +37,7 @@ class StateActionManager extends DefaultPluginManager {
     $this->setCacheBackend($cache_backend, 'state_action_plugins');
   }
 
+  // TODO validaton of def:
+  // - dynamic params cant have same names are base route parasm eg 'direction'
+
 }
