@@ -43,6 +43,13 @@ class StateAction extends Plugin {
    */
   public $directions = [];
 
+  /**
+   * TODO - change this to just dynamic?
+   *
+   * @var array
+   */
+  public $parameters = [];
+
   // global
 
   // cyclical?
