@@ -79,10 +79,6 @@ class BooleanField extends EntityFieldStateActionBase {
     return $plugin_form;
   }
 
-  public function validateConfigurationForm(array &$form, FormStateInterface $form_state) {
-    // dsm($form_state->getValues());
-  }
-
   /**
    * {@inheritdoc}
    */
