@@ -87,26 +87,9 @@ class BooleanField extends EntityFieldStateActionBase {
    * {@inheritdoc}
    */
   public function getNextStateName(string $direction, AccountInterface $user, EntityInterface $entity = NULL): ?string {
-    // dsm($direction);
-    // dump($this);
-    // to get the next state name we have to look at the current value of the field
-    // and do calculation on it.
-    //
-    // to chec if next state is operable, we have to look at... THE CURRENT VALUE OF THE FIELD!
-    // for entity actions it's a bit repetitive.
-    // what about non entity ones?
-    // like... FLAG!
-    // next state: get current flagging - is there one? -> tells you unflag/flag
-    // operable: stuff to do with bundles?? does flag apply to given entity? etc.
-    // which is stuff that should/could be checked BEFORE we try loading a flagging, probably!
-
     $field_name = $this->configuration['field'];
-    // dump($this->configuration);
 
     $value = $entity->get($field_name)->value;
-
-
-
 
     return match ((bool) $value) {
       FALSE => 'true',
