@@ -16,7 +16,7 @@ use Drupal\Core\Session\AccountInterface;
 interface ActionLinkInterface extends ConfigEntityInterface, EntityWithPluginCollectionInterface {
 
   /**
-   * Checks operability of a link.
+   * Checks operability of a link. TODO
    *
    * Operability is the concept of whether the action makes logical sense for the
    * current state of the site, regardless of the current user's access.
@@ -34,7 +34,7 @@ interface ActionLinkInterface extends ConfigEntityInterface, EntityWithPluginCol
    * @return bool
    *   TRUE if the action is operable, FALSE if it is not.
    */
-  public function checkOperability(string $direction, string $state, AccountInterface $account, ...$parameters): bool;
+  public function validateTargetState(string $direction, string $state, AccountInterface $account, ...$parameters): bool;
 
   /**
    * Checks access to use a link.

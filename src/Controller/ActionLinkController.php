@@ -69,7 +69,9 @@ class ActionLinkController {
     // User A then clicks the link. This should either fail silently, or tell
     // the user the action has done nothing because the system is already in the
     // state they wish to take it to.
-    $operable = $action_link->checkOperability($direction, $state, $user, ...$parameters);
+    // TODO: rename this? Or keep this?
+    // rename to validateTargetState??
+    $operable = $action_link->validateTargetState($direction, $state, $user, ...$parameters);
 
     if ($operable) {
       $action_link->advanceState($user, $state, ...$parameters);

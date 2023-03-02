@@ -181,8 +181,10 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
   /**
    * {@inheritdoc}
    */
-  public function checkOperability(string $direction, string $state, AccountInterface $account, ...$parameters): bool {
-    return $this->getStateActionPlugin()->checkOperability($direction, $state, $account, ...$parameters);
+  public function validateTargetState(string $direction, string $state, AccountInterface $account, ...$parameters): bool {
+    $next_state = $this->getStateActionPlugin()->getNextStateName($direction, $account, ...$parameters);
+
+    return ($next_state == $state);
   }
 
   /**
