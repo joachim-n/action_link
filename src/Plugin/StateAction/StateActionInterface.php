@@ -99,15 +99,16 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
    * @return array
    *   An array of parameters, in the same order that they are defined in the
    *   plugin annotation. Set route options in self::getActionRoute() to have
-   *   parameters upcasted by the routing system.
+   *   parameters upcasted by the routing system. NOT KEYED. OR SHOULD THEY BE?
    */
   public function getDynamicParametersFromRouteMatch(RouteMatchInterface $route_match): array;
 
   /**
-   * TODO KILL Checks whether the action is logically possible.
+   * Checks whether the action is logically possible.
    *
-   * This should not check any kind of user access, it is merely about whether
-   * the state of the site makes the action logically possible.
+   * This should not check any kind of user access, or check the state, TODO it is
+   * merely about whether the state of the site makes the action logically
+   * possible.
    *
    * For example:
    *  - The action is to publish a node, and the node is currently published:
@@ -119,19 +120,13 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
    *
    * @param \Drupal\action_link\Entity\ActionLinkInterface $action_link
    *   The action link entity.
-   * @param string $direction
-   *   The direction for the action.
-   * @param string $state
-   *   The target state for the action.
-   * @param \Drupal\user\UserInterface $user
-   *   The user to perform the action. This is not necessarily the current user.
    * @param mixed ...$parameters
    *   The dynamic parameters.
    *
    * @return bool
    *   TRUE if the link is operable, FALSE if not.
    */
-  // public function checkOperability(ActionLinkInterface $action_link, string $direction, string $state, AccountInterface $account, ...$parameters): bool;
+  public function checkOperability(ActionLinkInterface $action_link, ...$parameters): bool;
 
   /**
    * Checks the user's access based on this plugin's permissions.

@@ -81,12 +81,16 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
     // Validate parameters.
     $this->validateParameters($named_parameters);
 
+    $build = [];
+
+    if (!$this->checkOperability($action_link, ...$parameters)) {
+      return $build;
+    }
+
     // Downcast dynamic parameters.
     $scalar_parameters = $this->convertParametersForRoute($named_parameters);
 
     $directions = $this->getDirections();
-
-    $build = [];
 
     foreach ($directions as $direction => $direction_label) {
       if ($link = $this->getLink($action_link, $direction, $user, $named_parameters, $scalar_parameters)) {
@@ -122,6 +126,8 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
   // TODO!
   public function buildSingleLink(ActionLinkInterface $action_link, string $direction, AccountInterface $user, ...$parameters): array {
     $build = [];
+
+    // TODO needs $this->checkOperability($action_link, ...$named_parameters)
 
     // Validate the number of dynamic parameters. This must be done before they
     // are validated by the specific plugin class.
@@ -230,6 +236,13 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
    * {@inheritdoc}
    */
   abstract public function getLinkLabel(string $direction, string $state, ...$parameters): string;
+
+  /**
+   * {@inheritdoc}
+   */
+  public function checkOperability(ActionLinkInterface $action_link, ...$parameters): bool {
+    return TRUE;
+  }
 
   /**
    * {@inheritdoc}

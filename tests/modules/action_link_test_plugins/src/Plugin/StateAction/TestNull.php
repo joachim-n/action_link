@@ -2,6 +2,7 @@
 
 namespace Drupal\action_link_test_plugins\Plugin\StateAction;
 
+use Drupal\action_link\Entity\ActionLinkInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\action_link\Plugin\StateAction\StateActionBase;
 use Drupal\Core\Access\AccessResult;
@@ -35,7 +36,7 @@ class TestNull extends StateActionBase {
   /**
    * {@inheritdoc}
    */
-  public function checkOperability(ActionLinkInterface $action_link, string $direction, string $state, AccountInterface $account,  ...$parameters): bool {
+  public function checkOperability(ActionLinkInterface $action_link, ...$parameters): bool {
     return FALSE;
   }
 

@@ -153,7 +153,7 @@ abstract class EntityFieldStateActionBase extends StateActionBase {
   /**
    * {@inheritdoc}
    */
-  public function checkOperability(ActionLinkInterface $action_link, string $direction, string $state, AccountInterface $account, ...$parameters): bool {
+  public function checkOperability(ActionLinkInterface $action_link, ...$parameters): bool {
     // Fail operability if the action link's affected field is empty.
     list($entity) = $parameters;
     $field_name = $this->configuration['field'];
@@ -162,7 +162,7 @@ abstract class EntityFieldStateActionBase extends StateActionBase {
       return FALSE;
     }
 
-    return parent::checkOperability($direction, $state, $account, ...$parameters);
+    return parent::checkOperability($action_link, ...$parameters);
   }
 
 }
