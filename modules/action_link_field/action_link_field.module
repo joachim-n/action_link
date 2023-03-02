@@ -1,0 +1,86 @@
+<?php
+
+/**
+ * @file
+ * Contains hook implementations for the Action Link Field module.
+ */
+
+use Drupal\action_link\Plugin\StateAction\EntityFieldStateActionBase;
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_form_FORM_ID_alter(): action_link_form.
+ */
+function action_link_field_form_action_link_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  // dsm($form_id);
+  // dsm($form_state->getValues());
+  // dsm($form);
+
+  $action_link_plugin_id = $form['plugin']['#default_value']['plugin_id'];
+
+  // Bail on an 'add' form where the plugin ID is not yet set.
+  if (empty($action_link_plugin_id)) {
+    return;
+  }
+
+  $plugin_definition = \Drupal::service('plugin.manager.action_link_state_action')->getDefinition($action_link_plugin_id);
+  // dsm($plugin_definition);
+  if (!is_subclass_of($plugin_definition['class'], EntityFieldStateActionBase::class)) {
+    return;
+  }
+
+  $form['#after_build'][] = 'action_link_field_form_action_link_form_after_build';
+
+  // TODO: check only 1 dynamic parameter. we won't know what to do with more.
+
+  // dsm($form_id);
+  // $form['id'] = [
+  //   '#markup' => $action_link_plugin_id,
+  // ];
+
+  // if module computed_field
+  // show options.
+  // OR submodule???
+  // ONLY for entity plugins!
+  // TODO move this to 3rd party settings???
+  // as we need a sep module to provide custom formatter.
+  // $form['computed_field'] = [
+  //   '#type' => 'checkbox',
+  //   '#title' => t('Show as computed field'),
+  //   // '#default_value' => $action_link->get('computed_field'),
+  // ];
+
+
+  // if (isset($form['type']) && $form['type']['#value'] . '_node_settings' == $form_id) {
+  //   $upload_enabled_types = \Drupal::config('mymodule.settings')->get('upload_enabled_types');
+  //   $form['workflow']['upload_' . $form['type']['#value']] = [
+  //     '#type' => 'radios',
+  //     '#title' => t('Attachments'),
+  //     '#default_value' => in_array($form['type']['#value'], $upload_enabled_types) ? 1 : 0,
+  //     '#options' => [t('Disabled'), t('Enabled')],
+  //   ];
+  //   // Add a custom submit handler to save the array of types back to the config file.
+  //   $form['actions']['submit']['#submit'][] = 'mymodule_upload_enabled_types_submit';
+  // }
+}
+
+function action_link_field_form_action_link_form_after_build(array $element, FormStateInterface $form_state) {
+  dsm($element);
+
+  // needs to be in the plugin element
+  $element['plugin']['container']['computed_field'] = [
+    '#type' => 'checkbox',
+    '#title' => t('Show as computed field AB'),
+    // '#default_value' => $action_link->get('computed_field'),
+    '#weight' => 100,
+  ];
+
+  return $element;
+}
+
+
+// TODO: submit form
+// needs
+//     \Drupal::service('entity_field.manager')->clearCachedFieldDefinitions();
+// and clear CF plugin defs.
+//     \Drupal::service('entity_field.manager')->clearCachedDefinitions();
