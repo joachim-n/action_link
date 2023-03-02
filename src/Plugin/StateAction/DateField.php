@@ -68,12 +68,6 @@ class DateField extends EntityFieldStateActionBase {
   public function getNextStateName(string $direction, AccountInterface $user, EntityInterface $entity = NULL): ?string {
     $field_name = $this->configuration['field'];
 
-    // Check the field has a value.
-    // TODO all entity plugins need this!!!
-    if ($entity->get($field_name)->isEmpty()) {
-      return NULL;
-    }
-
     $date_interval = new \DateInterval($this->configuration['step']);
 
     $date = $entity->get($field_name)->date;
