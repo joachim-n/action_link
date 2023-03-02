@@ -88,6 +88,9 @@ class DateField extends EntityFieldStateActionBase {
     return $next_value;
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function advanceState(AccountInterface $account, string $state, array $parameters) {
     list($entity) = $parameters;
 
