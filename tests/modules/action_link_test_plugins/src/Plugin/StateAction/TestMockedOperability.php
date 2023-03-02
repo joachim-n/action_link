@@ -26,7 +26,8 @@ class TestMockedOperability extends StateActionBase {
    * {@inheritdoc}
    */
   public function getNextStateName(string $direction, AccountInterface $user): ?string {
-    return 'cake';
+    $operability = \Drupal::state()->get('test_mocked_operability:next_state');
+    return $operability;
   }
 
   /**
@@ -38,6 +39,8 @@ class TestMockedOperability extends StateActionBase {
   /**
    * {@inheritdoc}
    */
+  // tis will get screwed up!
+  // need to mock getNextStateName() instead.
   public function checkOperability(ActionLinkInterface $action_link, string $direction, string $state, AccountInterface $account,  ...$parameters): bool {
     $operability = \Drupal::state()->get('test_mocked_operability:operability');
     return $operability;

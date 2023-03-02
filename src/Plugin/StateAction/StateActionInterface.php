@@ -104,7 +104,7 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
   public function getDynamicParametersFromRouteMatch(RouteMatchInterface $route_match): array;
 
   /**
-   * Checks whether the action is logically possible.
+   * TODO KILL Checks whether the action is logically possible.
    *
    * This should not check any kind of user access, it is merely about whether
    * the state of the site makes the action logically possible.
@@ -131,7 +131,7 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
    * @return bool
    *   TRUE if the link is operable, FALSE if not.
    */
-  public function checkOperability(ActionLinkInterface $action_link, string $direction, string $state, AccountInterface $account, ...$parameters): bool;
+  // public function checkOperability(ActionLinkInterface $action_link, string $direction, string $state, AccountInterface $account, ...$parameters): bool;
 
   /**
    * Checks the user's access based on this plugin's permissions.

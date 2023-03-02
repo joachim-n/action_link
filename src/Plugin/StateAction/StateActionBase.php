@@ -257,27 +257,6 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
     return AccessResult::neutral();
   }
 
-  /**
-   * {@inheritdoc}
-   */
-  public function checkOperability(ActionLinkInterface $action_link, string $direction, string $state, AccountInterface $account, ...$parameters): bool {
-    // Check the desired state is the next state.
-
-    // ARGH this won't work for generating links, it's just tautology!!!
-
-
-    $next_state = $this->getNextStateName($direction, $account, ...$parameters);
-
-    return ($next_state == $state);
-  }
-
-  // implemented in traits.
-  // public function getLinkLabel(string $state, ...$parameters): string {
-  //   // try states first, then direcions.
-
-  // }
-  //
-
   public function buildConfigurationForm(array $element, FormStateInterface $form_state) {
     $plugin_form = [];
 
