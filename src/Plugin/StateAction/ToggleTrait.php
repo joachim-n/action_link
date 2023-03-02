@@ -8,7 +8,20 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 
 /**
- * Trait for actions which toggle between two states.
+ * Trait for actions which have only two states.
+ *
+ * A toggle action has only one direction, and that direction flips it between
+ * two states, such as 'on' and 'off'.
+ *
+ * (An action like this could also be defined to have two directions, where each
+ * direction can only advance to one state. It's mostly a matter of conceptual
+ * preference. Though it would mean more complicated operability checks, and the
+ * direction and state would essentially duplicate information in the action
+ * link path parameters. Doing it this way means a toggle is a special case of
+ * a cyclical action.)
+ *
+ * TODO This should be more for cyclical states rather than only 2 state toggles?
+ *
  */
 trait ToggleTrait {
 
