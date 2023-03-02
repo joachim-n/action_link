@@ -59,17 +59,17 @@ class ActionLinkController {
 
     // TODO: validate!
 
-    // Access is already checked, which covers whether the user is allowed to
+    // TODO tweak. Access is already checked, which covers whether the user is allowed to
     // use the action link on the given parameters. We now check whether the
-    // state is valid. Unlike the access check, a state check check fails
-    // without error. This is because the user could simply have clicked an
-    // action link which was output before a change to the system made it
-    // obsolete. For example, user A loads a page on which is a 'publish node'
-    // action link. Meanwhile, user B publishes the node. User A then clicks the
-    // link. This should either fail silently, or tell the user the action has
-    // done nothing because the system is already in the state they wish to take
-    // it to.
-    $operable = $action_link->validateTargetState($direction, $state, $user, ...$parameters);
+    // link is operable and the  state is valid. Unlike the access check, an
+    // operability check check fails without error. This is because the user
+    // could simply have clicked an action link which was output before a change
+    // to the system made it obsolete. For example, user A loads a page on which
+    // is a 'publish node' action link. Meanwhile, user B publishes the node.
+    // User A then clicks the link. This should either fail silently, or tell
+    // the user the action has done nothing because the system is already in the
+    // state they wish to take it to.
+    $operable = $state_action_plugin->checkOperability($action_link, ...$parameters) && $action_link->validateTargetState($direction, $state, $user, ...$parameters);
 
     if ($operable) {
       $action_link->advanceState($user, $state, ...$parameters);
