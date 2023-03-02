@@ -228,7 +228,7 @@ class ActionLinkKernelTest extends KernelTestBase {
     \Drupal::service('router.builder')->rebuildIfNeeded();
 
     // Set to inoperable.
-    $this->state->set('test_mocked_operability:next_state', 'not-cake');
+    $this->state->set('test_mocked_operability:operability', FALSE);
 
     $request = Request::create("/action-link/test_mocked_operability/nojs/change/cake/{$this->user->id()}");
 
@@ -240,7 +240,7 @@ class ActionLinkKernelTest extends KernelTestBase {
     $this->messenger->deleteAll();
 
     // Set to operable.
-    $this->state->set('test_mocked_operability:next_state', 'cake');
+    $this->state->set('test_mocked_operability:operability', TRUE);
 
     $request = Request::create("/action-link/test_mocked_operability/nojs/change/cake/{$this->user->id()}");
 
