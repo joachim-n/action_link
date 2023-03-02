@@ -16,10 +16,10 @@ use Drupal\Core\Session\AccountInterface;
 interface ActionLinkInterface extends ConfigEntityInterface, EntityWithPluginCollectionInterface {
 
   /**
-   * Checks operability of a link. TODO
+   * Verifies that a target state is the next state.
    *
-   * Operability is the concept of whether the action makes logical sense for the
-   * current state of the site, regardless of the current user's access.
+   * This determines wheter the action makes logical sense for the current state
+   * of the site, regardless of the current user's access.
    *
    * @param string $direction
    *   The direction for the action.
@@ -32,7 +32,7 @@ interface ActionLinkInterface extends ConfigEntityInterface, EntityWithPluginCol
    *   These are upcasted values.
    *
    * @return bool
-   *   TRUE if the action is operable, FALSE if it is not.
+   *   TRUE if the target state is valid, FALSE if it is not.
    */
   public function validateTargetState(string $direction, string $state, AccountInterface $account, ...$parameters): bool;
 
