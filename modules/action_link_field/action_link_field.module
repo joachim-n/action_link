@@ -13,11 +13,6 @@ use Drupal\Core\Form\FormStateInterface;
  * Implements hook_form_FORM_ID_alter(): action_link_form.
  */
 function action_link_field_form_action_link_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  // return;
-  // dsm($form_id);
-  // dsm($form_state->getValues());
-  // dsm($form);
-
   $action_link_plugin_id = $form['plugin']['#default_value']['plugin_id'];
 
   // Bail on an 'add' form where the plugin ID is not yet set.
@@ -32,29 +27,31 @@ function action_link_field_form_action_link_form_alter(&$form, FormStateInterfac
   }
   // TODO: check only 1 dynamic parameter. we won't know what to do with more.
 
+  $action_link_entity = $form_state->getFormObject()->getEntity();
+
   $form['plugin']['container']['computed_field'] = [
     '#type' => 'checkbox',
     '#title' => t('Show as field'),
     '#description' => t('If selected, a computed field on the target entity type is automatically defined.'),
-    // '#default_value' => $action_link->get('computed_field'),
+    '#default_value' => $action_link_entity->getThirdPartySetting('action_link_field', 'computed_field') ?? FALSE,
     '#weight' => 100,
   ];
 
+  $form['#entity_builders'][] = 'action_link_field_form_action_link_form_entity_builder';
 
   $form['actions']['submit']['#submit'][] = 'action_link_field_form_action_link_form_submit';
-
-  $form['#entity_builders'][] = 'action_link_field_form_action_link_form_entity_builder';
-  // dsm($form_id);
-  // $form['id'] = [
-  //   '#markup' => $action_link_plugin_id,
-  // ];
-
 }
 
+/**
+ * Entity builder callback.
+ */
 function action_link_field_form_action_link_form_entity_builder($entity_type, EntityInterface $entity, array $form, FormStateInterface $form_state) {
   $entity->setThirdPartySetting('action_link_field', 'computed_field', $form_state->getValue(['plugin', 'computed_field']));
 }
 
+/**
+ * Submit handler.
+ */
 function action_link_field_form_action_link_form_submit(array $form, FormStateInterface $form_state) {
   // TODO: submit form
   // needs
