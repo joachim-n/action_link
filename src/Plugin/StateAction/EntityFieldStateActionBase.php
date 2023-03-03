@@ -17,6 +17,16 @@ use Symfony\Component\Routing\Route;
  */
 abstract class EntityFieldStateActionBase extends StateActionBase {
 
+  /**
+   * {@inheritdoc}
+   */
+  public function defaultConfiguration() {
+    return [
+      'entity_type_id' => NULL,
+      'field' => NULL,
+    ];
+  }
+
   public function buildConfigurationForm(array $element, FormStateInterface $form_state) {
     $plugin_form = [];
 
