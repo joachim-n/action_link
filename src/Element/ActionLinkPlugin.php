@@ -51,13 +51,6 @@ class ActionLinkPlugin extends FormElement {
   }
 
   /**
-   * {@inheritdoc}
-   */
-  public static function setAttributes(&$element, $class = []) {
-    // Sets a form element's class attribute.
-  }
-
-  /**
    * Process callback.
    */
   public static function processPlugin(&$element, FormStateInterface $form_state, &$complete_form) {
