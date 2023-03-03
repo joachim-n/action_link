@@ -64,11 +64,6 @@ class ActionLinkDeriver extends DeriverBase implements ContainerDeriverInterface
 
       $action_link_state_action_plugin = $action_link_entity->getStateActionPlugin();
 
-      // // Only act for EntityFieldStateActionBase.
-      // if (!$action_link_state_action_plugin instanceof EntityFieldStateActionBase) {
-      //   continue;
-      // }
-
       if (empty($action_link_state_action_plugin->getConfiguration()['entity_type_id'])) {
         throw new PluginException("Missing entity_type_id on $action_link_entity_id");
       }
