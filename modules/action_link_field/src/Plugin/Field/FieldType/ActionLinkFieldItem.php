@@ -12,6 +12,7 @@ use Drupal\computed_field\Plugin\Field\FieldType\ComputedRenderArrayItem;
  * @FieldType(
  *   id = "action_linkset",
  *   label = @Translation("Action link field"),
+ *   default_formatter = "action_linkset_default",
  *   no_ui = TRUE,
  * )
  */
