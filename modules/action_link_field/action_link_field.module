@@ -46,18 +46,24 @@ function action_link_field_form_action_link_form_alter(&$form, FormStateInterfac
  * Entity builder callback.
  */
 function action_link_field_form_action_link_form_entity_builder($entity_type, EntityInterface $entity, array $form, FormStateInterface $form_state) {
-  $entity->setThirdPartySetting('action_link_field', 'computed_field', $form_state->getValue(['plugin', 'computed_field']));
+  $new_value = $form_state->getValue(['plugin', 'computed_field'], FALSE);
+
+  $entity->setThirdPartySetting('action_link_field', 'computed_field', $new_value);
 }
 
 /**
  * Submit handler.
+ *
+ * Clears caches of computed field plugin definitions and field definitions so
+ * a new or deleted computed field is picked up by the field system.
  */
 function action_link_field_form_action_link_form_submit(array $form, FormStateInterface $form_state) {
-  // TODO: submit form
-  // needs
-  //     \Drupal::service('entity_field.manager')->clearCachedFieldDefinitions();
-  // and clear CF plugin defs.
-  //     \Drupal::service('entity_field.manager')->clearCachedDefinitions();
+  $original_value = $form['plugin']['container']['computed_field']['#default_value'];
+  $new_value = $form_state->getValue(['plugin', 'computed_field'], FALSE);
 
+  if ($new_value != $original_value) {
+    \Drupal::service('plugin.manager.computed_field')->clearCachedDefinitions();
+
+    \Drupal::service('entity_field.manager')->clearCachedFieldDefinitions();
+  }
 }
-
