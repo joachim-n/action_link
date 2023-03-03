@@ -11,7 +11,8 @@ use Drupal\Core\Entity\EntityInterface;
 /**
  * Computed field that shows an action link's linkset.
  *
- * The deriver creates a plugin for each action link that has this enabled.
+ * The deriver creates a plugin for each action link that has the computed
+ * field setting enabled.
  *
  * @ComputedField(
  *   id = "action_link",
