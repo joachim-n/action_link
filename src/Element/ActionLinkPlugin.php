@@ -57,7 +57,13 @@ class ActionLinkPlugin extends FormElement {
     $element['#tree'] = TRUE;
 
     $container_html_id = Html::getUniqueId('ajax-link');
-    $element['container'] = [
+
+    // Allow forms to place elements that end up inside this element once it is
+    // built. This is the same behaviour as core's radios and checkboxes
+    // elements.
+    $element += ['container' => []];
+
+    $element['container'] += [
       '#type' => 'details',
       '#open' => TRUE,
       '#title' => $element['#title'] ?? '',
