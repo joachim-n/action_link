@@ -16,6 +16,9 @@ use Symfony\Component\HttpFoundation\Request;
  *  - '#field_types': (optional) An array of field types to include. If empty,
  *    fields of all types are shown.
  *
+ *
+ * TODO: filters! exclude computed, in our case.
+ *
  * The #default_value property may be set in the following format:
  * @code
  * [
