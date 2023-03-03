@@ -48,7 +48,7 @@ trait RepeatableTrait {
   }
 
   public function getLinkLabel(string $direction, string $state, ...$parameters): string {
-    $label = $this->configuration['labels']['direction'][$direction]['link_label'] ?? t("Change value");
+    $label = $this->configuration['labels']['direction'][$direction]['link_label'] ?: t("Change value");
 
     return $label;
   }
