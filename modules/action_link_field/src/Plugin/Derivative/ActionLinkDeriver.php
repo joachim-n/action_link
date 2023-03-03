@@ -74,7 +74,11 @@ class ActionLinkDeriver extends DeriverBase implements ContainerDeriverInterface
       // dump($action_link_state_action_plugin);
 
       $this->derivatives[$action_link_entity_id] = [
-        'label' => $action_link_state_action_plugin->getPluginDefinition()['label'] . ' ' . t('action link'),
+        // NOT,
+        // $action_link_state_action_plugin->getPluginDefinition()['label']
+        // NO, remove suffix???
+        // REALLY need admin label for manage display page!!
+        'label' => $action_link_entity->label() . ' ' . t('action link'),
         'attach' => [
           'field_name' => "action_link_{$action_link_entity_id}",
           'scope' => 'base', // TODO, match the action link's field.
