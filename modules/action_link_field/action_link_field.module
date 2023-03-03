@@ -12,6 +12,7 @@ use Drupal\Core\Form\FormStateInterface;
  * Implements hook_form_FORM_ID_alter(): action_link_form.
  */
 function action_link_field_form_action_link_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  // return;
   // dsm($form_id);
   // dsm($form_state->getValues());
   // dsm($form);
@@ -29,7 +30,20 @@ function action_link_field_form_action_link_form_alter(&$form, FormStateInterfac
     return;
   }
 
-  $form['#after_build'][] = 'action_link_field_form_action_link_form_after_build';
+  // ARGH this zaps the built in after build. FUCK
+  // $form['#after_build'][] = 'action_link_field_form_action_link_form_after_build';
+
+  $form['plugin']['container']['computed_field'] = [
+    '#type' => 'checkbox',
+    '#title' => t('Show as computed insert'),
+    // ARGH cant have this as no after build so fucks up.
+    // '#description' => t('If selected, a computed field on the target entity type is automatically defined.'),
+    // '#default_value' => $action_link->get('computed_field'),
+    '#weight' => 100,
+  ];
+
+
+  $form['actions']['submit']['#submit'][] = 'action_link_field_form_action_link_form_submit';
 
   // TODO: check only 1 dynamic parameter. we won't know what to do with more.
 
@@ -65,17 +79,27 @@ function action_link_field_form_action_link_form_alter(&$form, FormStateInterfac
 }
 
 function action_link_field_form_action_link_form_after_build(array $element, FormStateInterface $form_state) {
-  dsm($element);
+  // dsm($element);
 
   // needs to be in the plugin element
+  // ARGH I bet this isn't getting processed properly because
+  // AFTER BUILD - doens't get the right things set on it properly FUCKSTICKS
+  // use #process insread????
   $element['plugin']['container']['computed_field'] = [
     '#type' => 'checkbox',
-    '#title' => t('Show as computed field AB'),
+    '#title' => t('Show as computed field'),
+    // ARGH cant have this as no after build so fucks up.
+    // '#description' => t('If selected, a computed field on the target entity type is automatically defined.'),
     // '#default_value' => $action_link->get('computed_field'),
     '#weight' => 100,
   ];
 
   return $element;
+}
+
+function action_link_field_form_action_link_form_submit(array $form, FormStateInterface $form_state) {
+  dsm($form_state->getValues());
+  // $form_state->getValues()['plugin']['computed_field']
 }
 
 
