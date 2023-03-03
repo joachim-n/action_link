@@ -73,6 +73,9 @@ abstract class EntityFieldStateActionBase extends StateActionBase {
 
 
   public function validateConfigurationForm(array &$form, FormStateInterface $form_state) {
+    // IMPORTANT: It is essential that child classes that override this
+    // implementation call it with parent::, as it handles copying values from
+    // the 'entity_type_field' form element into the right place.
     $values = $form_state->getValues();
 
     // @todo Setting values on the subform state, which is the correct way,
