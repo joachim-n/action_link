@@ -18,7 +18,3 @@
     link_style:
       type: text
       label: 'Link style'
-    # TODO! TEMP! will move to 3rd party
-    computed_field:
-      type: text
-      label: 'Plugin ID'
