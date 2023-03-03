@@ -17,6 +17,7 @@ use Drupal\Core\Entity\EntityInterface;
  *   id = "action_link",
  *   label = @Translation("Action link"),
  *   field_type = "action_linkset",
+ *   no_ui = TRUE,
  *   deriver = "Drupal\action_link_field\Plugin\Derivative\ActionLinkDeriver"
  * )
  */

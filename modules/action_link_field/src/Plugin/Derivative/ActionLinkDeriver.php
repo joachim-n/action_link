@@ -4,6 +4,7 @@ namespace Drupal\action_link_field\Plugin\Derivative;
 
 use Drupal\action_link\Plugin\StateAction\EntityFieldStateActionBase;
 use Drupal\Component\Plugin\Derivative\DeriverBase;
+use Drupal\Component\Plugin\Exception\PluginException;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Plugin\Discovery\ContainerDeriverInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
@@ -50,34 +51,35 @@ class ActionLinkDeriver extends DeriverBase implements ContainerDeriverInterface
   public function getDerivativeDefinitions($base_plugin_definition) {
     $this->derivatives = [];
 
-    // TODO! Forms not working, disable these!
-    // return;
-
     $action_link_entities = $this->entityTypeManager->getStorage('action_link')->loadMultiple();
+    /** @var \Drupal\action_link\Entity\ActionLinkInterface $action_link_entity */
     foreach ($action_link_entities as $action_link_entity_id => $action_link_entity) {
-      $action_link_state_action_plugin = $action_link_entity->getStateActionPlugin();
-
-      // Only act for EntityFieldStateActionBase.
-      if (!$action_link_state_action_plugin instanceof EntityFieldStateActionBase) {
+      $computed_field_setting = $action_link_entity->getThirdPartySetting('action_link_field', 'computed_field', FALSE);
+      if (!$computed_field_setting) {
         continue;
       }
 
+      $action_link_state_action_plugin = $action_link_entity->getStateActionPlugin();
+
+      // // Only act for EntityFieldStateActionBase.
+      // if (!$action_link_state_action_plugin instanceof EntityFieldStateActionBase) {
+      //   continue;
+      // }
+
       if (empty($action_link_state_action_plugin->getConfiguration()['entity_type_id'])) {
-        throw new \Exception("BAD! $action_link_entity_id");
+        throw new PluginException("Missing entity type on $action_link_entity_id");
       }
       // dump($action_link_state_action_plugin->getConfiguration()['entity_type_id']);
-
-      // Skip badly-formed plugins. Or throw?
-      // $action_link_state_action_plugin->getConfiguration()['entity_type_id']
 
       // dump($action_link_state_action_plugin);
 
       $this->derivatives[$action_link_entity_id] = [
-        'label' => $action_link_state_action_plugin->getPluginDefinition()['label'],
+        'label' => $action_link_state_action_plugin->getPluginDefinition()['label'] . ' ' . t('action link'),
         'attach' => [
-          'scope' => 'base', // TODO, match the action link's field.
           'field_name' => "action_link_{$action_link_entity_id}",
+          'scope' => 'base', // TODO, match the action link's field.
           'entity_types' => [
+            // TODO bundles if bundle scope.
             $action_link_state_action_plugin->getConfiguration()['entity_type_id'] => [],
           ],
         ],
