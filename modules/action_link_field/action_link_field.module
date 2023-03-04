@@ -6,6 +6,7 @@
  */
 
 use Drupal\action_link\Plugin\StateAction\EntityFieldStateActionBase;
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 
@@ -33,7 +34,7 @@ function action_link_field_form_action_link_form_alter(&$form, FormStateInterfac
     '#type' => 'checkbox',
     '#title' => t('Show as field'),
     '#description' => t('If selected, a computed field on the target entity type is automatically defined.'),
-    '#default_value' => $action_link_entity->getThirdPartySetting('action_link_field', 'computed_field') ?? FALSE,
+    '#default_value' => $action_link_entity->getThirdPartySetting('action_link_field', 'computed_field', FALSE),
     '#weight' => 100,
   ];
 
@@ -67,3 +68,40 @@ function action_link_field_form_action_link_form_submit(array $form, FormStateIn
     \Drupal::service('entity_field.manager')->clearCachedFieldDefinitions();
   }
 }
+
+/**
+ * Implements hook_ENTITY_TYPE_insert(): action_link
+ */
+function action_link_field_action_link_insert(EntityInterface $entity) {
+  if ($entity->getThirdPartySetting('action_link_field', 'computed_field', TRUE)) {
+    \Drupal::service('plugin.manager.computed_field')->clearCachedDefinitions();
+    \Drupal::service('entity_field.manager')->clearCachedFieldDefinitions();
+
+    // Better: zap cache tag entity_field_info.
+    //         $entity_type_manager->getViewBuilder($entity_type)->resetCache();
+    Cache::invalidateTags(['entity_field_info']);
+
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_update(): action_link
+ */
+function action_link_field_action_link_update(EntityInterface $entity) {
+  if ($entity->getThirdPartySetting('action_link_field', 'computed_field', FALSE) != $entity->original->getThirdPartySetting('action_link_field', 'computed_field', FALSE)) {
+    \Drupal::service('plugin.manager.computed_field')->clearCachedDefinitions();
+    \Drupal::service('entity_field.manager')->clearCachedFieldDefinitions();
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_delete(): action_link
+ */
+function action_link_field_action_link_delete(EntityInterface $entity) {
+  if ($entity->getThirdPartySetting('action_link_field', 'computed_field', TRUE)) {
+    \Drupal::service('plugin.manager.computed_field')->clearCachedDefinitions();
+    \Drupal::service('entity_field.manager')->clearCachedFieldDefinitions();
+  }
+}
+
+// TODO: changes in field config - add/delete mean we need to zap computed_field plugin defs.

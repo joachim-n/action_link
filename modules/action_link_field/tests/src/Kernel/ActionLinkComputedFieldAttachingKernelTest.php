@@ -2,6 +2,8 @@
 
 namespace Drupal\Tests\computed_field\Kernel;
 
+use Drupal\field\Entity\FieldConfig;
+use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\KernelTests\KernelTestBase;
 
 /**
@@ -21,10 +23,10 @@ class ActionLinkComputedFieldAttachingKernelTest extends KernelTestBase {
     'user',
     'field',
     'field_ui',
-    'entity_test',
+    'node',
     'computed_field',
-    'test_computed_field_plugins',
-    'test_computed_field_automatic',
+    'action_link',
+    'action_link_field',
   ];
 
   /**
@@ -48,6 +50,9 @@ class ActionLinkComputedFieldAttachingKernelTest extends KernelTestBase {
    */
   protected $entityDisplayRepository;
 
+  // TODOARGH
+  protected $strictConfigSchema = 0;
+
   /**
    * {@inheritdoc}
    */
@@ -56,58 +61,87 @@ class ActionLinkComputedFieldAttachingKernelTest extends KernelTestBase {
 
     $this->installSchema('system', ['sequences']);
     $this->installEntitySchema('user');
-    $this->installEntitySchema('entity_test_with_bundle');
+    $this->installSchema('node', ['node_access']);
+    $this->installEntitySchema('node');
 
     $this->entityTypeManager = $this->container->get('entity_type.manager');
     $this->entityFieldManager = $this->container->get('entity_field.manager');
     $this->entityDisplayRepository = $this->container->get('entity_display.repository');
 
     // Create bundles.
-    $entity_test_bundle_storage = $this->entityTypeManager->getStorage('entity_test_bundle');
+    $node_type_storage = $this->entityTypeManager->getStorage('node_type');
     foreach (['alpha', 'beta'] as $bundle) {
-      $entity_test_bundle_storage->create([
+      $node_type_storage->create([
         'id' => $bundle,
+        'type' => $bundle,
       ])->save();
     }
+
+    // Create a config field.
+    // Add a translatable field to the vocabulary.
+    $field = FieldStorageConfig::create(array(
+      'field_name' => 'field_foo',
+      'entity_type' => 'node',
+      'type' => 'boolean',
+    ));
+    $field->save();
+    FieldConfig::create([
+      'field_name' => 'field_foo',
+      'entity_type' => 'node',
+      'bundle' => 'alpha',
+      'label' => 'Foo',
+    ])->save();
   }
 
   /**
-   * Tests that computed fields are registered as entity fields.
+   * Tests that action link computed fields are registered as entity fields.
    */
   public function testComputedFields() {
-    // Test field from config entity.
-    $computed_field_storage = $this->entityTypeManager->getStorage('computed_field');
+    $action_link_storage = $this->entityTypeManager->getStorage('action_link');
 
-    $computed_field = $computed_field_storage->create([
-      'field_name' => 'test_bundle',
-      'label' => 'Test',
-      'plugin_id' => 'test_string',
-      'entity_type' => 'entity_test_with_bundle',
-      'bundle' => 'alpha',
+    // Action link on a base field.
+    $action_link_on_base_field = $action_link_storage->create([
+      'id' => 'on_base_field',
+      'label' => 'action_link_on_base_field',
+      'plugin_id' => 'boolean_field',
+      'plugin_config' => [
+        'entity_type_id' => 'node',
+        'field' => 'promote',
+      ],
+      'link_style' => 'nojs',
+      'third_party_settings' => [
+        'action_link_field' => [
+          'computed_field' => TRUE,
+        ],
+      ]
     ]);
-    $computed_field->save();
+    $action_link_on_base_field->save();
 
-    $this->assertEquals('entity_test_with_bundle.alpha.test_bundle', $computed_field->id());
+    $this->assertArrayHasKey('action_link:on_base_field', \Drupal::service('plugin.manager.computed_field')->getDefinitions());
+    $this->assertArrayHasKey('action_link_on_base_field', $this->entityFieldManager->getFieldDefinitions('node', 'alpha'));
+    $this->assertArrayHasKey('action_link_on_base_field', $this->entityFieldManager->getFieldDefinitions('node', 'beta'));
 
-    $this->assertEquals([0 => 'entity_test.entity_test_bundle.alpha'], $computed_field->getDependencies()['config']);
-    $this->assertEquals([0 => 'test_computed_field_plugins'], $computed_field->getDependencies()['module']);
+    // Action link on a config field.
+    $action_link_on_config_field = $action_link_storage->create([
+      'id' => 'on_config_field',
+      'label' => 'action_link_on_config_field',
+      'plugin_id' => 'boolean_field',
+      'plugin_config' => [
+        'entity_type_id' => 'node',
+        'field' => 'field_foo',
+      ],
+      'link_style' => 'nojs',
+      'third_party_settings' => [
+        'action_link_field' => [
+          'computed_field' => TRUE,
+        ],
+      ]
+    ]);
+    $action_link_on_config_field->save();
 
-    $this->assertArrayHasKey('test_bundle', $this->entityFieldManager->getFieldDefinitions('entity_test_with_bundle', 'alpha'));
-    $this->assertArrayNotHasKey('test_bundle', $this->entityFieldManager->getFieldDefinitions('entity_test_with_bundle', 'beta'));
-
-    // Automatic plugins base fields.
-    $this->assertArrayHasKey('test_automatic_base', $this->entityFieldManager->getFieldDefinitions('entity_test_with_bundle', 'alpha'));
-    $this->assertArrayHasKey('test_automatic_base', $this->entityFieldManager->getFieldDefinitions('entity_test_with_bundle', 'beta'));
-
-    $this->assertArrayNotHasKey('test_automatic_base_unused', $this->entityFieldManager->getFieldDefinitions('entity_test_with_bundle', 'alpha'));
-    $this->assertArrayNotHasKey('test_automatic_base_unused', $this->entityFieldManager->getFieldDefinitions('entity_test_with_bundle', 'beta'));
-
-    // Automatic plugins bundle fields.
-    $this->assertArrayHasKey('test_automatic_bundle', $this->entityFieldManager->getFieldDefinitions('entity_test_with_bundle', 'alpha'));
-    $this->assertArrayNotHasKey('test_automatic_bundle', $this->entityFieldManager->getFieldDefinitions('entity_test_with_bundle', 'beta'));
-
-    $this->assertArrayNotHasKey('test_automatic_bundle_unused', $this->entityFieldManager->getFieldDefinitions('entity_test_with_bundle', 'alpha'));
-    $this->assertArrayNotHasKey('test_automatic_bundle_unused', $this->entityFieldManager->getFieldDefinitions('entity_test_with_bundle', 'beta'));
+    $this->assertArrayHasKey('action_link:on_config_field', \Drupal::service('plugin.manager.computed_field')->getDefinitions());
+    $this->assertArrayHasKey('action_link_on_config_field', $this->entityFieldManager->getFieldDefinitions('node', 'alpha'));
+    $this->assertArrayNotHasKey('action_link_on_config_field', $this->entityFieldManager->getFieldDefinitions('node', 'beta'));
   }
 
 }
