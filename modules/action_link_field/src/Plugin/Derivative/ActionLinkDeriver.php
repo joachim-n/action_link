@@ -15,8 +15,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * Derived computed fields are defined as either base or bundle bundles, to
  * match the field affected by the action link.
- *
- * @see TODO.
  */
 class ActionLinkDeriver extends DeriverBase implements ContainerDeriverInterface {
 
@@ -116,8 +114,9 @@ class ActionLinkDeriver extends DeriverBase implements ContainerDeriverInterface
         'label' => $action_link_entity->label() . ' ' . t('action link'),
         'attach' => [
           // Omit scope and bundles, which may or may not apply, as we can't
-          // determine these here without circularity. TODO explain
+          // determine these here without circularity.
           'field_name' => "action_link_{$action_link_entity_id}",
+          // Set the name of the controlled field for the plugin class to find.
           'controlled_field' => $field_name,
           // 'scope' => $scope,
           'entity_types' => [
@@ -126,7 +125,6 @@ class ActionLinkDeriver extends DeriverBase implements ContainerDeriverInterface
         ],
       ] + $base_plugin_definition;
     }
-    // dump($this->derivatives);
 
     return $this->derivatives;
   }

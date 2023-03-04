@@ -15,6 +15,16 @@ use Drupal\Core\Entity\EntityTypeInterface;
  * The deriver creates a plugin for each action link that has the computed
  * field setting enabled.
  *
+ * This plugin class overrides the attachAsFooField() methods, because the
+ * deriver can't determine how to attach the field. This is because to do so, it
+ * needs to inspect the definition of the field that the action link controls,
+ * and discovery of computed field plugins takes place when field definitions
+ * are being build: therefore the process is circular:
+ *  - Build field definitions
+ *  - Discover automatically attaching computed field plugins
+ *  - Derive plugins from action_link entities
+ *  - Get the definition of the field that an action link controls: circularity!
+ *
  * @ComputedField(
  *   id = "action_link",
  *   label = @Translation("Action link"),
@@ -75,6 +85,7 @@ class ActionLink extends ComputedFieldBase {
    * {@inheritdoc}
    */
   public function attachAsBundleField($fields, EntityTypeInterface $entity_type, string $bundle): bool {
+    // Match the scope and bundle of the controlled field.
     return isset($fields[$this->pluginDefinition['attach']['controlled_field']]);
   }
 
