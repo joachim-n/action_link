@@ -7,6 +7,7 @@ use Drupal\computed_field\Plugin\ComputedField\ComputedFieldBase;
 use Drupal\computed_field\Plugin\ComputedField\SingleValueTrait;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\EntityTypeInterface;
 
 /**
  * Computed field that shows an action link's linkset.
@@ -60,6 +61,21 @@ class ActionLink extends ComputedFieldBase {
     $cacheability->setCacheMaxAge(0);
 
     return $cacheability;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function attachAsBaseField($fields, EntityTypeInterface $entity_type): bool {
+    // Match the scope of the controlled field.
+    return isset($fields[$this->pluginDefinition['attach']['controlled_field']]);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function attachAsBundleField($fields, EntityTypeInterface $entity_type, string $bundle): bool {
+    return isset($fields[$this->pluginDefinition['attach']['controlled_field']]);
   }
 
 }

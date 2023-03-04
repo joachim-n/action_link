@@ -95,18 +95,18 @@ class ActionLinkDeriver extends DeriverBase implements ContainerDeriverInterface
       //   That's because in this case, it won't be in the field map, and will
       //   be incorrectly deduced to be a base field.
       // @see \Drupal\Core\Entity\EntityFieldManager::getFieldMap().
-      $this->keyValueFactory = \Drupal::service('keyvalue');
-      $bundle_field_maps = $this->keyValueFactory->get('entity.definitions.bundle_field_map')->getAll();
+      // $this->keyValueFactory = \Drupal::service('keyvalue');
+      // $bundle_field_maps = $this->keyValueFactory->get('entity.definitions.bundle_field_map')->getAll();
 
-      if (isset($bundle_field_maps[$host_entity_type_id][$field_name])) {
-        $scope = 'bundle';
+      // if (isset($bundle_field_maps[$host_entity_type_id][$field_name])) {
+      //   $scope = 'bundle';
 
-        $bundles = $bundle_field_maps[$host_entity_type_id][$field_name]['bundles'];
-      }
-      else {
-        $scope = 'base';
-        $bundles = [];
-      }
+      //   $bundles = $bundle_field_maps[$host_entity_type_id][$field_name]['bundles'];
+      // }
+      // else {
+      //   $scope = 'base';
+      //   $bundles = [];
+      // }
 
       $this->derivatives[$action_link_entity_id] = [
         // NOT,
@@ -115,10 +115,13 @@ class ActionLinkDeriver extends DeriverBase implements ContainerDeriverInterface
         // REALLY need admin label for manage display page!!
         'label' => $action_link_entity->label() . ' ' . t('action link'),
         'attach' => [
+          // Omit scope and bundles, which may or may not apply, as we can't
+          // determine these here without circularity. TODO explain
           'field_name' => "action_link_{$action_link_entity_id}",
-          'scope' => $scope,
+          'controlled_field' => $field_name,
+          // 'scope' => $scope,
           'entity_types' => [
-            $host_entity_type_id => $bundles,
+            $host_entity_type_id => [],
           ],
         ],
       ] + $base_plugin_definition;
