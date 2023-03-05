@@ -2,7 +2,6 @@
 
 namespace Drupal\action_link_field\Plugin\Derivative;
 
-use Drupal\action_link\Plugin\StateAction\EntityFieldStateActionBase;
 use Drupal\Component\Plugin\Derivative\DeriverBase;
 use Drupal\Component\Plugin\Exception\PluginException;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
