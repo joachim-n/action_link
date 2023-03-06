@@ -89,6 +89,7 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
 
     // Downcast dynamic parameters.
     $scalar_parameters = $this->convertParametersForRoute($named_parameters);
+    assert(empty(array_filter($scalar_parameters, 'is_object')), 'Call to convertParametersForRoute() should downcast all objects');
 
     $directions = $this->getDirections();
 
