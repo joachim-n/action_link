@@ -12,7 +12,7 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Symfony\Component\Routing\Route;
 
 /**
- * State action for adding a product to a cart.
+ * Proof of concept of a state action for adding a product to a cart.
  *
  * @StateAction(
  *   id = "test_add_to_cart",
@@ -33,6 +33,8 @@ use Symfony\Component\Routing\Route;
  * )
  */
 class TestAddToCart extends StateActionBase {
+
+  use StringTranslationTrait;
 
   public function buildConfigurationForm(array $element, FormStateInterface $form_state) {
     // $plugin_form = parent::buildConfigurationForm($element, $form_state);
@@ -75,17 +77,17 @@ class TestAddToCart extends StateActionBase {
 
     if ($direction == 'add') {
       return $count ?
-        t('Add to cart (@count in cart)', [
+        $this->t('Add to cart (@count in cart)', [
           '@count' => $count,
         ]) :
-        t('Add to cart');
+        $this->t('Add to cart');
     }
     else {
       return $count > 1 ?
-        t('Remove 1 from cart (@count in cart)', [
+        $this->t('Remove 1 from cart (@count in cart)', [
           '@count' => $count,
         ]) :
-        t('Remove from cart');
+        $this->t('Remove from cart');
     }
   }
 
@@ -121,7 +123,8 @@ class TestAddToCart extends StateActionBase {
 
     $route->setOption('parameters', [
       'entity' => [
-        'type' => 'entity:node', // TODO!!!
+        // @todo Get correct entity type from configuration.
+        'type' => 'entity:node',
       ],
     ]);
 
