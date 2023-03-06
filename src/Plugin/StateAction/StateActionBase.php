@@ -94,25 +94,37 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
     $directions = $this->getDirections();
 
     foreach ($directions as $direction => $direction_label) {
-      if ($link = $this->getLink($action_link, $direction, $user, $named_parameters, $scalar_parameters)) {
-        $build[$direction] = [
-          '#theme' => 'action_link',
-          '#link' => $link->toRenderable(),
-          '#direction' => $direction,
-          '#user' => $user,
-          '#dynamic_parameters' => $parameters,
-          '#attributes' => new Attribute([
-            'class' => [
-              'action-link',
-              'action-link-id-' . $action_link->id(),
-              'action-link-plugin-' . $this->getPluginId(),
-            ],
-          ]),
-        ];
+      $link = $this->getLink($action_link, $direction, $user, $named_parameters, $scalar_parameters);
 
-        // Set nofollow to prevent search bots from crawling anonymous flag links.
-        $build[$direction]['#link']['#attributes']['rel'][] = 'nofollow';
-      }
+      // We output an action link even if there is no link. This is so that if a
+      // link in another direction is used over AJAX, and causes the inactive
+      // direction to become available, then the empty SPAN is replaced by the
+      // AJAX with an active link. For example, suppose an action link adds a
+      // product to a shopping cart, with 'add' and 'remove' directions. When
+      // the cart is empty, only the 'add' direction link shows. Clicking this
+      // link takes the site to a state where the 'remove' direction is now
+      // valid and the link for that should show. Therefore, the AJAX
+      // replacement that occurs when the user clicks the 'add' link must
+      // replace both directions. Having an empty SPAN for the 'remove'
+      // direction means there is somewhere for the updated 'remove' link to go.
+      $build[$direction] = [
+        '#theme' => 'action_link',
+        '#link' => $link ? $link->toRenderable() : [],
+        '#direction' => $direction,
+        '#user' => $user,
+        '#dynamic_parameters' => $parameters,
+        '#attributes' => new Attribute([
+          'class' => [
+            'action-link',
+            'action-link-id-' . $action_link->id(),
+            'action-link-plugin-' . $this->getPluginId(),
+            'action-link-' . ($link ? 'present' : 'empty'),
+          ],
+        ]),
+      ];
+
+      // Set nofollow to prevent search bots from crawling anonymous flag links.
+      $build[$direction]['#link']['#attributes']['rel'][] = 'nofollow';
     }
 
     // Allow the link style plugin for this action link entity to modify the
