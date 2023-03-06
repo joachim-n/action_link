@@ -183,7 +183,10 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
    *   parameters.
    */
   protected function getLink(ActionLinkInterface $action_link, string $direction, AccountInterface $user, $named_parameters, $scalar_parameters): ?Link {
-    if ($next_state = $this->getNextStateName($direction, $user, ...$named_parameters)) {
+    // Only NULL means there is no valid next state; a string such as '0' is
+    // a valid state.
+    $next_state = $this->getNextStateName($direction, $user, ...$named_parameters);
+    if (!is_null($next_state)) {
       $label = $this->getLinkLabel($direction, $next_state, ...$named_parameters);
 
       $route_parameters = [
