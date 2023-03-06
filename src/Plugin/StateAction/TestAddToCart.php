@@ -3,7 +3,6 @@
 namespace Drupal\action_link\Plugin\StateAction;
 
 use Drupal\action_link\Entity\ActionLinkInterface;
-use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -94,6 +93,16 @@ class TestAddToCart extends StateActionBase {
   /**
    * {@inheritdoc}
    */
+  public function getMessage(string $direction, string $state, ...$parameters): string {
+    return match ($direction) {
+      'add' => $this->t('One item added to the cart'),
+      'remove' => $this->t('One item removed from the cart'),
+    };
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function checkAccess(string $direction, string $state, AccountInterface $account, ...$parameters): AccessResult {
     // @todo Implement properly!
     return AccessResult::allowed();
@@ -118,6 +127,9 @@ class TestAddToCart extends StateActionBase {
     return $parameters;
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function getActionRoute(ActionLinkInterface $action_link): Route {
     $route = parent::getActionRoute($action_link);
 
