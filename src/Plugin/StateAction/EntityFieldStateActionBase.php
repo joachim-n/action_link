@@ -3,9 +3,11 @@
 namespace Drupal\action_link\Plugin\StateAction;
 
 use Drupal\action_link\Entity\ActionLinkInterface;
+use Drupal\Component\Plugin\ConfigurableInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Plugin\PluginFormInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Symfony\Component\Routing\Route;
@@ -15,7 +17,7 @@ use Symfony\Component\Routing\Route;
  *
  * This expects an 'entity' dynamic parameter.
  */
-abstract class EntityFieldStateActionBase extends StateActionBase {
+abstract class EntityFieldStateActionBase extends StateActionBase implements ConfigurableInterface, PluginFormInterface{
 
   /**
    * {@inheritdoc}

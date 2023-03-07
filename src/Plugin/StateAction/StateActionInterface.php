@@ -3,7 +3,6 @@
 namespace Drupal\action_link\Plugin\StateAction;
 
 use Drupal\action_link\Entity\ActionLinkInterface;
-use Drupal\Component\Plugin\ConfigurableInterface;
 use Drupal\Component\Plugin\DerivativeInspectionInterface;
 use Drupal\Component\Plugin\PluginInspectionInterface;
 use Drupal\Core\Access\AccessResult;
@@ -16,8 +15,12 @@ use Symfony\Component\Routing\Route;
 
 /**
  * Interface for State Action plugins.
+ *
+ * State action plugins that are configurable should also implement:
+ *  - \Drupal\Core\Plugin\PluginFormInterface
+ *  - \Drupal\Component\Plugin\ConfigurableInterface
  */
-interface StateActionInterface extends PluginInspectionInterface, DerivativeInspectionInterface, ConfigurableInterface {
+interface StateActionInterface extends PluginInspectionInterface, DerivativeInspectionInterface {
 
   /**
    * Gets a render array of all the operable links for the user.
