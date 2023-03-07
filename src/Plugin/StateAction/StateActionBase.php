@@ -215,16 +215,22 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
 
       $url = Url::fromRoute('action_link.action_link.' . $action_link->id(), $route_parameters);
 
-      // Check access for the current user.
-      if ($url->access()) {
-        // FUCK WHY THIS FAILING???
-        return Link::fromTextAndUrl($label, $url);
+      // TODO: decide if this happens per direction or for the whole linkset.
+      if (!$this->checkOperability($action_link, ...$named_parameters)) {
+        return NULL;
       }
 
-      // @todo Show a link to log in if the user doesn't have access but an
-      // authenticated user would. Determining this appears to be rather
-      // complicated, as we'd need to mock a user object to pass to access
-      // checks, but isAuthenticated() works by checking for the uid.
+      // TODO! doesn't handle proxy access!!!!!
+      $access = $action_link->checkAccess($direction, $next_state, $user, ...$named_parameters);
+      if (!$access->isAllowed()) {
+        // @todo Show a link to log in if the user doesn't have access but an
+        // authenticated user would. Determining this appears to be rather
+        // complicated, as we'd need to mock a user object to pass to access
+        // checks, but isAuthenticated() works by checking for the uid.
+        return NULL;
+      }
+
+      return Link::fromTextAndUrl($label, $url);
     }
 
     return NULL;
