@@ -223,26 +223,8 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
 
       // @todo Show a link to log in if the user doesn't have access but an
       // authenticated user would. Determining this appears to be rather
-      // complicated.
-
-      // // TODO: If logged out, and an authenticated user would have access, show a log
-      // // in CTA? HOW?
-      // if (\Drupal::currentUser()->isAnonymous()) {
-      //   $dummy_authenticated_user = User::create([
-      //     'roles' => [
-      //       AccountInterface::AUTHENTICATED_ROLE,
-      //     ],
-      //   ]);
-      //  DOESN"T WORK -- isAuthenticated checks the uid!
-      //   dump($dummy_authenticated_user->isAuthenticated());
-
-
-      //   // doesn't work - wrong user gets to the controller access. HOW?
-      //   if ($url->access($dummy_authenticated_user)) {
-      //     return Link::fromTextAndUrl("Log in!", $url);
-      //   }
-      // }
-
+      // complicated, as we'd need to mock a user object to pass to access
+      // checks, but isAuthenticated() works by checking for the uid.
     }
 
     return NULL;
