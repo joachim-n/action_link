@@ -8,7 +8,7 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 
 /**
- * Trait for actions which are repeatable in one or more directions.
+ * Geometry trait for actions which are repeatable in one or more directions.
  *
  * For example, an action which increases or decreases the value of a numeric
  * field on an entity is repeatable, because the value can be increased over and
@@ -16,6 +16,7 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
  * on a colour value field would have six directions: increase and decrease each
  * of the red, green, blue components.
  */
+// TODO rename RepeatableGeometryTrait ?
 trait RepeatableTrait {
 
   public function buildTextsConfigurationForm($labels_form, FormStateInterface $form_state) {
