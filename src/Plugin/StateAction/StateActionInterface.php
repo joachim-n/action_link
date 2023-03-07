@@ -77,9 +77,12 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
   public function getNextStateName(string $direction, AccountInterface $user): ?string;
 
   /**
-   * Undocumented function
+   * Advance to the given state.
    *
-   * Also responsible for clearing any caches.
+   * This should made the necessary changes to put the operand into the given
+   * state. The state has already been checked for operability and access.
+   *
+   * This method is responsible for clearing caches as necessary.
    *
    * @param [type] $account
    * @param [type] $state
