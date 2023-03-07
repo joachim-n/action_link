@@ -264,6 +264,9 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
     return AccessResult::neutral();
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function checkOperandAccess(ActionLinkInterface $action_link, string $direction, string $state, AccountInterface $account, ...$parameters): AccessResult {
     return AccessResult::neutral();
   }
@@ -281,13 +284,13 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
   public function copyFormValuesToEntity($entity, array &$form, FormStateInterface $form_state) {
   }
 
-  // overridden by traits.
+  /**
+   * {@inheritdoc}
+   */
   public function getMessage(string $direction, string $state, ...$parameters): string {
+    // Overridden by traits.
+    return '';
   }
-    //   // try states first, then direcions.
-
-  //
-
 
   /**
    * Gets the directions for this plugin.
@@ -357,8 +360,6 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
     $parameter_position = array_search($name, $dynamic_parameters_definition);
     return $parameters[$parameter_position];
   }
-
-
 
   /**
    * Downcasts object parameters for use in routes and identifiers.
