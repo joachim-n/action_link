@@ -83,6 +83,7 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
 
     $build = [];
 
+    // If the action link isn't operable, show nothing.
     if (!$this->checkOperability($action_link, ...$parameters)) {
       return $build;
     }
