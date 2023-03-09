@@ -46,7 +46,15 @@ class StateAction extends Plugin {
   /**
    * TODO - change this to just dynamic?
    *
+   * These names are use as route parameters, and therefore the following names
+   * are reserved: link_style, direction, state, user.
+   *
    * @var array
+   *   An array of the directions for this plugin. Keys are direction machine
+   *   names, and values are human-readable labels. Keys are used in URLs and
+   *   must therefore may not contain special characters.
+   *
+   * @see \Drupal\action_link\Plugin\StateAction\StateActionBase::getDynamicParametersFromRouteMatch()
    */
   public $parameters = [];
 
