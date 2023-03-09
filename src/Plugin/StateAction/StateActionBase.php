@@ -95,6 +95,21 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
     $directions = $this->getDirections();
 
     foreach ($directions as $direction => $direction_label) {
+      // Only NULL means there is no valid next state; a string such as '0' is
+      // a valid state.
+      $next_state = $this->getNextStateName($direction, $user, ...$named_parameters);
+
+      // TODO! doesn't handle proxy access!!!!!
+      $access = $action_link->checkAccess($direction, $next_state, $user, ...$named_parameters);
+      if (!$access->isAllowed()) {
+        // @todo Show a link to log in if the user doesn't have access but an
+        // authenticated user would. Determining this appears to be rather
+        // complicated, as we'd need to mock a user object to pass to access
+        // checks, but isAuthenticated() works by checking for the uid.
+        continue;
+      }
+
+
       $link = $this->getLink($action_link, $direction, $user, $named_parameters, $scalar_parameters);
 
       // We output an action link even if there is no link. This is so that if a
@@ -218,16 +233,6 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
 
       // TODO: decide if this happens per direction or for the whole linkset.
       if (!$this->checkOperability($action_link, ...$named_parameters)) {
-        return NULL;
-      }
-
-      // TODO! doesn't handle proxy access!!!!!
-      $access = $action_link->checkAccess($direction, $next_state, $user, ...$named_parameters);
-      if (!$access->isAllowed()) {
-        // @todo Show a link to log in if the user doesn't have access but an
-        // authenticated user would. Determining this appears to be rather
-        // complicated, as we'd need to mock a user object to pass to access
-        // checks, but isAuthenticated() works by checking for the uid.
         return NULL;
       }
 
