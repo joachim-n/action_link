@@ -111,16 +111,13 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
   public function getDynamicParametersFromRouteMatch(RouteMatchInterface $route_match): array;
 
   /**
-   * Checks whether the action is logically possible.
+   * Checks whether the action is logically possible in any direction.
    *
-   * This should not check any kind of user access, or check the state, TODO it is
-   * merely about whether the state of the site makes the action logically
-   * possible.
+   * This should not check any kind of user access, or check the state, it is
+   * merely about whether the general state of the site makes the action
+   * logically possible.
    *
    * For example:
-   *  - The action is to publish a node, and the node is currently published:
-   *    the operability is FALSE because the node is already in the desired
-   *    state.
    *  - The action is to increment a numeric field on an entity, but the field
    *    value is empty: the operability is FALSE because a NULL value can't be
    *    incremented.
