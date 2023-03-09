@@ -95,52 +95,10 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
     $directions = $this->getDirections();
 
     foreach ($directions as $direction => $direction_label) {
-      // Only NULL means there is no valid next state; a string such as '0' is
-      // a valid state.
-      $next_state = $this->getNextStateName($direction, $user, ...$named_parameters);
-
-      // TODO! doesn't handle proxy access!!!!!
-      $access = $action_link->checkAccess($direction, $next_state, $user, ...$named_parameters);
-      if (!$access->isAllowed()) {
-        // @todo Show a link to log in if the user doesn't have access but an
-        // authenticated user would. Determining this appears to be rather
-        // complicated, as we'd need to mock a user object to pass to access
-        // checks, but isAuthenticated() works by checking for the uid.
-        continue;
+      $link = $this->buildLink($action_link, $direction, $user, $named_parameters, $scalar_parameters);
+      if ($link) {
+        $build[$direction] = $link;
       }
-
-
-      $link = $this->getLink($action_link, $direction, $next_state, $user, $named_parameters, $scalar_parameters);
-
-      // We output an action link even if there is no link. This is so that if a
-      // link in another direction is used over AJAX, and causes the inactive
-      // direction to become available, then the empty SPAN is replaced by the
-      // AJAX with an active link. For example, suppose an action link adds a
-      // product to a shopping cart, with 'add' and 'remove' directions. When
-      // the cart is empty, only the 'add' direction link shows. Clicking this
-      // link takes the site to a state where the 'remove' direction is now
-      // valid and the link for that should show. Therefore, the AJAX
-      // replacement that occurs when the user clicks the 'add' link must
-      // replace both directions. Having an empty SPAN for the 'remove'
-      // direction means there is somewhere for the updated 'remove' link to go.
-      $build[$direction] = [
-        '#theme' => 'action_link',
-        '#link' => $link ? $link->toRenderable() : [],
-        '#direction' => $direction,
-        '#user' => $user,
-        '#dynamic_parameters' => $parameters,
-        '#attributes' => new Attribute([
-          'class' => [
-            'action-link',
-            'action-link-id-' . $action_link->id(),
-            'action-link-plugin-' . $this->getPluginId(),
-            'action-link-' . ($link ? 'present' : 'empty'),
-          ],
-        ]),
-      ];
-
-      // Set nofollow to prevent search bots from crawling anonymous links.
-      $build[$direction]['#link']['#attributes']['rel'][] = 'nofollow';
     }
 
     // Allow the link style plugin for this action link entity to modify the
@@ -148,6 +106,76 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
     if ($build) {
       $action_link->getLinkStylePlugin()->alterLinksBuild($build, $action_link, $user, $named_parameters, $scalar_parameters);
     }
+
+    return $build;
+  }
+
+  protected function buildLink($action_link, $direction, $user, $named_parameters, $scalar_parameters): ?array {
+    // Only NULL means there is no valid next state; a string such as '0' is
+    // a valid state.
+    $next_state = $this->getNextStateName($direction, $user, ...$named_parameters);
+
+    // TODO! doesn't handle proxy access!!!!!
+    // TODO: figure out passing assoc array to splat.
+    $access = $action_link->checkAccess($direction, $next_state, $user, ...array_values($named_parameters));
+    if (!$access->isAllowed()) {
+      // @todo Show a link to log in if the user doesn't have access but an
+      // authenticated user would. Determining this appears to be rather
+      // complicated, as we'd need to mock a user object to pass to access
+      // checks, but isAuthenticated() works by checking for the uid.
+      return NULL;
+    }
+
+    $label = $this->getLinkLabel($direction, $next_state, ...$named_parameters);
+
+    $route_parameters = [
+      'action_link' => $action_link->id(),
+      'link_style' => $action_link->getLinkStylePlugin()->getPluginId(),
+      'direction' => $direction,
+      'state' => $next_state,
+      'user' => $user->id(),
+    ];
+
+    // Add the dynamic parameters to the route parameters.
+    $route_parameters += $scalar_parameters;
+
+    $reachable = !is_null($next_state);
+
+    if ($reachable) {
+      $url = Url::fromRoute('action_link.action_link.' . $action_link->id(), $route_parameters);
+      $link = Link::fromTextAndUrl($label, $url);
+    }
+
+    // We output an action link even if there is no actual link to show because
+    // the state is not reachable in the given direction. This is so that if a
+    // link in another direction is used over AJAX, and causes the inactive
+    // direction to become available, then the empty SPAN is replaced by the
+    // AJAX with an active link. For example, suppose an action link adds a
+    // product to a shopping cart, with 'add' and 'remove' directions. When
+    // the cart is empty, only the 'add' direction link shows. Clicking this
+    // link takes the site to a state where the 'remove' direction is now
+    // valid and the link for that should show. Therefore, the AJAX
+    // replacement that occurs when the user clicks the 'add' link must
+    // replace both directions. Having an empty SPAN for the 'remove'
+    // direction means there is somewhere for the updated 'remove' link to go.
+    $build = [
+      '#theme' => 'action_link',
+      '#link' => $reachable ? $link->toRenderable() : [],
+      '#direction' => $direction,
+      '#user' => $user,
+      '#dynamic_parameters' => $named_parameters,
+      '#attributes' => new Attribute([
+        'class' => [
+          'action-link',
+          'action-link-id-' . $action_link->id(),
+          'action-link-plugin-' . $this->getPluginId(),
+          'action-link-' . ($reachable ? 'present' : 'empty'),
+        ],
+      ]),
+    ];
+
+    // Set nofollow to prevent search bots from crawling anonymous links.
+    $build['#link']['#attributes']['rel'][] = 'nofollow';
 
     return $build;
   }
