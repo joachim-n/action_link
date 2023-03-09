@@ -114,19 +114,22 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
     // Only NULL means there is no valid next state; a string such as '0' is
     // a valid state.
     $next_state = $this->getNextStateName($direction, $user, ...$named_parameters);
+    $reachable = !is_null($next_state);
 
-    // TODO! doesn't handle proxy access!!!!!
-    // TODO: figure out passing assoc array to splat.
-    $access = $action_link->checkAccess($direction, $next_state, $user, ...array_values($named_parameters));
-    if (!$access->isAllowed()) {
-      // @todo Show a link to log in if the user doesn't have access but an
-      // authenticated user would. Determining this appears to be rather
-      // complicated, as we'd need to mock a user object to pass to access
-      // checks, but isAuthenticated() works by checking for the uid.
-      return NULL;
+    if ($reachable) {
+      // Check access if the state is reachable. If the state is not reachable,
+      // we can't check access but output an empty link anyway.
+      // TODO! doesn't handle proxy access!!!!!
+      // TODO: figure out passing assoc array to splat.
+      $access = $action_link->checkAccess($direction, $next_state, $user, ...array_values($named_parameters));
+      if (!$access->isAllowed()) {
+        // @todo Show a link to log in if the user doesn't have access but an
+        // authenticated user would. Determining this appears to be rather
+        // complicated, as we'd need to mock a user object to pass to access
+        // checks, but isAuthenticated() works by checking for the uid.
+        return NULL;
+      }
     }
-
-    $label = $this->getLinkLabel($direction, $next_state, ...$named_parameters);
 
     $route_parameters = [
       'action_link' => $action_link->id(),
@@ -139,9 +142,8 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
     // Add the dynamic parameters to the route parameters.
     $route_parameters += $scalar_parameters;
 
-    $reachable = !is_null($next_state);
-
     if ($reachable) {
+      $label = $this->getLinkLabel($direction, $next_state, ...$named_parameters);
       $url = Url::fromRoute('action_link.action_link.' . $action_link->id(), $route_parameters);
       $link = Link::fromTextAndUrl($label, $url);
     }
