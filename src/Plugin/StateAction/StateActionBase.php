@@ -110,7 +110,7 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
       }
 
 
-      $link = $this->getLink($action_link, $direction, $user, $named_parameters, $scalar_parameters);
+      $link = $this->getLink($action_link, $direction, $next_state, $user, $named_parameters, $scalar_parameters);
 
       // We output an action link even if there is no link. This is so that if a
       // link in another direction is used over AJAX, and causes the inactive
@@ -197,6 +197,8 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
    *   The action link entity.
    * @param string $direction
    *   The direction for the link.
+   * @param string $state
+   *   The state for the link.
    * @param \Drupal\Core\Session\AccountInterface $user
    *   The user to get the link for.
    * @param array $named_parameters
@@ -211,18 +213,15 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
    *   A link object, or NULL if there is no valid link for the given
    *   parameters.
    */
-  protected function getLink(ActionLinkInterface $action_link, string $direction, AccountInterface $user, $named_parameters, $scalar_parameters): ?Link {
-    // Only NULL means there is no valid next state; a string such as '0' is
-    // a valid state.
-    $next_state = $this->getNextStateName($direction, $user, ...$named_parameters);
-    if (!is_null($next_state)) {
-      $label = $this->getLinkLabel($direction, $next_state, ...$named_parameters);
+  protected function getLink(ActionLinkInterface $action_link, string $direction, string $state, AccountInterface $user, $named_parameters, $scalar_parameters): ?Link {
+    if (!is_null($state)) {
+      $label = $this->getLinkLabel($direction, $state, ...$named_parameters);
 
       $route_parameters = [
         'action_link' => $action_link->id(),
         'link_style' => $action_link->getLinkStylePlugin()->getPluginId(),
         'direction' => $direction,
-        'state' => $next_state,
+        'state' => $state,
         'user' => $user->id(),
       ];
 
