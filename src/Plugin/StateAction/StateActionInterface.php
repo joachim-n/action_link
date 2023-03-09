@@ -70,9 +70,10 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
    * @param [type] $user
    *
    * @return string|null
-   *   The name of the next state for the action, !!! in the given direction if
-   *   this action defines directions. If there is no valid state, NULL is
-   *   returned.
+   *   The name of the next state in the given direction for the action. If
+   *   there is no valid state, NULL is returned. The return value should be
+   *   checked against is_null() rather than empty(), as a value such as '0' can
+   *   be a valid state name.
    */
   public function getNextStateName(string $direction, AccountInterface $user): ?string;
 
