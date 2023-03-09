@@ -81,6 +81,13 @@ interface ActionLinkInterface extends ConfigEntityInterface, EntityWithPluginCol
    */
   public function getLinkStylePlugin(): ActionLinkStyleInterface;
 
+  /**
+   * Defines permissions for the action link.
+   *
+   * @return array
+   *   An array of permissions, in the same format as that returned by a
+   *   permissions provider.
+   */
   public function getPermissions(): array;
 
 }
