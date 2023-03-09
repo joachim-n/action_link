@@ -38,6 +38,20 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
   public function buildLinkSet(ActionLinkInterface $action_link, AccountInterface $user, ...$parameters): array;
 
   /**
+   * Validates the dynamic parameters.
+   *
+   * This is called by buildLinkSet().
+   *
+   * @param array $parameters
+   *   The dynamic parameters, keyed by the names defined in the plugin
+   *   annotation.
+   *
+   * @throws \Throwable
+   *   Throws an error or exception if the parameters are invalid.
+   */
+  public function validateParameters(array $parameters);
+
+  /**
    * Gets the action link for a specific direction.
    *
    * @internal This is liable to change if I work out a way for the plugin to be

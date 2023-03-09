@@ -376,11 +376,7 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
   }
 
   /**
-   * Validates the dynamic parameters.
-   *
-   * @param array $parameters
-   *   The dynamic parameters, keyed by the names defined in the plugin
-   *   annotation.
+   * {@inheritdoc}
    */
   public function validateParameters(array $parameters) {
 
