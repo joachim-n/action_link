@@ -317,6 +317,8 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
   /**
    * Gets the associative indexes for the dynamic parameters.
    *
+   * TODO rename getDynamicParameterValuesByName
+   *
    * @param array $parameters
    *   The dynamic parameters as a numeric array.
    *
