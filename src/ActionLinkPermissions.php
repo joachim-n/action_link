@@ -17,7 +17,8 @@ class ActionLinkPermissions {
    */
   public function permissions(): array {
     $permissions = [];
-    // Generate permissions for each TODO
+
+    // Get permissions from each action link entity.
     $action_links = \Drupal::service('entity_type.manager')->getStorage('action_link')->loadMultiple();
     uasort($action_links, ConfigEntityBase::class . '::sort');
 
