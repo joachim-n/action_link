@@ -16,7 +16,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Routing\Route;
 
 /**
- * TODO: class docs.
+ * State action plugin for controlling a workflow.
  *
  * Directions are not declared in the annotation, but are derived from the
  * associated workflow entity's transitions.
@@ -205,7 +205,8 @@ class Workflow extends StateActionBase implements ContainerFactoryPluginInterfac
 
     $route->setOption('parameters', [
       'entity' => [
-        'type' => 'entity:node', // TODO!!!
+        // @todo Set the entity based on configuration.
+        'type' => 'entity:node',
       ],
     ]);
 
