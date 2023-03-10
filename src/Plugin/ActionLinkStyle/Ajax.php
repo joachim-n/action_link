@@ -139,7 +139,7 @@ class Ajax extends ActionLinkStyleBase implements ContainerFactoryPluginInterfac
         $response->addCommand($message_command);
       }
     }
-    // TODO: 'nope' message
+    // @todo: Show a message if the action was not completed.
 
     return $response;
   }
