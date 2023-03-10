@@ -89,7 +89,7 @@ class OptionsField extends EntityFieldStateActionBase {
   /**
    * {@inheritdoc}
    */
-  public function advanceState(AccountInterface $account, string $state, array $parameters) {
+  public function advanceState(AccountInterface $account, string $state, ...$parameters) {
     list($entity) = $parameters;
 
     $field_name = $this->configuration['field'];

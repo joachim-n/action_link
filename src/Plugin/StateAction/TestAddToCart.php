@@ -64,7 +64,7 @@ class TestAddToCart extends StateActionBase {
   /**
    * {@inheritdoc}
    */
-  public function advanceState(AccountInterface $account, string $state, array $parameters) {
+  public function advanceState(AccountInterface $account, string $state, ...$parameters) {
     \Drupal::state()->set('test_add_to_cart:count', $state);
   }
 

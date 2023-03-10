@@ -32,7 +32,7 @@ class TestAlways extends StateActionBase {
   /**
    * {@inheritdoc}
    */
-  public function advanceState(AccountInterface $account, string $state, array $parameters) {
+  public function advanceState(AccountInterface $account, string $state, ...$parameters) {
   }
 
   /**

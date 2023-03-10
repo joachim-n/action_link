@@ -155,7 +155,7 @@ class Workflow extends StateActionBase implements ContainerFactoryPluginInterfac
   /**
    * {@inheritdoc}
    */
-  public function advanceState($account, $state, $parameters) {
+  public function advanceState($account, $state, ...$parameters) {
     // Undocumented function.
   }
 

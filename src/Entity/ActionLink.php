@@ -138,7 +138,7 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
 
   // controller already done access. but not operability access!? or has it? DECIDE
   public function advanceState(AccountInterface $account, string $state, ...$parameters) {
-    $this->getStateActionPlugin()->advanceState($account, $state, $parameters);
+    $this->getStateActionPlugin()->advanceState($account, $state, ...$parameters);
   }
 
   /**
