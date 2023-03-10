@@ -28,10 +28,10 @@ use Drupal\Core\Url;
  *    states, 'published' and 'unpublished', and one direction, which is simply
  *    to toggle between the two states. At any time, only one state is reachable
  *    because the other state is current.
- *  - An action link which increments or decrements a boolean field on an entity
- *    has two directions, 'inc' and 'dec', and an infinite number of states. At
- *    any time, only two states are reachable: the values one less and one
- *    greated than the current value.
+ *  - An action link which increments or decrements an integer field on an
+ *    entity has two directions, 'inc' and 'dec', and an infinite number of
+ *    states. At any time, only two states are reachable: the values one less
+ *    and one greated than the current value.
  *  - An action link which adds a product to the user's cart has two directions,
  *    'add' and 'remove', and an infinite number of states. If the cart has
  *    no items for that product, only one state is reachable, otherwise two
@@ -42,7 +42,7 @@ use Drupal\Core\Url;
  *    direction. For example, if an action link toggles a boolean field on an
  *    entity, it is only considered operable when the field on an entity has a
  *    value. The operability of an action link means no directions can be used.
- *    In this situation, only another type of change in the site will allow an
+ *    In this situation, only another type of change to the site will allow an
  *    action link to become operable.
  *  - Reachability: Whether the given target state makes sense from the current
  *    state. The reachability of a state can change if the action link's state
