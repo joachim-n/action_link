@@ -52,8 +52,6 @@ class ActionLinkController {
     $link_style_plugin = \Drupal::service('plugin.manager.action_link_style')->createInstance($link_style);
 
 
-    // array_slice($route_match->getParameters()->all(), 4);
-
     // dump($route_match->getParameters()->all());
     // dump($parameters);
 
