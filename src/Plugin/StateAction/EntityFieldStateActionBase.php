@@ -109,7 +109,7 @@ abstract class EntityFieldStateActionBase extends StateActionBase implements Con
 
     $route->setOption('parameters', [
       'entity' => [
-        'type' => 'entity:node', // TODO!!!
+        'type' => 'entity:' . $this->configuration['entity_type_id'],
       ],
     ]);
 
