@@ -17,7 +17,6 @@ class ActionLinkForm extends EntityForm {
   public function form(array $form, FormStateInterface $form_state) {
     $form = parent::form($form, $form_state);
 
-    // TODO 'add' title.
     // TODO: redirect, needed for Add action.
 
     // Workaround for https://www.drupal.org/project/drupal/issues/2360639.
