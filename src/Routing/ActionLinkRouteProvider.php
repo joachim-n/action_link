@@ -45,6 +45,9 @@ class ActionLinkRouteProvider {
       /** @var \Drupal\action_link\Entity\ActionLinkInterface $action_link_entity */
       $state_action_plugin = $action_link_entity->getStateActionPlugin();
 
+      // Let the action link plugin define the route. This allows dynamic
+      // parameters to be defined in the route, which allows validation and
+      // upcasting within the routing system.
       $routes['action_link.action_link.' . $action_link_id] = $state_action_plugin->getActionRoute($action_link_entity);
     }
 

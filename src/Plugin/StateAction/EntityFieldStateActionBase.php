@@ -104,6 +104,9 @@ abstract class EntityFieldStateActionBase extends StateActionBase implements Con
 
   */
 
+  /**
+   * {@inheritdoc}
+   */
   public function getActionRoute(ActionLinkInterface $action_link): Route {
     $route = parent::getActionRoute($action_link);
 
