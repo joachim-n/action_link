@@ -223,7 +223,7 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
   public function checkReachable(string $direction, string $state, AccountInterface $account, ...$parameters): bool {
     $next_state = $this->getStateActionPlugin()->getNextStateName($direction, $account, ...$parameters);
 
-    return ($next_state == $state);
+    return ($next_state === $state);
   }
 
   /**
