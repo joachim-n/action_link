@@ -68,7 +68,7 @@ class ActionLinkController {
     // the user the action has done nothing because the system is already in the
     // state they wish to take it to.
     $operable = $state_action_plugin->checkOperability($action_link, ...$parameters);
-    $reachable = $action_link->validateTargetState($direction, $state, $user, ...$parameters);
+    $reachable = $action_link->checkReachable($direction, $state, $user, ...$parameters);
 
     if ($operable && $reachable) {
       $action_link->advanceState($user, $state, ...$parameters);

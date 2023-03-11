@@ -34,7 +34,7 @@ interface ActionLinkInterface extends ConfigEntityInterface, EntityWithPluginCol
    * @return bool
    *   TRUE if the target state is valid, FALSE if it is not.
    */
-  public function validateTargetState(string $direction, string $state, AccountInterface $account, ...$parameters): bool;
+  public function checkReachable(string $direction, string $state, AccountInterface $account, ...$parameters): bool;
 
   /**
    * Checks access to use a link.
