@@ -51,22 +51,16 @@ class ActionLinkController {
     // overriding the action link's configured style in theming.
     $link_style_plugin = \Drupal::service('plugin.manager.action_link_style')->createInstance($link_style);
 
-
-    // dump($route_match->getParameters()->all());
-    // dump($parameters);
-
-    // TODO: validate!
-
-    // TODO tweak. Access is already checked, which covers whether the user is allowed to
+    // Access is already checked, which covers whether the user is allowed to
     // use the action link on the given parameters. We now check whether the
-    // link is operable and the  state is valid. Unlike the access check, an
-    // operability check check fails without error. This is because the user
-    // could simply have clicked an action link which was output before a change
-    // to the system made it obsolete. For example, user A loads a page on which
-    // is a 'publish node' action link. Meanwhile, user B publishes the node.
-    // User A then clicks the link. This should either fail silently, or tell
-    // the user the action has done nothing because the system is already in the
-    // state they wish to take it to.
+    // link is operable and the state is reachable. Unlike the access check,
+    // these checks fail without error. This is because the user could simply
+    // have clicked an action link which was output before a change to the
+    // system made it obsolete. For example, user A loads a page on which is a
+    // 'publish node' action link. Meanwhile, user B publishes the node. User A
+    // then clicks the link. This should either fail silently, or tell the user
+    // the action has done nothing because the system is already in the state
+    // they wish to take it to.
     $operable = $state_action_plugin->checkOperability($action_link, ...$parameters);
     $reachable = $action_link->checkReachable($direction, $state, $user, ...$parameters);
 
