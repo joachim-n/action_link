@@ -50,7 +50,7 @@ class ActionLinkComputedFieldAttachingKernelTest extends KernelTestBase {
    */
   protected $entityDisplayRepository;
 
-  // TODOARGH
+  // @todo Argh! Figure this out!
   protected $strictConfigSchema = 0;
 
   /**
