@@ -17,8 +17,6 @@ class ActionLinkForm extends EntityForm {
   public function form(array $form, FormStateInterface $form_state) {
     $form = parent::form($form, $form_state);
 
-    // TODO: redirect, needed for Add action.
-
     // Workaround for https://www.drupal.org/project/drupal/issues/2360639.
     $form_state->disableCache();
 
@@ -117,6 +115,8 @@ class ActionLinkForm extends EntityForm {
     elseif ($status == SAVED_NEW) {
       $this->messenger()->addStatus($this->t('The action link %name has been added.', $t_args));
     }
+
+    $form_state->setRedirectUrl($this->entity->toUrl('collection'));
 
     return $status;
   }
