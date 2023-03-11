@@ -75,8 +75,7 @@ class ActionLinkController {
     }
 
     return $link_style_plugin->handleActionRequest(
-      // TODO - operable? or do we just mean reachable here???
-      $operable,
+      $operable && $reachable,
       $request,
       $route_match,
       $action_link,
