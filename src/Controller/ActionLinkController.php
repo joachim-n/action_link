@@ -9,7 +9,6 @@ use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\user\UserInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -108,10 +107,6 @@ class ActionLinkController {
       // @todo Implement proxy use of action links.
       return AccessResult::forbidden();
     }
-
-    // @todo Validate direction and parameters
-    // TODO. validate $parameters, state, user with the plugin?
-    // or is that done above??
 
     return $action_link->checkAccess($direction, $state, $user, ...$parameters);
   }
