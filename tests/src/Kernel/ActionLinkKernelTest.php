@@ -18,7 +18,7 @@ use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 /**
- * Test case class TODO.
+ * Tests basic operation of action links.
  *
  * @group action_link
  */
@@ -81,6 +81,49 @@ class ActionLinkKernelTest extends KernelTestBase {
 
   }
 
+  public function testNewRenameMe() {
+    $action_link = $this->actionLinkStorage->create([
+      'id' => 'test_mocked_control',
+      'label' => 'Test',
+      'plugin_id' => 'test_mocked_control',
+      'plugin_config' => [],
+      'link_style' => 'nojs',
+    ]);
+    $action_link->save();
+
+    $user_no_access = $this->createUser();
+
+    $this->state->set('test_mocked_control:permission_access', AccessResult::forbidden());
+    $this->state->set('test_mocked_control:operand_access', AccessResult::forbidden());
+    $links = $action_link->buildLinkSet($user_no_access);
+    $this->assertEmpty($links);
+
+    $this->state->set('test_mocked_control:permission_access', AccessResult::allowed());
+    $this->state->set('test_mocked_control:operand_access', AccessResult::forbidden());
+    $links = $action_link->buildLinkSet($user_no_access);
+    $this->assertEmpty($links);
+
+    $this->state->set('test_mocked_control:permission_access', AccessResult::forbidden());
+    $this->state->set('test_mocked_control:operand_access', AccessResult::allowed());
+    $links = $action_link->buildLinkSet($user_no_access);
+    $this->assertEmpty($links);
+
+    $this->state->set('test_mocked_control:permission_access', AccessResult::allowed());
+    $this->state->set('test_mocked_control:operand_access', AccessResult::allowed());
+    $this->state->set('test_mocked_control:operability', FALSE);
+    $links = $action_link->buildLinkSet($user_no_access);
+    $this->assertEmpty($links);
+
+    $this->state->set('test_mocked_control:permission_access', AccessResult::allowed());
+    $this->state->set('test_mocked_control:operand_access', AccessResult::allowed());
+    $this->state->set('test_mocked_control:operability', TRUE);
+    $links = $action_link->buildLinkSet($user_no_access);
+    $this->assertNotEmpty($links);
+    // TWO directions, one reacable?
+
+
+  }
+
   /**
    * Tests building action links, and that access is checked.
    */
@@ -113,12 +156,16 @@ class ActionLinkKernelTest extends KernelTestBase {
     // Deny access.
     $this->state->set('test_mocked_access:access', FALSE);
     $links = $action_link->buildLinkSet($user_no_access);
+    dump($links);
     $this->assertEmpty($links);
 
     // Grant access.
     $this->state->set('test_mocked_access:access', TRUE);
     $links = $action_link->buildLinkSet($user_no_access);
     $this->assertNotEmpty($links);
+
+    // TODO: operability: NO link
+    // TODO: reachability: LINK!
   }
 
   /**
@@ -250,6 +297,8 @@ class ActionLinkKernelTest extends KernelTestBase {
     $messages = $this->messenger->messagesByType(MessengerInterface::TYPE_STATUS);
     $this->assertEquals([0 => 'Changed'], $messages);
     $this->messenger->deleteAll();
+
+    // TODO: reachability
   }
 
 
