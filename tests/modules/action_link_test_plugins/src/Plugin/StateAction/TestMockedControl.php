@@ -26,7 +26,8 @@ class TestMockedControl extends StateActionBase {
    * {@inheritdoc}
    */
   public function getNextStateName(string $direction, AccountInterface $user): ?string {
-    return 'cake';
+    $state = \Drupal::state()->get('test_mocked_control:next_state', NULL);
+    return $state;
   }
 
   /**

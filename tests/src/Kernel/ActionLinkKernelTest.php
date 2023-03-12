@@ -114,14 +114,16 @@ class ActionLinkKernelTest extends KernelTestBase {
     $links = $action_link->buildLinkSet($user_no_access);
     $this->assertEmpty($links);
 
-    $this->state->set('test_mocked_control:permission_access', AccessResult::allowed());
-    $this->state->set('test_mocked_control:operand_access', AccessResult::allowed());
     $this->state->set('test_mocked_control:operability', TRUE);
     $links = $action_link->buildLinkSet($user_no_access);
     $this->assertNotEmpty($links);
-    // TWO directions, one reacable?
+    // The actual link is empty, because the next state is not reachable.
+    $this->assertEmpty($links['change']['#link']);
 
-
+    $this->state->set('test_mocked_control:next_state', 'cake');
+    $links = $action_link->buildLinkSet($user_no_access);
+    $this->assertNotEmpty($links);
+    $this->assertNotEmpty($links['change']['#link']);
   }
 
   /**
