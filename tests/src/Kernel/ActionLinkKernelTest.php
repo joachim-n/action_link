@@ -130,9 +130,9 @@ class ActionLinkKernelTest extends KernelTestBase {
   }
 
   /**
-   * Tests access to an action link's route.
+   * Tests building of action link routes.
    */
-  public function testRouteAccess() {
+  public function testRouteBuilding() {
     // Mock the CSRF token access check so we don't need to pass them in to
     // our requests.
     $csrf_access = $this->prophesize(CsrfAccessCheck::class);
@@ -154,7 +154,6 @@ class ActionLinkKernelTest extends KernelTestBase {
 
     $request = Request::create("/action-link/test_always_1/nojs/change/cake/{$this->user->id()}");
     $response = $http_kernel->handle($request);
-    // Simulate the kernel shutdown rebuilding the router.
     $this->assertEquals(Response::HTTP_FOUND, $response->getStatusCode());
 
     // Test a new action link gets a route.
@@ -193,8 +192,12 @@ class ActionLinkKernelTest extends KernelTestBase {
     $request = Request::create("/action-link/test_always_2b/nojs/change/cake/{$this->user->id()}");
     $response = $http_kernel->handle($request);
     $this->assertEquals(Response::HTTP_NOT_FOUND, $response->getStatusCode());
+  }
 
-    // Test access on action link routes.
+  /**
+   * Tests access to an action link's route.
+   */
+  public function testRouteAccess() {
     $action_link = $this->actionLinkStorage->create([
       'id' => 'test_mocked_access',
       'label' => 'Test',
