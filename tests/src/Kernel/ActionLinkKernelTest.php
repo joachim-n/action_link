@@ -81,8 +81,11 @@ class ActionLinkKernelTest extends KernelTestBase {
 
   }
 
-  public function testNewRenameMe() {
-    $action_link = $this->actionLinkStorage->create([
+ /*
+  * Tests building action links, and that access and operability are checked.
+  */
+ public function testLinkGeneration() {
+   $action_link = $this->actionLinkStorage->create([
       'id' => 'test_mocked_control',
       'label' => 'Test',
       'plugin_id' => 'test_mocked_control',
@@ -124,50 +127,6 @@ class ActionLinkKernelTest extends KernelTestBase {
     $links = $action_link->buildLinkSet($user_no_access);
     $this->assertNotEmpty($links);
     $this->assertNotEmpty($links['change']['#link']);
-  }
-
-  /**
-   * Tests building action links, and that access is checked.
-   */
-  public function testLinkGeneration() {
-    $action_link = $this->actionLinkStorage->create([
-      'id' => 'test_null',
-      'label' => 'Test',
-      'plugin_id' => 'test_null',
-      'plugin_config' => [],
-      'link_style' => 'nojs',
-    ]);
-    $action_link->save();
-
-    $user_no_access = $this->createUser();
-    // We need to set the user we check for as the current user, as route access
-    // is checked when generating links.
-    $this->setCurrentUser($user_no_access);
-    $links = $action_link->buildLinkSet($user_no_access);
-    $this->assertEmpty($links);
-
-    $action_link = $this->actionLinkStorage->create([
-      'id' => 'test_mocked_access',
-      'label' => 'Test',
-      'plugin_id' => 'test_mocked_access',
-      'plugin_config' => [],
-      'link_style' => 'nojs',
-    ]);
-    $action_link->save();
-
-    // Deny access.
-    $this->state->set('test_mocked_access:access', FALSE);
-    $links = $action_link->buildLinkSet($user_no_access);
-    dump($links);
-    $this->assertEmpty($links);
-
-    // Grant access.
-    $this->state->set('test_mocked_access:access', TRUE);
-    $links = $action_link->buildLinkSet($user_no_access);
-    $this->assertNotEmpty($links);
-
-    // TODO: operability: NO link
-    // TODO: reachability: LINK!
   }
 
   /**
