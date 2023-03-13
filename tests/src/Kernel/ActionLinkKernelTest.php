@@ -145,7 +145,11 @@ class ActionLinkKernelTest extends KernelTestBase {
 
     $request = Request::create("/action-link/test_mocked_control/nojs/change/cake/{$user_no_access->id()}");
     $response = $http_kernel->handle($request);
-    $this->assertEquals(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+    $this->assertEquals(Response::HTTP_FOUND, $response->getStatusCode());
+
+    $messages = $this->messenger->messagesByType(MessengerInterface::TYPE_STATUS);
+    $this->assertEquals([0 => 'Unable to perform the action. The link may be outdated.'], $messages);
+    $this->messenger->deleteAll();
 
     // Operable, but next state not reachable.
     $this->state->set('test_mocked_control:operability', TRUE);
@@ -168,6 +172,10 @@ class ActionLinkKernelTest extends KernelTestBase {
     $links = $action_link->buildLinkSet($user_no_access);
     $this->assertNotEmpty($links);
     $this->assertNotEmpty($links['change']['#link']);
+
+    $request = Request::create("/action-link/test_mocked_control/nojs/change/cake/{$user_no_access->id()}");
+    $response = $http_kernel->handle($request);
+    $this->assertEquals(Response::HTTP_FOUND, $response->getStatusCode());
 
     $messages = $this->messenger->messagesByType(MessengerInterface::TYPE_STATUS);
     $this->assertEquals([0 => 'Changed'], $messages);

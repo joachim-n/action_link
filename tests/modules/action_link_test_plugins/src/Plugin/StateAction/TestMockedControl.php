@@ -45,6 +45,9 @@ class TestMockedControl extends StateActionBase {
     return $operability;
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function checkPermissionAccess(ActionLinkInterface $action_link, string $direction, string $state, AccountInterface $account, ...$parameters): AccessResult {
     $access = \Drupal::state()->get('test_mocked_control:permission_access', AccessResult::neutral());
     return $access;
@@ -56,11 +59,6 @@ class TestMockedControl extends StateActionBase {
   public function checkOperandAccess(ActionLinkInterface $action_link, string $direction, string $state, AccountInterface $account, ...$parameters): AccessResult {
     $access = \Drupal::state()->get('test_mocked_control:operand_access', AccessResult::neutral());
     return $access;
-    // match ($access) {
-    //   NULL => AccessResult::neutral(),
-    //   FALSE => AccessResult::forbidden(),
-    //   TRUE => AccessResult::allowed(),
-    // };
   }
 
   /**
