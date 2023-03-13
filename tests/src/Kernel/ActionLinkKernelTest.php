@@ -94,39 +94,84 @@ class ActionLinkKernelTest extends KernelTestBase {
     ]);
     $action_link->save();
 
-    $user_no_access = $this->createUser();
+    // Checking access to routes requires the current user to be set up.
+    // TODO: Change this when we add proxy functionality.
+    $user_no_access = $this->setUpCurrentUser();
 
+    $http_kernel = $this->container->get('http_kernel');
+
+    // Mock the CSRF token access check so we don't need to pass them in to
+    // our requests.
+    $csrf_access = $this->prophesize(CsrfAccessCheck::class);
+    $csrf_access->access(Argument::cetera())->willReturn(AccessResult::allowed());
+    $this->container->set('access_check.csrf', $csrf_access->reveal());
+
+    // No access at all.
     $this->state->set('test_mocked_control:permission_access', AccessResult::forbidden());
     $this->state->set('test_mocked_control:operand_access', AccessResult::forbidden());
     $links = $action_link->buildLinkSet($user_no_access);
     $this->assertEmpty($links);
 
+    $request = Request::create("/action-link/test_mocked_control/nojs/change/cake/{$user_no_access->id()}");
+    $response = $http_kernel->handle($request);
+    $this->assertEquals(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+
+    // Permission access only.
     $this->state->set('test_mocked_control:permission_access', AccessResult::allowed());
     $this->state->set('test_mocked_control:operand_access', AccessResult::forbidden());
     $links = $action_link->buildLinkSet($user_no_access);
     $this->assertEmpty($links);
 
+    $request = Request::create("/action-link/test_mocked_control/nojs/change/cake/{$user_no_access->id()}");
+    $response = $http_kernel->handle($request);
+    $this->assertEquals(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+
+    // Operand access only.
     $this->state->set('test_mocked_control:permission_access', AccessResult::forbidden());
     $this->state->set('test_mocked_control:operand_access', AccessResult::allowed());
     $links = $action_link->buildLinkSet($user_no_access);
     $this->assertEmpty($links);
 
+    $request = Request::create("/action-link/test_mocked_control/nojs/change/cake/{$user_no_access->id()}");
+    $response = $http_kernel->handle($request);
+    $this->assertEquals(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+
+    // Both access, but not operable.
     $this->state->set('test_mocked_control:permission_access', AccessResult::allowed());
     $this->state->set('test_mocked_control:operand_access', AccessResult::allowed());
     $this->state->set('test_mocked_control:operability', FALSE);
     $links = $action_link->buildLinkSet($user_no_access);
     $this->assertEmpty($links);
 
+    $request = Request::create("/action-link/test_mocked_control/nojs/change/cake/{$user_no_access->id()}");
+    $response = $http_kernel->handle($request);
+    $this->assertEquals(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+
+    // Operable, but next state not reachable.
     $this->state->set('test_mocked_control:operability', TRUE);
     $links = $action_link->buildLinkSet($user_no_access);
     $this->assertNotEmpty($links);
     // The actual link is empty, because the next state is not reachable.
     $this->assertEmpty($links['change']['#link']);
 
+    // The request is OK, but does nothing.
+    $request = Request::create("/action-link/test_mocked_control/nojs/change/cake/{$user_no_access->id()}");
+    $response = $http_kernel->handle($request);
+    $this->assertEquals(Response::HTTP_FOUND, $response->getStatusCode());
+
+    $messages = $this->messenger->messagesByType(MessengerInterface::TYPE_STATUS);
+    $this->assertEquals([0 => 'Unable to perform the action. The link may be outdated.'], $messages);
+    $this->messenger->deleteAll();
+
+    // All systems go!
     $this->state->set('test_mocked_control:next_state', 'cake');
     $links = $action_link->buildLinkSet($user_no_access);
     $this->assertNotEmpty($links);
     $this->assertNotEmpty($links['change']['#link']);
+
+    $messages = $this->messenger->messagesByType(MessengerInterface::TYPE_STATUS);
+    $this->assertEquals([0 => 'Changed'], $messages);
+    $this->messenger->deleteAll();
   }
 
   /**
@@ -207,6 +252,8 @@ class ActionLinkKernelTest extends KernelTestBase {
     ]);
     $action_link->save();
     \Drupal::service('router.builder')->rebuildIfNeeded();
+
+    $http_kernel = $this->container->get('http_kernel');
 
     // Deny access.
     $this->state->set('test_mocked_access:access', FALSE);
