@@ -177,7 +177,9 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
     ];
 
     // Set nofollow to prevent search bots from crawling anonymous links.
-    $build['#link']['#attributes']['rel'][] = 'nofollow';
+    if ($build['#link']) {
+      $build['#link']['#attributes']['rel'][] = 'nofollow';
+    }
 
     return $build;
   }
