@@ -152,11 +152,18 @@ class Ajax extends ActionLinkStyleBase implements ContainerFactoryPluginInterfac
   /**
    * Creates a unique HTML class for an action link.
    *
+   * We don't use \Drupal\Component\Utility\Html\HTML::getUniqueId() because we
+   * want the same class to be used on all instances of the same action link, so
+   * that they are all replaced.
+   *
    * @param \Drupal\action_link\Entity\ActionLinkInterface $action_link
    *   The action link entity.
    * @param string $direction
+   *   The direction.
    * @param \Drupal\Core\Session\AccountInterface $user
-   * @param [type] ...$scalar_parameters
+   *   The user account the action is for.
+   * @param mixed ...$scalar_parameters
+   *   The dynamic parameters for the action.
    *
    * @return string
    *   A CSS class.
