@@ -129,13 +129,6 @@ class Workflow extends StateActionBase implements ContainerFactoryPluginInterfac
     return $transition->to()->id();
   }
 
-  // /**
-  //  * {@inheritdoc}
-  //  */
-  // public function getLink(ActionLinkInterface $action_link, string $direction, AccountInterface $user): ?Link {
-  //   // Gets the action link for a specific direction.
-  // }
-
   /**
    * {@inheritdoc}
    */
@@ -170,11 +163,12 @@ class Workflow extends StateActionBase implements ContainerFactoryPluginInterfac
    * {@inheritdoc}
    */
   public function checkAccess(string $direction, string $state, AccountInterface $account, ...$parameters): AccessResult {
+    // @todo Implement this properly.
     return AccessResult::allowed();
   }
 
   public function checkOperandAccess(ActionLinkInterface $action_link, string $direction, string $state, AccountInterface $account, ...$parameters): AccessResult {
-    // TODO! implement properly!
+    // @todo Implement this properly.
     return AccessResult::allowed();
   }
 
@@ -182,7 +176,8 @@ class Workflow extends StateActionBase implements ContainerFactoryPluginInterfac
    * {@inheritdoc}
    */
   public function getMessage(string $direction, string $state, ...$parameters): string {
-    return 'boop';
+    // @todo Implement this properly.
+    return 'Workflow state changed.';
   }
 
 
@@ -193,8 +188,6 @@ class Workflow extends StateActionBase implements ContainerFactoryPluginInterfac
     $parameters = parent::convertParametersForRoute($parameters);
 
     // Convert the entity parameter to an entity ID.
-    // TODO: this needs to be able to complain if a param is bad.
-    // e.g. no node exists.
     $parameters['entity'] = $parameters['entity']->id();
 
     return $parameters;
