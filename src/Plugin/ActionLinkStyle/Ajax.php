@@ -133,15 +133,18 @@ class Ajax extends ActionLinkStyleBase implements ContainerFactoryPluginInterfac
 
     if ($action_completed) {
       $message = $action_link->getStateActionPlugin()->getMessage($direction, $state, ...$parameters);
-      if ($message) {
-        $selector = '.' . $this->createCssIdentifier($action_link, $direction, $user, ...$raw_dynamic_parameters);
-
-        // Add a message command to the stack.
-        $message_command = new ActionLinkMessageCommand($selector, $message);
-        $response->addCommand($message_command);
-      }
     }
-    // @todo: Show a message if the action was not completed.
+    else {
+      $message = $action_link->getStateActionPlugin()->getFailureMessage($direction, $state, ...$parameters);
+    }
+
+    if ($message) {
+      $selector = '.' . $this->createCssIdentifier($action_link, $direction, $user, ...$raw_dynamic_parameters);
+
+      // Add a message command to the stack.
+      $message_command = new ActionLinkMessageCommand($selector, $message);
+      $response->addCommand($message_command);
+    }
 
     return $response;
   }

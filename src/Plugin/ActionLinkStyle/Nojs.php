@@ -73,13 +73,13 @@ class Nojs extends ActionLinkStyleBase implements ContainerFactoryPluginInterfac
   public function handleActionRequest(bool $action_completed, Request $request, RouteMatchInterface $route_match, ActionLinkInterface $action_link, string $direction, string $state, UserInterface $user, ...$parameters): Response {
     if ($action_completed) {
       $message = $action_link->getStateActionPlugin()->getMessage($direction, $state, ...$parameters);
-      if ($message) {
-        $this->messenger->addMessage($message);
-      }
     }
     else {
-      // @todo Make this customizable.
-      $this->messenger->addMessage('Unable to perform the action. The link may be outdated.');
+      $message = $action_link->getStateActionPlugin()->getFailureMessage($direction, $state, ...$parameters);
+    }
+
+    if ($message) {
+      $this->messenger->addMessage($message);
     }
 
     // Redirect to the referrer.
