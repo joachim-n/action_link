@@ -234,6 +234,19 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
   public function getMessage(string $direction, string $state, ...$parameters): string;
 
   /**
+   * Gets the message to show the user when an action cannot be completed.
+   *
+   * @param string $state
+   *   The state that has been arrived at.
+   * @param mixed ...$parameters
+   *   The parameters.
+   *
+   * @return string
+   *   The message string. If this is empty then no message should be shown.
+   */
+  public function getFailureMessage(string $direction, string $state, ...$parameters): string;
+
+  /**
    * Defines the route for an action link entity.
    *
    * @param \Drupal\action_link\Entity\ActionLinkInterface $action_link

@@ -336,6 +336,13 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
   }
 
   /**
+   * {@inheritdoc}
+   */
+  public function getFailureMessage(string $direction, string $state, ...$parameters): string {
+    return 'Unable to perform the action. The link may be outdated.';
+  }
+
+  /**
    * Gets the directions for this plugin.
    *
    * @return array
