@@ -243,6 +243,28 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
     return $access_result;
   }
 
+  public function getMessage(string $direction, string $state, ...$parameters): string {
+    $message = $this->getStateActionPlugin->getMessage($direction, $state, ...$parameters);
+
+    $data = [
+      'action_link' => $this,
+    ];
+    $message = \Drupal::token()->replace($message, $data);
+
+    return $message;
+  }
+
+  public function getFailureMessage(string $direction, string $state, ...$parameters): string {
+    $message = $this->getStateActionPlugin->getFailureMessage($direction, $state, ...$parameters);
+
+    $data = [
+      'action_link' => $this,
+    ];
+    $message = \Drupal::token()->replace($message, $data);
+
+    return $message;
+  }
+
   /**
    * {@inheritdoc}
    */

@@ -72,10 +72,10 @@ class Nojs extends ActionLinkStyleBase implements ContainerFactoryPluginInterfac
    */
   public function handleActionRequest(bool $action_completed, Request $request, RouteMatchInterface $route_match, ActionLinkInterface $action_link, string $direction, string $state, UserInterface $user, ...$parameters): Response {
     if ($action_completed) {
-      $message = $action_link->getStateActionPlugin()->getMessage($direction, $state, ...$parameters);
+      $message = $action_link->getMessage($direction, $state, ...$parameters);
     }
     else {
-      $message = $action_link->getStateActionPlugin()->getFailureMessage($direction, $state, ...$parameters);
+      $message = $action_link->getFailureMessage($direction, $state, ...$parameters);
     }
 
     if ($message) {

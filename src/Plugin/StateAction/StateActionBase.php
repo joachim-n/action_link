@@ -143,7 +143,20 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
     $route_parameters += $scalar_parameters;
 
     if ($reachable) {
+      // TODO - texts come from the entity's methods, standardize!
       $label = $this->getLinkLabel($direction, $next_state, ...$named_parameters);
+
+      $data = [
+        'action_link' => $action_link,
+        'action_state_data' => new StateChangeTokenData(
+          $action_link,
+          $direction,
+          $next_state,
+        )
+        // TODO Params from the plugin!
+      ];
+      $label = \Drupal::token()->replace($label, $data);
+
       $url = Url::fromRoute('action_link.action_link.' . $action_link->id(), $route_parameters);
       $link = Link::fromTextAndUrl($label, $url);
     }
