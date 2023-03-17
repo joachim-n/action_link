@@ -452,6 +452,10 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
     return $dynamic_parameters;
   }
 
+  public function getTokenData(...$parameters) {
+    return [];
+  }
+
   /**
    * {@inheritdoc}
    */
