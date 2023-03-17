@@ -45,6 +45,16 @@ abstract class EntityFieldStateActionBase extends StateActionBase implements Con
       '#required' => TRUE,
     ];
 
+    // TODO parnet class somehow!
+    if (\Drupal::moduleHandler()->moduleExists('token')) {
+      // TODO in wrong part of the form!
+      $plugin_form['token_help'] = [
+        '#theme' => 'token_tree_link',
+        // TODO! can we even get the types?
+        '#token_types' => 'all',
+      ];
+    }
+
     return $plugin_form;
   }
 
