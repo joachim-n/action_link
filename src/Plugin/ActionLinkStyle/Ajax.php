@@ -132,10 +132,10 @@ class Ajax extends ActionLinkStyleBase implements ContainerFactoryPluginInterfac
     }
 
     if ($action_completed) {
-      $message = $action_link->getStateActionPlugin()->getMessage($direction, $state, ...$parameters);
+      $message = $action_link->getMessage($direction, $state, ...$parameters);
     }
     else {
-      $message = $action_link->getStateActionPlugin()->getFailureMessage($direction, $state, ...$parameters);
+      $message = $action_link->getFailureMessage($direction, $state, ...$parameters);
     }
 
     if ($message) {

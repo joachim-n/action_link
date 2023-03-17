@@ -4,6 +4,7 @@ namespace Drupal\action_link\Entity;
 
 use Drupal\action_link\Plugin\ActionLinkStyle\ActionLinkStyleInterface;
 use Drupal\action_link\Plugin\StateAction\StateActionInterface;
+use Drupal\action_link\Token\StateChangeTokenData;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Config\Entity\ConfigEntityBase;
 use Drupal\Core\Entity\EntityStorageInterface;
@@ -244,18 +245,25 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
   }
 
   public function getMessage(string $direction, string $state, ...$parameters): string {
-    $message = $this->getStateActionPlugin->getMessage($direction, $state, ...$parameters);
+    $message = $this->getStateActionPlugin()->getMessage($direction, $state, ...$parameters);
 
     $data = [
       'action_link' => $this,
-    ];
+      'action_state_data' => new StateChangeTokenData(
+        $this,
+        $direction,
+        $state,
+      )
+      // TODO Params from the plugin!
+    ] + $this->getStateActionPlugin()->getTokenData(...$parameters);
+
     $message = \Drupal::token()->replace($message, $data);
 
     return $message;
   }
 
   public function getFailureMessage(string $direction, string $state, ...$parameters): string {
-    $message = $this->getStateActionPlugin->getFailureMessage($direction, $state, ...$parameters);
+    $message = $this->getStateActionPlugin()->getFailureMessage($direction, $state, ...$parameters);
 
     $data = [
       'action_link' => $this,

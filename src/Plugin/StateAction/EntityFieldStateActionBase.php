@@ -193,4 +193,11 @@ abstract class EntityFieldStateActionBase extends StateActionBase implements Con
     return parent::checkOperability($action_link, ...$parameters);
   }
 
+  public function getTokenData(...$parameters) {
+    [$entity] = $parameters;
+    return [
+      $this->configuration['entity_type_id'] => $entity,
+    ];
+  }
+
 }
