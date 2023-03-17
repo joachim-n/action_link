@@ -155,7 +155,7 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
           $next_state,
         )
         // TODO Params from the plugin!
-      ];
+      ] + $this->getTokenData(...array_values($named_parameters));
       $label = \Drupal::token()->replace($label, $data);
 
       $url = Url::fromRoute('action_link.action_link.' . $action_link->id(), $route_parameters);
