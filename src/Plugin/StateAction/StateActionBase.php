@@ -3,6 +3,7 @@
 namespace Drupal\action_link\Plugin\StateAction;
 
 use Drupal\action_link\Entity\ActionLinkInterface;
+use Drupal\action_link\Token\StateChangeTokenData;
 use Drupal\Component\Plugin\PluginBase;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Form\FormStateInterface;
