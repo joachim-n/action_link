@@ -244,6 +244,24 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
     return $access_result;
   }
 
+  public function getLinkLabel(string $direction, string $state, ...$parameters): string {
+    $label = $this->getStateActionPlugin()->getLinkLabel($direction, $state, ...$parameters);
+
+    $data = [
+      'action_link' => $this,
+      'action_state_data' => new StateChangeTokenData(
+        $this,
+        $direction,
+        $state,
+      )
+      // TODO Params from the plugin!
+    ] + $this->getStateActionPlugin()->getTokenData(...$parameters);
+
+    $label = \Drupal::token()->replace($label, $data);
+
+    return $label;
+  }
+
   public function getMessage(string $direction, string $state, ...$parameters): string {
     $message = $this->getStateActionPlugin()->getMessage($direction, $state, ...$parameters);
 

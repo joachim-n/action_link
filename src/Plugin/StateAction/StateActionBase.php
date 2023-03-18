@@ -159,7 +159,7 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
 
     if ($reachable) {
       // TODO - texts come from the entity's methods, standardize!
-      $label = $this->getLinkLabel($direction, $next_state, ...$named_parameters);
+      $label = $action_link->getLinkLabel($direction, $next_state, ...$named_parameters);
 
       $data = [
         'action_link' => $action_link,
@@ -275,7 +275,7 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
    */
   protected function getLink(ActionLinkInterface $action_link, string $direction, string $state, AccountInterface $user, $named_parameters, $scalar_parameters): ?Link {
     if (!is_null($state)) {
-      $label = $this->getLinkLabel($direction, $state, ...$named_parameters);
+      $label = $action_link->getLinkLabel($direction, $state, ...$named_parameters);
 
       $route_parameters = [
         'action_link' => $action_link->id(),
