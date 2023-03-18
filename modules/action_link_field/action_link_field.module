@@ -57,7 +57,7 @@ function action_link_field_action_link_insert(EntityInterface $entity) {
   // If a new action_link has the computed field setting, we clear caches so
   // the derived computed field plugin and the computed field definition are
   // picked up.
-  if ($entity->getThirdPartySetting('action_link_field', 'computed_field', TRUE)) {
+  if ($entity->getThirdPartySetting('action_link_field', 'computed_field', FALSE)) {
     \Drupal::service('plugin.manager.computed_field')->clearCachedDefinitions();
     \Drupal::service('entity_field.manager')->clearCachedFieldDefinitions();
     Cache::invalidateTags(['entity_field_info']);
@@ -80,7 +80,7 @@ function action_link_field_action_link_update(EntityInterface $entity) {
  * Implements hook_ENTITY_TYPE_delete(): action_link
  */
 function action_link_field_action_link_delete(EntityInterface $entity) {
-  if ($entity->getThirdPartySetting('action_link_field', 'computed_field', TRUE)) {
+  if ($entity->getThirdPartySetting('action_link_field', 'computed_field', FALSE)) {
     \Drupal::service('plugin.manager.computed_field')->clearCachedDefinitions();
     \Drupal::service('entity_field.manager')->clearCachedFieldDefinitions();
     Cache::invalidateTags(['entity_field_info']);
