@@ -68,8 +68,12 @@ function action_link_field_action_link_insert(EntityInterface $entity) {
  * Implements hook_ENTITY_TYPE_update(): action_link
  */
 function action_link_field_action_link_update(EntityInterface $entity) {
-  // TODO no, clear for label change too! and other things might change!
-  if ($entity->getThirdPartySetting('action_link_field', 'computed_field', FALSE) != $entity->original->getThirdPartySetting('action_link_field', 'computed_field', FALSE)) {
+  // Clear field definition cache if the setting value has changed (because we
+  // need to define or remove a field), or if the setting is true (because the
+  // field may need to be updated).
+  $computed_field_setting = $entity->getThirdPartySetting('action_link_field', 'computed_field', FALSE);
+  $computed_field_setting_old_value = $entity->original->getThirdPartySetting('action_link_field', 'computed_field', FALSE);
+  if ($computed_field_setting || ($computed_field_setting != $computed_field_setting_old_value)) {
     \Drupal::service('plugin.manager.computed_field')->clearCachedDefinitions();
     \Drupal::service('entity_field.manager')->clearCachedFieldDefinitions();
     Cache::invalidateTags(['entity_field_info']);
