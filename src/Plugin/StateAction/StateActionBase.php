@@ -111,6 +111,20 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
     return $build;
   }
 
+  /**
+   * TODO
+   * - if no operability: no link!
+   * - if no access: no link!
+   * - if not reachable: EMPTY link!
+   *
+   * @param [type] $action_link
+   * @param [type] $direction
+   * @param [type] $user
+   * @param [type] $named_parameters
+   * @param [type] $scalar_parameters
+   *
+   * @return array|null
+   */
   protected function buildLink($action_link, $direction, $user, $named_parameters, $scalar_parameters): ?array {
     // Only NULL means there is no valid next state; a string such as '0' is
     // a valid state.
