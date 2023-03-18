@@ -218,10 +218,13 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
    */
   public function checkOperandAccess(ActionLinkInterface $action_link, string $direction, string $state, AccountInterface $account, ...$parameters): AccessResult;
 
+  // TODO no token replacement - go via entity,.
   public function getLinkLabel(string $direction, string $state, ...$parameters): string;
 
   /**
    * Gets the message to show the user after an action is complete.
+   *
+   * TODO no token replacement - go via entity
    *
    * @param string $state
    *   The state that has been arrived at.
@@ -235,6 +238,8 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
 
   /**
    * Gets the message to show the user when an action cannot be completed.
+   *
+   * TODO no token replacement - go via entity
    *
    * @param string $state
    *   The state that has been arrived at.
