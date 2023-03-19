@@ -25,6 +25,17 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
  */
 trait ToggleTrait {
 
+  public function stringsDefaultConfiguration() {
+    $defaults = [];
+    $defaults['labels']['state']['true']['link_label'] = 'Change state';
+    $defaults['labels']['state']['true']['message'] = 'Value set to TRUE';
+
+    $defaults['labels']['state']['false']['link_label'] = 'Change state';
+    $defaults['labels']['state']['false']['message'] = 'Value set to FALSE';
+
+    return $defaults;
+  }
+
   public function buildTextsConfigurationForm($labels_form, FormStateInterface $form_state) {
     $labels_form['state']['true'] = [
       '#type' => 'details',

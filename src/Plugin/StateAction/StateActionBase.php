@@ -47,6 +47,19 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
   }
 
   /**
+   * Gets default configuration for this plugin's strings.
+   *
+   * These are defined in a separate method because they require a different
+   * merging strategy, and so this method can be overridden by geometry traits.
+   *
+   * @return array
+   *   An associative array with the default configuration.
+   */
+  protected function stringsDefaultConfiguration() {
+    return [];
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function getConfiguration() {
@@ -57,7 +70,18 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
    * {@inheritdoc}
    */
   public function setConfiguration(array $configuration) {
+    // Merge in default configuration.
     $this->configuration = $configuration + $this->defaultConfiguration();
+
+    // Configuration for strings needs a different merging strategy for the
+    // defaults. We want an empty value in the incoming configuration to be
+    // replaced with the string from the defaults.
+    $strings_default_configuration = $this->stringsDefaultConfiguration();
+    NestedArrayRecursive::arrayWalkNested($strings_default_configuration, function($value, $parents) {
+      if (empty(NestedArray::getValue($this->configuration, $parents))) {
+        NestedArray::setValue($this->configuration, $parents, $value);
+      }
+    });
   }
 
   /**
