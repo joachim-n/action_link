@@ -31,9 +31,7 @@ abstract class EntityFieldStateActionBase extends StateActionBase implements Con
   }
 
   public function buildConfigurationForm(array $element, FormStateInterface $form_state) {
-    $plugin_form = [];
-
-    $plugin_form['entity_type_field'] = [
+    $element['entity_type_field'] = [
       '#type' => 'entity_type_field',
       '#title' => $this->t('Entity field'),
       '#element_validate' => [
@@ -49,14 +47,14 @@ abstract class EntityFieldStateActionBase extends StateActionBase implements Con
     // TODO parnet class somehow!
     if (\Drupal::moduleHandler()->moduleExists('token')) {
       // TODO in wrong part of the form!
-      $plugin_form['token_help'] = [
+      $element['token_help'] = [
         '#theme' => 'token_tree_link',
         // TODO! can we even get the types?
         '#token_types' => 'all',
       ];
     }
 
-    return $plugin_form;
+    return $element;
   }
 
   public static function entityFieldElementValidate(&$element, FormStateInterface $form_state, &$complete_form) {

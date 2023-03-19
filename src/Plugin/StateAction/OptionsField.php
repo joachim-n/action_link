@@ -39,9 +39,9 @@ class OptionsField extends EntityFieldStateActionBase {
    * {@inheritdoc}
    */
   public function buildConfigurationForm(array $element, FormStateInterface $form_state) {
-    $plugin_form = parent::buildConfigurationForm($element, $form_state);
+    $element = parent::buildConfigurationForm($element, $form_state);
 
-    $plugin_form['entity_type_field']['#field_types'] = [
+    $element['entity_type_field']['#field_types'] = [
       'list_float',
       'list_integer',
       'list_string',
@@ -49,15 +49,15 @@ class OptionsField extends EntityFieldStateActionBase {
 
     // delta??
 
-    $plugin_form['labels'] = [
+    $element['labels'] = [
       '#tree' => TRUE,
     ];
-    $plugin_form['labels'] = $this->buildTextsConfigurationForm($plugin_form['labels'], $form_state);
+    $element['labels'] = $this->buildTextsConfigurationForm($element['labels'], $form_state);
 
-    $plugin_form['labels']['direction']['inc']['link_label']['#title'] = $this->t('Link label for moving the field value forward');
-    $plugin_form['labels']['direction']['dec']['link_label']['#title'] = $this->t('Link label for moving the field value back');
+    $element['labels']['direction']['inc']['link_label']['#title'] = $this->t('Link label for moving the field value forward');
+    $element['labels']['direction']['dec']['link_label']['#title'] = $this->t('Link label for moving the field value back');
 
-    return $plugin_form;
+    return $element;
   }
 
   /**

@@ -35,14 +35,15 @@ class TestAddToCart extends StateActionBase {
 
   use StringTranslationTrait;
 
-  public function buildConfigurationForm(array $element, FormStateInterface $form_state) {
-    // $plugin_form = parent::buildConfigurationForm($element, $form_state);
 
-    $plugin_form['markup'] = [
+  public function buildConfigurationForm(array $element, FormStateInterface $form_state) {
+    // $element = parent::buildConfigurationForm($element, $form_state);
+
+    $element['markup'] = [
       '#markup' => 'one',
     ];
 
-    return $plugin_form;
+    return $element;
   }
 
   /**

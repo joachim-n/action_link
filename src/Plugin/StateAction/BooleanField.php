@@ -45,21 +45,21 @@ class BooleanField extends EntityFieldStateActionBase {
   use ToggleTrait;
 
   public function buildConfigurationForm(array $element, FormStateInterface $form_state) {
-    $plugin_form = parent::buildConfigurationForm($element, $form_state);
+    $element = parent::buildConfigurationForm($element, $form_state);
 
-    $plugin_form['entity_type_field']['#field_types'] = ['boolean'];
+    $element['entity_type_field']['#field_types'] = ['boolean'];
 
     // dsm($element);
 
 
-    // $plugin_form['entity_type'] = [
+    // $element['entity_type'] = [
 
     //   '#type' => 'textfield', // todo options
     //   '#title' => $this->t('Entity type'),
     //   // '#options' => [],
     // ];
 
-    // $plugin_form['field'] = [
+    // $element['field'] = [
     //   '#type' => 'textfield', // todo options
     //   '#title' => $this->t('field'),
     //   // '#options' => [],
@@ -67,16 +67,17 @@ class BooleanField extends EntityFieldStateActionBase {
 
     // TODO: field delta????? ARGH!
 
-    $plugin_form['labels'] = [
+    // ARGH LABELS IS BAD NAME TODO.
+    $element['labels'] = [
       // '#parents' => ['labels'],
       '#tree' => TRUE,
     ];
-    $plugin_form['labels'] = $this->buildTextsConfigurationForm($plugin_form['labels'], $form_state);
+    $element['labels'] = $this->buildTextsConfigurationForm($element['labels'], $form_state);
 
-    $plugin_form['labels']['state']['true']['link_label']['#title'] = $this->t('Link label for setting the field value to TRUE');
-    $plugin_form['labels']['state']['false']['link_label']['#title'] = $this->t('Link label for setting the field value to FALSE');
+    $element['labels']['state']['true']['link_label']['#title'] = $this->t('Link label for setting the field value to TRUE');
+    $element['labels']['state']['false']['link_label']['#title'] = $this->t('Link label for setting the field value to FALSE');
 
-    return $plugin_form;
+    return $element;
   }
 
   /**

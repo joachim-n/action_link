@@ -367,9 +367,7 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
   }
 
   public function buildConfigurationForm(array $element, FormStateInterface $form_state) {
-    $plugin_form = [];
-
-    return $plugin_form;
+    return $element;
   }
 
   public function validateConfigurationForm(array &$form, FormStateInterface $form_state) {
