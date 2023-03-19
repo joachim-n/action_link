@@ -118,10 +118,15 @@ class ActionLinkPlugin extends FormElement {
 
     // Add the plugin's configuration form, if it provides one.
     if ($selected_plugin_id) {
-      $plugin = static::getPluginManager()->createInstance($selected_plugin_id);
+
+      // Pass the default value from the form element into the plugin, so that
+      // the defaults from the form element are merged with the plugin's
+      // defaults. From this point on, the authority on the plugin's
+      // configuration is the configuration held by the plugin object.
+      $plugin = static::getPluginManager()->createInstance($selected_plugin_id, $element['#default_value']['plugin_configuration']);
       if ($plugin instanceof PluginFormInterface) {
         $plugin_subform = [
-          '#default_value' => $element['#default_value']['plugin_configuration'],
+          '#default_value' => $plugin->getConfiguration(),
         ];
         $element['container']['plugin_configuration'] = $plugin->buildConfigurationForm($plugin_subform, SubformState::createForSubform($plugin_subform, $form_state->getCompleteForm(), $form_state));
 
@@ -131,7 +136,7 @@ class ActionLinkPlugin extends FormElement {
           $plugin_configuration_form = &$element['container']['plugin_configuration'];
 
           // Recurse into nested configuration values.
-          NestedArrayRecursive::arrayWalkNested($element['#default_value']['plugin_configuration'], function($value, $parents) use (&$plugin_configuration_form) {
+          NestedArrayRecursive::arrayWalkNested($plugin->getConfiguration(), function($value, $parents) use (&$plugin_configuration_form) {
             $default_value_parents = $parents;
             $default_value_parents[] = '#default_value';
 
