@@ -26,7 +26,8 @@ abstract class EntityFieldStateActionBase extends StateActionBase implements Con
     return [
       'entity_type_id' => NULL,
       'field' => NULL,
-    ];
+    ]
+    + parent::defaultConfiguration();
   }
 
   public function buildConfigurationForm(array $element, FormStateInterface $form_state) {
