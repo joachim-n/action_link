@@ -366,7 +366,12 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
     return AccessResult::neutral();
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function buildConfigurationForm(array $element, FormStateInterface $form_state) {
+    // Note that default values are filled in from the plugin configuration
+    // by the ActionLinkPlugin form element's class.
     return $element;
   }
 
