@@ -19,6 +19,19 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
 // TODO rename RepeatableGeometryTrait ?
 trait RepeatableTrait {
 
+  public function stringsDefaultConfiguration() {
+    $defaults = [];
+
+    foreach ($this->getDirections() as $direction => $direction_label) {
+      $defaults['labels']['direction'][$direction]['link_label'] = t('@direction the value', [
+        '@direction' => ucfirst($direction_label),
+      ]);
+      $defaults['labels']['direction'][$direction]['message'] = t('Value changed');
+    }
+
+    return $defaults;
+  }
+
   public function buildTextsConfigurationForm($labels_form, FormStateInterface $form_state) {
     foreach ($this->getDirections() as $direction => $direction_label) {
       $labels_form['direction'][$direction] = [
