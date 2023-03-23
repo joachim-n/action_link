@@ -218,7 +218,23 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
    */
   public function checkOperandAccess(ActionLinkInterface $action_link, string $direction, string $state, AccountInterface $account, ...$parameters): AccessResult;
 
-  // TODO no token replacement - go via entity,.
+  /**
+   * Gets the label for a link.
+   *
+   * This may contain tokens, which will be replaced by the action link entity.
+   *
+   * @param string $direction
+   *   The direction for the action.
+   * @param string $state
+   *   The target state for the action.
+   * @param mixed ...$parameters
+   *   The dynamic parameters.
+   *
+   * @return string
+   *   The label.
+   *
+   * @see \Drupal\action_link\Entity\ActionLinkInterface::getLinkLabel()
+   */
   public function getLinkLabel(string $direction, string $state, ...$parameters): string;
 
   /**
