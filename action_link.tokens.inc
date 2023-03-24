@@ -39,11 +39,12 @@ function action_link_tokens($type, $tokens, array $data, array $options, Bubblea
 
     foreach ($tokens as $name => $original) {
       switch ($name) {
-        // Simple key values on the node.
         case 'new_state':
-          // TODO: human-readable!?
+          $replacements[$original] = $action_link->getStateActionPlugin()->getStateLabel($action_state_data->state);
+          break;
+
+        case 'new_state:raw':
           $replacements[$original] = $action_state_data->state;
-          // 'CAKKKKE!'; // $action_link->getStateActionPlugin()->getNextStateName();
           break;
 
         case 'title':
