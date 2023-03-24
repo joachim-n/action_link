@@ -1,0 +1,7 @@
+name: 'Action Link proofs of concept'
+type: module
+description: 'Contains proof-of-concept Action Link plugins'
+experimental: true
+core_version_requirement: '^9 || ^10'
+dependencies:
+  - action_link
