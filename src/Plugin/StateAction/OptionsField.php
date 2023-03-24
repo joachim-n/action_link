@@ -98,4 +98,29 @@ class OptionsField extends EntityFieldStateActionBase {
     $entity->save();
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getStateLabel(string $state): string {
+    // @todo Inject.
+    $entity_field_manager = \Drupal::service('entity_field.manager');
+    // To get option values, we need a dummy entity, and to make one we need
+    // a bundle. Since options are usually defined as a property of the
+    // storage, it doesn't matter which bundle we use.
+    $bundle = reset($entity_field_manager->getFieldMap()[$this->getTargetEntityTypeId()][$this->getTargetFieldName()]['bundles']);
+
+
+    $ids = (object) [
+      'entity_type' => $this->getTargetEntityTypeId(),
+      'bundle' => $bundle,
+      'entity_id' => NULL,
+    ];
+    $dummy_entity = _field_create_entity_from_ids($ids);
+
+    $options_field_storage_definition = $entity_field_manager->getFieldStorageDefinitions($this->getTargetEntityTypeId())[$this->getTargetFieldName()];
+    $allowed_options = options_allowed_values($options_field_storage_definition, $dummy_entity);
+
+    return $allowed_options[$state] ?? $state;
+  }
+
 }
