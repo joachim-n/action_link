@@ -409,6 +409,13 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
   }
 
   /**
+   * {@inheritdoc}
+   */
+  public function getStateLabel(string $state): string {
+    return $state;
+  }
+
+  /**
    * Gets the associative indexes for the dynamic parameters.
    *
    * TODO rename getDynamicParameterValuesByName

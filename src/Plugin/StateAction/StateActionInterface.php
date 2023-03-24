@@ -219,6 +219,27 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
   public function checkOperandAccess(ActionLinkInterface $action_link, string $direction, string $state, AccountInterface $account, ...$parameters): AccessResult;
 
   /**
+   * Gets the directions for this plugin.
+   *
+   * @return array
+   *   An array of the directions defined in the plugin definition. Keys are
+   *   direction machine names, and values are the labels.
+   */
+  public function getDirections(): array;
+
+  /**
+   * Gets the label for a state.
+   *
+   * @param string $state
+   *   The state machine name.
+   *
+   * @return string
+   *   A human-readable representation of the state. By default, this is
+   *   identical to the machine name.
+   */
+  public function getStateLabel(string $state): string;
+
+  /**
    * Gets the label for a link.
    *
    * This may contain tokens, which will be replaced by the action link entity.
