@@ -4,7 +4,9 @@ namespace Drupal\action_link\Plugin\StateAction;
 
 use Drupal\action_link\Entity\ActionLinkInterface;
 use Drupal\action_link\Token\StateChangeTokenData;
+use Drupal\action_link\Utility\NestedArrayRecursive;
 use Drupal\Component\Plugin\PluginBase;
+use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
