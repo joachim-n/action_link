@@ -15,7 +15,7 @@ function action_link_token_info() {
   $type = [
     'name' => t('State action'),
     'description' => t('Tokens related to a state action change.'),
-    'needs-data' => 'action_link',
+    'needs-data' => 'action_link', // TODO WRONG! dcan't need TOW things!
   ];
 
   // Core tokens for nodes.
@@ -46,6 +46,7 @@ function action_link_tokens($type, $tokens, array $data, array $options, Bubblea
   }
   $replacements = [];
 
+  // ARGH! TWO data blobs! TODO!
   if ($type == 'action_link' && !empty($data['action_link'])) {
     /** @var \Drupal\action_link\Entity\ActionLinkInterface $action_link */
     $action_link = $data['action_link'];
