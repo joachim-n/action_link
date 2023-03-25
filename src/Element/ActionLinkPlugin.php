@@ -130,25 +130,28 @@ class ActionLinkPlugin extends FormElement {
         ];
         $element['container']['plugin_configuration'] = $plugin->buildConfigurationForm($plugin_subform, SubformState::createForSubform($plugin_subform, $form_state->getCompleteForm(), $form_state));
 
-        // If this is the original load of the form, set the default values on
-        // the plugin configuration.
-        if (isset($element['#default_value']['plugin_id']) && $element['#default_value']['plugin_id'] == $selected_plugin_id) {
-          $plugin_configuration_form = &$element['container']['plugin_configuration'];
+        // Set the configuration from the plugin into the form's default values.
+        // On an initial load of an 'add' form, this will give us the default
+        // values form the plugin. On an initial load of an 'edit' form, this
+        // will give us the default values from the $element, which the form
+        // using this element should have populated with values from storage,
+        // such as a config entity.
+        $plugin_configuration_form = &$element['container']['plugin_configuration'];
 
-          // Recurse into nested configuration values.
-          NestedArrayRecursive::arrayWalkNested($plugin->getConfiguration(), function($value, $parents) use (&$plugin_configuration_form) {
-            $default_value_parents = $parents;
-            $default_value_parents[] = '#default_value';
+        // Recurse into nested configuration values.
+        $plugin_configuration = $plugin->getConfiguration();
+        NestedArrayRecursive::arrayWalkNested($plugin_configuration, function($value, $parents) use (&$plugin_configuration_form) {
+          $default_value_parents = $parents;
+          $default_value_parents[] = '#default_value';
 
-            // Allow plugin forms to set default values themselves.
-            $default_value_key_exists = NULL;
-            NestedArray::getValue($plugin_configuration_form, $default_value_parents, $default_value_key_exists);
+          // Allow plugin forms to set default values themselves.
+          $default_value_key_exists = NULL;
+          NestedArray::getValue($plugin_configuration_form, $default_value_parents, $default_value_key_exists);
 
-            if (!$default_value_key_exists) {
-              NestedArray::setValue($plugin_configuration_form, $default_value_parents, $value);
-            }
-          });
-        }
+          if (!$default_value_key_exists) {
+            NestedArray::setValue($plugin_configuration_form, $default_value_parents, $value);
+          }
+        });
       }
       else {
         $element['container']['plugin_configuration'] = [
