@@ -6,10 +6,9 @@ use Drupal\action_link\Entity\ActionLinkInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\action_link\Plugin\StateAction\StateActionBase;
 use Drupal\Core\Access\AccessResult;
-use Drupal\Core\Url;
 
 /**
- * Test plugin which returns access based on state value. TODO
+ * Test plugin which returns access and operability based on state value.
  *
  * @StateAction(
  *   id = "test_mocked_control",
