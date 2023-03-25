@@ -136,18 +136,32 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
   }
 
   /**
-   * TODO
-   * - if no operability: no link!
-   * - if no access: no link!
-   * - if not reachable: EMPTY link!
+   * Gets the build array for a single link.
    *
-   * @param [type] $action_link
-   * @param [type] $direction
-   * @param [type] $user
-   * @param [type] $named_parameters
-   * @param [type] $scalar_parameters
+   * This creates a build array rather than return a Link object, because in
+   * some cases we want an empty build array with no link, and in some we want
+   * nothing at all, and returning a Link object wouldn't capture that
+   * distinction.
+   *
+   * @param \Drupal\action_link\Entity\ActionLinkInterface $action_link
+   *   The action link entity.
+   * @param string $direction
+   *   The direction for the action.
+   * @param \Drupal\user\UserInterface $user
+   *   The user to perform the action. This is not necessarily the current user.
+   * @param array $named_parameters
+   *   The dynamic parameters, keyed by parameter name.
+   * @param array $scalar_parameters
+   *   The dynamic parameters, downcasted to scalar values, keyed by parameter
+   *   name.
    *
    * @return array|null
+   *   A build array for the link, or NULL if nothing should be output. The
+   *   build array may itself be empty. The logic is:
+   *    - No access: nothing.
+   *    - No operability: nothing.
+   *    - No reachable state: build array with no link.
+   *    - Everything ok: build array with a link.
    */
   protected function buildLink($action_link, $direction, $user, $named_parameters, $scalar_parameters): ?array {
     // Only NULL means there is no valid next state; a string such as '0' is
