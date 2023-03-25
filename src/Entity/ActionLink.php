@@ -146,7 +146,7 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
    * {@inheritdoc}
    */
   public function getStateActionPlugin(): StateActionInterface {
-    return $this->getActionLinkPluginCollection()->get($this->plugin_id);
+    return $this->getStateActionPluginCollection()->get($this->plugin_id);
   }
 
   /**
@@ -159,8 +159,8 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
 
   public function getPluginCollections() {
     $collections = [];
-    if ($this->getActionLinkPluginCollection()) {
-      $collections['plugin_config'] = $this->getActionLinkPluginCollection();
+    if ($this->getStateActionPluginCollection()) {
+      $collections['plugin_config'] = $this->getStateActionPluginCollection();
     }
     if ($this->getLinkStylePluginCollection()) {
       $collections['link_style_collection'] = $this->getLinkStylePluginCollection();
@@ -175,7 +175,7 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
    *   The flag type's plugin collection.
    */
   // TODO rename!
-  protected function getActionLinkPluginCollection() {
+  protected function getStateActionPluginCollection() {
     if (!$this->actionLinkPluginCollection && $this->plugin_id) {
       $this->actionLinkPluginCollection = new DefaultSingleLazyPluginCollection(
         \Drupal::service('plugin.manager.action_link_state_action'),
