@@ -53,6 +53,7 @@ trait ToggleTrait {
     $labels_form['state']['true']['message'] = [
       '#type' => 'textfield',
       '#title' => t('Message when setting the toggle'),
+      '#description' => t('Leave empty to show no message.'),
     ];
 
     $labels_form['state']['false'] = [
@@ -70,6 +71,7 @@ trait ToggleTrait {
     $labels_form['state']['false']['message'] = [
       '#type' => 'textfield',
       '#title' => t('Message when unsetting the toggle'),
+      '#description' => t('Leave empty to show no message.'),
     ];
 
     return $labels_form;

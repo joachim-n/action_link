@@ -55,6 +55,7 @@ trait RepeatableTrait {
         '#title' => t('Message for @direction', [
           '@direction' => $direction_label,
         ]),
+        '#description' => t('Leave empty to show no message.'),
       ];
     }
 
