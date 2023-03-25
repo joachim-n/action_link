@@ -123,12 +123,12 @@ class ActionLinkPlugin extends FormElement {
 
     // Add the plugin's configuration form, if it provides one.
     if ($selected_plugin_id) {
-
       // Pass the default value from the form element into the plugin, so that
       // the defaults from the form element are merged with the plugin's
       // defaults. From this point on, the authority on the plugin's
       // configuration is the configuration held by the plugin object.
       $plugin = static::getPluginManager()->createInstance($selected_plugin_id, $element['#default_value']['plugin_configuration']);
+
       if ($plugin instanceof PluginFormInterface && $plugin instanceof ConfigurableInterface) {
         $plugin_subform = [
           '#default_value' => $plugin->getConfiguration(),
