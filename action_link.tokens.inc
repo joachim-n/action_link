@@ -9,6 +9,29 @@ use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\user\Entity\User;
 
 /**
+ * Implements hook_token_info().
+ */
+function action_link_token_info() {
+  $type = [
+    'name' => t('State action'),
+    'description' => t('Tokens related to a state action change.'),
+    'needs-data' => 'action_link',
+  ];
+
+  // Core tokens for nodes.
+  $tokens['new_state'] = [
+    'name' => t("State"),
+    'description' => t("The unique ID of the TODO."),
+  ];
+
+  return [
+    // state_action???
+    'types' => ['action_link' => $type],
+    'tokens' => ['action_link' => $tokens],
+  ];
+}
+
+/**
  * Implements hook_tokens().
  */
 function action_link_tokens($type, $tokens, array $data, array $options, BubbleableMetadata $bubbleable_metadata) {
@@ -78,27 +101,4 @@ function action_link_tokens($type, $tokens, array $data, array $options, Bubblea
   }
 
   return $replacements;
-}
-
-/**
- * Implements hook_token_info().
- */
-function action_link_token_info() {
-  $type = [
-    'name' => t('State action'),
-    'description' => t('Tokens related to a state action change.'),
-    'needs-data' => 'action_link',
-  ];
-
-  // Core tokens for nodes.
-  $tokens['new_state'] = [
-    'name' => t("State"),
-    'description' => t("The unique ID of the TODO."),
-  ];
-
-  return [
-    // state_action???
-    'types' => ['action_link' => $type],
-    'tokens' => ['action_link' => $tokens],
-  ];
 }
