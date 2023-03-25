@@ -2,6 +2,7 @@
 
 namespace Drupal\action_link\Element;
 
+use Drupal\Component\Plugin\ConfigurableInterface;
 use Drupal\Component\Utility\Html;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\computed_field\Utility\NestedArrayRecursive;
@@ -124,7 +125,7 @@ class ActionLinkPlugin extends FormElement {
       // defaults. From this point on, the authority on the plugin's
       // configuration is the configuration held by the plugin object.
       $plugin = static::getPluginManager()->createInstance($selected_plugin_id, $element['#default_value']['plugin_configuration']);
-      if ($plugin instanceof PluginFormInterface) {
+      if ($plugin instanceof PluginFormInterface && $plugin instanceof ConfigurableInterface) {
         $plugin_subform = [
           '#default_value' => $plugin->getConfiguration(),
         ];
