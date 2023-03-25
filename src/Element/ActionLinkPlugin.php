@@ -16,6 +16,10 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * Form element for selecting and configuring a state action plugin.
  *
+ * Plugins that implement both \Drupal\Core\Plugin\PluginFormInterface and
+ * \Drupal\Component\Plugin\ConfigurableInterface will show the plugin's
+ * configuration form.
+ *
  * @todo Replace this with Plugin module when
  * https://www.drupal.org/project/plugin/issues/3197304 is fixed. Any changes to
  * this class should be submitted to the merge request on that issue.
