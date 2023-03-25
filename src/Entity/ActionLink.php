@@ -169,12 +169,11 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
   }
 
   /**
-   * Encapsulates the creation of the action link plugin collection.
+   * Encapsulates the creation of the state action plugin collection.
    *
    * @return \Drupal\Component\Plugin\DefaultSingleLazyPluginCollection
-   *   The flag type's plugin collection.
+   *   The action link plugin collection.
    */
-  // TODO rename!
   protected function getStateActionPluginCollection() {
     if (!$this->actionLinkPluginCollection && $this->plugin_id) {
       $this->actionLinkPluginCollection = new DefaultSingleLazyPluginCollection(
@@ -185,6 +184,12 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
     return $this->actionLinkPluginCollection;
   }
 
+  /**
+   * Encapsulates the creation of the action link style plugin collection.
+   *
+   * @return \Drupal\Component\Plugin\DefaultSingleLazyPluginCollection
+   *   The action link style plugin collection.
+   */
   protected function getLinkStylePluginCollection() {
     // Horrible workaround for the form element's inner element's value getting
     // set and then the resulting value *array* for the outer element being used
