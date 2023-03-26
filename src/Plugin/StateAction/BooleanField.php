@@ -18,7 +18,7 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
  * @StateAction(
  *   id = "boolean_field",
  *   label = @Translation("Boolean field"),
- *   description = @Translation("Boolean field TODO"),
+ *   description = @Translation("Action link to control the value of a boolean field."),
  *   parameters = {
  *     "dynamic" = {
  *       "entity",

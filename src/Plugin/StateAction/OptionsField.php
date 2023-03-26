@@ -13,7 +13,7 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
  * @StateAction(
  *   id = "options_field",
  *   label = @Translation("Options field"),
- *   description = @Translation("Options field TODO"),
+ *   description = @Translation("Action link to control the value of an options field."),
  *   parameters = {
  *     "dynamic" = {
  *       "entity",

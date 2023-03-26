@@ -15,7 +15,7 @@ use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
  * @StateAction(
  *   id = "date_field",
  *   label = @Translation("Date field"),
- *   description = @Translation("Date field TODO"),
+ *   description = @Translation("Action link to control the value of a date field."),
  *   parameters = {
  *     "dynamic" = {
  *       "entity",
