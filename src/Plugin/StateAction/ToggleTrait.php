@@ -95,14 +95,15 @@ trait ToggleTrait {
     return $this->configuration['labels']['state'][$state]['message'];
   }
 
-  public function XXgetStateActionPermissions(ActionLinkInterface $action_link): array {
-    // TODO: need getStates()
+  public function getStateActionPermissions(ActionLinkInterface $action_link): array {
+    $states = $this->getStates();
+
     $permissions = [];
-    foreach ($this->getDirections() as $direction => $direction_label) {
-      $permissions["use {$action_link->id()} action links in {$direction} direction"] = [
-        'title' => t('Use %label action links to @direction', [
+    foreach ($this->getStates() as $state) {
+      $permissions["use {$action_link->id()} action links to set to {$state}"] = [
+        'title' => t('Use %label action links to set to @state', [
           '%label' => $action_link->label(),
-          '@direction' => $direction_label,
+          '@state' => $this->getStateLabel($state),
         ]),
       ];
     }
