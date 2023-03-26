@@ -15,6 +15,8 @@ use Drupal\Core\Session\AccountInterface;
  */
 interface ActionLinkInterface extends ConfigEntityInterface, EntityWithPluginCollectionInterface {
 
+  public function buildLinkSet(AccountInterface $user, ...$parameters);
+
   /**
    * Verifies that a target state is the next state.
    *
