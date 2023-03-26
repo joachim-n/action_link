@@ -51,7 +51,6 @@ function action_link_tokens($type, $tokens, array $data, array $options, Bubblea
   }
   $replacements = [];
 
-  // ARGH! TWO data blobs! TODO!
   if ($type == 'action_state' && !empty($data['action_state'])) {
     /** @var \Drupal\action_link\Token\StateChangeTokenData $action_link */
     $action_state_data = $data['action_state'];
