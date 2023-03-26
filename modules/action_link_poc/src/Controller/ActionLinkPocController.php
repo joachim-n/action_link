@@ -57,15 +57,21 @@ class ActionLinkPocController extends ControllerBase implements ContainerInjecti
     foreach ($action_links as $action_link_id => $action_link) {
       // Add to cart action links.
       if ($action_link->getStateActionPlugin()->getPluginId() == 'poc_add_to_cart') {
-        $build[$action_link_id] = $action_link->buildLinkSet($user, $node);
+        $build[$action_link_id] = [
+          '#type' => 'container',
+        ];
+
+        $build[$action_link_id]['links'] = $action_link->buildLinkSet($user, $node);
       }
 
       // Subscribe action links.
       if ($action_link->getStateActionPlugin()->getPluginId() == 'poc_subscribe') {
         // @todo It's not very elegant having to pass both the entity type ID
-        // and the entity ID. Maybe allow just an entity, and intercept in
-        // buildLinkSet() to turn it into the expected dynamic parameters?
-        $build[$action_link_id] = $action_link->buildLinkSet($user, 'node', $node->id());
+        // and the entity ID.
+        $build[$action_link_id] = [
+          '#type' => 'container',
+        ];
+        $build[$action_link_id]['links'] = $action_link->buildLinkSet($user, 'node', $node->id());
       }
 
     }
