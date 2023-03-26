@@ -85,9 +85,7 @@ class NumericField extends EntityFieldStateActionBase {
   /**
    * {@inheritdoc}
    */
-  public function advanceState(AccountInterface $account, string $state, ...$parameters) {
-    list($entity) = $parameters;
-
+  public function advanceState(AccountInterface $account, string $state, EntityInterface $entity = NULL) {
     $field_name = $this->configuration['field'];
 
     $entity->set($field_name, $state);

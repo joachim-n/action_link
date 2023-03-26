@@ -98,7 +98,7 @@ class PocAddToCart extends StateActionBase implements ContainerFactoryPluginInte
   /**
    * {@inheritdoc}
    */
-  public function advanceState(AccountInterface $account, string $state, ...$parameters) {
+  public function advanceState(AccountInterface $account, string $state, EntityInterface $entity = NULL) {
     \Drupal::state()->set('poc_add_to_cart:count', $state);
   }
 

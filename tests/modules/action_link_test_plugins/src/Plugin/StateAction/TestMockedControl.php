@@ -32,7 +32,7 @@ class TestMockedControl extends StateActionBase {
   /**
    * {@inheritdoc}
    */
-  public function advanceState(AccountInterface $account, string $state, ...$parameters) {
+  public function advanceState(AccountInterface $account, string $state) {
     \Drupal::state()->set('test_mocked_control:set_state', $state);
   }
 

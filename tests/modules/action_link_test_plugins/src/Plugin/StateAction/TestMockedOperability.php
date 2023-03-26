@@ -32,7 +32,7 @@ class TestMockedOperability extends StateActionBase {
   /**
    * {@inheritdoc}
    */
-  public function advanceState(AccountInterface $account, string $state, ...$parameters) {
+  public function advanceState(AccountInterface $account, string $state) {
   }
 
   /**

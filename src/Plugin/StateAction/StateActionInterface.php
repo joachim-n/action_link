@@ -101,9 +101,10 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
    *
    * @param [type] $account
    * @param [type] $state
-   * @param [type] $parameters
+   * @param ...
+   *   Dynamic parameters specific to the action link's state action plugin.
    */
-  public function advanceState(AccountInterface $account, string $state, ...$parameters);
+  public function advanceState(AccountInterface $account, string $state);
 
   /**
    * Gets the dynamic parameters from the route match.
