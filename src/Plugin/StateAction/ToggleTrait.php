@@ -79,14 +79,13 @@ trait ToggleTrait {
 
 
   public function getLinkLabel(string $direction, string $state, ...$parameters): string {
-    // TODO: config defaults? how in trait?
-    $label = $this->configuration['labels']['state'][$state]['link_label'] ?? t("Change state");
+    $label = $this->configuration['labels']['state'][$state]['link_label'];
 
     return $label;
   }
 
   public function getMessage(string $direction, string $state, ...$parameters): string {
-    return $this->configuration['labels']['state'][$state]['message'] ?? '';
+    return $this->configuration['labels']['state'][$state]['message'];
   }
 
   public function XXgetStateActionPermissions(ActionLinkInterface $action_link): array {
