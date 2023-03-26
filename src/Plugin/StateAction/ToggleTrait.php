@@ -34,48 +34,53 @@ trait ToggleTrait {
 
   public function stringsDefaultConfiguration() {
     $defaults = [];
-    $defaults['labels']['state']['true']['link_label'] = 'Change state';
-    $defaults['labels']['state']['true']['message'] = 'Value set to TRUE';
 
-    $defaults['labels']['state']['false']['link_label'] = 'Change state';
-    $defaults['labels']['state']['false']['message'] = 'Value set to FALSE';
+    [$set_state, $unset_state] = $this->getStates();
+
+    $defaults['labels']['state'][$set_state]['link_label'] = 'Change state';
+    $defaults['labels']['state'][$set_state]['message'] = 'Value set to TRUE';
+
+    $defaults['labels']['state'][$unset_state]['link_label'] = 'Change state';
+    $defaults['labels']['state'][$unset_state]['message'] = 'Value set to FALSE';
 
     return $defaults;
   }
 
   public function buildTextsConfigurationForm($labels_form, FormStateInterface $form_state) {
-    $labels_form['state']['true'] = [
+    [$set_state, $unset_state] = $this->getStates();
+
+    $labels_form['state'][$set_state] = [
       '#type' => 'details',
       '#open' => TRUE,
       '#title' => t('Texts for setting the toggle'),
     ];
 
-    $labels_form['state']['true']['link_label'] = [
+    $labels_form['state'][$set_state]['link_label'] = [
       '#type' => 'textfield',
       '#title' => t('Link label for setting the toggle'),
       '#required' => TRUE,
       // todo basic defaults.
     ];
 
-    $labels_form['state']['true']['message'] = [
+    $labels_form['state'][$set_state]['message'] = [
       '#type' => 'textfield',
       '#title' => t('Message when setting the toggle'),
       '#description' => t('Leave empty to show no message.'),
     ];
 
-    $labels_form['state']['false'] = [
+    $labels_form['state'][$unset_state] = [
       '#type' => 'details',
       '#open' => TRUE,
       '#title' => t('Texts for unsetting the toggle'),
     ];
 
-    $labels_form['state']['false']['link_label'] = [
+    $labels_form['state'][$unset_state]['link_label'] = [
       '#type' => 'textfield',
       '#title' => t('Link label for removing the toggle'),
       '#required' => TRUE,
     ];
 
-    $labels_form['state']['false']['message'] = [
+    $labels_form['state'][$unset_state]['message'] = [
       '#type' => 'textfield',
       '#title' => t('Message when unsetting the toggle'),
       '#description' => t('Leave empty to show no message.'),
@@ -86,6 +91,7 @@ trait ToggleTrait {
 
 
   public function getLinkLabel(string $direction, string $state, ...$parameters): string {
+    dump($this->configuration);
     $label = $this->configuration['labels']['state'][$state]['link_label'];
 
     return $label;
