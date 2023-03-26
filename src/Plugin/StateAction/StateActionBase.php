@@ -476,10 +476,7 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
   }
 
   /**
-   * Gets the names of the plugin's dynamic parameters.
-   *
-   * @return array
-   *   An array of names.
+   * {@inheritdoc}
    */
   public function getDynamicParameterNames(): array {
     return $this->pluginDefinition['parameters']['dynamic'] ?? [];

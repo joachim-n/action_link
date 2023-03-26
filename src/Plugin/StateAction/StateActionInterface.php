@@ -220,6 +220,14 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
   public function checkOperandAccess(ActionLinkInterface $action_link, string $direction, string $state, AccountInterface $account, ...$parameters): AccessResult;
 
   /**
+   * Gets the names of the plugin's dynamic parameters.
+   *
+   * @return array
+   *   An array of names.
+   */
+  public function getDynamicParameterNames(): array;
+
+  /**
    * Gets the directions for this plugin.
    *
    * @return array
