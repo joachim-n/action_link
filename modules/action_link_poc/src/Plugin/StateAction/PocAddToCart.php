@@ -83,7 +83,7 @@ class PocAddToCart extends StateActionBase implements ContainerFactoryPluginInte
    * {@inheritdoc}
    */
   public function getNextStateName(string $direction, AccountInterface $user, EntityInterface $entity = NULL): ?string {
-    $count = \Drupal::state()->get('test_add_to_cart:count', 0);
+    $count = \Drupal::state()->get('poc_add_to_cart:count', 0);
 
     if ($direction == 'add') {
       return $count + 1;
@@ -99,14 +99,14 @@ class PocAddToCart extends StateActionBase implements ContainerFactoryPluginInte
    * {@inheritdoc}
    */
   public function advanceState(AccountInterface $account, string $state, ...$parameters) {
-    \Drupal::state()->set('test_add_to_cart:count', $state);
+    \Drupal::state()->set('poc_add_to_cart:count', $state);
   }
 
   /**
    * {@inheritdoc}
    */
   public function getLinkLabel(string $direction, string $state, ...$parameters): string {
-    $count = \Drupal::state()->get('test_add_to_cart:count', 0);
+    $count = \Drupal::state()->get('poc_add_to_cart:count', 0);
 
     if ($direction == 'add') {
       return $count ?
