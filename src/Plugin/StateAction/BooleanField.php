@@ -67,11 +67,6 @@ class BooleanField extends EntityFieldStateActionBase {
 
     // TODO: field delta????? ARGH!
 
-    // ARGH LABELS IS BAD NAME TODO.
-    $element['labels'] = [
-      '#tree' => TRUE,
-    ];
-    $element['labels'] = $this->buildTextsConfigurationForm($element['labels'], $form_state);
 
     $element['labels']['state']['true']['link_label']['#title'] = $this->t('Link label for setting the field value to TRUE');
     $element['labels']['state']['false']['link_label']['#title'] = $this->t('Link label for setting the field value to FALSE');

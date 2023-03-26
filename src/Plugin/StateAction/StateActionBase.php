@@ -373,11 +373,37 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
   }
 
   /**
-   * {@inheritdoc}
+   * Gets the plugin configuration form.
+   *
+   * This implements
+   * \Drupal\Core\Plugin\PluginFormInterface::buildConfigurationForm() for child
+   * classes which implement that interface. This in particular inserts the
+   * string form elements from traits.
    */
   public function buildConfigurationForm(array $element, FormStateInterface $form_state) {
     // Note that default values are filled in from the plugin configuration
-    // by the ActionLinkPlugin form element's class.
+    // by the 'action_plugin' form element's class which calls this.
+
+    // If a trait supplies a method for configuring strings, add an element for
+    // it.
+    if (method_exists($this, 'buildTextsConfigurationForm')) {
+      // ARGH LABELS IS BAD NAME TODO.
+      $element['labels'] = [
+        '#tree' => TRUE,
+      ];
+      $element['labels'] = $this->buildTextsConfigurationForm($element['labels'], $form_state);
+
+      // Show the token browser if there are label form elements and if token
+      // module is present.
+      if (\Drupal::moduleHandler()->moduleExists('token')) {
+        $element['token_help'] = [
+          '#theme' => 'token_tree_link',
+          // TODO! can we even get the types?
+          '#token_types' => 'all',
+        ];
+      }
+    }
+
     return $element;
   }
 
