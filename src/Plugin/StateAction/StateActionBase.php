@@ -203,7 +203,7 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
 
       $data = [
         'action_link' => $action_link,
-        'action_state_data' => new StateChangeTokenData(
+        'action_state' => new StateChangeTokenData(
           $action_link,
           $direction,
           $next_state,

@@ -254,7 +254,7 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
 
     $data = [
       'action_link' => $this,
-      'action_state_data' => new StateChangeTokenData(
+      'action_state' => new StateChangeTokenData(
         $this,
         $direction,
         $state,
@@ -272,7 +272,7 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
 
     $data = [
       'action_link' => $this,
-      'action_state_data' => new StateChangeTokenData(
+      'action_state' => new StateChangeTokenData(
         $this,
         $direction,
         $state,
@@ -290,7 +290,7 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
 
     $data = [
       'action_link' => $this,
-      'action_state_data' => new StateChangeTokenData(
+      'action_state' => new StateChangeTokenData(
         $this,
         $direction,
         $state,
