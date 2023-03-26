@@ -69,7 +69,6 @@ class BooleanField extends EntityFieldStateActionBase {
 
     // ARGH LABELS IS BAD NAME TODO.
     $element['labels'] = [
-      // '#parents' => ['labels'],
       '#tree' => TRUE,
     ];
     $element['labels'] = $this->buildTextsConfigurationForm($element['labels'], $form_state);
