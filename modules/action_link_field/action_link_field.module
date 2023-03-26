@@ -26,9 +26,15 @@ function action_link_field_form_action_link_form_alter(&$form, FormStateInterfac
   if (!is_subclass_of($plugin_definition['class'], EntityFieldStateActionBase::class)) {
     return;
   }
-  // TODO: check only 1 dynamic parameter. we won't know what to do with more.
 
+  /** @var \Drupal\action_link\Entity\ActionLinkInterface $action_link_entity */
   $action_link_entity = $form_state->getFormObject()->getEntity();
+
+  // Check there is only 1 dynamic parameter. We won't know what to do with
+  // more.
+  if (count($action_link_entity->getStateActionPlugin()->getDynamicParameterNames()) != 1) {
+    return;
+  }
 
   $form['plugin']['container']['computed_field'] = [
     '#type' => 'checkbox',
