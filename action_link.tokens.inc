@@ -18,10 +18,15 @@ function action_link_token_info() {
     'needs-data' => 'action_state',
   ];
 
-  // Core tokens for nodes.
+  // Tokens for state action change.
   $tokens['new_state'] = [
     'name' => t("State"),
-    'description' => t("The unique ID of the TODO."),
+    'description' => t("The label of the new state."),
+  ];
+
+  $tokens['new_state:raw'] = [
+    'name' => t("State"),
+    'description' => t("The raw machine name of the new state."),
   ];
 
   return [
