@@ -417,6 +417,13 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
   /**
    * {@inheritdoc}
    */
+  public function getStates(): array {
+    return $this->pluginDefinition['states'] ?? [];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getStateLabel(string $state): string {
     return $state;
   }

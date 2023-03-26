@@ -229,6 +229,22 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
   public function getDirections(): array;
 
   /**
+   * Gets the states for this plugin, if they are finite and defined.
+   *
+   * Plugins do not need to define states. This is the case for example if there
+   * are an infinite number, such as for a plugin which increments and
+   * decrements a numeric field value.
+   *
+   * This method does not return state labels, because plugins which do not
+   * define states can still use static::getStateLabel() to return labels for
+   * them. For example, a plugin which adds products to a shopping cart has
+   * infinite states but might return a label of 'Empty' for the 0 state.
+   *
+   * @return array
+   */
+  public function getStates(): array;
+
+  /**
    * Gets the label for a state.
    *
    * @param string $state
