@@ -1,0 +1,7 @@
+action_link_poc.action_link_poc:
+  path: /action_link_poc
+  defaults:
+    _title: 'Action link demos'
+    _controller: '\Drupal\action_link_poc\Controller\ActionLinkPocController::content'
+  requirements:
+    _access: 'TRUE'
