@@ -28,7 +28,7 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
    * @param \Drupal\action_link\Entity\ActionLinkInterface $action_link
    *   The action link entity.
    * @param \Drupal\Core\Session\AccountInterface $user
-   *   The user to get links for. TODO ARGH WANT TO ALLOW EASY DEFAULT TO MEAN CURRENT USER!
+   *   The user to get links for.
    * @param [type] ...$parameters
    *   Dynamic parameters specific to the action link's state action plugin.
    *
@@ -278,7 +278,8 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
   /**
    * Gets the message to show the user after an action is complete.
    *
-   * TODO no token replacement - go via entity
+   * This does not perform token replacement. Call the same method on the
+   * action link entity to get tokens replaced.
    *
    * @param string $state
    *   The state that has been arrived at.
@@ -293,7 +294,8 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
   /**
    * Gets the message to show the user when an action cannot be completed.
    *
-   * TODO no token replacement - go via entity
+   * This does not perform token replacement. Call the same method on the
+   * action link entity to get tokens replaced.
    *
    * @param string $state
    *   The state that has been arrived at.
