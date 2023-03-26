@@ -8,10 +8,17 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 
 /**
- * Trait for actions which have only two states.
+ * Trait for actions with only two states and a single direction to toggle.
  *
  * A toggle action has only one direction, and that direction flips it between
  * two states, such as 'on' and 'off'.
+ *
+ * Plugin classes using this trait must:
+ *  - implement \Drupal\Component\Plugin\ConfigurableInterface
+ *  - implement \Drupal\Core\Plugin\PluginFormInterface
+ *  - in their buildConfigurationForm(), set the form elements from
+ *    this trait's buildTextsConfigurationForm() in to $element['labels'].
+ *  - define two states, in the order 'set, unset'.
  *
  * (An action like this could also be defined to have two directions, where each
  * direction can only advance to one state. It's mostly a matter of conceptual
