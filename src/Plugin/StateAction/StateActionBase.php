@@ -51,8 +51,8 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
   /**
    * Gets default configuration for this plugin's strings.
    *
-   * These are defined in a separate method because they require a different
-   * merging strategy, and so this method can be overridden by geometry traits.
+   * These are defined in a separate method so it can be overridden by geometry
+   * traits.
    *
    * @return array
    *   An associative array with the default configuration.
