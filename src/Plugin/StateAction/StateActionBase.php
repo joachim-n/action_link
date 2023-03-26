@@ -45,7 +45,7 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
    * {@inheritdoc}
    */
   public function defaultConfiguration() {
-    return [];
+    return $this->stringsDefaultConfiguration();
   }
 
   /**
