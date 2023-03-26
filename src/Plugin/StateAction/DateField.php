@@ -48,7 +48,6 @@ class DateField extends EntityFieldStateActionBase {
       '#title' => $this->t('Step interval'),
       '#description' => $this->t('The amount of time to change the date by, as a PHP DateInterval string.'),
       '#required' => TRUE,
-      // TODO: validation.
     ];
 
     $plugin_form['labels'] = [
@@ -60,6 +59,22 @@ class DateField extends EntityFieldStateActionBase {
     $plugin_form['labels']['direction']['dec']['link_label']['#title'] = $this->t('Link label for decreasing the field value');
 
     return $plugin_form;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function validateConfigurationForm(array &$form, FormStateInterface $form_state) {
+    parent::validateConfigurationForm($form, $form_state);
+
+    $step = $form_state->getValue('step');
+
+    try {
+      new \DateInterval($step);
+    }
+    catch (\Exception $e) {
+      $form_state->setError($form['step'], 'The step value must be a valid PHP DateInterval string.');
+    }
   }
 
   /**
@@ -86,8 +101,6 @@ class DateField extends EntityFieldStateActionBase {
    * {@inheritdoc}
    */
   public function advanceState(AccountInterface $account, string $state, EntityInterface $entity = NULL) {
-    // TODO:
-    // dump($state);
     $date = new \DateTime($state);
     $value = $date->format(DateTimeItemInterface::DATETIME_STORAGE_FORMAT);
 
