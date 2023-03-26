@@ -16,9 +16,14 @@ use Symfony\Component\Routing\Route;
 /**
  * Action link to add a product to a shopping cart.
  *
+ * Proof-of-concept only, needs more work.
+ *
+ * The entity parameter would represent the product, but it's not used in the
+ * demo logic.
+ *
  * @StateAction(
  *   id = "poc_add_to_cart",
- *   label = @Translation("Add To Cart (proof-of-concept)"),
+ *   label = @Translation("Add to cart (proof-of-concept)"),
  *   description = @Translation("Action link to add a product to a shopping cart."),
  *   parameters = {
  *     "dynamic" = {
