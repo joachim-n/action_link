@@ -74,16 +74,6 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
   public function setConfiguration(array $configuration) {
     // Merge in default configuration.
     $this->configuration = $configuration + $this->defaultConfiguration();
-
-    // Configuration for strings needs a different merging strategy for the
-    // defaults. We want an empty value in the incoming configuration to be
-    // replaced with the string from the defaults.
-    $strings_default_configuration = $this->stringsDefaultConfiguration();
-    NestedArrayRecursive::arrayWalkNested($strings_default_configuration, function($value, $parents) {
-      if (empty(NestedArray::getValue($this->configuration, $parents))) {
-        NestedArray::setValue($this->configuration, $parents, $value);
-      }
-    });
   }
 
   /**
