@@ -4,8 +4,6 @@ namespace Drupal\action_link\Plugin\StateAction;
 
 use Drupal\action_link\Entity\ActionLinkInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Session\AccountInterface;
-use Drupal\Core\StringTranslation\TranslatableMarkup;
 
 /**
  * Trait for actions with only two states and a single direction to toggle.
@@ -26,8 +24,6 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
  * direction and state would essentially duplicate information in the action
  * link path parameters. Doing it this way means a toggle is a special case of
  * a cyclical action.)
- *
- * TODO This should be more for cyclical states rather than only 2 state toggles?
  *
  */
 trait ToggleTrait {
@@ -59,7 +55,6 @@ trait ToggleTrait {
       '#type' => 'textfield',
       '#title' => t('Link label for setting the toggle'),
       '#required' => TRUE,
-      // todo basic defaults.
     ];
 
     $labels_form['state'][$set_state]['message'] = [
