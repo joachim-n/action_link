@@ -71,8 +71,9 @@ class ActionLinkset extends RenderElement {
     // Temporarily switch the link style. This avoids having an additional
     // parameter to buildLinkSet() which can't be optional because it comes
     // before the variadic parameters, which would be further-reaching ugliness.
-    // This hack works because ActionLinkController respects the link style
-    // given in the path.
+    // This hack works because
+    // \Drupal\action_link\Controller\ActionLinkController respects the link
+    // style given in the path.
     if (!empty($element['#link_style'])) {
       $action_link->set('link_style', $element['#link_style']);
     }
