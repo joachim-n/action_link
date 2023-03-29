@@ -149,9 +149,9 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
    *
    * @return array|null
    *   A build array for the link, or NULL if nothing should be output. The
-   *   build array may itself be empty. The logic is:
-   *    - No access: nothing.
-   *    - No operability: nothing.
+   *   build array may itself not contain a link and show nothing. The logic is:
+   *    - No access: NULL.
+   *    - No operability: NULL.
    *    - No reachable state: build array with no link.
    *    - Everything ok: build array with a link.
    */
