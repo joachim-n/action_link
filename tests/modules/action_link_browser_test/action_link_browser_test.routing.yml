@@ -1,5 +1,5 @@
 action_link_browser_test.action_link_browser_test:
-  path: /action_link_browser_test
+  path: /action_link_browser_test/{action_link}
   defaults:
     _title: 'Action Link Test Output'
     _controller: '\Drupal\action_link_browser_test\Controller\ActionLinkBrowserTestController::content'
