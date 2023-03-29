@@ -214,12 +214,11 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
    * Gets a render array of all the operable links for the user.
    *
    * @param \Drupal\Core\Session\AccountInterface $user
-   *   The user to get links for. TODO ARGH WANT TO ALLOW EASY DEFAULT TO MEAN CURRENT USER!
+   *   The user to get links for.
    * @param [type] ...$parameters
    */
   public function buildLinkSet(AccountInterface $user, ...$parameters) {
     $plugin = $this->getStateActionPlugin();
-    // ARGH need to pass entity to plugin!
     return $plugin->buildLinkSet($this, $user, ...$parameters);
   }
 
@@ -236,7 +235,8 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
    * {@inheritdoc}
    */
   public function checkAccess(string $direction, string $state, AccountInterface $account, ...$parameters): AccessResult {
-    // TODO: confusing that this is here! - move to checkPermissionAccess?
+    // This is here rather than in the plugin's checkPermissionAccess so that it
+    // cannot be accidentally omitted in a plugin's override of the method.
     $main_permission_access = AccessResult::allowedIfHasPermission($account, "use {$this->id()} action links");
 
     $specific_permission_access = $this->getStateActionPlugin()->checkPermissionAccess($this, $direction, $state, $account, ...$parameters);
@@ -249,6 +249,9 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
     return $access_result;
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function getLinkLabel(string $direction, string $state, ...$parameters): string {
     $label = $this->getStateActionPlugin()->getLinkLabel($direction, $state, ...$parameters);
 
@@ -285,6 +288,9 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
     return $message;
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function getFailureMessage(string $direction, string $state, ...$parameters): string {
     $message = $this->getStateActionPlugin()->getFailureMessage($direction, $state, ...$parameters);
 
