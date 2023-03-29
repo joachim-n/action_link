@@ -7,6 +7,7 @@ use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Plugin\DefaultPluginManager;
 use Drupal\action_link\Annotation\StateAction;
 use Drupal\action_link\Plugin\StateAction\StateActionInterface;
+use Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException;
 
 /**
  * Manages discovery and instantiation of State Action plugins.
@@ -40,8 +41,13 @@ class StateActionManager extends DefaultPluginManager {
   public function processDefinition(&$definition, $plugin_id) {
     parent::processDefinition($definition, $plugin_id);
 
+    foreach ($definition['dynamic_parameters'] as $parameter) {
+      if (in_array($parameter, ['link_style', 'direction', 'state', 'user'])) {
+        throw new InvalidPluginDefinitionException($plugin_id, sprintf('The %s parameter name is reserved.', $parameter));
+      }
+    }
+
     // TODO validaton of def:
-    // - dynamic params cant have same names are base route parasm eg 'direction'
     // - geometry traits need plugin to also implement form interface!
   }
 
