@@ -45,6 +45,13 @@ class TestAlways extends StateActionBase {
   /**
    * {@inheritdoc}
    */
+  public function checkPermissionAccess(ActionLinkInterface $action_link, string $direction, string $state, AccountInterface $account, ...$parameters): AccessResult {
+    return AccessResult::allowed();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function checkOperandAccess(ActionLinkInterface $action_link, string $direction, string $state, AccountInterface $account, ...$parameters): AccessResult {
     return AccessResult::allowed();
   }
