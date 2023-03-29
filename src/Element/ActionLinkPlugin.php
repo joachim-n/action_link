@@ -109,7 +109,7 @@ class ActionLinkPlugin extends FormElement {
     // Non-JS support.
     // @todo Fix this. It doesn't work because the link style radios get an
     // error set on them and at that point setErrorByName() sees
-    // limit_validation_errorsas emty. WTF.
+    // limit_validation_errors as emty. WTF.
     // $array_parents = array_merge($element['#array_parents'], ['container', 'plugin_id']);
     // $element['container']['choose_plugin'] = [
     //   '#type' => 'submit',

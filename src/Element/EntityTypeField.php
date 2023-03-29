@@ -16,7 +16,11 @@ use Symfony\Component\HttpFoundation\Request;
  *  - '#field_types': (optional) An array of field types to include. If empty,
  *    fields of all types are shown.
  *  - '#field_options_filters': (optional) An array of callbacks which can
- *    alter the field options.
+ *    alter the field options. These receive the following parameters:
+ *     - $field_options: The array of field options.
+ *     - $selected_entity_type_id: The selected entity type ID.
+ *     - $field_map_for_entity_type: The field map for the entity type.
+ *     - $form_state: The form state.
  *
  * The #default_value property may be set in the following format:
  * @code

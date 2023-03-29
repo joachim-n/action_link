@@ -52,6 +52,9 @@ abstract class EntityFieldStateActionBase extends StateActionBase implements Con
     return $element;
   }
 
+  /**
+   * Field options filter callback.
+   */
   public static function fieldOptionsFilter(&$field_options, $selected_entity_type_id, $field_map_for_entity_type, $form_state) {
     /** @var \Drupal\Core\Entity\EntityFieldManagerInterface */
     $entity_field_manager = \Drupal::service('entity_field.manager');
