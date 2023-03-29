@@ -46,7 +46,7 @@ class ActionLink extends ComputedFieldBase {
       // The plugin derivative ID is set to the action link entity ID in the
       // deriver.
       '#action_link' => $this->getDerivativeId(),
-      '#parameters' => [
+      '#dynamic_parameters' => [
         $host_entity,
       ],
     ];

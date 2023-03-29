@@ -11,9 +11,9 @@ use Drupal\Core\Render\Element\RenderElement;
  *   - #action_link: The action link entity ID.
  *   - #user: (optional) The user to get the links for. Defaults to the current
  *     user.
- *   - #parameters: (optional) The parameters for the action link's state
- *     action plugin. These should be raw values as used in the action link
- *     URLs, not upcasted objects.
+ *   - #dynamic_parameters: (optional) The parameters for the action link's
+ *     state action plugin. These should be raw values as used in the action
+ *     link URLs, not upcasted objects.
  *   - #link_style: (optional) The ID of an action link style plugin to override
  *     the link style set in the action link config entity.
  *
@@ -23,7 +23,7 @@ use Drupal\Core\Render\Element\RenderElement;
  *   '#type' => 'action_linkset',
  *   '#action_link' => 'my_action_link',
  *   '#link_style' => 'ajax',
- *   '#parameters' => [
+ *   '#dynamic_parameters' => [
  *     42,
  *   ],
  * ];
@@ -42,7 +42,7 @@ class ActionLinkset extends RenderElement {
       '#pre_render' => [
         [$class, 'preRenderLinkset'],
       ],
-      '#parameters' => [],
+      '#dynamic_parameters' => [],
     ];
   }
 
@@ -56,7 +56,7 @@ class ActionLinkset extends RenderElement {
    *   An associative array with the following properties:
    *   - #action_link: The action link entity ID.
    *   - #user: (optional) The user to get the links for.
-   *   - #parameters: (optional) The parameters for the action link's state
+   *   - #dynamic_parameters: (optional) The parameters for the action link's state
    *     action plugin.
    *   - #link_style: (optional) The ID of an action link style plugin to
    *     override the action link's configuration.
@@ -78,7 +78,7 @@ class ActionLinkset extends RenderElement {
       $action_link->set('link_style', $element['#link_style']);
     }
 
-    $element += $action_link->buildLinkSet($element['#user'] ?? \Drupal::currentUser(), ...$element['#parameters']);
+    $element += $action_link->buildLinkSet($element['#user'] ?? \Drupal::currentUser(), ...$element['#dynamic_parameters']);
 
     return $element;
   }
