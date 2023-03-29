@@ -78,13 +78,12 @@ class ActionLinkKernelTest extends KernelTestBase {
 
     // Checking access to routes requires the current user to be set up.
     $this->user = $this->setUpCurrentUser();
-
   }
 
  /*
-  * Tests building action links, and that access and operability are checked.
+  * Tests access and operability checks on building and accessing links
   */
- public function testLinkGeneration() {
+ public function testLinkAccess() {
    $action_link = $this->actionLinkStorage->create([
       'id' => 'test_mocked_control',
       'label' => 'Test',
@@ -251,80 +250,9 @@ class ActionLinkKernelTest extends KernelTestBase {
     $this->assertEquals(Response::HTTP_NOT_FOUND, $response->getStatusCode());
   }
 
-  /**
-   * Tests access to an action link's route.
-   */
-  public function testRouteAccess() {
-    $action_link = $this->actionLinkStorage->create([
-      'id' => 'test_mocked_access',
-      'label' => 'Test',
-      'plugin_id' => 'test_mocked_access',
-      'plugin_config' => [],
-      'link_style' => 'nojs',
-    ]);
-    $action_link->save();
-    \Drupal::service('router.builder')->rebuildIfNeeded();
+  public function testLinkGenerationValidation() {
 
-    $http_kernel = $this->container->get('http_kernel');
-
-    // Deny access.
-    $this->state->set('test_mocked_access:access', FALSE);
-
-    $request = Request::create("/action-link/test_mocked_access/nojs/change/cake/{$this->user->id()}");
-
-    $response = $http_kernel->handle($request);
-    $this->assertEquals(Response::HTTP_FORBIDDEN, $response->getStatusCode());
-
-    // Grant access.
-    $this->state->set('test_mocked_access:access', TRUE);
-
-    $response = $http_kernel->handle($request);
-    $this->assertEquals(Response::HTTP_FOUND, $response->getStatusCode());
-
-    $messages = $this->messenger->messagesByType(MessengerInterface::TYPE_STATUS);
-    $this->assertEquals([0 => 'Changed'], $messages);
-    $this->messenger->deleteAll();
-
-    // TODO: access per user?
-
-    $action_link = $this->actionLinkStorage->create([
-      'id' => 'test_mocked_operability',
-      'label' => 'Test',
-      'plugin_id' => 'test_mocked_operability',
-      'plugin_config' => [],
-      'link_style' => 'nojs',
-    ]);
-    $action_link->save();
-    \Drupal::service('router.builder')->rebuildIfNeeded();
-
-    // Set to inoperable.
-    $this->state->set('test_mocked_operability:operability', FALSE);
-
-    $request = Request::create("/action-link/test_mocked_operability/nojs/change/cake/{$this->user->id()}");
-
-    $response = $http_kernel->handle($request);
-    $this->assertEquals(Response::HTTP_FOUND, $response->getStatusCode());
-
-    $messages = $this->messenger->messagesByType(MessengerInterface::TYPE_STATUS);
-    $this->assertEquals([0 => 'Unable to perform the action. The link may be outdated.'], $messages);
-    $this->messenger->deleteAll();
-
-    // Set to operable.
-    $this->state->set('test_mocked_operability:operability', TRUE);
-
-    $request = Request::create("/action-link/test_mocked_operability/nojs/change/cake/{$this->user->id()}");
-
-    $response = $http_kernel->handle($request);
-    $this->assertEquals(Response::HTTP_FOUND, $response->getStatusCode());
-
-    $messages = $this->messenger->messagesByType(MessengerInterface::TYPE_STATUS);
-    $this->assertEquals([0 => 'Changed'], $messages);
-    $this->messenger->deleteAll();
-
-    // TODO: reachability
   }
-
-
 
 
     // no access, BUT operable and access to auth: 'log in to FOO'
