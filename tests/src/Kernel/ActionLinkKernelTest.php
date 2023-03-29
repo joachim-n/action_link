@@ -270,18 +270,4 @@ class ActionLinkKernelTest extends KernelTestBase {
     $links = $action_link->buildLinkSet($user);
   }
 
-
-    // no access, BUT operable and access to auth: 'log in to FOO'
-    // no access, and neither: nothing
-    // access, not operable: nothing
-    // access, operable: link
-
-    // todo:
-    // generate link
-    // no link for bad user
-    // no link for bad AL entity
-    // no link for bad dynamic params
-    // access???
-    //
-
 }
