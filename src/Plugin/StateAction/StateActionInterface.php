@@ -34,6 +34,10 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
    *
    * @return array
    *   A render array of links. This may be empty if no links are available.
+   *
+   * @throws \ArgumentCountError
+   *   Throws an error if the $parameter don't match up with the dynamic
+   *   parameters defined by this plugin.
    */
   public function buildLinkSet(ActionLinkInterface $action_link, AccountInterface $user, ...$parameters): array;
 

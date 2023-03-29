@@ -171,8 +171,8 @@ abstract class EntityFieldStateActionBase extends StateActionBase implements Con
     $parameters = parent::convertParametersForRoute($parameters);
 
     // Convert the entity parameter to an entity ID.
-    // TODO: this needs to be able to complain if a param is bad.
-    // e.g. no node exists.
+    // @todo: This needs to be able to complain if a param is bad, e.g. no node
+    // exists.
     $parameters['entity'] = $parameters['entity']->id();
 
     return $parameters;

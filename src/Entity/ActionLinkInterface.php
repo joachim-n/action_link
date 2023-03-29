@@ -15,7 +15,43 @@ use Drupal\Core\Session\AccountInterface;
  */
 interface ActionLinkInterface extends ConfigEntityInterface, EntityWithPluginCollectionInterface {
 
+  /**
+   * Gets a render array of all the reachable directions for the user.
+   *
+   * @param \Drupal\action_link\Entity\ActionLinkInterface $action_link
+   *   The action link entity.
+   * @param \Drupal\Core\Session\AccountInterface $user
+   *   The user to get links for.
+   * @param mixed ...$parameters
+   *   Dynamic parameters specific to the action link's state action plugin.
+   *
+   * @return array
+   *   A render array of links. This may be empty if no links are available.
+   *
+   * @throws \ArgumentCountError
+   *   Throws an error if the $parameter don't match up with the dynamic
+   *   parameters defined by this entity's state action plugin.
+   */
   public function buildLinkSet(AccountInterface $user, ...$parameters);
+
+  /**
+   * Gets a render array of the given direction for the user.
+   *
+   * @param string $direction
+   *   The direction to get the link for.
+   * @param \Drupal\Core\Session\AccountInterface $user
+   *   The user to get links for.
+   * @param mixed ...$parameters
+   *   Dynamic parameters specific to the action link's state action plugin.
+   *
+   * @return array
+   *   A render array of links. This may be empty if no links are available.
+   *
+   * @throws \ArgumentCountError
+   *   Throws an error if the $parameter don't match up with the dynamic
+   *   parameters defined by this entity's state action plugin.
+   */
+  public function buildSingleLink(string $direction, AccountInterface $user, ...$parameters): array;
 
   /**
    * Verifies that a target state is the next state.
