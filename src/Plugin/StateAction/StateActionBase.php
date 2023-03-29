@@ -164,7 +164,6 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
     if ($reachable) {
       // Check access if the state is reachable. If the state is not reachable,
       // we can't check access but output an empty link anyway.
-      // TODO! doesn't handle proxy access!!!!!
       // TODO: figure out passing assoc array to splat.
       $access = $action_link->checkAccess($direction, $next_state, $user, ...array_values($named_parameters));
       if (!$access->isAllowed()) {
