@@ -117,6 +117,18 @@ class PocSubscribe extends StateActionBase implements ContainerFactoryPluginInte
   /**
    * {@inheritdoc}
    */
+  public function validateConfigurationForm(array &$form, FormStateInterface $form_state) {
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function submitConfigurationForm(array &$form, FormStateInterface $form_state) {
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getNextStateName(string $direction, AccountInterface $user, string $entity_type = NULL, string $entity_id = NULL): ?string {
     $value = \Drupal::state()->get(implode(':', ['poc_subscribe', $entity_type, $entity_id]), 'unsub');
 

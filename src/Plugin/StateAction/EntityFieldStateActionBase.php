@@ -95,7 +95,9 @@ abstract class EntityFieldStateActionBase extends StateActionBase implements Con
     // $form_state->setValue(['plugin', 'plugin_configuration'], $merged_values);
   }
 
-
+  /**
+   * {@inheritdoc}
+   */
   public function validateConfigurationForm(array &$form, FormStateInterface $form_state) {
     // IMPORTANT: It is essential that child classes that override this
     // implementation call it with parent::, as it handles copying values from
@@ -114,6 +116,12 @@ abstract class EntityFieldStateActionBase extends StateActionBase implements Con
     // be aware of the form structure it's used in.
     $form_state->getCompleteFormState()->setValue(['plugin', 'plugin_configuration', 'entity_type_id'], $values['entity_type_field']['entity_type_id']);
     $form_state->getCompleteFormState()->setValue(['plugin', 'plugin_configuration', 'field'], $values['entity_type_field']['field']);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function submitConfigurationForm(array &$form, FormStateInterface $form_state) {
   }
 
   /*
