@@ -6,7 +6,6 @@ use Drupal\action_link\Entity\ActionLinkInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\action_link\Plugin\StateAction\StateActionBase;
 use Drupal\Core\Access\AccessResult;
-use Drupal\Core\Url;
 
 /**
  * Test action which is always usable.
