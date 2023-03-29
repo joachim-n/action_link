@@ -319,13 +319,6 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
     return $element;
   }
 
-  public function validateConfigurationForm(array &$form, FormStateInterface $form_state) {
-
-  }
-
-  public function copyFormValuesToEntity($entity, array &$form, FormStateInterface $form_state) {
-  }
-
   /**
    * {@inheritdoc}
    */

@@ -98,8 +98,6 @@ class ActionLinkForm extends EntityForm {
     $entity->set('plugin_config', $form_state->getValue(['plugin', 'plugin_configuration']) ?? []);
 
     $entity->set('link_style', $form_state->getValue(['link_style']));
-
-    $entity->getStateActionPlugin()->copyFormValuesToEntity($entity, $form, $form_state);
   }
 
   /**
