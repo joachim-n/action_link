@@ -36,6 +36,9 @@ abstract class EntityFieldStateActionBase extends StateActionBase implements Con
     $element['entity_type_field'] = [
       '#type' => 'entity_type_field',
       '#title' => $this->t('Entity field'),
+      '#field_options_filters' => [
+        [static::class, 'fieldOptionsFilter'],
+      ],
       '#element_validate' => [
         [static::class, 'entityFieldElementValidate'],
       ],
@@ -47,6 +50,21 @@ abstract class EntityFieldStateActionBase extends StateActionBase implements Con
     ];
 
     return $element;
+  }
+
+  public static function fieldOptionsFilter(&$field_options, $selected_entity_type_id, $field_map_for_entity_type, $form_state) {
+    /** @var \Drupal\Core\Entity\EntityFieldManagerInterface */
+    $entity_field_manager = \Drupal::service('entity_field.manager');
+
+    // Remove computed fields.
+    foreach ($field_options as $field_id => $label) {
+      foreach ($field_map_for_entity_type[$field_id]['bundles'] as $bundle) {
+        $field_definition = $entity_field_manager->getFieldDefinitions($selected_entity_type_id, $bundle)[$field_id];
+        if ($field_definition->isComputed()) {
+          unset($field_options[$field_id]);
+        }
+      }
+    }
   }
 
   public static function entityFieldElementValidate(&$element, FormStateInterface $form_state, &$complete_form) {

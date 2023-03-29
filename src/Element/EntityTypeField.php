@@ -15,9 +15,8 @@ use Symfony\Component\HttpFoundation\Request;
  * Available properties:
  *  - '#field_types': (optional) An array of field types to include. If empty,
  *    fields of all types are shown.
- *
- *
- * TODO: filters! exclude computed, in our case.
+ *  - '#field_options_filters': (optional) An array of callbacks which can
+ *    alter the field options.
  *
  * The #default_value property may be set in the following format:
  * @code
@@ -44,6 +43,9 @@ class EntityTypeField extends FormElement {
         [$class, 'processEntityType'],
       ],
       '#options_element_type' => 'select',
+      // @todo Not yet implemented.
+      '#entity_type_options_filters' => [],
+      '#field_options_filters' => [],
     ];
   }
 
@@ -143,6 +145,12 @@ class EntityTypeField extends FormElement {
         }
         $field_options[$field_id] = $label;
       }
+
+      // Execute field options filter callbacks.
+      foreach ($element['#field_options_filters'] as $filter_callback) {
+        call_user_func_array($form_state->prepareCallback($filter_callback), [&$field_options, $selected_entity_type_id, $field_map_for_entity_type, $form_state]);
+      }
+
       natcasesort($field_options);
 
       $element['container']['field'] = [
