@@ -79,9 +79,10 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
    *
    * Subclasses will add parameters to this.
    *
-   *
-   *
-   * @param [type] $user
+   * @param string $direction
+   *   The direction.
+   * @param \Drupal\Core\Session\AccountInterface $user
+   *   The user to get the direction for.
    *
    * @return string|null
    *   The name of the next state in the given direction for the action. If

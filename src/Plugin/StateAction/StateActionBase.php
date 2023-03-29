@@ -95,6 +95,9 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
     return $this->doBuildLinkSet($action_link, $user, $direction_array, ...$parameters);
   }
 
+  /**
+   * Common code for static::buildLinkSet() and static::buildSingleLink().
+   */
   protected function doBuildLinkSet(ActionLinkInterface $action_link, AccountInterface $user, $directions, ...$parameters): array {
     // Validate the number of dynamic parameters. This must be done before they
     // are validated by the specific plugin class.
