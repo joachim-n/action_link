@@ -60,7 +60,7 @@ class StateAction extends Plugin {
    * @see \Drupal\action_link\Plugin\StateAction\StateActionBase::getDynamicParameterNames()
    * @see \Drupal\action_link\Plugin\StateAction\StateActionInterface::getActionRoute()
    */
-  public $parameters = [];
+  public $dynamic_parameters = [];
 
   // global
 

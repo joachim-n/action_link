@@ -31,13 +31,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   id = "poc_subscribe",
  *   label = @Translation("Subscribe (proof-of-concept)"),
  *   description = @Translation("Action link to subscribe to an entity."),
- *   parameters = {
- *     "dynamic" = {
- *       "entity_type",
- *       "entity_id",
- *     },
- *     "configuration" = {
- *     },
+ *   dynamic_parameters = {
+ *     "entity_type",
+ *     "entity_id",
  *   },
  *   directions = {
  *     "toggle" = "toggle",

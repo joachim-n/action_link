@@ -26,10 +26,8 @@ use Symfony\Component\Routing\Route;
  *   label = @Translation("Workflow"),
  *   description = @Translation("Workflow"),
  *   directions = {},
- *   parameters = {
- *     "dynamic" = {
- *       "entity",
- *     },
+ *   dynamic_parameters = {
+ *     "entity",
  *   },
  *   deriver = "Drupal\action_link_workflow\Plugin\Derivative\WorkflowActionLinkDeriver"
  * )

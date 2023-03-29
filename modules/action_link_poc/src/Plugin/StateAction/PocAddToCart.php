@@ -25,12 +25,8 @@ use Symfony\Component\Routing\Route;
  *   id = "poc_add_to_cart",
  *   label = @Translation("Add to cart (proof-of-concept)"),
  *   description = @Translation("Action link to add a product to a shopping cart."),
- *   parameters = {
- *     "dynamic" = {
- *       "entity"
- *     },
- *     "configuration" = {
- *     },
+ *   dynamic_parameters = {
+ *     "entity"
  *   },
  *   directions = {
  *     "add" = "add",

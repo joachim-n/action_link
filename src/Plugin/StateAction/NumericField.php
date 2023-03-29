@@ -15,15 +15,8 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
  *   id = "numeric_field",
  *   label = @Translation("Numeric field"),
  *   description = @Translation("Numeric field TODO"),
- *   parameters = {
- *     "dynamic" = {
- *       "entity",
- *     },
- *     "configuration" = {
- *       "entity_type",
- *       "field",
- *       "step",
- *     },
+ *   dynamic_parameters = {
+ *     "entity",
  *   },
  *   directions = {
  *     "dec" = "decrease",

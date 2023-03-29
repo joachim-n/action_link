@@ -14,14 +14,8 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
  *   id = "options_field",
  *   label = @Translation("Options field"),
  *   description = @Translation("Action link to control the value of an options field."),
- *   parameters = {
- *     "dynamic" = {
- *       "entity",
- *     },
- *     "configuration" = {
- *       "entity_type",
- *       "field",
- *     },
+ *   dynamic_parameters = {
+ *     "entity",
  *   },
  *   directions = {
  *     "inc" = "forward",

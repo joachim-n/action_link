@@ -16,15 +16,8 @@ use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
  *   id = "date_field",
  *   label = @Translation("Date field"),
  *   description = @Translation("Action link to control the value of a date field."),
- *   parameters = {
- *     "dynamic" = {
- *       "entity",
- *     },
- *     "configuration" = {
- *       "entity_type",
- *       "field",
- *       "step",
- *     },
+ *   dynamic_parameters = {
+ *     "entity",
  *   },
  *   directions = {
  *     "dec" = "decrease",
