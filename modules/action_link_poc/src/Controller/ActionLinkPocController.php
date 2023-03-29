@@ -8,7 +8,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * TODO: class docs.
+ * Shows all action links that use the proof-of-concept plugins.
  */
 class ActionLinkPocController extends ControllerBase implements ContainerInjectionInterface {
 

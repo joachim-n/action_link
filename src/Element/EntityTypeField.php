@@ -69,8 +69,6 @@ class EntityTypeField extends FormElement {
 
     // Try to get a default value for the entity_type_id element.
     $entity_type_id_parents = $element['#parents'];
-    // TODO: why do we need 'container' here but not in the plugin form element????
-    // $entity_type_id_parents[] = 'container';
     $entity_type_id_parents[] = 'entity_type_id';
 
     if ($selected_entity_type_id = $form_state->getValue($entity_type_id_parents)) {

@@ -108,11 +108,9 @@ class Workflow extends StateActionBase implements ContainerFactoryPluginInterfac
    * {@inheritdoc}
    */
   public function getNextStateName(string $direction, AccountInterface $user, EntityInterface $entity = NULL): ?string {
-    // get current state from entity! HOW?
-    // TODO configuration needs to tell us which field!
+    // @todo Get current state from entity: configuration needs to tell us which
+    // field.
     $current_state = $entity->moderation_state->value;
-    //
-    // getTransitionsForState
 
     /** @var \Drupal\workflows\WorkflowInterface */
     $workflow = $this->entityTypeManager->getStorage('workflow')->load($this->workflowId);

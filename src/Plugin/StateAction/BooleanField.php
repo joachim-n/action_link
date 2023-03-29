@@ -2,12 +2,9 @@
 
 namespace Drupal\action_link\Plugin\StateAction;
 
-use Drupal\Component\Utility\NestedArray;
-use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
  * State action for toggling a boolean field on an entity.
@@ -31,9 +28,6 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
  *   },
  * )
  */
-// TODO: allow customising state names -- eg published, flagged, yes, no. for nicer URLs.
-// two directions, but also only two states.
-// how does getAllLinks know which one? OPERABILITY!
 class BooleanField extends EntityFieldStateActionBase {
 
   use ToggleTrait;
@@ -42,25 +36,6 @@ class BooleanField extends EntityFieldStateActionBase {
     $element = parent::buildConfigurationForm($element, $form_state);
 
     $element['entity_type_field']['#field_types'] = ['boolean'];
-
-    // dsm($element);
-
-
-    // $element['entity_type'] = [
-
-    //   '#type' => 'textfield', // todo options
-    //   '#title' => $this->t('Entity type'),
-    //   // '#options' => [],
-    // ];
-
-    // $element['field'] = [
-    //   '#type' => 'textfield', // todo options
-    //   '#title' => $this->t('field'),
-    //   // '#options' => [],
-    // ];
-
-    // TODO: field delta????? ARGH!
-
 
     $element['labels']['state']['true']['link_label']['#title'] = $this->t('Link label for setting the field value to TRUE');
     $element['labels']['state']['false']['link_label']['#title'] = $this->t('Link label for setting the field value to FALSE');

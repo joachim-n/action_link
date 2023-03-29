@@ -47,7 +47,7 @@ class StateActionManager extends DefaultPluginManager {
       }
     }
 
-    // TODO validaton of def:
+    // @todo Further validation of definition:
     // - geometry traits need plugin to also implement form interface!
   }
 
