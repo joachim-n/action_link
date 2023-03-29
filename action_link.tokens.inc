@@ -25,8 +25,18 @@ function action_link_token_info() {
   ];
 
   $tokens['new_state:raw'] = [
-    'name' => t("State"),
+    'name' => t("State machine name"),
     'description' => t("The raw machine name of the new state."),
+  ];
+
+  $tokens['direction'] = [
+    'name' => t("Direction"),
+    'description' => t("The label of the direction."),
+  ];
+
+  $tokens['direction:raw'] = [
+    'name' => t("Direction machine name"),
+    'description' => t("The raw machine name of the direction."),
   ];
 
   return [
@@ -66,6 +76,15 @@ function action_link_tokens($type, $tokens, array $data, array $options, Bubblea
         case 'new_state:raw':
           $replacements[$original] = $action_state_data->state;
           break;
+
+        case 'direction':
+          $replacements[$original] = $action_link->getStateActionPlugin()->getDirections()[$action_state_data->direction];
+          break;
+
+        case 'direction:raw':
+          $replacements[$original] = $action_state_data->direction;
+          break;
+
       }
     }
   }
