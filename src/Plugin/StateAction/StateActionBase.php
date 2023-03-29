@@ -391,7 +391,6 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
    * {@inheritdoc}
    */
   public function validateParameters(array $parameters) {
-
   }
 
   /**
