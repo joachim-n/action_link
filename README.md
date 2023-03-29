@@ -14,6 +14,11 @@ page reload, or can reload the page.
 
 This module requires no modules outside of Drupal core.
 
+### Optional modules
+
+- Computed Field module allows action links that control entities to be output
+  as computed fields on the entity.
+
 ## Installation
 
 Install as you would normally install a contributed Drupal module. For further
@@ -22,21 +27,6 @@ information, see
 
 ## Configuration
 
-1. Go to
-
-
-## Permissions
-
-granularity
-
-
-For example, with an
- action link which toggles the published status of an entity, a user could
- have permission only to unpublish an entity, and not to access the link to
-publish it.
-
-
-## Developers
-
-
-NO PROB NOT! needs core patch from https://www.drupal.org/project/drupal/issues/2987987
+1. Go to Administration › Structure › Action Links.
+2. Click 'Add action link' to create an action link.
+3. Configure permissions to use the action link at the normal permissions page.
