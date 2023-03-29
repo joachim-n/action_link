@@ -119,19 +119,29 @@ class EntityTypeField extends FormElement {
     ];
 
     if ($selected_entity_type_id) {
+      /** @var \Drupal\Core\Entity\EntityFieldManagerInterface */
+      $entity_field_manager = \Drupal::service('entity_field.manager');
+      $field_map_for_entity_type = $entity_field_manager->getFieldMap()[$selected_entity_type_id];
+
       /** @var \Drupal\Core\Field\FieldStorageDefinitionInterface[] */
       $field_storage_definitions = \Drupal::service('entity_field.manager')->getFieldStorageDefinitions($selected_entity_type_id);
 
       $field_options = [];
-      foreach ($field_storage_definitions as $field_id => $field_storage_definition) {
+      foreach ($field_map_for_entity_type as $field_id => $field_map_data) {
         if (!empty($element['#field_types'])) {
-          if (!in_array($field_storage_definition->getType(), $element['#field_types'])) {
+          if (!in_array($field_map_data['type'], $element['#field_types'])) {
             continue;
           }
         }
 
         // @todo Labels for config field storages are ugly!
-        $field_options[$field_id] = $field_storage_definition->getLabel();
+        if (isset($field_storage_definitions[$field_id])) {
+          $label = $field_storage_definitions[$field_id]->getLabel();
+        }
+        else {
+          $label = $field_id;
+        }
+        $field_options[$field_id] = $label;
       }
       natcasesort($field_options);
 
