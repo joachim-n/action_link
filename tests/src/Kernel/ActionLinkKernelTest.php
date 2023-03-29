@@ -250,8 +250,24 @@ class ActionLinkKernelTest extends KernelTestBase {
     $this->assertEquals(Response::HTTP_NOT_FOUND, $response->getStatusCode());
   }
 
+  /**
+   * Tests that dynamic parameters passed to buildLinkSet() are validated.
+   */
   public function testLinkGenerationValidation() {
+    /** @var \Drupal\action_link\Entity\ActionLinkInterface $action_link */
+    $action_link = $this->actionLinkStorage->create([
+      'id' => 'test_dynamic_parameters',
+      'label' => 'Test',
+      'plugin_id' => 'test_dynamic_parameters',
+      'plugin_config' => [],
+      'link_style' => 'nojs',
+    ]);
+    $action_link->save();
 
+    $user = $this->setUpCurrentUser();
+
+    $this->expectException(\ArgumentCountError::class);
+    $links = $action_link->buildLinkSet($user);
   }
 
 
