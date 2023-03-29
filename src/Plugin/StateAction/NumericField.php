@@ -14,7 +14,7 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
  * @StateAction(
  *   id = "numeric_field",
  *   label = @Translation("Numeric field"),
- *   description = @Translation("Numeric field TODO"),
+ *   description = @Translation("Changes the value of a numeric field"),
  *   dynamic_parameters = {
  *     "entity",
  *   },
