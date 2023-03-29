@@ -211,7 +211,7 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
   }
 
   /**
-   * Gets a render array of all the operable links for the user.
+   * Gets a render array of all the reachable directions for the user.
    *
    * @param \Drupal\Core\Session\AccountInterface $user
    *   The user to get links for.
@@ -220,6 +220,20 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
   public function buildLinkSet(AccountInterface $user, ...$parameters) {
     $plugin = $this->getStateActionPlugin();
     return $plugin->buildLinkSet($this, $user, ...$parameters);
+  }
+
+  /**
+   * Gets a render array of the given direction for the user.
+   *
+   * @param string $direction
+   *   The direction to get the link for.
+   * @param \Drupal\Core\Session\AccountInterface $user
+   *   The user to get links for.
+   * @param [type] ...$parameters
+   */
+  public function buildSingleLink(string $direction, AccountInterface $user, ...$parameters): array {
+    $plugin = $this->getStateActionPlugin();
+    return $plugin->buildSingleLink($this, $direction, $user, ...$parameters);
   }
 
   /**

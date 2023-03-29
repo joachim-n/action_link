@@ -80,6 +80,22 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
    * {@inheritdoc}
    */
   public function buildLinkSet(ActionLinkInterface $action_link, AccountInterface $user, ...$parameters): array {
+    $directions = $this->getDirections();
+
+    return $this->doBuildLinkSet($action_link, $user, $directions, ...$parameters);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function buildSingleLink(ActionLinkInterface $action_link, string $direction, AccountInterface $user, ...$parameters): array {
+    $directions = $this->getDirections();
+    $direction_array = [$direction => $directions[$direction]];
+
+    return $this->doBuildLinkSet($action_link, $user, $direction_array, ...$parameters);
+  }
+
+  protected function doBuildLinkSet(ActionLinkInterface $action_link, AccountInterface $user, $directions, ...$parameters): array {
     // Validate the number of dynamic parameters. This must be done before they
     // are validated by the specific plugin class.
     $dynamic_parameter_names = $this->getDynamicParameterNames();
@@ -108,8 +124,6 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
     // Downcast dynamic parameters.
     $scalar_parameters = $this->convertParametersForRoute($named_parameters);
     assert(empty(array_filter($scalar_parameters, 'is_object')), 'Call to convertParametersForRoute() should downcast all objects');
-
-    $directions = $this->getDirections();
 
     foreach ($directions as $direction => $direction_label) {
       $link = $this->buildLink($action_link, $direction, $user, $named_parameters, $scalar_parameters);

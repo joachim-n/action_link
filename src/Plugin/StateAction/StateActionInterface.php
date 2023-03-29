@@ -23,7 +23,7 @@ use Symfony\Component\Routing\Route;
 interface StateActionInterface extends PluginInspectionInterface, DerivativeInspectionInterface {
 
   /**
-   * Gets a render array of all the operable links for the user.
+   * Gets a render array of all the reachable directions for the user.
    *
    * @param \Drupal\action_link\Entity\ActionLinkInterface $action_link
    *   The action link entity.
@@ -38,25 +38,7 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
   public function buildLinkSet(ActionLinkInterface $action_link, AccountInterface $user, ...$parameters): array;
 
   /**
-   * Validates the dynamic parameters.
-   *
-   * This is called by buildLinkSet().
-   *
-   * @param array $parameters
-   *   The dynamic parameters, keyed by the names defined in the plugin
-   *   annotation.
-   *
-   * @throws \Throwable
-   *   Throws an error or exception if the parameters are invalid.
-   */
-  public function validateParameters(array $parameters);
-
-  /**
-   * Gets the action link for a specific direction.
-   *
-   * @internal This is liable to change if I work out a way for the plugin to be
-   * aware of the action_link entity. Use
-   * \Drupal\action_link\Entity\ActionLinkInterface::getLinkSet() instead.
+   * Gets the link for a specific direction.
    *
    * @param \Drupal\action_link\Entity\ActionLinkInterface $action_link
    *   The action link entity.
@@ -71,6 +53,20 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
    *   The link object, or NULL if no link is applicable.
    */
   public function buildSingleLink(ActionLinkInterface $action_link, string $direction, AccountInterface $user): array;
+
+  /**
+   * Validates the dynamic parameters.
+   *
+   * This is called by buildLinkSet().
+   *
+   * @param array $parameters
+   *   The dynamic parameters, keyed by the names defined in the plugin
+   *   annotation.
+   *
+   * @throws \Throwable
+   *   Throws an error or exception if the parameters are invalid.
+   */
+  public function validateParameters(array $parameters);
 
   public function buildConfigurationForm(array $element, FormStateInterface $form_state);
 
