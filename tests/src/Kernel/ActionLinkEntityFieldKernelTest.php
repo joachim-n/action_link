@@ -91,6 +91,7 @@ class ActionLinkEntityFieldKernelTest extends KernelTestBase {
 
     // Create a node type.
     $node_type = $this->entityTypeManager->getStorage('node_type')->create([
+      'name' => 'alpha',
       'type' => 'alpha',
     ]);
     $node_type->save();
