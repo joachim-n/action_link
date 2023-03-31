@@ -130,8 +130,7 @@ class ActionLinkEntityFieldKernelTest extends KernelTestBase {
     // boolean field, because it is an admin-restricted field.
     // Access is denied because the user doesn't have access to edit the node.
     $user_no_access = $this->createUser(['access content']);
-    // We need to set the user we check for as the current user, as route access
-    // is checked when generating links. TODO: prob not true now! REMOVE?
+    // Set the current user for the request.
     $this->setCurrentUser($user_no_access);
     $links = $action_link->buildLinkSet($user_no_access, $node);
     $this->assertEmpty($links);
