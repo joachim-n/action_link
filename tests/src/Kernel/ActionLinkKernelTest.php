@@ -94,7 +94,7 @@ class ActionLinkKernelTest extends KernelTestBase {
     $action_link->save();
 
     // Checking access to routes requires the current user to be set up.
-    // TODO: Change this when we add proxy functionality.
+    // @todo Change this when we add proxy functionality.
     $user_no_access = $this->setUpCurrentUser();
 
     $http_kernel = $this->container->get('http_kernel');
