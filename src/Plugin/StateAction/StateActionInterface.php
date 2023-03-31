@@ -158,7 +158,8 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
    * have permission only to unpublish an entity, and not to access the link to
    * publish it.
    *
-   * The permission access is ORed with the main permission.
+   * The permission access is ORed with the main 'use ID action links'
+   * permission.
    *
    * @param \Drupal\action_link\Entity\ActionLinkInterface $action_link
    *   The action link entity.
