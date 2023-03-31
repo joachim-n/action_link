@@ -98,9 +98,9 @@ class ActionLinkEntityFieldKernelTest extends KernelTestBase {
   }
 
   /**
-   * Tests TODO.
+   * Tests the boolean field state action on the 'published' node field.
    */
-  public function testEntityFieldActions() {
+  public function testPublishedBooleanField() {
     $http_kernel = $this->container->get('http_kernel');
 
     $node_storage = $this->entityTypeManager->getStorage('node');
