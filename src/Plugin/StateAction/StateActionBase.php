@@ -423,7 +423,7 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
    * @return array
    *   The array of raw parameters.
    */
-  public function convertParametersForRoute(array $parameters): array {
+  protected function convertParametersForRoute(array $parameters): array {
     // TODO: PHP 8.1 sanity check with array_is_list.
     // Do nothing by default.
     return $parameters;

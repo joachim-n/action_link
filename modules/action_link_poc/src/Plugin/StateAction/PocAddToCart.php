@@ -154,7 +154,7 @@ class PocAddToCart extends StateActionBase implements ContainerFactoryPluginInte
   /**
    * {@inheritdoc}
    */
-  public function convertParametersForRoute(array $parameters): array {
+  protected function convertParametersForRoute(array $parameters): array {
     $parameters = parent::convertParametersForRoute($parameters);
 
     // Convert the entity parameter to an entity ID.
