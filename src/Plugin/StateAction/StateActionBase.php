@@ -312,7 +312,8 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
       if (\Drupal::moduleHandler()->moduleExists('token')) {
         $element['token_help'] = [
           '#theme' => 'token_tree_link',
-          // TODO! can we even get the types?
+          // We can't narrow down types as in some cases they relevant types
+          // depend on the currently selected configuration.
           '#token_types' => 'all',
         ];
       }
