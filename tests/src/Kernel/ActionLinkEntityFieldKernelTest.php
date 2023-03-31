@@ -126,28 +126,55 @@ class ActionLinkEntityFieldKernelTest extends KernelTestBase {
     $action_link->save();
     \Drupal::service('router.builder')->rebuildIfNeeded();
 
-    // User has no access to an action link that toggles the 'status'
+    // 1. User has no access to an action link that toggles the 'status'
     // boolean field, because it is an admin-restricted field.
+    // Access is denied because the user doesn't have access to edit the node.
     $user_no_access = $this->createUser(['access content']);
     // We need to set the user we check for as the current user, as route access
-    // is checked when generating links.
+    // is checked when generating links. TODO: prob not true now! REMOVE?
     $this->setCurrentUser($user_no_access);
     $links = $action_link->buildLinkSet($user_no_access, $node);
     $this->assertEmpty($links);
 
-    // Access is denied because the user doesn't have access to edit the node.
     $request = Request::create("/action-link/test_status/nojs/toggle/false/{$user_no_access->id()}/{$node->id()}");
     $response = $http_kernel->handle($request);
     $this->assertEquals(Response::HTTP_FORBIDDEN, $response->getStatusCode());
 
-    // User who can edit the node but not change published status.
+    // 2. User who can edit the node but not change published status.
+    // Access is denied because the 'published' field has special field access
+    // control.
     $user_with_edit_access = $this->createUser(['access content', 'edit any alpha content']);
     $this->setCurrentUser($user_with_edit_access);
     $links = $action_link->buildLinkSet($user_no_access, $node);
     $this->assertEmpty($links);
 
-    // User with admin access who can publish and unpublish nodes.
-    $user_with_access = $this->createUser(['access content', 'bypass node access', 'administer nodes']);
+    $request = Request::create("/action-link/test_status/nojs/toggle/false/{$user_with_edit_access->id()}/{$node->id()}");
+    $response = $http_kernel->handle($request);
+    $this->assertEquals(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+
+    // 3. User with admin access who can publish and unpublish nodes, but
+    // doesn't have access to the action link.
+    $user_with_admin_access = $this->createUser(['access content', 'bypass node access', 'administer nodes']);
+    $this->setCurrentUser($user_with_admin_access);
+    $links = $action_link->buildLinkSet($user_with_admin_access, $node);
+    $this->assertEmpty($links);
+
+    $request = Request::create("/action-link/test_status/nojs/toggle/false/{$user_with_admin_access->id()}/{$node->id()}");
+    $response = $http_kernel->handle($request);
+    $this->assertEquals(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+
+    // 4. User with access to operate the action link, but no other access.
+    $user_with_link_access = $this->createUser(["use {$action_link->id()} action links"]);
+    $this->setCurrentUser($user_with_link_access);
+    $links = $action_link->buildLinkSet($user_with_link_access, $node);
+    $this->assertEmpty($links);
+
+    $request = Request::create("/action-link/test_status/nojs/toggle/false/{$user_with_link_access->id()}/{$node->id()}");
+    $response = $http_kernel->handle($request);
+    $this->assertEquals(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+
+    // 5. User with access to everything.
+    $user_with_access = $this->createUser(["use {$action_link->id()} action links", 'access content', 'bypass node access', 'administer nodes']);
     $this->setCurrentUser($user_with_access);
     $links = $action_link->buildLinkSet($user_with_access, $node);
     $this->assertNotEmpty($links);
@@ -156,6 +183,7 @@ class ActionLinkEntityFieldKernelTest extends KernelTestBase {
     $response = $http_kernel->handle($request);
     $this->assertEquals(Response::HTTP_FOUND, $response->getStatusCode());
 
+    // Using the link route changed the node's status.
     $node = $this->reloadEntity($node);
     $this->assertEquals(FALSE, $node->isPublished());
 
