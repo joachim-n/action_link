@@ -382,9 +382,18 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
   }
 
   /**
-   * {@inheritdoc}
+   * Validates the dynamic parameters.
+   *
+   * This is called by buildLinkSet().
+   *
+   * @param array $parameters
+   *   The dynamic parameters, keyed by the names defined in the plugin
+   *   annotation.
+   *
+   * @throws \Throwable
+   *   Throws an error or exception if the parameters are invalid.
    */
-  public function validateParameters(array $parameters) {
+  protected function validateParameters(array $parameters) {
   }
 
   /**

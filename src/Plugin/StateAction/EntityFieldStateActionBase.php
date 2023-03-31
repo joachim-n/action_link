@@ -142,7 +142,7 @@ abstract class EntityFieldStateActionBase extends StateActionBase implements Con
   /**
    * {@inheritdoc}
    */
-  public function validateParameters(array $parameters) {
+  protected function validateParameters(array $parameters) {
     parent::validateParameters($parameters);
 
     if ($parameters['entity']->getEntityTypeId() != $this->configuration['entity_type_id']) {

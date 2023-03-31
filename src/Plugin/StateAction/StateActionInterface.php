@@ -58,20 +58,6 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
    */
   public function buildSingleLink(ActionLinkInterface $action_link, string $direction, AccountInterface $user): array;
 
-  /**
-   * Validates the dynamic parameters.
-   *
-   * This is called by buildLinkSet().
-   *
-   * @param array $parameters
-   *   The dynamic parameters, keyed by the names defined in the plugin
-   *   annotation.
-   *
-   * @throws \Throwable
-   *   Throws an error or exception if the parameters are invalid.
-   */
-  public function validateParameters(array $parameters);
-
   public function buildConfigurationForm(array $element, FormStateInterface $form_state);
 
   /**
