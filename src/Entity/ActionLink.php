@@ -266,7 +266,6 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
         $direction,
         $state,
       )
-      // TODO Params from the plugin!
     ] + $this->getStateActionPlugin()->getTokenData(...$parameters);
 
     $label = \Drupal::token()->replace($label, $data);
@@ -284,7 +283,6 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
         $direction,
         $state,
       )
-      // TODO Params from the plugin!
     ] + $this->getStateActionPlugin()->getTokenData(...$parameters);
 
     $message = \Drupal::token()->replace($message, $data);
@@ -305,7 +303,6 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
         $direction,
         $state,
       )
-      // TODO Params from the plugin!
     ] + $this->getStateActionPlugin()->getTokenData(...$parameters);
 
     $message = \Drupal::token()->replace($message, $data);
