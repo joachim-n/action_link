@@ -124,16 +124,6 @@ abstract class EntityFieldStateActionBase extends StateActionBase implements Con
   public function submitConfigurationForm(array &$form, FormStateInterface $form_state) {
   }
 
-  /*
- get links:
-  - get directions
-    - is there a next state? AHA!
-
-
-
-
-  */
-
   /**
    * {@inheritdoc}
    */
