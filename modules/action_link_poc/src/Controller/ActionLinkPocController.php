@@ -73,39 +73,9 @@ class ActionLinkPocController extends ControllerBase implements ContainerInjecti
         ];
         $build[$action_link_id]['links'] = $action_link->buildLinkSet($user, 'node', $node->id());
       }
-
     }
-
 
     return $build;
-
-
-
-    // dsm($action_links);
-    $node = $entity_type_manager->getStorage('node')->load(1);
-    $action_links = [$action_links['options']];
-
-    /** @var \Drupal\action_link\Entity\ActionLinkInterface */
-    foreach ($action_links as $action_link_id => $action_link) {
-      // dsm($action_link);
-      $build[$action_link_id] = [
-        '#type' => 'container',
-      ];
-
-      $dynamic_parameter_names = $action_link->getStateActionPlugin()->getDynamicParameterNames();
-      // dump($dynamic_parameter_names);
-      $parameters = [];
-      if ($dynamic_parameter_names) {
-        // QUick and dirty! Assume just entity.
-        $parameters[] = $node;
-      }
-
-      $build[$action_link_id]['links'] = $action_link->buildLinkSet($user, ...$parameters);
-
-      // break;
-    }
-
-    // dsm($build);
-    return $build;  }
+  }
 
 }
