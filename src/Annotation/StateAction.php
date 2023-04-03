@@ -62,10 +62,4 @@ class StateAction extends Plugin {
    */
   public $dynamic_parameters = [];
 
-  // global
-
-  // cyclical?
-
-  // state count
-
 }
