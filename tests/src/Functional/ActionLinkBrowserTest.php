@@ -5,7 +5,7 @@ namespace Drupal\Tests\action_link\Functional;
 use Drupal\Tests\BrowserTestBase;
 
 /**
- * Test case class TODO.
+ * Browser test for action links.
  *
  * @group action_link
  */
