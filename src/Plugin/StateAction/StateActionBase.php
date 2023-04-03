@@ -363,7 +363,7 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
    *   The same parameters, keyed by their name as declared in the plugin's
    *   annotation.
    */
-  public function getDynamicParameterValuesByName(array $parameters) {
+  protected function getDynamicParameterValuesByName(array $parameters) {
     $named_parameters = [];
     $dynamic_parameters_definition = $this->getDynamicParameterNames();
     foreach ($dynamic_parameters_definition as $parameter_name) {
