@@ -151,13 +151,6 @@ class Workflow extends StateActionBase implements ContainerFactoryPluginInterfac
   /**
    * {@inheritdoc}
    */
-  public function XgetDynamicParametersFromRouteMatch(RouteMatchInterface $route_match): array {
-    // Gets the dynamic parameters from the route match.
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function checkAccess(string $direction, string $state, AccountInterface $account, ...$parameters): AccessResult {
     // @todo Implement this properly.
     return AccessResult::allowed();
