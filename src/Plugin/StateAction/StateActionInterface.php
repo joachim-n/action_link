@@ -106,9 +106,9 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
    *   The route match.
    *
    * @return array
-   *   An array of parameters, in the same order that they are defined in the
-   *   plugin annotation. Set route options in self::getActionRoute() to have
-   *   parameters upcasted by the routing system. NOT KEYED. OR SHOULD THEY BE?
+   *   A numeric array of parameters, in the same order that they are defined in
+   *   the plugin annotation. Set route options in self::getActionRoute() to
+   *   have parameters upcasted by the routing system.
    */
   public function getDynamicParametersFromRouteMatch(RouteMatchInterface $route_match): array;
 
