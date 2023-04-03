@@ -148,7 +148,7 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
     }
 
     // Get the associative indexes for the dynamic parameters.
-    $named_parameters = $this->getDynamicParametersByName($parameters);
+    $named_parameters = $this->getDynamicParameterValuesByName($parameters);
 
     // Validate parameters.
     $this->validateParameters($named_parameters);
@@ -356,8 +356,6 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
   /**
    * Gets the associative indexes for the dynamic parameters.
    *
-   * TODO rename getDynamicParameterValuesByName
-   *
    * @param array $parameters
    *   The dynamic parameters as a numeric array.
    *
@@ -365,7 +363,7 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
    *   The same parameters, keyed by their name as declared in the plugin's
    *   annotation.
    */
-  public function getDynamicParametersByName(array $parameters) {
+  public function getDynamicParameterValuesByName(array $parameters) {
     $named_parameters = [];
     $dynamic_parameters_definition = $this->getDynamicParameterNames();
     foreach ($dynamic_parameters_definition as $parameter_name) {
