@@ -304,6 +304,18 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
   public function getFailureMessage(string $direction, string $state, ...$parameters): string;
 
   /**
+   * Gets additional token replacement data specific to this plugin.
+   *
+   * @param mixed ...$parameters
+   *   The dynamic parameters.
+   *
+   * @return array
+   *   An array of token data, in the format accepted by
+   *   \Drupal\Core\Utility\Token::replace()'s $data parameter.
+   */
+  public function getTokenData(...$parameters);
+
+  /**
    * Defines the route for an action link entity.
    *
    * @param \Drupal\action_link\Entity\ActionLinkInterface $action_link
