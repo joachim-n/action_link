@@ -165,7 +165,7 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
     assert(empty(array_filter($scalar_parameters, 'is_object')), 'Call to convertParametersForRoute() should downcast all objects');
 
     foreach ($directions as $direction => $direction_label) {
-      $link = $this->buildLink($action_link, $direction, $user, $named_parameters, $scalar_parameters);
+      $link = $this->buildLink($action_link, $direction, $user, $scalar_parameters, ...$parameters);
       if ($link) {
         $build[$direction] = $link;
       }
@@ -194,11 +194,11 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
    *   The direction for the action.
    * @param \Drupal\user\UserInterface $user
    *   The user to perform the action. This is not necessarily the current user.
-   * @param array $named_parameters
-   *   The dynamic parameters, keyed by parameter name.
    * @param array $scalar_parameters
    *   The dynamic parameters, downcasted to scalar values, keyed by parameter
    *   name.
+   * @param ...$parameters
+   *   The dynamic parameters.
    *
    * @return array|null
    *   A build array for the link, or NULL if nothing should be output. The
@@ -208,16 +208,16 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
    *    - No reachable state: build array with no link.
    *    - Everything ok: build array with a link.
    */
-  protected function buildLink($action_link, $direction, $user, $named_parameters, $scalar_parameters): ?array {
+  protected function buildLink($action_link, $direction, $user, $scalar_parameters, ...$parameters): ?array {
     // Only NULL means there is no valid next state; a string such as '0' is
     // a valid state.
-    $next_state = $this->getNextStateName($direction, $user, ...$named_parameters);
+    $next_state = $this->getNextStateName($direction, $user, ...$parameters);
     $reachable = !is_null($next_state);
 
     if ($reachable) {
       // Check access if the state is reachable. If the state is not reachable,
       // we can't check access but output an empty link anyway.
-      $access = $action_link->checkAccess($direction, $next_state, $user, ...array_values($named_parameters));
+      $access = $action_link->checkAccess($direction, $next_state, $user, ...$parameters);
       if (!$access->isAllowed()) {
         // @todo Show a link to log in if the user doesn't have access but an
         // authenticated user would. Determining this appears to be rather
@@ -239,7 +239,7 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
     $route_parameters += $scalar_parameters;
 
     if ($reachable) {
-      $label = $action_link->getLinkLabel($direction, $next_state, ...$named_parameters);
+      $label = $action_link->getLinkLabel($direction, $next_state, ...$parameters);
 
       $url = Url::fromRoute('action_link.action_link.' . $action_link->id(), $route_parameters);
       $link = Link::fromTextAndUrl($label, $url);
@@ -262,7 +262,7 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
       '#link' => $reachable ? $link->toRenderable() : [],
       '#direction' => $direction,
       '#user' => $user,
-      '#dynamic_parameters' => $named_parameters,
+      '#dynamic_parameters' => $parameters,
       '#attributes' => new Attribute([
         'class' => [
           'action-link',
