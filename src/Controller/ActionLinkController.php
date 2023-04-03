@@ -43,6 +43,9 @@ class ActionLinkController {
   public function action(Request $request, RouteMatchInterface $route_match, ActionLinkInterface $action_link, string $link_style, string $direction, string $state, UserInterface $user) {
     $state_action_plugin = $action_link->getStateActionPlugin();
 
+    // Get the dynamic parameters from the route match. We can't define them in
+    // the function signature as this controller callback is shared by all
+    // action links.
     $parameters = $state_action_plugin->getDynamicParametersFromRouteMatch($route_match);
 
     // Use the given link style rather than the one configured in the action
