@@ -306,7 +306,7 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
    */
   public function checkPermissionAccess(ActionLinkInterface $action_link, string $direction, string $state, AccountInterface $account, ...$parameters): AccessResult {
     // The base plugin class doesn't define any permissions in
-    // self::getStateActionPermissions() so return neutral access.
+    // self::getStateActionPermissions(), therefore return neutral access.
     return AccessResult::neutral();
   }
 
