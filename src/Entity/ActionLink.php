@@ -128,17 +128,10 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
 
   protected $link_style;
 
-  /*
-
-  - state action plugin
-  - UI strings
-
-
-
-  */
-
-  // controller already done access. but not operability access!? or has it? DECIDE
-  public function advanceState(AccountInterface $account, string $state, ...$parameters) {
+  /**
+   * {@inheritdoc}
+   */
+  public function advanceState(AccountInterface $account, string $state, ...$parameters): void {
     $this->getStateActionPlugin()->advanceState($account, $state, ...$parameters);
   }
 
@@ -156,7 +149,9 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
     return $this->getLinkStylePluginCollection()->get($this->link_style);
   }
 
-
+  /**
+   * {@inheritdoc}
+   */
   public function getPluginCollections() {
     $collections = [];
     if ($this->getStateActionPluginCollection()) {
@@ -273,6 +268,9 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
     return $label;
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function getMessage(string $direction, string $state, ...$parameters): string {
     $message = $this->getStateActionPlugin()->getMessage($direction, $state, ...$parameters);
 
