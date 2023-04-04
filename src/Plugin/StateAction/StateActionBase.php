@@ -449,7 +449,7 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
       $path,
       [
         '_controller' => '\Drupal\action_link\Controller\ActionLinkController::action',
-        // Pass the action link ID as a parameter to the controller and access
+        // Pass the action link as a parameter to the controller and access
         // callbacks.
         'action_link' => $action_link_id,
       ],
