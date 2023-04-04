@@ -104,6 +104,21 @@ interface ActionLinkInterface extends ConfigEntityInterface, EntityWithPluginCol
   public function checkAccess(string $direction, string $state, AccountInterface $account, ...$parameters): AccessResult;
 
   /**
+   * Advances the state of the action link.
+   *
+   * This performs no access or logic checks at all, and so must only be called
+   * once access, operability, and reachability have been checked.
+   *
+   * @param \Drupal\Core\Session\AccountInterface $account
+   *   The user to perform the action. This is not necessarily the current user.
+   * @param string $state
+   *   The state to advance to.
+   * @param ...$parameters
+   *   Dynamic parameters specific to this action link's state action plugin.
+   */
+  public function advanceState(AccountInterface $account, string $state, ...$parameters): void;
+
+  /**
    * Gets the state action plugin for this entity.
    *
    * @return \Drupal\action_link\Plugin\StateAction\StateActionInterface
