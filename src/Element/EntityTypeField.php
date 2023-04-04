@@ -116,11 +116,13 @@ class EntityTypeField extends FormElement {
       ],
     ];
 
-    $elementX['container']['choose_entity_type_id'] = [
-      '#type' => 'submit',
-      '#value' => t('Choose entity type'),
-      // '#attributes' => ['class' => ['ajax-example-hide', 'ajax-example-inline']],
-    ];
+    // @todo Non-JS support.
+    // See similar commented-out code in ActionLinkPlugin.
+    // $element['container']['choose_entity_type_id'] = [
+    //   '#type' => 'submit',
+    //   '#value' => t('Choose entity type'),
+    //   '#attributes' => ['class' => ['ajax-example-hide', 'ajax-example-inline']],
+    // ];
 
     if ($selected_entity_type_id) {
       /** @var \Drupal\Core\Entity\EntityFieldManagerInterface */
@@ -180,7 +182,6 @@ class EntityTypeField extends FormElement {
   public static function validateEntityType($element, FormStateInterface &$form_state, $form) {
     $triggering_element = $form_state->getTriggeringElement();
 
-    // dsm($triggering_element);
     // $form_state->setRebuild(); // argh prevents save! but needed to handle no-JS button!
   }
 
