@@ -169,7 +169,6 @@ class Workflow extends StateActionBase implements ContainerFactoryPluginInterfac
     return 'Workflow state changed.';
   }
 
-
   /**
    * {@inheritdoc}
    */
