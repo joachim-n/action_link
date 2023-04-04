@@ -158,6 +158,7 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
       $collections['plugin_config'] = $this->getStateActionPluginCollection();
     }
     if ($this->getLinkStylePluginCollection()) {
+      // The plugin has no configuration.
       $collections['link_style_collection'] = $this->getLinkStylePluginCollection();
     }
     return $collections;
