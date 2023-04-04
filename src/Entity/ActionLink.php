@@ -114,19 +114,39 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
   protected $label = '';
 
   /**
-   * Action link plugin.
+   * State action plugin ID. TODO rename!?
    *
    * @var string
    */
   protected $plugin_id;
 
+  /**
+   * State action plugin configuration.
+   *
+   * @var array
+   */
   protected $plugin_config = [];
 
+  /**
+   * The state action plugin collecton TODO RENAME
+   *
+   * @var \Drupal\Component\Plugin\DefaultSingleLazyPluginCollection
+   */
   protected $actionLinkPluginCollection;
 
-  protected $linkStylePluginCollection;
-
+  /**
+   * The link style plugin ID.
+   *
+   * @var [type]
+   */
   protected $link_style;
+
+  /**
+   * The link style plugin collecton.
+   *
+   * @var \Drupal\Component\Plugin\DefaultSingleLazyPluginCollection
+   */
+  protected $linkStylePluginCollection;
 
   /**
    * {@inheritdoc}
@@ -194,8 +214,7 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
     if (is_array($this->link_style)) {
       return NULL;
     }
-    // dsm($this->link_style);
-    // return;
+
     if (!$this->linkStylePluginCollection && $this->link_style) {
       $this->linkStylePluginCollection = new DefaultSingleLazyPluginCollection(
         \Drupal::service('plugin.manager.action_link_style'),
