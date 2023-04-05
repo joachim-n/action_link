@@ -167,7 +167,7 @@ abstract class EntityFieldStateActionBase extends StateActionBase implements Con
   public function checkOperandAccess(ActionLinkInterface $action_link, string $direction, string $state, AccountInterface $account, ...$parameters): AccessResult {
     // Check access both to edit the entity, and to edit the specific field.
     /** @var \Drupal\Core\Entity\ContentEntityInterface $entity */
-    list($entity) = $parameters;
+    [$entity] = $parameters;
 
     $entity_access = $entity->access('update', $account, TRUE);
 
