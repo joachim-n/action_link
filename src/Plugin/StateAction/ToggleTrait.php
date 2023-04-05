@@ -24,7 +24,6 @@ use Drupal\Core\Form\FormStateInterface;
  * direction and state would essentially duplicate information in the action
  * link path parameters. Doing it this way means a toggle is a special case of
  * a cyclical action.)
- *
  */
 trait ToggleTrait {
 
@@ -83,7 +82,6 @@ trait ToggleTrait {
 
     return $labels_form;
   }
-
 
   public function getLinkLabel(string $direction, string $state, ...$parameters): string {
     $label = $this->configuration['labels']['state'][$state]['link_label'];

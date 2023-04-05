@@ -56,15 +56,15 @@ class ActionLinkset extends RenderElement {
    *   An associative array with the following properties:
    *   - #action_link: The action link entity ID.
    *   - #user: (optional) The user to get the links for.
-   *   - #dynamic_parameters: (optional) The parameters for the action link's state
-   *     action plugin.
+   *   - #dynamic_parameters: (optional) The parameters for the action link's
+   *     state action plugin.
    *   - #link_style: (optional) The ID of an action link style plugin to
    *     override the action link's configuration.
    *
    * @return array
    *   The passed-in element containing the render elements for the link.
    */
-  public static function preRenderLinkset($element) {
+  public static function preRenderLinkset(array $element) {
     $entity_type_manager = \Drupal::service('entity_type.manager');
     $action_link = $entity_type_manager->getStorage('action_link')->load($element['#action_link']);
 

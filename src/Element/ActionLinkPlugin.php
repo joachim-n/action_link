@@ -28,8 +28,6 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class ActionLinkPlugin extends FormElement {
 
-  // use CompositeFormElementTrait?
-
   /**
    * {@inheritdoc}
    */
@@ -43,15 +41,8 @@ class ActionLinkPlugin extends FormElement {
       ],
       '#process' => [
         [$class, 'processPlugin'],
-        // [$class, 'processAjaxForm'],
-        // [$class, 'processGroup'],
       ],
       '#options_element_type' => 'select',
-      // '#pre_render' => [
-      //   [$class, 'preRenderGroup'],
-      // ],
-      // '#theme' => 'datetime_form',
-      // '#theme_wrappers' => ['datetime_wrapper'],
     ];
   }
 
@@ -161,7 +152,7 @@ class ActionLinkPlugin extends FormElement {
 
         // Recurse into nested configuration values.
         $plugin_configuration = $plugin->getConfiguration();
-        NestedArrayRecursive::arrayWalkNested($plugin_configuration, function($value, $parents) use (&$plugin_configuration_form) {
+        NestedArrayRecursive::arrayWalkNested($plugin_configuration, function ($value, $parents) use (&$plugin_configuration_form) {
           $default_value_parents = $parents;
           $default_value_parents[] = '#default_value';
 

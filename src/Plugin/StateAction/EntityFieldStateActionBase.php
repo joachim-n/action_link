@@ -5,11 +5,9 @@ namespace Drupal\action_link\Plugin\StateAction;
 use Drupal\action_link\Entity\ActionLinkInterface;
 use Drupal\Component\Plugin\ConfigurableInterface;
 use Drupal\Core\Access\AccessResult;
-use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\PluginFormInterface;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\Core\Url;
 use Symfony\Component\Routing\Route;
 
 /**
@@ -17,7 +15,7 @@ use Symfony\Component\Routing\Route;
  *
  * This expects an 'entity' dynamic parameter.
  */
-abstract class EntityFieldStateActionBase extends StateActionBase implements ConfigurableInterface, PluginFormInterface{
+abstract class EntityFieldStateActionBase extends StateActionBase implements ConfigurableInterface, PluginFormInterface {
 
   /**
    * {@inheritdoc}
@@ -30,6 +28,9 @@ abstract class EntityFieldStateActionBase extends StateActionBase implements Con
     + parent::defaultConfiguration();
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function buildConfigurationForm(array $element, FormStateInterface $form_state) {
     $element = parent::buildConfigurationForm($element, $form_state);
 
@@ -70,6 +71,9 @@ abstract class EntityFieldStateActionBase extends StateActionBase implements Con
     }
   }
 
+  /**
+   * Element validate callback.
+   */
   public static function entityFieldElementValidate(&$element, FormStateInterface $form_state, &$complete_form) {
     $element_parents = $element['#parents'];
     $plugin_form_parents = $element_parents;
@@ -84,15 +88,6 @@ abstract class EntityFieldStateActionBase extends StateActionBase implements Con
       // $form_state->setValue([...$plugin_form_parents, 'entity_type_id'], $element_value['entity_type_id']);
       // $form_state->setValue([...$plugin_form_parents, 'field'], $element_value['field']);
     }
-
-    // // ARGH hardcoded array structure :(
-    // // Can't get this from slicing up $element['#parents'] because of the
-    // // 'container' from the plugin form element.
-    // $plugin_configuration_values = $form_state->getValue(['plugin', 'plugin_configuration']);
-
-    // $merged_values = $plugin_configuration_values + $element_value;
-
-    // $form_state->setValue(['plugin', 'plugin_configuration'], $merged_values);
   }
 
   /**
@@ -109,11 +104,9 @@ abstract class EntityFieldStateActionBase extends StateActionBase implements Con
     // element in the 'action_plugin' form element, and so the values get set
     // there. That apparently happens later than the 'action_plugin' form
     // element's valueCallback() setting the form values one level up to get rid
-    // of the surplus 'container' nesting.
-    // $form_state->setValue(['entity_type_id'], $values['entity_type_field']['entity_type_id']);
-    // $form_state->setValue(['field'], $values['entity_type_field']['field']);
-    // Therefore we do it directly, which is a hack, as this plugin shouldn't
-    // be aware of the form structure it's used in.
+    // of the surplus 'container' nesting. Therefore we do it directly, which is
+    // a hack, as this plugin shouldn't be aware of the form structure it's used
+    // in.
     $form_state->getCompleteFormState()->setValue(['plugin', 'plugin_configuration', 'entity_type_id'], $values['entity_type_field']['entity_type_id']);
     $form_state->getCompleteFormState()->setValue(['plugin', 'plugin_configuration', 'field'], $values['entity_type_field']['field']);
   }
@@ -161,7 +154,7 @@ abstract class EntityFieldStateActionBase extends StateActionBase implements Con
     $parameters = parent::convertParametersForRoute($parameters);
 
     // Convert the entity parameter to an entity ID.
-    // @todo: This needs to be able to complain if a param is bad, e.g. no node
+    // @todo This needs to be able to complain if a param is bad, e.g. no node
     // exists.
     $parameters['entity'] = $parameters['entity']->id();
 
@@ -180,7 +173,7 @@ abstract class EntityFieldStateActionBase extends StateActionBase implements Con
 
     $field_name = $this->configuration['field'];
 
-    // TODO: inject.
+    // @todo Inject.
     $this->entityTypeManager = \Drupal::service('entity_type.manager');
     $access_control_handler = $this->entityTypeManager->getAccessControlHandler($entity->getEntityTypeId());
     $field_access = $access_control_handler->fieldAccess('edit', $entity->getFieldDefinition($field_name), $account, NULL, TRUE);
@@ -193,7 +186,7 @@ abstract class EntityFieldStateActionBase extends StateActionBase implements Con
    */
   public function checkOperability(ActionLinkInterface $action_link, ...$parameters): bool {
     // Fail operability if the action link's affected field is empty.
-    list($entity) = $parameters;
+    [$entity] = $parameters;
     $field_name = $this->configuration['field'];
 
     if ($entity->get($field_name)->isEmpty()) {

@@ -3,21 +3,15 @@
 namespace Drupal\action_link\Plugin\StateAction;
 
 use Drupal\action_link\Entity\ActionLinkInterface;
-use Drupal\action_link\Token\StateChangeTokenData;
-use Drupal\action_link\Utility\NestedArrayRecursive;
 use Drupal\Component\Plugin\PluginBase;
-use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Template\Attribute;
 use Drupal\Core\Url;
-use Drupal\user\Entity\User;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Route;
 
 /**

@@ -41,8 +41,6 @@ class OptionsField extends EntityFieldStateActionBase {
       'list_string',
     ];
 
-    // delta??
-
     $element['labels'] = [
       '#tree' => TRUE,
     ];
@@ -100,7 +98,6 @@ class OptionsField extends EntityFieldStateActionBase {
     // a bundle. Since options are usually defined as a property of the
     // storage, it doesn't matter which bundle we use.
     $bundle = reset($entity_field_manager->getFieldMap()[$this->getTargetEntityTypeId()][$this->getTargetFieldName()]['bundles']);
-
 
     $ids = (object) [
       'entity_type' => $this->getTargetEntityTypeId(),

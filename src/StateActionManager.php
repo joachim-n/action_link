@@ -38,6 +38,9 @@ class StateActionManager extends DefaultPluginManager {
     $this->setCacheBackend($cache_backend, 'state_action_plugins');
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function processDefinition(&$definition, $plugin_id) {
     parent::processDefinition($definition, $plugin_id);
 
@@ -50,6 +53,5 @@ class StateActionManager extends DefaultPluginManager {
     // @todo Further validation of definition:
     // - geometry traits need plugin to also implement form interface!
   }
-
 
 }

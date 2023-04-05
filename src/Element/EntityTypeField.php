@@ -152,7 +152,14 @@ class EntityTypeField extends FormElement {
 
       // Execute field options filter callbacks.
       foreach ($element['#field_options_filters'] as $filter_callback) {
-        call_user_func_array($form_state->prepareCallback($filter_callback), [&$field_options, $selected_entity_type_id, $field_map_for_entity_type, $form_state]);
+        call_user_func_array(
+          $form_state->prepareCallback($filter_callback), [
+            &$field_options,
+            $selected_entity_type_id,
+            $field_map_for_entity_type,
+            $form_state,
+          ]
+        );
       }
 
       natcasesort($field_options);

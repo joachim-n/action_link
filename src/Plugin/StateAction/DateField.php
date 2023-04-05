@@ -2,7 +2,6 @@
 
 namespace Drupal\action_link\Plugin\StateAction;
 
-use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
@@ -31,6 +30,9 @@ class DateField extends EntityFieldStateActionBase {
 
   use StringTranslationTrait;
 
+  /**
+   * {@inheritdoc}
+   */
   public function buildConfigurationForm(array $element, FormStateInterface $form_state) {
     $plugin_form = parent::buildConfigurationForm($element, $form_state);
 

@@ -15,7 +15,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Render\RendererInterface;
-use Drupal\Core\Template\Attribute;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -80,9 +79,9 @@ class Ajax extends ActionLinkStyleBase implements ContainerFactoryPluginInterfac
    */
   public function alterLinksBuild(&$build, ActionLinkInterface $action_link, AccountInterface $user, $named_parameters, $scalar_parameters) {
     foreach ($build as $direction => $direction_link_build) {
-      // Add the 'use-ajax' class to the link. This makes core handle the link using a JS
-      // request and degrades gracefully to be handled by the nojs link style
-      // plugin.
+      // Add the 'use-ajax' class to the link. This makes core handle the link
+      // using a JS request and degrades gracefully to be handled by the nojs
+      // link style plugin.
       $build[$direction]['#link']['#attributes']['class'][] = 'use-ajax';
 
       // Add a unique class to the outer HTML for the AJAX replacement.

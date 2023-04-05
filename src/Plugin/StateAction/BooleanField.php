@@ -32,6 +32,9 @@ class BooleanField extends EntityFieldStateActionBase {
 
   use ToggleTrait;
 
+  /**
+   * {@inheritdoc}
+   */
   public function buildConfigurationForm(array $element, FormStateInterface $form_state) {
     $element = parent::buildConfigurationForm($element, $form_state);
 

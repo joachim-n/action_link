@@ -277,6 +277,8 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
    * This does not perform token replacement. Call the same method on the
    * action link entity to get tokens replaced.
    *
+   * @param string $direction
+   *   The direction for the action.
    * @param string $state
    *   The state that has been arrived at.
    * @param mixed ...$parameters
@@ -293,6 +295,8 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
    * This does not perform token replacement. Call the same method on the
    * action link entity to get tokens replaced.
    *
+   * @param string $direction
+   *   The direction for the action.
    * @param string $state
    *   The state that has been arrived at.
    * @param mixed ...$parameters

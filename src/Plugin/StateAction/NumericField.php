@@ -2,7 +2,6 @@
 
 namespace Drupal\action_link\Plugin\StateAction;
 
-use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
@@ -36,9 +35,11 @@ class NumericField extends EntityFieldStateActionBase {
   public function buildConfigurationForm(array $element, FormStateInterface $form_state) {
     $plugin_form = parent::buildConfigurationForm($element, $form_state);
 
-    $plugin_form['entity_type_field']['#field_types'] = ['integer', 'decimal', 'float'];
-
-    // delta??
+    $plugin_form['entity_type_field']['#field_types'] = [
+      'integer',
+      'decimal',
+      'float',
+    ];
 
     $plugin_form['step'] = [
       '#type' => 'number',

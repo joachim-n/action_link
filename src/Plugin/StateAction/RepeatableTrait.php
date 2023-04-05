@@ -4,8 +4,6 @@ namespace Drupal\action_link\Plugin\StateAction;
 
 use Drupal\action_link\Entity\ActionLinkInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Session\AccountInterface;
-use Drupal\Core\StringTranslation\TranslatableMarkup;
 
 /**
  * Geometry trait for actions which are repeatable in one or more directions.
