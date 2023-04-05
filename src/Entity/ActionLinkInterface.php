@@ -7,7 +7,6 @@ use Drupal\action_link\Plugin\StateAction\StateActionInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Config\Entity\ConfigEntityInterface;
 use Drupal\Core\Entity\EntityWithPluginCollectionInterface;
-use Drupal\Core\Link;
 use Drupal\Core\Session\AccountInterface;
 
 /**
@@ -18,8 +17,6 @@ interface ActionLinkInterface extends ConfigEntityInterface, EntityWithPluginCol
   /**
    * Gets a render array of all the reachable directions for the user.
    *
-   * @param \Drupal\action_link\Entity\ActionLinkInterface $action_link
-   *   The action link entity.
    * @param \Drupal\Core\Session\AccountInterface $user
    *   The user to get links for.
    * @param mixed ...$parameters

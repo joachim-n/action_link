@@ -6,7 +6,6 @@
  */
 
 use Drupal\Core\Render\BubbleableMetadata;
-use Drupal\user\Entity\User;
 
 /**
  * Implements hook_token_info().

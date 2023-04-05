@@ -12,8 +12,7 @@ class StateChangeTokenData {
     public $actionLink,
     public string $direction,
     public string $state,
-  )
-  {
+  ) {
 
   }
 
