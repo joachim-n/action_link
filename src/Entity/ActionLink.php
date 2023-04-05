@@ -8,10 +8,8 @@ use Drupal\action_link\Token\StateChangeTokenData;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Config\Entity\ConfigEntityBase;
 use Drupal\Core\Entity\EntityStorageInterface;
-use Drupal\Core\Link;
 use Drupal\Core\Plugin\DefaultSingleLazyPluginCollection;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\Core\Url;
 
 /**
  * Provides the Action Link entity.
@@ -128,7 +126,9 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
   protected $plugin_config = [];
 
   /**
-   * The state action plugin collecton TODO RENAME
+   * The state action plugin collecton.
+   *
+   * TODO RENAME
    *
    * @var \Drupal\Component\Plugin\DefaultSingleLazyPluginCollection
    */
@@ -300,7 +300,7 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
         $this,
         $direction,
         $state,
-      )
+      ),
     ] + $this->getStateActionPlugin()->getTokenData(...$parameters);
 
     $message = \Drupal::token()->replace($message, $data);
@@ -320,7 +320,7 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
         $this,
         $direction,
         $state,
-      )
+      ),
     ] + $this->getStateActionPlugin()->getTokenData(...$parameters);
 
     $message = \Drupal::token()->replace($message, $data);
