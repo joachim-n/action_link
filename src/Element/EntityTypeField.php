@@ -64,6 +64,7 @@ class EntityTypeField extends FormElement {
       '#type' => 'details',
       '#open' => TRUE,
       '#title' => $element['#title'] ?? 'Entity type and field',
+      '#description' => $element['#description'] ?? '',
       '#attributes' => ['id' => $container_html_id],
     ];
 
