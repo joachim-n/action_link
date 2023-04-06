@@ -72,7 +72,7 @@ class EntityTypeField extends FormElement {
     $entity_type_id_parents = $element['#parents'];
     $entity_type_id_parents[] = 'entity_type_id';
 
-    if ($selected_entity_type_id = $form_state->getValue($entity_type_id_parents)) {
+    if ($selected_entity_type_id = $form_state->getValue([...$element['#parents'], 'entity_type_id'])) {
       // A value set in the form by the user prior to an AJAX submission takes
       // precedence.
     }
