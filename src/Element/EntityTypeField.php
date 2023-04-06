@@ -76,6 +76,10 @@ class EntityTypeField extends FormElement {
       // A value set in the form by the user prior to an AJAX submission takes
       // precedence.
     }
+    elseif ($selected_entity_type_id = $form_state->getValue([...$element['#parents'], 'container', 'entity_type_id'])) {
+      // On a non-JS 'Choose' button submission, the valueCallback has not
+      // (yet?) run, and so our value is still inside the container. WTF.
+    }
     elseif (isset($element['#default_value']['entity_type_id'])) {
       // A default value in the form build.
       $selected_entity_type_id = $element['#default_value']['entity_type_id'];
@@ -117,13 +121,18 @@ class EntityTypeField extends FormElement {
       ],
     ];
 
-    // @todo Non-JS support.
-    // See similar commented-out code in ActionLinkPlugin.
-    // $element['container']['choose_entity_type_id'] = [
-    //   '#type' => 'submit',
-    //   '#value' => t('Choose entity type'),
-    //   '#attributes' => ['class' => ['ajax-example-hide', 'ajax-example-inline']],
-    // ];
+    // Non-JS support: button to choose the entity type.
+    $array_parents = array_merge($element['#array_parents'], ['container', 'entity_type_id']);
+    $element['container']['choose_entity_type_id'] = [
+      '#type' => 'submit',
+      '#value' => t('Choose entity type'),
+      '#attributes' => ['class' => ['js-hide', 'ajax-example-inline']],
+      '#limit_validation_errors' => [
+        $array_parents,
+      ],
+      '#validate' => [],
+      '#submit' => [static::class . '::entityTypeSubmit'],
+    ];
 
     if ($selected_entity_type_id) {
       /** @var \Drupal\Core\Entity\EntityFieldManagerInterface */
@@ -191,6 +200,13 @@ class EntityTypeField extends FormElement {
     $triggering_element = $form_state->getTriggeringElement();
 
     // $form_state->setRebuild(); // argh prevents save! but needed to handle no-JS button!
+  }
+
+  /**
+   * Submit handler for the 'Choose' button.
+   */
+  public static function entityTypeSubmit(array &$form, FormStateInterface $form_state) {
+    $form_state->setRebuild();
   }
 
   /**
