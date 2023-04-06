@@ -7,10 +7,8 @@ use Drupal\Component\Plugin\DerivativeInspectionInterface;
 use Drupal\Component\Plugin\PluginInspectionInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Link;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\Core\Url;
 use Symfony\Component\Routing\Route;
 
 /**
@@ -18,7 +16,7 @@ use Symfony\Component\Routing\Route;
  *
  * State action plugins that are configurable should also implement:
  *  - \Drupal\Core\Plugin\PluginFormInterface
- *  - \Drupal\Component\Plugin\ConfigurableInterface
+ *  - \Drupal\Component\Plugin\ConfigurableInterface.
  */
 interface StateActionInterface extends PluginInspectionInterface, DerivativeInspectionInterface {
 
@@ -29,7 +27,7 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
    *   The action link entity.
    * @param \Drupal\Core\Session\AccountInterface $user
    *   The user to get links for.
-   * @param [type] ...$parameters
+   * @param mixed ...$parameters
    *   Dynamic parameters specific to the action link's state action plugin.
    *
    * @return array
@@ -57,8 +55,6 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
    *   The link object, or NULL if no link is applicable.
    */
   public function buildSingleLink(ActionLinkInterface $action_link, string $direction, AccountInterface $user): array;
-
-  public function buildConfigurationForm(array $element, FormStateInterface $form_state);
 
   /**
    * Gets the next state for the given parameters, or NULL if there is none.
