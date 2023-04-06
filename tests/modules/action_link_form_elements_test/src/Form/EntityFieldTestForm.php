@@ -49,7 +49,7 @@ class EntityFieldTestForm extends FormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    $this->messenger()->addMessage($this->t("You selected @entity-type field @field.", [
+    $this->messenger()->addMessage($this->t("You selected '@entity-type' field '@field'.", [
       '@entity-type' => $form_state->getValue(['entity_type_field', 'entity_type_id']),
       '@field' => $form_state->getValue(['entity_type_field', 'field']),
     ]));
