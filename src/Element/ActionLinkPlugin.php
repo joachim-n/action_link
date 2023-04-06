@@ -63,6 +63,7 @@ class ActionLinkPlugin extends FormElement {
       '#type' => 'details',
       '#open' => TRUE,
       '#title' => $element['#title'] ?? '',
+      '#description' => $element['#description'] ?? '',
       '#attributes' => ['id' => $container_html_id],
     ];
 
