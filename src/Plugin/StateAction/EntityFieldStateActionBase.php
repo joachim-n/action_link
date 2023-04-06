@@ -107,8 +107,12 @@ abstract class EntityFieldStateActionBase extends StateActionBase implements Con
     // of the surplus 'container' nesting. Therefore we do it directly, which is
     // a hack, as this plugin shouldn't be aware of the form structure it's used
     // in.
-    $form_state->getCompleteFormState()->setValue(['plugin', 'plugin_configuration', 'entity_type_id'], $values['entity_type_field']['entity_type_id']);
-    $form_state->getCompleteFormState()->setValue(['plugin', 'plugin_configuration', 'field'], $values['entity_type_field']['field']);
+    if (isset($values['entity_type_field']['entity_type_id'])) {
+      $form_state->getCompleteFormState()->setValue(['plugin', 'plugin_configuration', 'entity_type_id'], $values['entity_type_field']['entity_type_id']);
+    }
+    if (isset($values['entity_type_field']['field'])) {
+      $form_state->getCompleteFormState()->setValue(['plugin', 'plugin_configuration', 'field'], $values['entity_type_field']['field']);
+    }
   }
 
   /**
