@@ -67,7 +67,7 @@ class ActionLinkPocController extends ControllerBase implements ContainerInjecti
       // Subscribe action links.
       if ($action_link->getStateActionPlugin()->getPluginId() == 'poc_subscribe') {
         // @todo It's not very elegant having to pass both the entity type ID
-        // and the entity ID.
+        // and the entity ID. See the @todo note in the plugin class.
         $build[$action_link_id] = [
           '#type' => 'container',
         ];
