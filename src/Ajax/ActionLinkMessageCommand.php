@@ -9,7 +9,7 @@ use Drupal\Core\Ajax\CommandInterface;
  *
  * The client side code can be found in js/link-style-ajax.js.
  *
- * @todo Cribbed from flag module.
+ * Cribbed from flag module.
  */
 class ActionLinkMessageCommand implements CommandInterface {
 
