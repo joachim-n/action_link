@@ -128,11 +128,9 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
   /**
    * The state action plugin collecton.
    *
-   * TODO RENAME
-   *
    * @var \Drupal\Component\Plugin\DefaultSingleLazyPluginCollection
    */
-  protected $actionLinkPluginCollection;
+  protected $stateActionPluginCollection;
 
   /**
    * The link style plugin ID.
@@ -191,13 +189,13 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
    *   The action link plugin collection.
    */
   protected function getStateActionPluginCollection() {
-    if (!$this->actionLinkPluginCollection && $this->plugin_id) {
-      $this->actionLinkPluginCollection = new DefaultSingleLazyPluginCollection(
+    if (!$this->stateActionPluginCollection && $this->plugin_id) {
+      $this->stateActionPluginCollection = new DefaultSingleLazyPluginCollection(
         \Drupal::service('plugin.manager.action_link_state_action'),
         $this->plugin_id, $this->plugin_config
       );
     }
-    return $this->actionLinkPluginCollection;
+    return $this->stateActionPluginCollection;
   }
 
   /**
