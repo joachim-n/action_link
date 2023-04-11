@@ -67,15 +67,20 @@ class ActionLinkPlugin extends FormElement {
       '#attributes' => ['id' => $container_html_id],
     ];
 
-    $plugin_id_parents = $element['#array_parents'];
-    $plugin_id_parents[] = 'plugin_id';
-
-    if (empty($form_state->getValue($plugin_id_parents))) {
-      $selected_plugin_id = $element['#default_value']['plugin_id'] ?? '';
+    if ($selected_plugin_id = $form_state->getValue([...$element['#array_parents'], 'plugin_id'])) {
+      // A value set in the form by the user prior to an AJAX submission takes
+      // precedence.
+    }
+    elseif ($selected_plugin_id = $form_state->getValue([...$element['#array_parents'], 'container', 'plugin_id'])) {
+      // On a non-JS 'Choose' button submission, the valueCallback has not
+      // (yet?) run, and so our value is still inside the container. WTF.
+    }
+    elseif (isset($element['#default_value']['plugin_id'])) {
+      $selected_plugin_id = $element['#default_value']['plugin_id'];
     }
     else {
-      // Get the value if it already exists.
-      $selected_plugin_id = $form_state->getValue($plugin_id_parents);
+      // If we still don't have anything, use an empty value.
+      $selected_entity_type_id = '';
     }
 
     $element['container']['plugin_id'] = [
@@ -102,16 +107,15 @@ class ActionLinkPlugin extends FormElement {
     // @todo Fix this. It doesn't work because the link style radios get an
     // error set on them and at that point setErrorByName() sees
     // limit_validation_errors as empty. WTF.
-    // $array_parents = array_merge($element['#array_parents'], ['container', 'plugin_id']);
     // $element['container']['choose_plugin'] = [
     //   '#type' => 'submit',
-    //   '#value' => t('Choose'),
+    //   '#value' => t('Choose plugin'),
     //   '#attributes' => ['class' => ['js-hide']],
     //   '#limit_validation_errors' => [
-    //     $array_parents,
+    //     [...$element['#array_parents'], 'container', 'plugin_id'],
     //   ],
     //   '#validate' => [],
-    //   '#submit' => ['::pluginDropdownCallback'],
+    //   '#submit' => [static::class . '::PluginSubmit'],
     // ];
 
     // Build the plugin options.
@@ -206,6 +210,13 @@ class ActionLinkPlugin extends FormElement {
         $plugin->validateConfigurationForm($element['container']['plugin_configuration'], SubformState::createForSubform($element['container']['plugin_configuration'], $form_state->getCompleteForm(), $form_state));
       }
     }
+  }
+
+  /**
+   * Submit handler for the 'Choose' button.
+   */
+  public static function PluginSubmit(array &$form, FormStateInterface $form_state) {
+    $form_state->setRebuild();
   }
 
   /**
