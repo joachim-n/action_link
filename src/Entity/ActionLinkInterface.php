@@ -51,6 +51,21 @@ interface ActionLinkInterface extends ConfigEntityInterface, EntityWithPluginCol
   public function buildSingleLink(string $direction, AccountInterface $user, ...$parameters): array;
 
   /**
+   * Gets the label for a link, with tokens replaced.
+   *
+   * @param string $direction
+   *   The direction of the link.
+   * @param string $state
+   *   The target state of the link.
+   * @param mixed ...$parameters
+   *   Dynamic parameters specific to the action link's state action plugin.
+   *
+   * @return string
+   *   The link label.
+   */
+  public function getLinkLabel(string $direction, string $state, ...$parameters): string;
+
+  /**
    * Verifies that a target state is the next state.
    *
    * This determines wheter the action makes logical sense for the current state
