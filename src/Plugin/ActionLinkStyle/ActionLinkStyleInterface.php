@@ -65,7 +65,7 @@ interface ActionLinkStyleInterface extends PluginInspectionInterface, Derivative
    *
    * @param bool $action_completed
    *   Whether the action could be completed. If FALSE, this means that the
-   *   action wasn't operable.
+   *   action wasn't operable or the target state wasn't reachable.
    * @param \Symfony\Component\HttpFoundation\Request $request
    *   The request.
    * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
