@@ -85,7 +85,6 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
     // If a trait supplies a method for configuring strings, add an element for
     // it.
     if (method_exists($this, 'buildTextsConfigurationForm')) {
-      // ARGH LABELS IS BAD NAME TODO.
       $element['texts'] = [
         '#tree' => TRUE,
       ];
