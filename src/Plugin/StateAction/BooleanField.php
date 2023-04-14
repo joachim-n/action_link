@@ -40,8 +40,8 @@ class BooleanField extends EntityFieldStateActionBase {
 
     $element['entity_type_field']['#field_types'] = ['boolean'];
 
-    $element['labels']['state']['true']['link_label']['#title'] = $this->t('Link label for setting the field value to TRUE');
-    $element['labels']['state']['false']['link_label']['#title'] = $this->t('Link label for setting the field value to FALSE');
+    $element['texts']['state']['true']['link_label']['#title'] = $this->t('Link label for setting the field value to TRUE');
+    $element['texts']['state']['false']['link_label']['#title'] = $this->t('Link label for setting the field value to FALSE');
 
     return $element;
   }

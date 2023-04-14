@@ -86,10 +86,10 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
     // it.
     if (method_exists($this, 'buildTextsConfigurationForm')) {
       // ARGH LABELS IS BAD NAME TODO.
-      $element['labels'] = [
+      $element['texts'] = [
         '#tree' => TRUE,
       ];
-      $element['labels'] = $this->buildTextsConfigurationForm($element['labels'], $form_state);
+      $element['texts'] = $this->buildTextsConfigurationForm($element['texts'], $form_state);
 
       // Show the token browser if there are label form elements and if token
       // module is present.

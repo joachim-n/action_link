@@ -41,13 +41,13 @@ class OptionsField extends EntityFieldStateActionBase {
       'list_string',
     ];
 
-    $element['labels'] = [
+    $element['texts'] = [
       '#tree' => TRUE,
     ];
-    $element['labels'] = $this->buildTextsConfigurationForm($element['labels'], $form_state);
+    $element['texts'] = $this->buildTextsConfigurationForm($element['texts'], $form_state);
 
-    $element['labels']['direction']['inc']['link_label']['#title'] = $this->t('Link label for moving the field value forward');
-    $element['labels']['direction']['dec']['link_label']['#title'] = $this->t('Link label for moving the field value back');
+    $element['texts']['direction']['inc']['link_label']['#title'] = $this->t('Link label for moving the field value forward');
+    $element['texts']['direction']['dec']['link_label']['#title'] = $this->t('Link label for moving the field value back');
 
     return $element;
   }

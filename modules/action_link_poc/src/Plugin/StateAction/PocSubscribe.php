@@ -106,10 +106,10 @@ class PocSubscribe extends StateActionBase implements ContainerFactoryPluginInte
    * {@inheritdoc}
    */
   public function buildConfigurationForm(array $element, FormStateInterface $form_state) {
-    $element['labels'] = [
+    $element['texts'] = [
       '#tree' => TRUE,
     ];
-    $element['labels'] = $this->buildTextsConfigurationForm($element['labels'], $form_state);
+    $element['texts'] = $this->buildTextsConfigurationForm($element['texts'], $form_state);
 
     return $element;
   }

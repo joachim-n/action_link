@@ -15,7 +15,7 @@ use Drupal\Core\Form\FormStateInterface;
  *  - implement \Drupal\Component\Plugin\ConfigurableInterface
  *  - implement \Drupal\Core\Plugin\PluginFormInterface
  *  - in their buildConfigurationForm(), set the form elements from
- *    this trait's buildTextsConfigurationForm() in to $element['labels'].
+ *    this trait's buildTextsConfigurationForm() in to $element['texts'].
  *  - define two states, in the order 'set, unset'.
  *
  * (An action like this could also be defined to have two directions, where each
@@ -32,11 +32,11 @@ trait ToggleTrait {
 
     [$set_state, $unset_state] = $this->getStates();
 
-    $defaults['labels']['state'][$set_state]['link_label'] = 'Change state';
-    $defaults['labels']['state'][$set_state]['message'] = 'Value set to TRUE';
+    $defaults['texts']['state'][$set_state]['link_label'] = 'Change state';
+    $defaults['texts']['state'][$set_state]['message'] = 'Value set to TRUE';
 
-    $defaults['labels']['state'][$unset_state]['link_label'] = 'Change state';
-    $defaults['labels']['state'][$unset_state]['message'] = 'Value set to FALSE';
+    $defaults['texts']['state'][$unset_state]['link_label'] = 'Change state';
+    $defaults['texts']['state'][$unset_state]['message'] = 'Value set to FALSE';
 
     return $defaults;
   }
@@ -84,13 +84,13 @@ trait ToggleTrait {
   }
 
   public function getLinkLabel(string $direction, string $state, ...$parameters): string {
-    $label = $this->configuration['labels']['state'][$state]['link_label'];
+    $label = $this->configuration['texts']['state'][$state]['link_label'];
 
     return $label;
   }
 
   public function getMessage(string $direction, string $state, ...$parameters): string {
-    return $this->configuration['labels']['state'][$state]['message'];
+    return $this->configuration['texts']['state'][$state]['message'];
   }
 
   public function getStateActionPermissions(ActionLinkInterface $action_link): array {

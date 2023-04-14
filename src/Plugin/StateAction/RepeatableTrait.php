@@ -21,10 +21,10 @@ trait RepeatableTrait {
     $defaults = [];
 
     foreach ($this->getDirections() as $direction => $direction_label) {
-      $defaults['labels']['direction'][$direction]['link_label'] = t('@direction the value', [
+      $defaults['texts']['direction'][$direction]['link_label'] = t('@direction the value', [
         '@direction' => ucfirst($direction_label),
       ]);
-      $defaults['labels']['direction'][$direction]['message'] = t('Value changed');
+      $defaults['texts']['direction'][$direction]['message'] = t('Value changed');
     }
 
     return $defaults;
@@ -61,13 +61,13 @@ trait RepeatableTrait {
   }
 
   public function getLinkLabel(string $direction, string $state, ...$parameters): string {
-    $label = $this->configuration['labels']['direction'][$direction]['link_label'] ?? t("Change value");
+    $label = $this->configuration['texts']['direction'][$direction]['link_label'] ?? t("Change value");
 
     return $label;
   }
 
   public function getMessage(string $direction, string $state, ...$parameters): string {
-    return $this->configuration['labels']['direction'][$direction]['message'] ?? '';
+    return $this->configuration['texts']['direction'][$direction]['message'] ?? '';
   }
 
   public function getStateActionPermissions(ActionLinkInterface $action_link): array {
