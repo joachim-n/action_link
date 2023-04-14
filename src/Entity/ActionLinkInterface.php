@@ -131,6 +131,40 @@ interface ActionLinkInterface extends ConfigEntityInterface, EntityWithPluginCol
   public function advanceState(AccountInterface $account, string $state, ...$parameters): void;
 
   /**
+   * Gets the message to show the user when an action state change is completed.
+   *
+   * @param string $direction
+   *   The direction of the action.
+   * @param string $state
+   *   The state that has been reached.
+   * @param mixed ...$parameters
+   *   Dynamic parameters specific to the action link's state action plugin.
+   *
+   * @return string
+   *   The message.
+   */
+  public function getMessage(string $direction, string $state, ...$parameters): string;
+
+  /**
+   * Gets the message to show the user when an action state change has failed.
+   *
+   * This is shown when the failure is due to the action link not being operable
+   * or the state not being reachable. It is not shown for an access failure.
+   *
+   * @param string $direction
+   *   The direction of the action.
+   * @param string $state
+   *   The state that was the target of the action. Because the action state
+   *   change has failed, this is not the current state.
+   * @param mixed ...$parameters
+   *   Dynamic parameters specific to the action link's state action plugin.
+   *
+   * @return string
+   *   The message.
+   */
+  public function getFailureMessage(string $direction, string $state, ...$parameters): string;
+
+  /**
    * Gets the state action plugin for this entity.
    *
    * @return \Drupal\action_link\Plugin\StateAction\StateActionInterface
