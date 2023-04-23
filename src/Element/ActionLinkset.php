@@ -3,9 +3,13 @@
 namespace Drupal\action_link\Element;
 
 use Drupal\Core\Render\Element\RenderElement;
+use Drupal\Core\Routing\RouteObjectInterface;
 
 /**
  * Render element for an action link's linkset.
+ *
+ * This uses a lazy builder as links are per-user and therefore considered
+ * uncacheable.
  *
  * Properties:
  *   - #action_link: The action link entity ID.
@@ -65,8 +69,38 @@ class ActionLinkset extends RenderElement {
    *   The passed-in element containing the render elements for the link.
    */
   public static function preRenderLinkset(array $element) {
+    $element['linkset'] = [
+      '#lazy_builder' => [
+        static::class . '::linksetLazyBuilder', [
+          $element['#action_link'],
+          // ??? here??? or later in LB??
+          $element['#user'] ?? \Drupal::currentUser()->id(),
+          $element['#link_style'] ?? NULL,
+          // TODO: downcast!
+          ...$element['#dynamic_parameters'],
+        ]],
+      '#create_placeholder' => TRUE,
+    ];
+    // dsm($element);
+    //
+
+        // Directly create a placeholder as we need this to be placeholdered
+    // regardless if this is a POST or GET request.
+    // @todo remove this when https://www.drupal.org/node/2367555 lands.
+    // $element = \Drupal::service('render_placeholder_generator')->createPlaceholder($element);
+
+    // ARGH! LB params can't be objects!
+    //
+    // ARGH! render elements can't use LB's like this, have to createPlaceholder themselves!
+    // ARGH! docs in status messages are wrong - should mention this.
+
+    return $element;
+  }
+
+  public static function linksetLazyBuilder(string $action_link_id, int $user_id, ?string $link_style, ...$scalar_dynamic_parameters) {
     $entity_type_manager = \Drupal::service('entity_type.manager');
-    $action_link = $entity_type_manager->getStorage('action_link')->load($element['#action_link']);
+    /** @var \Drupal\action_link\Entity\ActionLinkInterface $action_link */
+    $action_link = $entity_type_manager->getStorage('action_link')->load($action_link_id);
 
     // Temporarily switch the link style. This avoids having an additional
     // parameter to buildLinkSet() which can't be optional because it comes
@@ -74,13 +108,30 @@ class ActionLinkset extends RenderElement {
     // This hack works because
     // \Drupal\action_link\Controller\ActionLinkController respects the link
     // style given in the path.
-    if (!empty($element['#link_style'])) {
-      $action_link->set('link_style', $element['#link_style']);
+    if (!empty($link_style)) {
+      $action_link->set('link_style', $link_style);
     }
 
-    $element += $action_link->buildLinkSet($element['#user'] ?? \Drupal::currentUser(), ...$element['#dynamic_parameters']);
+    // TODO! upcast!
+    $route = $action_link->getStateActionPlugin()->getActionRoute($action_link);
+    $state_action_plugin = $action_link->getStateActionPlugin();
+    // dump($route->getDefaults());
 
-    return $element;
+    /** @var \Drupal\Core\ParamConverter\ParamConverterManagerInterface $param_converter_manager */
+    $param_converter_manager = \Drupal::service('paramconverter_manager');
+
+    // Make a dummy defaults array so we can use the parameter converting system
+    // to upcast the dynamic parameters.
+    $dummy_defaults = $scalar_dynamic_parameters;
+    $dummy_defaults[RouteObjectInterface::ROUTE_OBJECT] = $route;
+
+    $converted_defaults = $param_converter_manager->convert($dummy_defaults);
+
+    // $param_converter_manager
+
+    $user = $entity_type_manager->getStorage('user')->load($user_id);
+
+    return $state_action_plugin->buildLinkSet($action_link, $user, ...$scalar_dynamic_parameters);
   }
 
 }

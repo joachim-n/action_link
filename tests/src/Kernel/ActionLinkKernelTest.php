@@ -102,6 +102,7 @@ class ActionLinkKernelTest extends KernelTestBase {
     // No access at all.
     $this->state->set('test_mocked_control:permission_access', AccessResult::forbidden());
     $this->state->set('test_mocked_control:operand_access', AccessResult::forbidden());
+    // TODO call plugin to bypass lazy builder etc.
     $links = $action_link->buildLinkSet($user_no_access);
     $this->assertEmpty($links);
 

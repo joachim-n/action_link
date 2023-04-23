@@ -227,16 +227,25 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
    * {@inheritdoc}
    */
   public function buildLinkSet(AccountInterface $user, ...$parameters) {
-    $plugin = $this->getStateActionPlugin();
-    return $plugin->buildLinkSet($this, $user, ...$parameters);
+    return [
+      '#type' => 'action_linkset',
+      '#action_link' => $this->plugin_id,
+      '#user' => $user->id(),
+      '#dynamic_parameters' => $parameters,
+    ];
   }
 
   /**
    * {@inheritdoc}
    */
   public function buildSingleLink(string $direction, AccountInterface $user, ...$parameters): array {
-    $plugin = $this->getStateActionPlugin();
-    return $plugin->buildSingleLink($this, $direction, $user, ...$parameters);
+    // TODO! SINGLE link!
+    return [
+      '#type' => 'action_linkset',
+      '#action_link' => $this->plugin_id,
+      '#user' => $user,
+      '#dynamic_parameters' => $parameters,
+    ];
   }
 
   /**

@@ -59,6 +59,7 @@ class ActionLink extends ComputedFieldBase {
    */
   public function useLazyBuilder(EntityInterface $host_entity, ComputedFieldDefinitionWithValuePluginInterface $computed_field_definition): bool {
     return TRUE;
+    // TODO! not needed.
   }
 
   /**
