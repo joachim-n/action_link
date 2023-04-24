@@ -102,6 +102,8 @@ class ActionLinkset extends RenderElement {
     /** @var \Drupal\action_link\Entity\ActionLinkInterface $action_link */
     $action_link = $entity_type_manager->getStorage('action_link')->load($action_link_id);
 
+    // TODO throw for no $action_link.
+
     // Temporarily switch the link style. This avoids having an additional
     // parameter to buildLinkSet() which can't be optional because it comes
     // before the variadic parameters, which would be further-reaching ugliness.
