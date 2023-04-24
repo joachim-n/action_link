@@ -229,7 +229,7 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
   public function buildLinkSet(AccountInterface $user, ...$parameters) {
     return [
       '#type' => 'action_linkset',
-      '#action_link' => $this->plugin_id,
+      '#action_link' => $this->id(),
       '#user' => $user->id(),
       '#dynamic_parameters' => $parameters,
     ];
@@ -242,7 +242,7 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
     // TODO! SINGLE link!
     return [
       '#type' => 'action_linkset',
-      '#action_link' => $this->plugin_id,
+      '#action_link' => $this->id(),
       '#user' => $user,
       '#dynamic_parameters' => $parameters,
     ];
