@@ -156,7 +156,7 @@ class Workflow extends StateActionBase implements ContainerFactoryPluginInterfac
     return AccessResult::allowed();
   }
 
-  public function checkOperandAccess(ActionLinkInterface $action_link, string $direction, string $state, AccountInterface $account, ...$parameters): AccessResult {
+  public function checkOperandAccess(ActionLinkInterface $action_link, string $direction, string $state, AccountInterface $account): AccessResult {
     // @todo Implement this properly.
     return AccessResult::allowed();
   }

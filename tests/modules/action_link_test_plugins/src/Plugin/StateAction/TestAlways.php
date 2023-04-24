@@ -37,7 +37,7 @@ class TestAlways extends StateActionBase {
   /**
    * {@inheritdoc}
    */
-  public function checkOperability(ActionLinkInterface $action_link, ...$parameters): bool {
+  public function checkOperability(ActionLinkInterface $action_link): bool {
     return TRUE;
   }
 
@@ -51,7 +51,7 @@ class TestAlways extends StateActionBase {
   /**
    * {@inheritdoc}
    */
-  public function checkOperandAccess(ActionLinkInterface $action_link, string $direction, string $state, AccountInterface $account, ...$parameters): AccessResult {
+  public function checkOperandAccess(ActionLinkInterface $action_link, string $direction, string $state, AccountInterface $account): AccessResult {
     return AccessResult::allowed();
   }
 

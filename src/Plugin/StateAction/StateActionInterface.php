@@ -124,13 +124,13 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
    *
    * @param \Drupal\action_link\Entity\ActionLinkInterface $action_link
    *   The action link entity.
-   * @param mixed ...$parameters
-   *   The dynamic parameters.
+   * @param mixed ...
+   *   Additional dynamic parameters.
    *
    * @return bool
    *   TRUE if the link is operable, FALSE if not.
    */
-  public function checkOperability(ActionLinkInterface $action_link, ...$parameters): bool;
+  public function checkOperability(ActionLinkInterface $action_link): bool;
 
   /**
    * Checks the user's access based on this plugin's permissions.
@@ -194,8 +194,8 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
    *   The target state for the action.
    * @param \Drupal\user\UserInterface $user
    *   The user to perform the action. This is not necessarily the current user.
-   * @param mixed ...$parameters
-   *   The dynamic parameters.
+   * @param mixed ...
+   *   Additional dynamic parameters.
    *
    * @return \Drupal\Core\Access\AccessResult
    *   The access result.
@@ -203,7 +203,7 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
    * @see \Drupal\action_link\Entity\ActionLinkInterface::checkAccess()
    * @see self::checkPermissionAccess()
    */
-  public function checkOperandAccess(ActionLinkInterface $action_link, string $direction, string $state, AccountInterface $account, ...$parameters): AccessResult;
+  public function checkOperandAccess(ActionLinkInterface $action_link, string $direction, string $state, AccountInterface $account): AccessResult;
 
   /**
    * Gets the names of the plugin's dynamic parameters.

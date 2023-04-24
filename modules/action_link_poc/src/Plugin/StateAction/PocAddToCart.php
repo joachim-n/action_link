@@ -146,7 +146,7 @@ class PocAddToCart extends StateActionBase implements ContainerFactoryPluginInte
   /**
    * {@inheritdoc}
    */
-  public function checkOperandAccess(ActionLinkInterface $action_link, string $direction, string $state, AccountInterface $account, ...$parameters): AccessResult {
+  public function checkOperandAccess(ActionLinkInterface $action_link, string $direction, string $state, AccountInterface $account): AccessResult {
     // @todo Implement properly!
     return AccessResult::allowed();
   }

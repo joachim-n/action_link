@@ -35,7 +35,7 @@ class TestNull extends StateActionBase {
   /**
    * {@inheritdoc}
    */
-  public function checkOperability(ActionLinkInterface $action_link, ...$parameters): bool {
+  public function checkOperability(ActionLinkInterface $action_link): bool {
     return FALSE;
   }
 
