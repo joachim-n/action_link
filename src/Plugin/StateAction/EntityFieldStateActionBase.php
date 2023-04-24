@@ -200,8 +200,7 @@ abstract class EntityFieldStateActionBase extends StateActionBase implements Con
   /**
    * {@inheritdoc}
    */
-  public function getTokenData(...$parameters) {
-    [$entity] = $parameters;
+  public function getTokenData(EntityInterface $entity = NULL) {
     return [
       $this->configuration['entity_type_id'] => $entity,
     ];

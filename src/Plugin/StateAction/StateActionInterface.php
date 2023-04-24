@@ -308,14 +308,14 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
   /**
    * Gets additional token replacement data specific to this plugin.
    *
-   * @param mixed ...$parameters
-   *   The dynamic parameters.
+   * @param mixed ...
+   *   Additional dynamic parameters.
    *
    * @return array
    *   An array of token data, in the format accepted by
    *   \Drupal\Core\Utility\Token::replace()'s $data parameter.
    */
-  public function getTokenData(...$parameters);
+  public function getTokenData();
 
   /**
    * Defines the route for an action link entity.

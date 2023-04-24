@@ -418,7 +418,7 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
   /**
    * {@inheritdoc}
    */
-  public function getTokenData(...$parameters) {
+  public function getTokenData() {
     return [];
   }
 
