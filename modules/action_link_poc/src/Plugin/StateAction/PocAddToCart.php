@@ -99,6 +99,14 @@ class PocAddToCart extends StateActionBase implements ContainerFactoryPluginInte
   /**
    * {@inheritdoc}
    */
+  public function checkOperandAccess(ActionLinkInterface $action_link, string $direction, string $state, AccountInterface $account, EntityInterface $entity = NULL): AccessResult {
+    // @todo Implement properly!
+    return AccessResult::allowed();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function advanceState(AccountInterface $account, string $state, EntityInterface $entity = NULL) {
     \Drupal::state()->set('poc_add_to_cart:count', $state);
   }
@@ -139,14 +147,6 @@ class PocAddToCart extends StateActionBase implements ContainerFactoryPluginInte
    * {@inheritdoc}
    */
   public function checkAccess(string $direction, string $state, AccountInterface $account, ...$parameters): AccessResult {
-    // @todo Implement properly!
-    return AccessResult::allowed();
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function checkOperandAccess(ActionLinkInterface $action_link, string $direction, string $state, AccountInterface $account): AccessResult {
     // @todo Implement properly!
     return AccessResult::allowed();
   }
