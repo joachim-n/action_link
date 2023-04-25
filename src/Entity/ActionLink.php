@@ -226,11 +226,11 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
   /**
    * {@inheritdoc}
    */
-  public function buildLinkSet(AccountInterface $user, ...$parameters) {
+  public function buildLinkSet(?AccountInterface $user, ...$parameters) {
     return [
       '#type' => 'action_linkset',
       '#action_link' => $this->id(),
-      '#user' => $user->id(),
+      '#user' => $user?->id() ?? NULL,
       '#dynamic_parameters' => $parameters,
     ];
   }
@@ -238,12 +238,12 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
   /**
    * {@inheritdoc}
    */
-  public function buildSingleLink(string $direction, AccountInterface $user, ...$parameters): array {
+  public function buildSingleLink(string $direction, ?AccountInterface $user, ...$parameters): array {
     // TODO! SINGLE link!
     return [
       '#type' => 'action_linkset',
       '#action_link' => $this->id(),
-      '#user' => $user,
+      '#user' => $user?->id() ?? NULL,
       '#dynamic_parameters' => $parameters,
     ];
   }

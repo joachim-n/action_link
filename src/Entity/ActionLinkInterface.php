@@ -17,8 +17,11 @@ interface ActionLinkInterface extends ConfigEntityInterface, EntityWithPluginCol
   /**
    * Gets a render array of all the reachable directions for the user.
    *
-   * @param \Drupal\Core\Session\AccountInterface $user
-   *   The user to get links for.
+   * @param \Drupal\Core\Session\AccountInterface|null $user
+   *   (optional) The user to get links for. If NULL, the current user is used.
+   *   Do not pass the user ID for the current user unless you intend for all
+   *   users to use that user account, as the lazy builder parameters may get
+   *   cached.
    * @param mixed ...$parameters
    *   Dynamic parameters specific to the action link's state action plugin.
    *
@@ -29,15 +32,18 @@ interface ActionLinkInterface extends ConfigEntityInterface, EntityWithPluginCol
    *   Throws an error if the $parameter don't match up with the dynamic
    *   parameters defined by this entity's state action plugin.
    */
-  public function buildLinkSet(AccountInterface $user, ...$parameters);
+  public function buildLinkSet(?AccountInterface $user, ...$parameters);
 
   /**
    * Gets a render array of the given direction for the user.
    *
    * @param string $direction
    *   The direction to get the link for.
-   * @param \Drupal\Core\Session\AccountInterface $user
-   *   The user to get links for.
+   * @param \Drupal\Core\Session\AccountInterface|null $user
+   *   (optional) The user to get links for. If NULL, the current user is used.
+   *   Do not pass the user ID for the current user unless you intend for all
+   *   users to use that user account, as the lazy builder parameters may get
+   *   cached.
    * @param mixed ...$parameters
    *   Dynamic parameters specific to the action link's state action plugin.
    *
@@ -48,7 +54,7 @@ interface ActionLinkInterface extends ConfigEntityInterface, EntityWithPluginCol
    *   Throws an error if the $parameter don't match up with the dynamic
    *   parameters defined by this entity's state action plugin.
    */
-  public function buildSingleLink(string $direction, AccountInterface $user, ...$parameters): array;
+  public function buildSingleLink(string $direction, ?AccountInterface $user, ...$parameters): array;
 
   /**
    * Gets the label for a link, with tokens replaced.

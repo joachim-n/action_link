@@ -59,7 +59,8 @@ class ActionLinkset extends RenderElement {
    * @param array $element
    *   An associative array with the following properties:
    *   - #action_link: The action link entity ID.
-   *   - #user: (optional) The user to get the links for.
+   *   - #user: (optional) The user to get the links for. If empty, all users
+   *     get a link for their own account.
    *   - #dynamic_parameters: (optional) The parameters for the action link's
    *     state action plugin.
    *   - #link_style: (optional) The ID of an action link style plugin to
@@ -73,8 +74,7 @@ class ActionLinkset extends RenderElement {
       '#lazy_builder' => [
         static::class . '::linksetLazyBuilder', [
           $element['#action_link'],
-          // ??? here??? or later in LB??
-          $element['#user'] ?? \Drupal::currentUser()->id(),
+          $element['#user'] ?? NULL,
           $element['#link_style'] ?? NULL,
           // TODO: downcast!
           ...$element['#dynamic_parameters'],
@@ -97,7 +97,7 @@ class ActionLinkset extends RenderElement {
     return $element;
   }
 
-  public static function linksetLazyBuilder(string $action_link_id, int $user_id, ?string $link_style, ...$scalar_dynamic_parameters) {
+  public static function linksetLazyBuilder(string $action_link_id, ?int $user_id, ?string $link_style, ...$scalar_dynamic_parameters) {
     $entity_type_manager = \Drupal::service('entity_type.manager');
     /** @var \Drupal\action_link\Entity\ActionLinkInterface $action_link */
     $action_link = $entity_type_manager->getStorage('action_link')->load($action_link_id);
@@ -137,7 +137,12 @@ class ActionLinkset extends RenderElement {
 
     unset($converted_defaults[RouteObjectInterface::ROUTE_OBJECT]);
 
-    $user = $entity_type_manager->getStorage('user')->load($user_id);
+    if ($user_id) {
+      $user = $entity_type_manager->getStorage('user')->load($user_id);
+    }
+    else {
+      $user =  \Drupal::currentUser();
+    }
 
     return $state_action_plugin->buildLinkSet($action_link, $user, ...$converted_defaults);
   }
