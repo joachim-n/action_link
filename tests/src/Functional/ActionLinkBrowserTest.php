@@ -20,8 +20,11 @@ class ActionLinkBrowserTest extends BrowserTestBase {
     'system',
     'user',
     'action_link',
+    'action_link_test_plugins',
     'action_link_browser_test',
   ];
+
+  protected $defaultTheme = 'stark';
 
   /**
    * The entity type manager.
@@ -31,20 +34,37 @@ class ActionLinkBrowserTest extends BrowserTestBase {
   protected $entityTypeManager;
 
   /**
+   * The action_link storage handler.
+   *
+   * @var \Drupal\Core\Entity\EntityStorageInterface
+   */
+  protected $actionLinkStorage;
+
+  /**
    * {@inheritdoc}
    */
   protected function setUp(): void {
     parent::setUp();
 
     $this->entityTypeManager = $this->container->get('entity_type.manager');
-
+    $this->actionLinkStorage = $this->entityTypeManager->getStorage('action_link');
   }
 
   /**
    * Tests the TODO.
    */
-  public function testMyTest() {
-    // TODO: test code here.
+  public function testLazyBuilderCaching() {
+    // Create an action link.
+    $action_link = $this->actionLinkStorage->create([
+      'id' => 'test_always',
+      'label' => 'Test',
+      'plugin_id' => 'test_always',
+      'plugin_config' => [],
+      'link_style' => 'nojs',
+    ]);
+    $action_link->save();
+
+    $this->drupalGet('action_link_browser_test/test_always');
   }
 
 }
