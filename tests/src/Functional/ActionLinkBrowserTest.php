@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\action_link\Functional;
 
+use Drupal\dynamic_page_cache\EventSubscriber\DynamicPageCacheSubscriber;
 use Drupal\Tests\BrowserTestBase;
 
 /**
@@ -51,7 +52,7 @@ class ActionLinkBrowserTest extends BrowserTestBase {
   }
 
   /**
-   * Tests the TODO.
+   * Tests the lazy builders for action links work correctly.
    */
   public function testLazyBuilderCaching() {
     // Create an action link.
@@ -63,8 +64,31 @@ class ActionLinkBrowserTest extends BrowserTestBase {
       'link_style' => 'nojs',
     ]);
     $action_link->save();
+    \Drupal::service('router.builder')->rebuildIfNeeded();
+
+    $user_1 = $this->drupalCreateUser([]);
+    $this->drupalLogin($user_1);
 
     $this->drupalGet('action_link_browser_test/test_always');
+    $this->assertSession()->statusCodeEquals(200);
+    $this->assertSession()->responseHeaderEquals(DynamicPageCacheSubscriber::HEADER, 'MISS');
+    // The page's action link has the user's ID.
+    $this->assertSession()->linkByHrefExists('action-link/test_always/nojs/change/cake/' . $user_1->id());
+
+    $user_2 = $this->drupalCreateUser([]);
+    $this->drupalLogin($user_2);
+
+    // Second user gets a cache hit: action link does not make the page
+    // uncacheable.
+    $this->drupalGet('action_link_browser_test/test_always');
+    $this->assertSession()->statusCodeEquals(200);
+    $this->assertSession()->responseHeaderEquals(DynamicPageCacheSubscriber::HEADER, 'HIT');
+    // The page's action link has the user's ID.
+    $this->assertSession()->linkByHrefExists('action-link/test_always/nojs/change/cake/' . $user_2->id());
+
+    // The controller was only called once.
+    $call_count = \Drupal::state()->get('ActionLinkBrowserTestController:call_count', 0);
+    $this->assertEquals(1, $call_count);
   }
 
 }

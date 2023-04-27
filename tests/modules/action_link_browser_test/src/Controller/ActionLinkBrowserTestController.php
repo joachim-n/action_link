@@ -21,7 +21,6 @@ class ActionLinkBrowserTestController {
     $build = [];
 
     $entity_type_manager = \Drupal::service('entity_type.manager');
-    // $user = \Drupal::currentUser(); // /NO PASS IN EMPTY!
 
     $dynamic_parameter_names = $action_link->getStateActionPlugin()->getDynamicParameterNames();
     $parameters = [];
@@ -31,7 +30,7 @@ class ActionLinkBrowserTestController {
       // $parameters[] = $node;
 
 
-      /// use scalars for now!
+      // use scalars for now!
       $parameters[] = 1;
     }
 
