@@ -141,7 +141,7 @@ class ActionLinkset extends RenderElement {
       $user = $entity_type_manager->getStorage('user')->load($user_id);
     }
     else {
-      $user =  \Drupal::currentUser();
+      $user = \Drupal::currentUser();
     }
 
     return $state_action_plugin->buildLinkSet($action_link, $user, ...$converted_defaults);
