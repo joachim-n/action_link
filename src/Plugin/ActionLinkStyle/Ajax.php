@@ -116,9 +116,8 @@ class Ajax extends ActionLinkStyleBase implements ContainerFactoryPluginInterfac
     // one, as the next state will change for all directions.
     // Replace links even if the action was not completed, as if that is the
     // case then links on the page are out of date.
-    //
-    // ARGH NOT LZY BUILDER< go to plugin!
-    // check NOJS plugin too
+    // Call buildLinkSet() on the plugin rather than the action link entity,
+    // so we get the plain render array and not the lazy builder.
     $links = $action_link->getStateActionPlugin()->buildLinkSet($action_link, $user, ...$parameters);
     foreach (Element::children($links) as $link_direction) {
       // Generate a CSS selector to use in a JQuery Replace command.
