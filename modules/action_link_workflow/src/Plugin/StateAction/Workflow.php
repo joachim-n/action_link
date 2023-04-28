@@ -172,7 +172,7 @@ class Workflow extends StateActionBase implements ContainerFactoryPluginInterfac
   /**
    * {@inheritdoc}
    */
-  protected function convertParametersForRoute(array $parameters): array {
+  public function convertParametersForRoute(array $parameters): array {
     $parameters = parent::convertParametersForRoute($parameters);
 
     // Convert the entity parameter to an entity ID.

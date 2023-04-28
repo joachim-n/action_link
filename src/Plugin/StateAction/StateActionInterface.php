@@ -335,6 +335,9 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
    */
   public function getActionRoute(ActionLinkInterface $action_link): Route;
 
+  // TODO docs and rename
+  public function convertParametersForRoute(array $parameters): array;
+
   /**
    * Gets permissions for an action link using this plugin.
    *
