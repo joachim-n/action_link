@@ -25,6 +25,10 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
   /**
    * Gets a render array of all the reachable directions for the user.
    *
+   * This render array does not have a lazy builder and is therefore
+   * uncacheable. In general, you should instead call buildLinkSet() on an
+   * action link.
+   *
    * @param \Drupal\action_link\Entity\ActionLinkInterface $action_link
    *   The action link entity.
    * @param \Drupal\Core\Session\AccountInterface $user
