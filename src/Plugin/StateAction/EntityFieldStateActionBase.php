@@ -161,7 +161,9 @@ abstract class EntityFieldStateActionBase extends StateActionBase implements Con
     // Convert the entity parameter to an entity ID.
     // @todo This needs to be able to complain if a param is bad, e.g. no node
     // exists.
-    $parameters['entity'] = $parameters['entity']->id();
+    if (is_object($parameters['entity'])) {
+      $parameters['entity'] = $parameters['entity']->id();
+    }
 
     return $parameters;
   }

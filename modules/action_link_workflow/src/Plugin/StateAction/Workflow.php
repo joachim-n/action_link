@@ -176,7 +176,9 @@ class Workflow extends StateActionBase implements ContainerFactoryPluginInterfac
     $parameters = parent::convertParametersForRoute($parameters);
 
     // Convert the entity parameter to an entity ID.
-    $parameters['entity'] = $parameters['entity']->id();
+    if (is_object($parameters['entity'])) {
+      $parameters['entity'] = $parameters['entity']->id();
+    }
 
     return $parameters;
   }
