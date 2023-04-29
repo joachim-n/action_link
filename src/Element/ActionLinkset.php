@@ -89,8 +89,14 @@ class ActionLinkset extends RenderElement {
     assert(!empty($action_link));
     $state_action_plugin = $action_link->getStateActionPlugin();
 
-    // Give the parameters their names, as we'll need them.
-    $scalar_dynamic_parameters = array_combine($state_action_plugin->getDynamicParameterNames(), $element['#dynamic_parameters']);
+    // Ensure the parameters are keyed by their names, as we'll need them for
+    // downcasting.
+    if (array_is_list($element['#dynamic_parameters'])) {
+      $scalar_dynamic_parameters = array_combine($state_action_plugin->getDynamicParameterNames(), $element['#dynamic_parameters']);
+    }
+    else {
+      $scalar_dynamic_parameters = $element['#dynamic_parameters'];
+    }
 
     // Downcast the parameters.
     $scalar_dynamic_parameters = $action_link->getStateActionPlugin()->convertParametersForRoute($scalar_dynamic_parameters);
