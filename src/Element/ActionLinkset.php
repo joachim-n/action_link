@@ -21,8 +21,10 @@ use Drupal\Core\Routing\RouteObjectInterface;
  *   - #user: (optional) The user to get the links for. Defaults to the current
  *     user.
  *   - #dynamic_parameters: (optional) The parameters for the action link's
- *     state action plugin. These should be raw values as used in the action
- *     link URLs, not upcasted objects.
+ *     state action plugin. These may be either raw values as used in the action
+ *     link URLs, or upcasted objects. They must be in the same order as the
+ *     declaration of the dynamic parameters in the state action plugin's
+ *     definition. Keys may be numeric, or use the parameter names.
  *   - #link_style: (optional) The ID of an action link style plugin to override
  *     the link style set in the action link config entity.
  *
