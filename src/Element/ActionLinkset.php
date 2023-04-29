@@ -119,6 +119,20 @@ class ActionLinkset extends RenderElement {
     return $element;
   }
 
+  /**
+   * Lazy builder for the linkset.
+   *
+   * @param string $action_link_id
+   *   The action link entity ID.
+   * @param int|null $user_id
+   *   The user ID to return the linkset for, or NULL for a linkset which is
+   *   for the current user.
+   * @param string|null $link_style
+   *   The link style to use, or NULL to use the link style that is set on the
+   *   action link entity.
+   * @param mixed ...$scalar_dynamic_parameters
+   *   The dynamic parameters for the state action plugin.
+   */
   public static function linksetLazyBuilder(string $action_link_id, ?int $user_id, ?string $link_style, ...$scalar_dynamic_parameters) {
     $entity_type_manager = \Drupal::service('entity_type.manager');
     /** @var \Drupal\action_link\Entity\ActionLinkInterface $action_link */
