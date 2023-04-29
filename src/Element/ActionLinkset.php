@@ -107,6 +107,9 @@ class ActionLinkset extends RenderElement {
           $element['#action_link'],
           $element['#user'] ?? NULL,
           $element['#link_style'] ?? NULL,
+          // We have to strip the keys again here, as otherwise PHP will try to
+          // match keys to method parameter names. We can't pass the array as a
+          // single parameter, because lazy builder callbacks don't allow that.
           ...array_values($scalar_dynamic_parameters),
         ]],
       '#create_placeholder' => TRUE,
