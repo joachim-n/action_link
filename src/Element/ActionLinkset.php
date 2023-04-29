@@ -137,8 +137,7 @@ class ActionLinkset extends RenderElement {
     $entity_type_manager = \Drupal::service('entity_type.manager');
     /** @var \Drupal\action_link\Entity\ActionLinkInterface $action_link */
     $action_link = $entity_type_manager->getStorage('action_link')->load($action_link_id);
-
-    // TODO throw for no $action_link.
+    $state_action_plugin = $action_link->getStateActionPlugin();
 
     // Temporarily switch the link style. This avoids having an additional
     // parameter to buildLinkSet() which can't be optional because it comes
@@ -150,28 +149,29 @@ class ActionLinkset extends RenderElement {
       $action_link->set('link_style', $link_style);
     }
 
-    // TODO! upcast!
-    // need to get the route from the routing system so it has upcasting stuff defined.
-    // $route = $action_link->getStateActionPlugin()->getActionRoute($action_link);
-    $state_action_plugin = $action_link->getStateActionPlugin();
-    // dump($route->getDefaults());
-    //
+    // Use the routing system to upcast the dynamic parameters.
+    if ($scalar_dynamic_parameters) {
+      $route_provider = \Drupal::service('router.route_provider');
+      // TODO: DRY!
+      $route = $route_provider->getRouteByName('action_link.action_link.' . $action_link_id);
 
-    $route_provider = \Drupal::service('router.route_provider');
-    // TODO: DRY!
-    $route = $route_provider->getRouteByName('action_link.action_link.' . $action_link_id);
+      /** @var \Drupal\Core\ParamConverter\ParamConverterManagerInterface $param_converter_manager */
+      $param_converter_manager = \Drupal::service('paramconverter_manager');
 
-    /** @var \Drupal\Core\ParamConverter\ParamConverterManagerInterface $param_converter_manager */
-    $param_converter_manager = \Drupal::service('paramconverter_manager');
+      // Make a dummy defaults array so we can use the parameter converting system
+      // to upcast the dynamic parameters.
+      $dummy_defaults = array_combine($state_action_plugin->getDynamicParameterNames(), $scalar_dynamic_parameters);
+      $dummy_defaults[RouteObjectInterface::ROUTE_OBJECT] = $route;
 
-    // Make a dummy defaults array so we can use the parameter converting system
-    // to upcast the dynamic parameters.
-    $dummy_defaults = array_combine($state_action_plugin->getDynamicParameterNames(), $scalar_dynamic_parameters);
-    $dummy_defaults[RouteObjectInterface::ROUTE_OBJECT] = $route;
+      $converted_defaults = $param_converter_manager->convert($dummy_defaults);
 
-    $converted_defaults = $param_converter_manager->convert($dummy_defaults);
+      unset($converted_defaults[RouteObjectInterface::ROUTE_OBJECT]);
 
-    unset($converted_defaults[RouteObjectInterface::ROUTE_OBJECT]);
+      $dynamic_parameters = $converted_defaults;
+    }
+    else {
+      $dynamic_parameters = [];
+    }
 
     if ($user_id) {
       $user = $entity_type_manager->getStorage('user')->load($user_id);
@@ -180,7 +180,7 @@ class ActionLinkset extends RenderElement {
       $user = \Drupal::currentUser();
     }
 
-    return $state_action_plugin->buildLinkSet($action_link, $user, ...$converted_defaults);
+    return $state_action_plugin->buildLinkSet($action_link, $user, ...$dynamic_parameters);
   }
 
 }
