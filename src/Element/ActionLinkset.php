@@ -8,6 +8,11 @@ use Drupal\Core\Routing\RouteObjectInterface;
 /**
  * Render element for an action link's linkset.
  *
+ * This can be used directly, or obtained from:
+ * @code
+ * $action_link_entity->buildLinkSet()
+ * @code
+ *
  * This uses a lazy builder as links are per-user and therefore considered
  * uncacheable.
  *
@@ -32,6 +37,12 @@ use Drupal\Core\Routing\RouteObjectInterface;
  *   ],
  * ];
  * @endcode
+ *
+ * The full flow of code is:
+ * - (optional) \Drupal\action_link\Entity\ActionLinkInterface::buildLinkSet()
+ * - static::preRenderLinkset()
+ * - static::linksetLazyBuilder()
+ * - \Drupal\action_link\Plugin\StateAction\StateAction::buildLinkSet()
  *
  * @RenderElement("action_linkset")
  */
