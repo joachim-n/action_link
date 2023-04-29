@@ -403,7 +403,7 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
    * @return array
    *   The array of raw parameters.
    */
-  protected function convertParametersForRoute(array $parameters): array {
+  public function convertParametersForRoute(array $parameters): array {
     // Do nothing by default.
     return $parameters;
   }
