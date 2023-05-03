@@ -78,7 +78,8 @@ class ActionLinkKernelTest extends KernelTestBase {
   * Tests access and operability checks on building and accessing links
   */
  public function testLinkAccess() {
-   $action_link = $this->actionLinkStorage->create([
+    /** @var \Drupal\action_link\Entity\ActionLinkInterface $action_link */
+    $action_link = $this->actionLinkStorage->create([
       'id' => 'test_mocked_control',
       'label' => 'Test',
       'plugin_id' => 'test_mocked_control',
@@ -103,7 +104,7 @@ class ActionLinkKernelTest extends KernelTestBase {
     $this->state->set('test_mocked_control:permission_access', AccessResult::forbidden());
     $this->state->set('test_mocked_control:operand_access', AccessResult::forbidden());
     // TODO call plugin to bypass lazy builder etc.
-    $links = $action_link->buildLinkSet($user_no_access);
+    $links = $action_link->getStateActionPlugin()->buildLinkSet($action_link, $user_no_access);
     $this->assertEmpty($links);
 
     $request = Request::create("/action-link/test_mocked_control/nojs/change/cake/{$user_no_access->id()}");
@@ -113,7 +114,7 @@ class ActionLinkKernelTest extends KernelTestBase {
     // Permission access only.
     $this->state->set('test_mocked_control:permission_access', AccessResult::allowed());
     $this->state->set('test_mocked_control:operand_access', AccessResult::forbidden());
-    $links = $action_link->buildLinkSet($user_no_access);
+    $links = $action_link->getStateActionPlugin()->buildLinkSet($action_link, $user_no_access);
     $this->assertEmpty($links);
 
     $request = Request::create("/action-link/test_mocked_control/nojs/change/cake/{$user_no_access->id()}");
@@ -123,7 +124,7 @@ class ActionLinkKernelTest extends KernelTestBase {
     // Operand access only.
     $this->state->set('test_mocked_control:permission_access', AccessResult::forbidden());
     $this->state->set('test_mocked_control:operand_access', AccessResult::allowed());
-    $links = $action_link->buildLinkSet($user_no_access);
+    $links = $action_link->getStateActionPlugin()->buildLinkSet($action_link, $user_no_access);
     $this->assertEmpty($links);
 
     $request = Request::create("/action-link/test_mocked_control/nojs/change/cake/{$user_no_access->id()}");
@@ -134,7 +135,7 @@ class ActionLinkKernelTest extends KernelTestBase {
     $this->state->set('test_mocked_control:permission_access', AccessResult::allowed());
     $this->state->set('test_mocked_control:operand_access', AccessResult::allowed());
     $this->state->set('test_mocked_control:operability', FALSE);
-    $links = $action_link->buildLinkSet($user_no_access);
+    $links = $action_link->getStateActionPlugin()->buildLinkSet($action_link, $user_no_access);
     $this->assertEmpty($links);
 
     $request = Request::create("/action-link/test_mocked_control/nojs/change/cake/{$user_no_access->id()}");
@@ -147,7 +148,7 @@ class ActionLinkKernelTest extends KernelTestBase {
 
     // Operable, but next state not reachable.
     $this->state->set('test_mocked_control:operability', TRUE);
-    $links = $action_link->buildLinkSet($user_no_access);
+    $links = $action_link->getStateActionPlugin()->buildLinkSet($action_link, $user_no_access);
     $this->assertNotEmpty($links);
     // The actual link is empty, because the next state is not reachable.
     $this->assertEmpty($links['change']['#link']);
@@ -165,7 +166,7 @@ class ActionLinkKernelTest extends KernelTestBase {
 
     // All systems go!
     $this->state->set('test_mocked_control:next_state', 'cake');
-    $links = $action_link->buildLinkSet($user_no_access);
+    $links = $action_link->getStateActionPlugin()->buildLinkSet($action_link, $user_no_access);
     $this->assertNotEmpty($links);
     $this->assertNotEmpty($links['change']['#link']);
 
@@ -262,7 +263,7 @@ class ActionLinkKernelTest extends KernelTestBase {
     $user = $this->setUpCurrentUser();
 
     $this->expectException(\ArgumentCountError::class);
-    $links = $action_link->buildLinkSet($user);
+    $links = $action_link->getStateActionPlugin()->buildLinkSet($action_link, $user);
   }
 
 }
