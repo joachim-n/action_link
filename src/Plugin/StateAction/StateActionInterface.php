@@ -33,8 +33,12 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
    *   The action link entity.
    * @param \Drupal\Core\Session\AccountInterface $user
    *   The user to get links for.
-   * @param mixed ...$parameters
-   *   Dynamic parameters specific to the action link's state action plugin.
+   * @param array $scalar_parameters
+   *   (optional) The scalar values of the dynamic parameters for the state
+   *   action plugin.
+   * @param array $parameters
+   *   (optional) The upcasted values of the dynamic parameters for the state
+   *   action plugin.
    *
    * @return array
    *   A render array of links. This may be empty if no links are available.
@@ -43,7 +47,7 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
    *   Throws an error if the $parameter don't match up with the dynamic
    *   parameters defined by this plugin.
    */
-  public function buildLinkSet(ActionLinkInterface $action_link, AccountInterface $user, ...$parameters): array;
+  public function buildLinkSet(ActionLinkInterface $action_link, AccountInterface $user, $scalar_parameters = [], $parameters = []): array;
 
   /**
    * Gets the link for a specific direction.
