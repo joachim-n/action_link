@@ -58,8 +58,9 @@ class ActionLink extends ComputedFieldBase {
    * {@inheritdoc}
    */
   public function useLazyBuilder(EntityInterface $host_entity, ComputedFieldDefinitionWithValuePluginInterface $computed_field_definition): bool {
-    return TRUE;
-    // TODO! not needed.
+    // The action linkset element itself uses a lazy builder, so there is no
+    // need for one at the field level.
+    return FALSE;
   }
 
   /**
