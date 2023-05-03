@@ -241,7 +241,7 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
     if ($reachable) {
       $label = $action_link->getLinkLabel($direction, $next_state, ...$parameters);
 
-      $url = Url::fromRoute('action_link.action_link.' . $action_link->id(), $route_parameters);
+      $url = Url::fromRoute($action_link->getRouteName(), $route_parameters);
       $link = Link::fromTextAndUrl($label, $url);
     }
 

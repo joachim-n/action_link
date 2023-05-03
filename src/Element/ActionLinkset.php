@@ -150,8 +150,7 @@ class ActionLinkset extends RenderElement {
     // Use the routing system to upcast the dynamic parameters.
     if ($scalar_dynamic_parameters) {
       $route_provider = \Drupal::service('router.route_provider');
-      // TODO: DRY!
-      $route = $route_provider->getRouteByName('action_link.action_link.' . $action_link_id);
+      $route = $route_provider->getRouteByName($action_link->getRouteName());
 
       /** @var \Drupal\Core\ParamConverter\ParamConverterManagerInterface $param_converter_manager */
       $param_converter_manager = \Drupal::service('paramconverter_manager');

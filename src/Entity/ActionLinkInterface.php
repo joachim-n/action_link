@@ -195,4 +195,15 @@ interface ActionLinkInterface extends ConfigEntityInterface, EntityWithPluginCol
    */
   public function getPermissions(): array;
 
+  /**
+   * Gets the route name for the action link.
+   *
+   * Each action link entity defines its own route, so that dynamic parameters
+   * can be upcasted by the routing system.
+   *
+   * @return string
+   *   The route name.
+   */
+  public function getRouteName(): string;
+
 }

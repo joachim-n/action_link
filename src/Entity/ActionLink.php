@@ -377,4 +377,11 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
     return $permissions;
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getRouteName(): string {
+    return 'action_link.action_link.' . $this->id();
+  }
+
 }

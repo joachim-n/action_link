@@ -48,7 +48,7 @@ class ActionLinkRouteProvider {
       // Let the action link plugin define the route. This allows dynamic
       // parameters to be defined in the route, which means that validation and
       // upcasting are done by the routing system.
-      $routes['action_link.action_link.' . $action_link_id] = $state_action_plugin->getActionRoute($action_link_entity);
+      $routes[$action_link_entity->getRouteName()] = $state_action_plugin->getActionRoute($action_link_entity);
     }
 
     return $routes;
