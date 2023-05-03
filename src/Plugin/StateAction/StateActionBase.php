@@ -108,15 +108,17 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
   /**
    * {@inheritdoc}
    */
-  public function buildLinkSet(ActionLinkInterface $action_link, AccountInterface $user, ...$parameters): array {
+  // OH BUT FUCK this is bad for Ajax style which now has to fuck about. NO< it should have both from the route match!
+  public function buildLinkSet(ActionLinkInterface $action_link, AccountInterface $user, $scalar_parameters = [], $parameters = []): array {
     $directions = $this->getDirections();
 
-    return $this->doBuildLinkSet($action_link, $user, $directions, ...$parameters);
+    return $this->doBuildLinkSet($action_link, $user, $directions, $scalar_parameters, $parameters);
   }
 
   /**
    * {@inheritdoc}
    */
+  // TODO! fix params and call!
   public function buildSingleLink(ActionLinkInterface $action_link, string $direction, AccountInterface $user, ...$parameters): array {
     $directions = $this->getDirections();
     $direction_array = [$direction => $directions[$direction]];
@@ -127,7 +129,7 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
   /**
    * Common code for static::buildLinkSet() and static::buildSingleLink().
    */
-  protected function doBuildLinkSet(ActionLinkInterface $action_link, AccountInterface $user, $directions, ...$parameters): array {
+  protected function doBuildLinkSet(ActionLinkInterface $action_link, AccountInterface $user, $directions, $scalar_parameters, $parameters): array {
     // Validate the number of dynamic parameters. This must be done before they
     // are validated by the specific plugin class.
     $dynamic_parameter_names = $this->getDynamicParameterNames();
