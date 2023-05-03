@@ -105,6 +105,8 @@ class ActionLinkset extends RenderElement {
       '#lazy_builder' => [
         static::class . '::linksetLazyBuilder', [
           $element['#action_link'],
+          // Don't replace a NULL for the user value with the current user ID at
+          // this point, as that would pollute the cache.
           $element['#user'] ?? NULL,
           $element['#link_style'] ?? NULL,
           // We have to strip the keys again here, as otherwise PHP will try to
