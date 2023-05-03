@@ -21,10 +21,10 @@ use Drupal\Core\Routing\RouteObjectInterface;
  *   - #user: (optional) The user to get the links for. Defaults to the current
  *     user.
  *   - #dynamic_parameters: (optional) The parameters for the action link's
- *     state action plugin. These may be either raw values as used in the action
- *     link URLs, or upcasted objects. They must be in the same order as the
+ *     state action plugin. These must be raw values as used in the action
+ *     link URLs, rather than upcasted objects. They must be in the same order as the
  *     declaration of the dynamic parameters in the state action plugin's
- *     definition. Keys may be numeric, or use the parameter names.
+ *     definition. Keys may either be numeric, or the parameter names.
  *   - #link_style: (optional) The ID of an action link style plugin to override
  *     the link style set in the action link config entity.
  *
@@ -91,15 +91,15 @@ class ActionLinkset extends RenderElement {
 
     // Ensure the parameters are keyed by their names, as we'll need them for
     // downcasting.
-    if (array_is_list($element['#dynamic_parameters'])) {
-      $scalar_dynamic_parameters = array_combine($state_action_plugin->getDynamicParameterNames(), $element['#dynamic_parameters']);
-    }
-    else {
-      $scalar_dynamic_parameters = $element['#dynamic_parameters'];
-    }
+    // if (array_is_list($element['#dynamic_parameters'])) {
+    //   $scalar_dynamic_parameters = array_combine($state_action_plugin->getDynamicParameterNames(), $element['#dynamic_parameters']);
+    // }
+    // else {
+    //   $scalar_dynamic_parameters = $element['#dynamic_parameters'];
+    // }
 
-    // Downcast the parameters.
-    $scalar_dynamic_parameters = $action_link->getStateActionPlugin()->convertParametersForRoute($scalar_dynamic_parameters);
+    // // Downcast the parameters.
+    // $scalar_dynamic_parameters = $action_link->getStateActionPlugin()->convertParametersForRoute($scalar_dynamic_parameters);
 
     $element['linkset'] = [
       '#lazy_builder' => [
@@ -112,7 +112,7 @@ class ActionLinkset extends RenderElement {
           // We have to strip the keys again here, as otherwise PHP will try to
           // match keys to method parameter names. We can't pass the array as a
           // single parameter, because lazy builder callbacks don't allow that.
-          ...array_values($scalar_dynamic_parameters),
+          ...array_values($element['#dynamic_parameters']),
         ]],
       '#create_placeholder' => TRUE,
     ];
@@ -193,7 +193,7 @@ class ActionLinkset extends RenderElement {
       $user = \Drupal::currentUser();
     }
 
-    return $state_action_plugin->buildLinkSet($action_link, $user, ...$dynamic_parameters);
+    return $state_action_plugin->buildLinkSet($action_link, $user, $scalar_dynamic_parameters, $dynamic_parameters);
   }
 
 }
