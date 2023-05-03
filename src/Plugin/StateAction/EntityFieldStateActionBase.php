@@ -155,22 +155,6 @@ abstract class EntityFieldStateActionBase extends StateActionBase implements Con
   /**
    * {@inheritdoc}
    */
-  public function convertParametersForRoute(array $parameters): array {
-    $parameters = parent::convertParametersForRoute($parameters);
-
-    // Convert the entity parameter to an entity ID.
-    // @todo This needs to be able to complain if a param is bad, e.g. no node
-    // exists.
-    if (is_object($parameters['entity'])) {
-      $parameters['entity'] = $parameters['entity']->id();
-    }
-
-    return $parameters;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function checkOperandAccess(ActionLinkInterface $action_link, string $direction, string $state, AccountInterface $account, EntityInterface $entity = NULL): AccessResult {
     // Check access both to edit the entity, and to edit the specific field.
     $entity_access = $entity->access('update', $account, TRUE);

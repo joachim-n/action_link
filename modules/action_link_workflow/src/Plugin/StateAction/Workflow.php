@@ -169,20 +169,6 @@ class Workflow extends StateActionBase implements ContainerFactoryPluginInterfac
     return 'Workflow state changed.';
   }
 
-  /**
-   * {@inheritdoc}
-   */
-  public function convertParametersForRoute(array $parameters): array {
-    $parameters = parent::convertParametersForRoute($parameters);
-
-    // Convert the entity parameter to an entity ID.
-    if (is_object($parameters['entity'])) {
-      $parameters['entity'] = $parameters['entity']->id();
-    }
-
-    return $parameters;
-  }
-
   public function getActionRoute(ActionLinkInterface $action_link): Route {
     $route = parent::getActionRoute($action_link);
 

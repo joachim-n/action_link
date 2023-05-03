@@ -40,10 +40,9 @@ interface ActionLinkStyleInterface extends PluginInspectionInterface, Derivative
    *   The user account the links are for.
    * @param array $named_parameters
    *   The aditional dynamic parameters specific to the action link's state
-   *   action plugin. Keys are the parameter names.
+   *   action plugin, as upcasted objects. Keys are the parameter names.
    * @param array $scalar_parameters
-   *   The same parameters as $named_parameters, but with any objects downcasted
-   *   to scalar values.
+   *   The raw values of the dynamic parameters.
    */
   public function alterLinksBuild(array &$build, ActionLinkInterface $action_link, AccountInterface $user, array $named_parameters, array $scalar_parameters);
 

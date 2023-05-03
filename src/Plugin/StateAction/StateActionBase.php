@@ -391,20 +391,6 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
   }
 
   /**
-   * Downcasts object parameters for use in routes and identifiers.
-   *
-   * @param array $parameters
-   *   The array of dynamic parameters.
-   *
-   * @return array
-   *   The array of raw parameters.
-   */
-  public function convertParametersForRoute(array $parameters): array {
-    // Do nothing by default.
-    return $parameters;
-  }
-
-  /**
    * {@inheritdoc}
    */
   public function getDynamicParametersFromRouteMatch(RouteMatchInterface $route_match): array {

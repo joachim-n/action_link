@@ -50,8 +50,7 @@ class StateAction extends Plugin {
    * are reserved: link_style, direction, state, user.
    *
    * If any parameters need to be upcasted in the route, then the parameter type
-   * should be declared in the plugin's getActionRoute() and the corresponding
-   * downcasting done in convertParametersForRoute().
+   * should be declared in the plugin's getActionRoute().
    *
    * @var array
    *   An array of the dynamic parameter names for this plugin.
