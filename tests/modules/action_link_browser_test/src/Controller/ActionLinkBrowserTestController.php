@@ -5,14 +5,16 @@ namespace Drupal\action_link_browser_test\Controller;
 use Drupal\action_link\Entity\ActionLinkInterface;
 
 /**
- * Controller that outputs all action links for testing.
+ * Controller that outputs an action link for testing.
+ *
+ * Use at the path '/action_link_browser_test/{action_link}'.
  */
 class ActionLinkBrowserTestController {
 
   /**
    * Callback for the action_link_browser_test.action_link_browser_test route.
    */
-  public function content(ActionLinkInterface $action_link = NULL) {
+  public function content(ActionLinkInterface $action_link) {
     // Track the number of times this is called in total.
     $call_count = \Drupal::state()->get('ActionLinkBrowserTestController:call_count', 0);
     $call_count++;
