@@ -117,13 +117,11 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
   /**
    * {@inheritdoc}
    */
-  // TODO! fix params and call!
-  // TODO: doc as semi-internal
-  public function buildSingleLink(ActionLinkInterface $action_link, string $direction, AccountInterface $user, ...$parameters): array {
+  public function buildSingleLink(ActionLinkInterface $action_link, string $direction, AccountInterface $user, $scalar_parameters = [], $parameters = []): array {
     $directions = $this->getDirections();
     $direction_array = [$direction => $directions[$direction]];
 
-    return $this->doBuildLinkSet($action_link, $user, $direction_array, ...$parameters);
+    return $this->doBuildLinkSet($action_link, $user, $direction_array, $scalar_parameters, $parameters);
   }
 
   /**
