@@ -27,12 +27,8 @@ class ActionLinkBrowserTestController {
     $dynamic_parameter_names = $action_link->getStateActionPlugin()->getDynamicParameterNames();
     $parameters = [];
     if ($dynamic_parameter_names) {
-      // Quick and dirty! Assume parameter is an entity.
-      // $node = $entity_type_manager->getStorage('node')->load(1);
-      // $parameters[] = $node;
-
-
-      // use scalars for now!
+      // Quick and dirty! Assume that if there is a parameter, it is an entity
+      // AND assume that in that case, the test will have created it.
       $parameters[] = 1;
     }
 
