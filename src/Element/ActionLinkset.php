@@ -87,19 +87,6 @@ class ActionLinkset extends RenderElement {
     /** @var \Drupal\action_link\Entity\ActionLinkInterface $action_link */
     $action_link = $entity_type_manager->getStorage('action_link')->load($element['#action_link']);
     assert(!empty($action_link));
-    $state_action_plugin = $action_link->getStateActionPlugin();
-
-    // Ensure the parameters are keyed by their names, as we'll need them for
-    // downcasting.
-    // if (array_is_list($element['#dynamic_parameters'])) {
-    //   $scalar_dynamic_parameters = array_combine($state_action_plugin->getDynamicParameterNames(), $element['#dynamic_parameters']);
-    // }
-    // else {
-    //   $scalar_dynamic_parameters = $element['#dynamic_parameters'];
-    // }
-
-    // // Downcast the parameters.
-    // $scalar_dynamic_parameters = $action_link->getStateActionPlugin()->convertParametersForRoute($scalar_dynamic_parameters);
 
     $element['linkset'] = [
       '#lazy_builder' => [
