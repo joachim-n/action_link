@@ -118,7 +118,7 @@ class Ajax extends ActionLinkStyleBase implements ContainerFactoryPluginInterfac
     // case then links on the page are out of date.
     // Call buildLinkSet() on the plugin rather than the action link entity,
     // so we get the plain render array and not the lazy builder.
-    $links = $action_link->getStateActionPlugin()->buildLinkSet($action_link, $user, ...$parameters);
+    $links = $action_link->getStateActionPlugin()->buildLinkSet($action_link, $user, $raw_parameters, $parameters);
     foreach (Element::children($links) as $link_direction) {
       // Generate a CSS selector to use in a JQuery Replace command.
       $selector = '.' . $this->createCssIdentifier($action_link, $link_direction, $user, ...$raw_dynamic_parameters);
