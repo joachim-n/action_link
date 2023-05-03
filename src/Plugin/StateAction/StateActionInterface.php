@@ -6,7 +6,6 @@ use Drupal\action_link\Entity\ActionLinkInterface;
 use Drupal\Component\Plugin\DerivativeInspectionInterface;
 use Drupal\Component\Plugin\PluginInspectionInterface;
 use Drupal\Core\Access\AccessResult;
-use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
 use Symfony\Component\Routing\Route;
@@ -14,7 +13,9 @@ use Symfony\Component\Routing\Route;
 /**
  * Interface for State Action plugins.
  *
- * The larlge internal to callers..... TODO
+ * This is largely internal with respect to callers; in other words, you should
+ * probably only call methods on this plugin if you are extending the module in
+ * some way. In general, there are corresponding methods on the entity class.
  *
  * State action plugins that are configurable should also implement:
  *  - \Drupal\Core\Plugin\PluginFormInterface
