@@ -231,6 +231,7 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
       '#type' => 'action_linkset',
       '#action_link' => $this->id(),
       '#user' => $user?->id() ?? NULL,
+      // TODO: downcast here.
       '#dynamic_parameters' => $parameters,
     ];
   }
