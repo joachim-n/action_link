@@ -103,8 +103,6 @@ class ActionLinkset extends RenderElement {
         ]],
       '#create_placeholder' => TRUE,
     ];
-    // dsm($element);
-    //
 
         // Directly create a placeholder as we need this to be placeholdered
     // regardless if this is a POST or GET request.
