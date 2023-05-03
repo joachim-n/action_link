@@ -109,6 +109,7 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
    * {@inheritdoc}
    */
   // OH BUT FUCK this is bad for Ajax style which now has to fuck about. NO< it should have both from the route match!
+  // TODO: doc as semi-internal
   public function buildLinkSet(ActionLinkInterface $action_link, AccountInterface $user, $scalar_parameters = [], $parameters = []): array {
     $directions = $this->getDirections();
 
@@ -119,6 +120,7 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
    * {@inheritdoc}
    */
   // TODO! fix params and call!
+  // TODO: doc as semi-internal
   public function buildSingleLink(ActionLinkInterface $action_link, string $direction, AccountInterface $user, ...$parameters): array {
     $directions = $this->getDirections();
     $direction_array = [$direction => $directions[$direction]];
