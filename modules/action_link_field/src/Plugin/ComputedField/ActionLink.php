@@ -47,7 +47,7 @@ class ActionLink extends ComputedFieldBase {
       // deriver.
       '#action_link' => $this->getDerivativeId(),
       '#dynamic_parameters' => [
-        $host_entity,
+        $host_entity->id(),
       ],
     ];
 
