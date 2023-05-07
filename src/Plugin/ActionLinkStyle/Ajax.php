@@ -109,7 +109,7 @@ class Ajax extends ActionLinkStyleBase implements ContainerFactoryPluginInterfac
 
     $raw_dynamic_parameters = [];
     foreach ($dynamic_parameter_names as $name) {
-      $raw_dynamic_parameters[] = $raw_parameters->get($name);
+      $raw_dynamic_parameters[$name] = $raw_parameters->get($name);
     }
 
     // We have to replace all links for this action link, not just the clicked
@@ -118,10 +118,10 @@ class Ajax extends ActionLinkStyleBase implements ContainerFactoryPluginInterfac
     // case then links on the page are out of date.
     // Call buildLinkSet() on the plugin rather than the action link entity,
     // so we get the plain render array and not the lazy builder.
-    $links = $action_link->getStateActionPlugin()->buildLinkSet($action_link, $user, $raw_parameters, $parameters);
+    $links = $action_link->getStateActionPlugin()->buildLinkSet($action_link, $user, $raw_dynamic_parameters, $parameters);
     foreach (Element::children($links) as $link_direction) {
       // Generate a CSS selector to use in a JQuery Replace command.
-      $selector = '.' . $this->createCssIdentifier($action_link, $link_direction, $user, ...$raw_dynamic_parameters);
+      $selector = '.' . $this->createCssIdentifier($action_link, $link_direction, $user, ...array_values($raw_dynamic_parameters));
 
       // Create a new AJAX Replace command to update the link display. This
       // will update all copies of the same link if there are more than one.
@@ -140,7 +140,7 @@ class Ajax extends ActionLinkStyleBase implements ContainerFactoryPluginInterfac
     }
 
     if ($message) {
-      $selector = '.' . $this->createCssIdentifier($action_link, $direction, $user, ...$raw_dynamic_parameters);
+      $selector = '.' . $this->createCssIdentifier($action_link, $direction, $user, ...array_values($raw_dynamic_parameters));
 
       // Add a message command to the stack.
       $message_command = new ActionLinkMessageCommand($selector, $message);
