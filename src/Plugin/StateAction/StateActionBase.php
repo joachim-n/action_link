@@ -143,15 +143,15 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
     // Get the associative indexes for the dynamic parameters.
     $named_parameters = $this->getDynamicParameterValuesByName($parameters);
 
+    // Validate parameters.
+    $this->validateParameters($named_parameters);
+
     // Strip any keys from the parameters array. This is so that plugin classes
     // can omit implementing methods in this base class that they don't care
     // about overriding. With array keys, the call to a method in this class
     // would cause a PHP error because the splat operator treats an array key as
     // a method parameter name.
     $parameters = array_values($parameters);
-
-    // Validate parameters.
-    $this->validateParameters($named_parameters);
 
     $build = [];
 
