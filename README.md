@@ -30,3 +30,6 @@ information, see
 1. Go to Administration › Structure › Action Links.
 2. Click 'Add action link' to create an action link.
 3. Configure permissions to use the action link at the normal permissions page.
+
+## Developers
+
