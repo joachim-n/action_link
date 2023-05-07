@@ -128,6 +128,11 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
    * Common code for static::buildLinkSet() and static::buildSingleLink().
    */
   protected function doBuildLinkSet(ActionLinkInterface $action_link, AccountInterface $user, $directions, array $scalar_parameters, array $parameters): array {
+    // @todo When I update my local to PHP 8.1!
+    // Check the parameters are keyed.
+    // assert(!\array_is_list($scalar_parameters));
+    // assert(!\array_is_list($parameters));
+
     // Validate the number of dynamic parameters. This must be done before they
     // are validated by the specific plugin class.
     $dynamic_parameter_names = $this->getDynamicParameterNames();
@@ -205,8 +210,6 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
    *    - Everything ok: build array with a link.
    */
   protected function buildLink($action_link, $direction, $user, array $scalar_parameters, ...$parameters): ?array {
-    // TODO: When I update my local to PHP 8.1!
-    // assert(!\array_is_list($scalar_parameters));
     // Only NULL means there is no valid next state; a string such as '0' is
     // a valid state.
     $next_state = $this->getNextStateName($direction, $user, ...$parameters);
