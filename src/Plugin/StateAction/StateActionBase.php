@@ -205,6 +205,8 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
    *    - Everything ok: build array with a link.
    */
   protected function buildLink($action_link, $direction, $user, $scalar_parameters, ...$parameters): ?array {
+    // TODO: When I update my local to PHP 8.1!
+    // assert(!\array_is_list($scalar_parameters));
     // Only NULL means there is no valid next state; a string such as '0' is
     // a valid state.
     $next_state = $this->getNextStateName($direction, $user, ...$parameters);
