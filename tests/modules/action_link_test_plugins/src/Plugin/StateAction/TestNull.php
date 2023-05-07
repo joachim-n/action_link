@@ -36,14 +36,14 @@ class TestNull extends StateActionBase {
    * {@inheritdoc}
    */
   public function checkOperability(ActionLinkInterface $action_link): bool {
-    return FALSE;
+    return TRUE;
   }
 
   /**
    * {@inheritdoc}
    */
   public function checkAccess(string $direction, string $state, AccountInterface $account, ...$parameters): AccessResult {
-    return AccessResult::neutral();
+    return AccessResult::allowed();
   }
 
   /**
