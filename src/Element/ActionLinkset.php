@@ -147,8 +147,11 @@ class ActionLinkset extends RenderElement {
       $action_link->set('link_style', $link_style);
     }
 
-    // Use the routing system to upcast the dynamic parameters.
     if ($scalar_dynamic_parameters) {
+      // Give the dynamic parameters their parameter names as keys.
+      $scalar_dynamic_parameters = array_combine($state_action_plugin->getDynamicParameterNames(), $scalar_dynamic_parameters);
+
+      // Use the routing system to upcast the dynamic parameters.
       $route_provider = \Drupal::service('router.route_provider');
       $route = $route_provider->getRouteByName($action_link->getRouteName());
 
@@ -157,7 +160,7 @@ class ActionLinkset extends RenderElement {
 
       // Make a dummy defaults array so we can use the parameter converting system
       // to upcast the dynamic parameters.
-      $dummy_defaults = array_combine($state_action_plugin->getDynamicParameterNames(), $scalar_dynamic_parameters);
+      $dummy_defaults = $scalar_dynamic_parameters;
       $dummy_defaults[RouteObjectInterface::ROUTE_OBJECT] = $route;
 
       $converted_defaults = $param_converter_manager->convert($dummy_defaults);
