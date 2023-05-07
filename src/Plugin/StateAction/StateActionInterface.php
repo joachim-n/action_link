@@ -36,10 +36,10 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
    *   The user to get links for.
    * @param array $scalar_parameters
    *   (optional) The scalar values of the dynamic parameters for the state
-   *   action plugin. TODO KEYED?
+   *   action plugin, keyed by the parameter names.
    * @param array $parameters
    *   (optional) The upcasted values of the dynamic parameters for the state
-   *   action plugin. TODO KEYED?
+   *   action plugin, keyed by the parameter names.
    *
    * @return array
    *   A render array of links. This may be empty if no links are available.
@@ -65,10 +65,10 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
    *   The user to get the link for.
    * @param array $scalar_parameters
    *   (optional) The scalar values of the dynamic parameters for the state
-   *   action plugin.
+   *   action plugin, keyed by the parameter names.
    * @param array $parameters
    *   (optional) The upcasted values of the dynamic parameters for the state
-   *   action plugin.
+   *   action plugin, keyed by the parameter names.
    *
    * @return \Drupal\Core\Link|null
    *   The link object, or NULL if no link is applicable.
