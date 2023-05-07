@@ -10,7 +10,7 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\State\StateInterface;
 use Drupal\action_link\Entity\ActionLinkInterface;
 use Drupal\action_link\Plugin\StateAction\StateActionBase;
-use Drupal\action_link\Plugin\StateAction\ToggleTrait;
+use Drupal\action_link\Plugin\StateAction\ToggleGeometryTrait;
 use Drupal\Component\Plugin\ConfigurableInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Plugin\PluginFormInterface;
@@ -47,7 +47,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class PocSubscribe extends StateActionBase implements ContainerFactoryPluginInterface, ConfigurableInterface, PluginFormInterface {
 
   use StringTranslationTrait;
-  use ToggleTrait;
+  use ToggleGeometryTrait;
 
   /**
    * The entity type manager.

@@ -30,7 +30,7 @@ use Drupal\Core\Session\AccountInterface;
  */
 class BooleanField extends EntityFieldStateActionBase {
 
-  use ToggleTrait;
+  use ToggleGeometryTrait;
 
   /**
    * {@inheritdoc}

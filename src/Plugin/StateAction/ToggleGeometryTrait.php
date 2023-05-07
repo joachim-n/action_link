@@ -25,7 +25,7 @@ use Drupal\Core\Form\FormStateInterface;
  * link path parameters. Doing it this way means a toggle is a special case of
  * a cyclical action.)
  */
-trait ToggleTrait {
+trait ToggleGeometryTrait {
 
   public function stringsDefaultConfiguration() {
     $defaults = [];
