@@ -41,37 +41,6 @@ class ActionLinkBrowserSingleLinkTestController {
     }
 
     return $build;
-
-    // TODO: Links on other node.
-    $node = $entity_type_manager->getStorage('node')->load(4);
-    $build['other'] = $action_link->buildLinkSet($user, $node);
-
-    return $build;
-
-    // $action_links = $entity_type_manager->getStorage('action_link')->loadMultiple();
-    // $action_links = [$action_links['test_date']];
-
-    foreach ($action_links as $action_link_id => $action_link) {
-      // dsm($action_link);
-      $build[$action_link_id . '4'] = [
-        '#type' => 'container',
-      ];
-
-      $build[$action_link_id . '4']['links'] = $action_link->buildLinkSet($user, $node);
-
-      // break;
-    }
-
-
-    // Test repeat links!
-    // $build['repeat'] = [
-    //   '#type' => 'container',
-    // ];
-
-    // $build['repeat']['links'] = $action_link->buildLinkSet($user, $node);
-
-
-    return $build;
   }
 
 }
