@@ -14,8 +14,7 @@ use Drupal\Core\Form\FormStateInterface;
  * on a colour value field would have six directions: increase and decrease each
  * of the red, green, blue components.
  */
-// TODO rename RepeatableGeometryTrait ?
-trait RepeatableTrait {
+trait RepeatableGeometryTrait {
 
   public function stringsDefaultConfiguration() {
     $defaults = [];

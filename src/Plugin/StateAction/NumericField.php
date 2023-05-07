@@ -25,7 +25,7 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
  */
 class NumericField extends EntityFieldStateActionBase {
 
-  use RepeatableTrait;
+  use RepeatableGeometryTrait;
 
   use StringTranslationTrait;
 
