@@ -48,7 +48,7 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
    *   Throws an error if the $parameter don't match up with the dynamic
    *   parameters defined by this plugin.
    */
-  public function buildLinkSet(ActionLinkInterface $action_link, AccountInterface $user, $scalar_parameters = [], $parameters = []): array;
+  public function buildLinkSet(ActionLinkInterface $action_link, AccountInterface $user, array $scalar_parameters = [], array $parameters = []): array;
 
   /**
    * Gets the link for a specific direction.
@@ -73,7 +73,7 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
    * @return \Drupal\Core\Link|null
    *   The link object, or NULL if no link is applicable.
    */
-  public function buildSingleLink(ActionLinkInterface $action_link, string $direction, AccountInterface $user, $scalar_parameters = [], $parameters = []): array;
+  public function buildSingleLink(ActionLinkInterface $action_link, string $direction, AccountInterface $user, array $scalar_parameters = [], array $parameters = []): array;
 
   /**
    * Gets the next state for the given parameters, or NULL if there is none.

@@ -108,7 +108,7 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
   /**
    * {@inheritdoc}
    */
-  public function buildLinkSet(ActionLinkInterface $action_link, AccountInterface $user, $scalar_parameters = [], $parameters = []): array {
+  public function buildLinkSet(ActionLinkInterface $action_link, AccountInterface $user, array $scalar_parameters = [], array $parameters = []): array {
     $directions = $this->getDirections();
 
     return $this->doBuildLinkSet($action_link, $user, $directions, $scalar_parameters, $parameters);
@@ -117,7 +117,7 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
   /**
    * {@inheritdoc}
    */
-  public function buildSingleLink(ActionLinkInterface $action_link, string $direction, AccountInterface $user, $scalar_parameters = [], $parameters = []): array {
+  public function buildSingleLink(ActionLinkInterface $action_link, string $direction, AccountInterface $user, array $scalar_parameters = [], array $parameters = []): array {
     $directions = $this->getDirections();
     $direction_array = [$direction => $directions[$direction]];
 
@@ -127,7 +127,7 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
   /**
    * Common code for static::buildLinkSet() and static::buildSingleLink().
    */
-  protected function doBuildLinkSet(ActionLinkInterface $action_link, AccountInterface $user, $directions, $scalar_parameters, $parameters): array {
+  protected function doBuildLinkSet(ActionLinkInterface $action_link, AccountInterface $user, $directions, array $scalar_parameters, array $parameters): array {
     // Validate the number of dynamic parameters. This must be done before they
     // are validated by the specific plugin class.
     $dynamic_parameter_names = $this->getDynamicParameterNames();
