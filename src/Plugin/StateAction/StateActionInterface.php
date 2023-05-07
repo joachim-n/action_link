@@ -36,10 +36,10 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
    *   The user to get links for.
    * @param array $scalar_parameters
    *   (optional) The scalar values of the dynamic parameters for the state
-   *   action plugin.
+   *   action plugin. TODO KEYED?
    * @param array $parameters
    *   (optional) The upcasted values of the dynamic parameters for the state
-   *   action plugin.
+   *   action plugin. TODO KEYED?
    *
    * @return array
    *   A render array of links. This may be empty if no links are available.
