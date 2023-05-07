@@ -5,3 +5,11 @@ action_link_browser_test.action_link_browser_test:
     _controller: '\Drupal\action_link_browser_test\Controller\ActionLinkBrowserTestController::content'
   requirements:
     _access: 'TRUE'
+
+action_link_browser_test.action_link_browser_test_single:
+  path: /action_link_browser_test_single/{action_link}
+  defaults:
+    _title: 'Action Link Test Output - Single links'
+    _controller: '\Drupal\action_link_browser_test\Controller\ActionLinkBrowserSingleLinkTestController::content'
+  requirements:
+    _access: 'TRUE'
