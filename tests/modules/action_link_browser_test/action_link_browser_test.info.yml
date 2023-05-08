@@ -1,0 +1,5 @@
+name: 'Action Link Browser Test'
+type: module
+description: 'Provides routes showing output to test action links.'
+package: Testing
+core_version_requirement: '^9 || ^10'

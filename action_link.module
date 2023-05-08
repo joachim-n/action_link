@@ -1,0 +1,46 @@
+<?php
+
+/**
+ * @file
+ * Contains hook implementations for the Action links module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function action_link_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    case 'help.page.action_link':
+      return t("The Action Link module can be used to create links which users can click on to perform actions.");
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function action_link_theme($existing, $type, $theme, $path) {
+  return [
+    'action_linkset' => [
+      'variables' => [
+        'links' => [],
+        'action_link' => NULL,
+        'attributes' => NULL,
+        'user' => NULL,
+        'dynamic_parameters' => [],
+      ],
+    ],
+    'action_link' => [
+      'variables' => [
+        'link' => [],
+        'action_link' => NULL,
+        'direction' => NULL,
+        'state' => NULL,
+        'user' => NULL,
+        'dynamic_parameters' => [],
+        'attributes' => NULL,
+      ],
+    ],
+  ];
+}

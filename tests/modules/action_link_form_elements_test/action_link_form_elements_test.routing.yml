@@ -1,0 +1,16 @@
+action_link_form_elements_test.entity_type_field:
+  path: /action_link_form_elements_test/entity_type_field
+  defaults:
+    _title: 'Form elements test - entity_type_field'
+    _form: \Drupal\action_link_form_elements_test\Form\EntityFieldTestForm
+  requirements:
+    _access: 'TRUE'
+
+action_link_form_elements_test.action_plugin:
+  path: /action_link_form_elements_test/action_plugin
+  defaults:
+    _title: 'Form elements test - action_plugin'
+    _form: \Drupal\action_link_form_elements_test\Form\ActionPluginTestForm
+  requirements:
+    _access: 'TRUE'
+

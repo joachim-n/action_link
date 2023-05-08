@@ -1,0 +1,7 @@
+name: 'Action Link Field'
+type: module
+description: 'Provides computed fields showing action links.'
+core_version_requirement: '^9 || ^10'
+dependencies:
+  - action_link
+  - computed_field:computed_field

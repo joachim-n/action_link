@@ -1,0 +1,5 @@
+name: 'Action Link Test Plugins'
+type: module
+description: 'Contains test plugins'
+package: Testing
+core_version_requirement: '^9 || ^10'

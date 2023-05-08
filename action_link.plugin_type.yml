@@ -1,0 +1,8 @@
+action_link.state_action:
+  label: 'State Action'
+  plugin_manager_service_id: plugin.manager.action_link_state_action
+  plugin_definition_decorator_class: Drupal\plugin\PluginDefinition\ArrayPluginDefinitionDecorator
+action_link.link_style:
+  label: 'Action Link Style'
+  plugin_manager_service_id: plugin.manager.action_link_style
+  plugin_definition_decorator_class: Drupal\plugin\PluginDefinition\ArrayPluginDefinitionDecorator

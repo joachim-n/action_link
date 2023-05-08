@@ -1,0 +1,23 @@
+field.formatter.settings.action_linkset_default:
+  type: mapping
+  label: action_link_field_action_link_ajax
+  mapping: {  }
+
+field.formatter.settings.action_linkset_ajax:
+  type: mapping
+  label: action_link_field_action_link_ajax
+  mapping: {  }
+
+field.formatter.settings.action_linkset_nojs:
+  type: mapping
+  label: action_linkset_nojs
+  mapping: {  }
+
+# @todo This is wrong but rabbithole.
+action_link.action_link.*.third_party_settings.action_link_field:
+  type: mapping
+  label: 'Action link field settings'
+  mapping:
+    computed_field:
+      type: bool
+      label: Shows as computed field

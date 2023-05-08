@@ -1,0 +1,23 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display an action linkset.
+ *
+ * Available variables:
+ * - links: The renderable linkset.
+ * - action_link: The action link entity.
+ * - user: The user the link are for.
+ * - dynamic_parameters: The dynamic parameters.
+ * - attributes: The HTML attributes for the containing element. By default,
+ *   this has the following CSS classes:
+ *   - action-linkset
+ *   - action-linkset-id-ACTION_LINK_ENTITY_ID
+ *   - action-linkset-plugin-STATE_ACTION_PLUGIN_ID
+ *
+ * @ingroup themeable
+ */
+#}
+
+<div {{ attributes }}>
+  {{ links }}
+</div>

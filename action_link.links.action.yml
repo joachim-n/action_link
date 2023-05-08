@@ -1,0 +1,6 @@
+entity.action_link.add:
+  title: 'Add Action Link'
+  route_name: entity.action_link.add_form
+  weight: 15
+  appears_on:
+    - entity.action_link.collection

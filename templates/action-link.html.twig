@@ -1,0 +1,32 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a single action link.
+ *
+ * This is also used for empty links, in the case that a particular direction is
+ * not valid. This is to ensure there is a SPAN to replace with an active link
+ * if another direction link is used.
+ *
+ * Available variables:
+ * - link: The renderable link for the action.
+ * - action_link: The action link entity.
+ * - direction: The direction.
+ * - state: The target state of the link.
+ * - user: The user the link is for.
+ * - dynamic_parameters: The dynamic parameters.
+ * - attributes: The HTML attributes for the containing element. By default,
+ *   this has the following CSS classes:
+ *   - action-link
+ *   - action-link-id-ACTION_LINK_ENTITY_ID
+ *   - action-link-plugin-STATE_ACTION_PLUGIN_ID
+ *   - action-link-direction-DIRECTION
+ *   - action-link-state-TARGET_STATE
+ *   - action-link-present if a link is shown
+ *   - action-link-empty if there is no link shown
+ *
+ * @ingroup themeable
+ */
+#}
+<span {{ attributes }}>
+ {{ link }}
+</span>

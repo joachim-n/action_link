@@ -1,0 +1,8 @@
+name: 'Action link workflow'
+type: module
+description: 'Provides an action link type for workflows.'
+experimental: true
+core_version_requirement: '^9 || ^10'
+dependencies:
+  - action_link
+  - workflows

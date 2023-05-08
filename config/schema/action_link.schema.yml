@@ -1,0 +1,20 @@
+'action_link.action_link.*':
+  type: config_entity
+  label: 'Action Link'
+  mapping:
+    id:
+      type: text
+      label: 'Machine name'
+    label:
+      type: label
+      label: Name
+    plugin_id:
+      type: text
+      label: 'Plugin ID'
+    plugin_config:
+      # @todo expand!
+      type: ignore
+      label: 'Plugin configuration'
+    link_style:
+      type: text
+      label: 'Link style'

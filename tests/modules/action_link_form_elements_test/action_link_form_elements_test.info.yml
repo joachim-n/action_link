@@ -1,0 +1,5 @@
+type: module
+name: Form elements test
+description: Test module for custom form elements. Note this has no test written yet, but useful for manual testing.
+package: Testing
+core_version_requirement: '^9 || ^10'

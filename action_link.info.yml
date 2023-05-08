@@ -1,0 +1,4 @@
+name: 'Action links'
+type: module
+description: 'Create customised links which perform actions on your site.'
+core_version_requirement: '^9 || ^10'
