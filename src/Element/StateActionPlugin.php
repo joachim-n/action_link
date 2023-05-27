@@ -24,9 +24,9 @@ use Symfony\Component\HttpFoundation\Request;
  * https://www.drupal.org/project/plugin/issues/3197304 is fixed. Any changes to
  * this class should be submitted to the merge request on that issue.
  *
- * @FormElement("action_plugin")
+ * @FormElement("state_action_plugin")
  */
-class ActionLinkPlugin extends FormElement {
+class StateActionPlugin extends FormElement {
 
   /**
    * {@inheritdoc}

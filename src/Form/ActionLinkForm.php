@@ -48,7 +48,7 @@ class ActionLinkForm extends EntityForm {
     ];
 
     $form['plugin'] = [
-      '#type' => 'action_plugin',
+      '#type' => 'state_action_plugin',
       '#title' => $this->t('Action plugin'),
       '#required' => TRUE,
       '#default_value' => [
@@ -58,7 +58,7 @@ class ActionLinkForm extends EntityForm {
     ];
 
     $form['link_style'] = [
-      '#type' => 'action_link_plugin',
+      '#type' => 'action_link_style_plugin',
       '#title' => $this->t('Link style'),
       '#required' => TRUE,
       '#default_value' => $action_link->get('link_style'),
