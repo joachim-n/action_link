@@ -41,7 +41,9 @@ class DateField extends EntityFieldStateActionBase {
     $plugin_form['step'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Step interval'),
-      '#description' => $this->t('The amount of time to change the date by, as a PHP DateInterval string.'),
+      '#description' => $this->t('The amount of time to change the date by, as a <a href=":url">PHP DateInterval string</a>.', [
+        ':url' => 'https://www.php.net/manual/en/dateinterval.construct.php',
+      ]),
       '#required' => TRUE,
     ];
 
@@ -68,7 +70,9 @@ class DateField extends EntityFieldStateActionBase {
       new \DateInterval($step);
     }
     catch (\Exception $e) {
-      $form_state->setError($form['step'], $this->t('The step value must be a valid PHP DateInterval string.'));
+      $form_state->setError($form['step'], $this->t('The step value must be a <a href=":url">valid PHP DateInterval string</a>.', [
+        ':url' => 'https://www.php.net/manual/en/dateinterval.construct.php',
+      ]));
     }
   }
 
