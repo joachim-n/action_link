@@ -68,7 +68,7 @@ class DateField extends EntityFieldStateActionBase {
       new \DateInterval($step);
     }
     catch (\Exception $e) {
-      $form_state->setError($form['step'], 'The step value must be a valid PHP DateInterval string.');
+      $form_state->setError($form['step'], $this->t('The step value must be a valid PHP DateInterval string.'));
     }
   }
 
