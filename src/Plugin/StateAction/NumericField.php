@@ -41,6 +41,8 @@ class NumericField extends EntityFieldStateActionBase {
       'float',
     ];
 
+    $plugin_form['entity_type_field']['#field_options_filters'][] = [static::class, 'IDFieldsFilter'];
+
     $plugin_form['step'] = [
       '#type' => 'number',
       '#title' => $this->t('Step'),
@@ -56,6 +58,21 @@ class NumericField extends EntityFieldStateActionBase {
     $plugin_form['texts']['direction']['dec']['link_label']['#title'] = $this->t('Link label for decreasing the field value');
 
     return $plugin_form;
+  }
+
+  /**
+   * Field options filter callback.
+   */
+  public static function IDFieldsFilter(&$field_options, $selected_entity_type_id, $field_map_for_entity_type, $form_state) {
+    /** @var \Drupal\Core\Entity\EntityTypeManagerInterface */
+    $entity_type_manager = \Drupal::service('entity_type.manager');
+    $selected_entity_type = $entity_type_manager->getDefinition($selected_entity_type_id);
+
+    // Remove ID fields.
+    unset($field_options[$selected_entity_type->getKey('id')]);
+    if ($revision_id_field = $selected_entity_type->getKey('revision')) {
+      unset($field_options[$revision_id_field]);
+    }
   }
 
   /**
