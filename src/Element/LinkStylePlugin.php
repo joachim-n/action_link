@@ -40,7 +40,7 @@ class LinkStylePlugin extends FormElement {
    * Process callback.
    */
   public static function processPlugin(&$element, FormStateInterface $form_state, &$complete_form) {
-    $plugin_manager = \Drupal::service('plugin.plugin_type_manager')->getPluginType($element['#plugin_type'])->getPluginManager();
+    $plugin_manager = static::getPluginManager();
 
     $plugin_id_parents = $element['#array_parents'];
     $plugin_id_parents[] = 'plugin_id';
@@ -108,6 +108,17 @@ class LinkStylePlugin extends FormElement {
     $form_state->setValueForElement($element, $plugin_id);
 
     return $element;
+  }
+
+  /**
+   * Gets the plugin manager.
+   *
+   * @return mixed
+   *   The plugin manager service for the plugin type.
+   */
+  protected static function getPluginManager() {
+    // Hardcoded for now, generalise later!
+    return \Drupal::service('plugin.manager.action_link_style');
   }
 
 }
