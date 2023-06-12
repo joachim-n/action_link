@@ -227,6 +227,10 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
    * {@inheritdoc}
    */
   public function buildLinkSet(?AccountInterface $user, ...$parameters) {
+    assert(count($parameters) === count(array_filter($parameters, function ($v) {
+      return is_null($v) || is_scalar($v);
+    })), "Parameters may only contain scalar values.");
+
     return [
       '#type' => 'action_linkset',
       '#action_link' => $this->id(),
@@ -239,6 +243,10 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
    * {@inheritdoc}
    */
   public function buildSingleLink(string $direction, ?AccountInterface $user, ...$parameters): array {
+    assert(count($parameters) === count(array_filter($parameters, function ($v) {
+      return is_null($v) || is_scalar($v);
+    })), "Parameters may only contain scalar values.");
+
     return [
       '#type' => 'action_linkset',
       '#action_link' => $this->id(),
