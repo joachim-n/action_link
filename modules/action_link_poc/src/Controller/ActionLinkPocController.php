@@ -61,7 +61,7 @@ class ActionLinkPocController extends ControllerBase implements ContainerInjecti
           '#type' => 'container',
         ];
 
-        $build[$action_link_id]['links'] = $action_link->buildLinkSet($user, $node);
+        $build[$action_link_id]['links'] = $action_link->buildLinkSet($user, $node->id());
       }
 
       // Subscribe action links.
