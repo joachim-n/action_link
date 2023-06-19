@@ -86,6 +86,12 @@ class DateField extends EntityFieldStateActionBase {
 
     $date = $entity->get($field_name)->date;
     $date_clone = clone($date);
+
+    // Workaround for https://www.drupal.org/project/drupal/issues/3367543:
+    // force the timezone to UTC, because the date property will sometimes
+    // return a date object in UTC and sometimes in the user's timezone.
+    $date_clone->setTimeZone(timezone_open('UTC'));
+
     $next_date = match($direction) {
       'inc' => $date_clone->add($date_interval),
       'dec' => $date_clone->sub($date_interval),
