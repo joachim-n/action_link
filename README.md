@@ -17,7 +17,8 @@ This module requires no modules outside of Drupal core.
 ### Optional modules
 
 - Computed Field module allows action links that control entities to be output
-  as computed fields on the entity.
+  as computed fields on the entity. See the Action Link Field submodule in this
+  project for details.
 
 ## Installation
 
