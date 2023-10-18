@@ -203,7 +203,7 @@ class ActionLinkKernelTest extends KernelTestBase {
       'link_style' => 'nojs',
     ]);
     $action_link->save();
-    \Drupal::service('router.builder')->rebuildIfNeeded();
+    $this->container->get('router.builder')->rebuildIfNeeded();
 
     $request = Request::create("/action-link/test_always_1/nojs/change/cake/{$this->user->id()}");
     $response = $http_kernel->handle($request);
@@ -218,7 +218,7 @@ class ActionLinkKernelTest extends KernelTestBase {
       'link_style' => 'nojs',
     ]);
     $action_link->save();
-    \Drupal::service('router.builder')->rebuildIfNeeded();
+    $this->container->get('router.builder')->rebuildIfNeeded();
 
     $request = Request::create("/action-link/test_always_2/nojs/change/cake/{$this->user->id()}");
     $response = $http_kernel->handle($request);
@@ -228,7 +228,7 @@ class ActionLinkKernelTest extends KernelTestBase {
     // new one to exist in its place.
     $action_link->set('id', 'test_always_2b');
     $action_link->save();
-    \Drupal::service('router.builder')->rebuildIfNeeded();
+    $this->container->get('router.builder')->rebuildIfNeeded();
 
     $request = Request::create("/action-link/test_always_2/nojs/change/cake/{$this->user->id()}");
     $response = $http_kernel->handle($request);
@@ -240,7 +240,7 @@ class ActionLinkKernelTest extends KernelTestBase {
 
     // Test that deleting causes the route to no longer exist.
     $action_link->delete();
-    \Drupal::service('router.builder')->rebuildIfNeeded();
+    $this->container->get('router.builder')->rebuildIfNeeded();
 
     $request = Request::create("/action-link/test_always_2b/nojs/change/cake/{$this->user->id()}");
     $response = $http_kernel->handle($request);

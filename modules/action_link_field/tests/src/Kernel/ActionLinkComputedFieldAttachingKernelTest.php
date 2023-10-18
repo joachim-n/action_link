@@ -117,7 +117,7 @@ class ActionLinkComputedFieldAttachingKernelTest extends KernelTestBase {
     ]);
     $action_link_on_base_field->save();
 
-    $this->assertArrayHasKey('action_link:on_base_field', \Drupal::service('plugin.manager.computed_field')->getDefinitions());
+    $this->assertArrayHasKey('action_link:on_base_field', $this->container->get('plugin.manager.computed_field')->getDefinitions());
     $this->assertArrayHasKey('action_link_on_base_field', $this->entityFieldManager->getFieldDefinitions('node', 'alpha'));
     $this->assertArrayHasKey('action_link_on_base_field', $this->entityFieldManager->getFieldDefinitions('node', 'beta'));
 
@@ -139,7 +139,7 @@ class ActionLinkComputedFieldAttachingKernelTest extends KernelTestBase {
     ]);
     $action_link_on_config_field->save();
 
-    $this->assertArrayHasKey('action_link:on_config_field', \Drupal::service('plugin.manager.computed_field')->getDefinitions());
+    $this->assertArrayHasKey('action_link:on_config_field', $this->container->get('plugin.manager.computed_field')->getDefinitions());
     $this->assertArrayHasKey('action_link_on_config_field', $this->entityFieldManager->getFieldDefinitions('node', 'alpha'));
     $this->assertArrayNotHasKey('action_link_on_config_field', $this->entityFieldManager->getFieldDefinitions('node', 'beta'));
   }

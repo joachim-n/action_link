@@ -118,7 +118,7 @@ class ActionLinkEntityFieldKernelTest extends KernelTestBase {
       'link_style' => 'nojs',
     ]);
     $action_link->save();
-    \Drupal::service('router.builder')->rebuildIfNeeded();
+    $this->container->get('router.builder')->rebuildIfNeeded();
 
     $parameters_combined = [
       [
@@ -234,7 +234,7 @@ class ActionLinkEntityFieldKernelTest extends KernelTestBase {
       'link_style' => 'nojs',
     ]);
     $action_link->save();
-    \Drupal::service('router.builder')->rebuildIfNeeded();
+    $this->container->get('router.builder')->rebuildIfNeeded();
 
     $parameters_combined = [
       [
