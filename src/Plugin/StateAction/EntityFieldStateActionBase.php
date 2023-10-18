@@ -5,10 +5,14 @@ namespace Drupal\action_link\Plugin\StateAction;
 use Drupal\action_link\Entity\ActionLinkInterface;
 use Drupal\Component\Plugin\ConfigurableInterface;
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Plugin\PluginFormInterface;
 use Drupal\Core\Session\AccountInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Routing\Route;
 
 /**
@@ -16,7 +20,60 @@ use Symfony\Component\Routing\Route;
  *
  * This expects an 'entity' dynamic parameter.
  */
-abstract class EntityFieldStateActionBase extends StateActionBase implements ConfigurableInterface, PluginFormInterface {
+abstract class EntityFieldStateActionBase extends StateActionBase implements ConfigurableInterface, PluginFormInterface, ContainerFactoryPluginInterface {
+
+  /**
+   * The entity type manager.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $entityTypeManager;
+
+  /**
+   * The entity field manager.
+   *
+   * @var \Drupal\Core\Entity\EntityFieldManagerInterface
+   */
+  protected $entityFieldManager;
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    return new static(
+      $configuration,
+      $plugin_id,
+      $plugin_definition,
+      $container->get('entity_type.manager'),
+      $container->get('entity_field.manager'),
+    );
+  }
+
+  /**
+   * Creates a DummyFieldBase instance.
+   *
+   * @param array $configuration
+   *   A configuration array containing information about the plugin instance.
+   * @param string $plugin_id
+   *   The plugin_id for the plugin instance.
+   * @param mixed $plugin_definition
+   *   The plugin implementation definition.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   The entity type manager.
+   * @param \Drupal\Core\Entity\EntityFieldManagerInterface $entity_field_manager
+   *   The entity field manager.
+   */
+  public function __construct(
+    array $configuration,
+    $plugin_id,
+    $plugin_definition,
+    EntityTypeManagerInterface $entity_type_manager,
+    EntityFieldManagerInterface $entity_field_manager
+  ) {
+    parent::__construct($configuration, $plugin_id, $plugin_definition);
+    $this->entityTypeManager = $entity_type_manager;
+    $this->entityFieldManager = $entity_field_manager;
+  }
 
   /**
    * {@inheritdoc}
@@ -58,13 +115,10 @@ abstract class EntityFieldStateActionBase extends StateActionBase implements Con
    * Field options filter callback.
    */
   public static function fieldOptionsFilter(&$field_options, $selected_entity_type_id, $field_map_for_entity_type, $form_state) {
-    /** @var \Drupal\Core\Entity\EntityFieldManagerInterface */
-    $entity_field_manager = \Drupal::service('entity_field.manager');
-
     // Remove computed fields.
     foreach ($field_options as $field_id => $label) {
       foreach ($field_map_for_entity_type[$field_id]['bundles'] as $bundle) {
-        $field_definition = $entity_field_manager->getFieldDefinitions($selected_entity_type_id, $bundle)[$field_id];
+        $field_definition = $this->entityFieldManager->getFieldDefinitions($selected_entity_type_id, $bundle)[$field_id];
         if ($field_definition->isComputed()) {
           unset($field_options[$field_id]);
         }
@@ -161,8 +215,6 @@ abstract class EntityFieldStateActionBase extends StateActionBase implements Con
 
     $field_name = $this->configuration['field'];
 
-    // @todo Inject.
-    $this->entityTypeManager = \Drupal::service('entity_type.manager');
     $access_control_handler = $this->entityTypeManager->getAccessControlHandler($entity->getEntityTypeId());
     $field_access = $access_control_handler->fieldAccess('edit', $entity->getFieldDefinition($field_name), $account, NULL, TRUE);
 
