@@ -115,10 +115,13 @@ abstract class EntityFieldStateActionBase extends StateActionBase implements Con
    * Field options filter callback.
    */
   public static function fieldOptionsFilter(&$field_options, $selected_entity_type_id, $field_map_for_entity_type, $form_state) {
+    /** @var \Drupal\Core\Entity\EntityFieldManagerInterface */
+    $entity_field_manager = \Drupal::service('entity_field.manager');
+
     // Remove computed fields.
     foreach ($field_options as $field_id => $label) {
       foreach ($field_map_for_entity_type[$field_id]['bundles'] as $bundle) {
-        $field_definition = $this->entityFieldManager->getFieldDefinitions($selected_entity_type_id, $bundle)[$field_id];
+        $field_definition = $entity_field_manager->getFieldDefinitions($selected_entity_type_id, $bundle)[$field_id];
         if ($field_definition->isComputed()) {
           unset($field_options[$field_id]);
         }
