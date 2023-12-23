@@ -253,7 +253,7 @@ abstract class EntityFieldStateActionBase extends StateActionBase implements Con
    * @return string
    *   The entity type ID.
    */
-  protected function getTargetEntityTypeId(): string {
+  public function getTargetEntityTypeId(): string {
     return $this->configuration['entity_type_id'];
   }
 
@@ -263,7 +263,7 @@ abstract class EntityFieldStateActionBase extends StateActionBase implements Con
    * @return string
    *   The field name.
    */
-  protected function getTargetFieldName(): string {
+  public function getTargetFieldName(): string {
     return $this->configuration['field'];
   }
 
