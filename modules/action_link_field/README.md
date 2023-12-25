@@ -3,7 +3,7 @@
 The Action Link Field module allows action links that target entities to be
 output as computed fields on entities.
 
-For example, an action link which toggle's a node's published status can be
+For example, an action link which toggles a node's published status can be
 output as a link on an entity.
 
 ## Requirements
