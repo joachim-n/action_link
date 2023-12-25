@@ -67,7 +67,7 @@ class ActionLinkBrowserTest extends BrowserTestBase {
       'link_style' => 'nojs',
     ]);
     $action_link->save();
-    \$this->container->get('router.builder')->rebuildIfNeeded();
+    $this->container->get('router.builder')->rebuildIfNeeded();
 
     $user_1 = $this->drupalCreateUser([]);
     $this->drupalLogin($user_1);
