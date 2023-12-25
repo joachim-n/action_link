@@ -191,10 +191,13 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
     array $scalar_parameters,
     array $parameters,
   ): array {
-    // @todo When I update my local to PHP 8.1!
     // Check the parameters are keyed.
-    // assert(!\array_is_list($scalar_parameters));
-    // assert(!\array_is_list($parameters));
+    if (!empty($scalar_parameters) && \array_is_list($scalar_parameters)) {
+      throw new \InvalidArgumentException('Parameter $scalar_parameters has numeric keys');
+    }
+    if (!empty($parameters) && \array_is_list($parameters)) {
+      throw new \InvalidArgumentException('Parameter $parameters has numeric keys');
+    }
 
     // Validate the number of dynamic parameters. This must be done before they
     // are validated by the specific plugin class.
