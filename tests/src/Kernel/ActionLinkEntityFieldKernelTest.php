@@ -10,15 +10,18 @@ use Drupal\Tests\user\Traits\UserCreationTrait;
 use Prophecy\Argument;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Psr\Log\LoggerInterface;
+use Psr\Log\LoggerTrait;
 
 /**
  * Tests the entity field state action plugins.
  *
  * @group action_link
  */
-class ActionLinkEntityFieldKernelTest extends KernelTestBase {
+class ActionLinkEntityFieldKernelTest extends KernelTestBase implements LoggerInterface {
 
   use UserCreationTrait;
+  use LoggerTrait;
 
   /**
    * The modules to enable.
@@ -88,6 +91,11 @@ class ActionLinkEntityFieldKernelTest extends KernelTestBase {
     $this->installSchema('node', 'node_access');
     $this->installEntitySchema('node');
 
+    // Register this class as a logger so we can fail on errors generated during
+    // the requests.
+    // See https://www.drupal.org/project/drupal/issues/2903456.
+    $this->container->get('logger.factory')->addLogger($this);
+
     $this->state = $this->container->get('state');
     $this->messenger = $this->container->get('messenger');
     $this->entityTypeManager = $this->container->get('entity_type.manager');
@@ -109,6 +117,23 @@ class ActionLinkEntityFieldKernelTest extends KernelTestBase {
       'type' => 'alpha',
     ]);
     $node_type->save();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function log($level, string|\Stringable $message, array $context = []): void {
+    $message = strtr($message, $context);
+
+    // We expect warnings to be logged for requests that result in a 403.
+    if (str_contains($message, 'permission is required')) {
+      return;
+    }
+
+    // Fail the test on any log message: any errors or warnings during a request
+    // will be obscured by the error handling system. This makes them visible.
+    $level_label = \Drupal\Core\Logger\RfcLogLevel::getLevels()[$level];
+    $this->fail("Log $level_label: $message");
   }
 
   /**
@@ -226,6 +251,16 @@ class ActionLinkEntityFieldKernelTest extends KernelTestBase {
 
     $node = $this->reloadEntity($node);
     $this->assertEquals(TRUE, $node->isPublished());
+
+    // Check the action with the Ajax link type.
+    $request = Request::create("/action-link/test_status/ajax/toggle/false/{$user_with_access->id()}/{$node->id()}");
+    $response = $http_kernel->handle($request);
+    $this->assertInstanceOf(\Drupal\Core\Ajax\AjaxResponse::class, $response);
+    $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
+    $ajax_commands = $response->getCommands();
+    $this->assertCount(2, $ajax_commands);
+    $this->assertEquals('insert', $ajax_commands[0]['command']);
+    $this->assertEquals('.action-link-test-status-toggle-' . $user_with_access->id() . '-' . $node->id(), $ajax_commands[0]['selector']);
   }
 
   /**

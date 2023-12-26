@@ -112,13 +112,16 @@ class Ajax extends ActionLinkStyleBase implements ContainerFactoryPluginInterfac
       $raw_dynamic_parameters[$name] = $raw_parameters->get($name);
     }
 
+    // Key the upcasted parameters array.
+    $dynamic_parameters = array_combine($dynamic_parameter_names, $parameters);
+
     // We have to replace all links for this action link, not just the clicked
     // one, as the next state will change for all directions.
     // Replace links even if the action was not completed, as if that is the
     // case then links on the page are out of date.
     // Get the raw linkset from the plugin rather than the action link entity,
     // so we get the plain render array for each link, and not the lazy builder.
-    $links = $action_link->getStateActionPlugin()->buildLinkArray($action_link, $user, $raw_dynamic_parameters, $parameters);
+    $links = $action_link->getStateActionPlugin()->buildLinkArray($action_link, $user, $raw_dynamic_parameters, $dynamic_parameters);
     foreach (Element::children($links) as $link_direction) {
       // Generate a CSS selector to use in a JQuery Replace command.
       $selector = '.' . $this->createCssIdentifier($action_link, $link_direction, $user, ...array_values($raw_dynamic_parameters));
