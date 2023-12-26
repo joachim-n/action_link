@@ -55,6 +55,27 @@ class ActionLinkEntityFieldKernelTest extends KernelTestBase {
   protected $actionLinkStorage;
 
   /**
+   * The state storage service.
+   *
+   * @var \Drupal\Core\State\StateInterface
+   */
+  protected $state;
+
+  /**
+   * The messenger service.
+   *
+   * @var \Drupal\Core\Messenger\MessengerInterface
+   */
+  protected $messenger;
+
+  /**
+   * The current user.
+   *
+   * @var \Drupal\user\Entity\User
+   */
+  protected $user;
+
+  /**
    * {@inheritdoc}
    */
   protected function setUp(): void {
