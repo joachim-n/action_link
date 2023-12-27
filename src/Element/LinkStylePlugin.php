@@ -62,6 +62,10 @@ class LinkStylePlugin extends FormElement {
     // Build the plugin options.
     $options = [];
     foreach ($plugin_manager->getDefinitions() as $plugin_id => $plugin_definition) {
+      if (!empty($plugin_definition['no_ui'])) {
+        continue;
+      }
+
       $options[$plugin_id] = $plugin_definition['label'];
 
       // Add plugin descriptions to radios, if they exist.
