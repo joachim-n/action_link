@@ -14,7 +14,7 @@ abstract class ActionLinkStyleBase extends PluginBase implements ActionLinkStyle
   /**
    * {@inheritdoc}
    */
-  public function alterLinksBuild(&$build, ActionLinkInterface $action_link, AccountInterface $user, $named_parameters, $scalar_parameters) {
+  public function alterLinksBuild(array &$build, ActionLinkInterface $action_link, AccountInterface $user, array $named_parameters, array $scalar_parameters) {
     // Do nothing by default.
   }
 
