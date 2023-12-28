@@ -1,0 +1,6 @@
+name: 'Action Link Formatter Links'
+type: module
+description: 'Allows action links to be output alongside fields they control.'
+core_version_requirement: '^9 || ^10'
+dependencies:
+  - action_link

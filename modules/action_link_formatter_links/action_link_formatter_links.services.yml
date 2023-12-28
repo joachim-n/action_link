@@ -1,0 +1,8 @@
+services:
+  action_link_formatter_links.formatter_admin_alter:
+    class: Drupal\action_link_formatter_links\FormatterAdminAlter
+    arguments: ['@entity_type.manager']
+
+  action_link_formatter_links.display_build_alter:
+    class: Drupal\action_link_formatter_links\DisplayBuildAlter
+    arguments: ['@entity_type.manager']

@@ -1,0 +1,42 @@
+<?php
+
+/**
+ * @file
+ * Contains hook implementations for the Action Link Formatter Links module.
+ */
+
+use Drupal\Core\Field\FieldDefinitionInterface;
+use Drupal\Core\Field\FormatterInterface;
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_entity_display_build_alter().
+ */
+function action_link_formatter_links_entity_display_build_alter(&$build, $context) {
+  \Drupal::service('action_link_formatter_links.display_build_alter')->hookEntityDisplayBuildAlter($build, $context);
+}
+
+/**
+ * Implements hook_field_formatter_third_party_settings_form().
+ */
+function action_link_formatter_links_field_formatter_third_party_settings_form(FormatterInterface $plugin, FieldDefinitionInterface $field_definition, $view_mode, array $form, FormStateInterface $form_state) {
+  return \Drupal::service('action_link_formatter_links.formatter_admin_alter')->formatterSettingsForm($plugin, $field_definition, $view_mode, $form, $form_state);
+}
+
+/**
+ * Implements hook_field_formatter_settings_summary_alter().
+ */
+function action_link_formatter_links_field_formatter_settings_summary_alter(array &$summary, array $context) {
+  if ($settings = $context['formatter']->getThirdPartySetting('action_link_formatter_links', 'action_links')) {
+    if (empty(array_filter($settings))) {
+      return;
+    }
+
+    $entity_type_manager = \Drupal::service('entity_type.manager');
+    $action_links = $entity_type_manager->getStorage('action_link')->loadMultiple(array_filter($settings));
+
+    $summary[] = t('Action links: @action-links', [
+      '@action-links' => implode(', ', array_map(fn ($action_link) => $action_link->label(), $action_links)),
+    ]);
+  }
+}
