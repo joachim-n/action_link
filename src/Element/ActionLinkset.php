@@ -138,7 +138,8 @@ class ActionLinkset extends RenderElement {
     // before the variadic parameters, which would be further-reaching ugliness.
     // This hack works because
     // \Drupal\action_link\Controller\ActionLinkController respects the link
-    // style given in the path.
+    // style given in the path, and because all the function calls from this
+    // point pass the action link entity rather than load it from storage.
     if (!empty($link_style)) {
       $action_link->set('link_style', $link_style);
     }
