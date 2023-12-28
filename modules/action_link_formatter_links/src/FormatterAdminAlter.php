@@ -62,7 +62,7 @@ class FormatterAdminAlter {
       '#type' => 'checkboxes',
       '#title' => t('Action links'),
       '#options' => $options,
-      '#default_value' => $plugin->getThirdPartySetting('action_link_formatter_links', 'action_links'),
+      '#default_value' => $plugin->getThirdPartySetting('action_link_formatter_links', 'action_links', []),
     ];
 
     return $element;
