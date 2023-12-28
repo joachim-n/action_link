@@ -198,7 +198,7 @@ class AjaxEntityField extends Ajax {
       // rendered field will include the action links.
       $field_build = $view_builder->viewField($entity->get($field_name), $view_mode_name);
 
-      $selector = '.' . $this->displayBuildAlter->getWrapperCssClass($action_link, $entity, $field_name, $delta, $view_mode_name);
+      $selector = '.' . $this->displayBuildAlter->getViewModeWrapperCssClass($action_link, $entity, $field_name, $delta, $view_mode_name);
       $replace = new ReplaceCommand($selector, $this->renderer->renderPlain($field_build[$delta]));
       $response->addCommand($replace);
     }
@@ -209,7 +209,7 @@ class AjaxEntityField extends Ajax {
     // we'd have to serialise the display options to pass them to the action
     // link URL).
     $field_build = $view_builder->viewField($entity->get($field_name), 'default');
-    $selector = '.' . $this->displayBuildAlter->getWrapperCssClass($action_link, $entity, $field_name, $delta, EntityDisplayBase::CUSTOM_MODE);
+    $selector = '.' . $this->displayBuildAlter->getViewModeWrapperCssClass($action_link, $entity, $field_name, $delta, EntityDisplayBase::CUSTOM_MODE);
     $replace = new ReplaceCommand($selector, $this->renderer->renderPlain($field_build[$delta]));
     $response->addCommand($replace);
 
@@ -217,8 +217,14 @@ class AjaxEntityField extends Ajax {
     $message = $action_link->getMessage($direction, $state, ...$parameters);
     if ($message) {
       // Add a message command to the stack.
-      // Put the message on the specific link that was clicked.
-      $message_selector = ".action-link-id-{$action_link->id()}.action-link-direction-{$direction}";
+      // Put the message on the specific direction link that was clicked, using
+      // the CSS class that doesn't include the view mode to save having to
+      // add a message for every view mode.
+      $message_selector =
+        '.' .
+        $this->displayBuildAlter->getGenericWrapperCssClass($action_link, $entity, $field_name, $delta) .
+        ' ' .
+        ".action-link-direction-{$direction}";
       $message_command = new ActionLinkMessageCommand($message_selector, $message);
       $response->addCommand($message_command);
     }

@@ -82,7 +82,8 @@ class DisplayBuildAlter {
             '#type' => 'container',
             '#attributes' => [
               'class' => [
-                $this->getWrapperCssClass($action_link, $entity, $field_name, $delta, $view_mode),
+                $this->getViewModeWrapperCssClass($action_link, $entity, $field_name, $delta, $view_mode),
+                $this->getGenericWrapperCssClass($action_link, $entity, $field_name, $delta),
               ],
             ],
           ];
@@ -144,7 +145,7 @@ class DisplayBuildAlter {
   }
 
   /**
-   * Gets the CSS class to use on the formatter wrapper for AJAX replacement.
+   * Gets the view mode CSS class to use on the formatter wrapper.
    *
    * This doesn't need the entity type ID as the action link is specific to one
    * entity type, or user ID as action links that control entity fields are not
@@ -161,7 +162,7 @@ class DisplayBuildAlter {
    * @param string $view_mode
    *   The view mode being shown.
    */
-  public function getWrapperCssClass(ActionLinkInterface $action_link, EntityInterface $entity, string $field_name, int $delta, string $view_mode): string {
+  public function getViewModeWrapperCssClass(ActionLinkInterface $action_link, EntityInterface $entity, string $field_name, int $delta, string $view_mode): string {
     return implode(
       '-',
       [
@@ -171,6 +172,35 @@ class DisplayBuildAlter {
         $field_name,
         $delta,
         $view_mode,
+      ]
+    );
+  }
+
+  /**
+   * Gets the generic CSS class to use on the formatter wrapper.
+   *
+   * This doesn't need the entity type ID as the action link is specific to one
+   * entity type, or user ID as action links that control entity fields are not
+   * user-specific.
+   *
+   * @param \Drupal\action_link\Entity\ActionLinkInterface $action_link
+   *   The action link.
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   *   The entity being controlled.
+   * @param string $field_name
+   *   The name of the field being controlled.
+   * @param int $delta
+   *   The delta being controlled.
+   */
+  public function getGenericWrapperCssClass(ActionLinkInterface $action_link, EntityInterface $entity, string $field_name, int $delta): string {
+    return implode(
+      '-',
+      [
+        'action-link',
+        $action_link->id(),
+        $entity->id(),
+        $field_name,
+        $delta,
       ]
     );
   }
