@@ -34,3 +34,15 @@ options, there is no way for the module to know how to render the field value
 that is returned AJAX, and so it falls back to the default display.
 
 This includes fields that are show in Views.
+
+There are two possible workarounds:
+  - Configure the default view display to show the field in question with the
+    same formatter options as the custom options used where the field is shown
+    with action links. This only works if there is only one variety of custom
+    formatter options in use.
+  - Implement hook_action_link_style_info_alter() to swap the class for the
+    ajax_entity_field plugin, and in the custom replacement class, return field
+    formatted with the appropriate display options (including the
+    third_party_settings for this module so that the returned field includes the
+    action links). The request object can be used to determine which options to
+    use if there are multiple options in use.

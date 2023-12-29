@@ -16,7 +16,6 @@ use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\user\UserInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Replaces the ajax link style for action links in field formatters.
@@ -109,7 +108,18 @@ class AjaxEntityField extends Ajax {
   /**
    * {@inheritdoc}
    */
-  public function handleActionRequest(bool $action_completed, Request $request, RouteMatchInterface $route_match, ActionLinkInterface $action_link, string $direction, string $state, UserInterface $user, ...$parameters): Response {
+  protected function addReplacementsToResponse(
+    AjaxResponse $response,
+    bool $action_completed,
+    Request $request,
+    RouteMatchInterface $route_match,
+    ActionLinkInterface $action_link,
+    string $direction,
+    string $state,
+    UserInterface $user,
+    $raw_dynamic_parameters,
+    $dynamic_parameters,
+  ): void {
     // If the action did not complete, fall back to the parent AJAX plugin,
     // which only returns the action links and not the field formatter.
     // It's likely that if the action didn't complete, the displayed value is
@@ -120,7 +130,8 @@ class AjaxEntityField extends Ajax {
       // replaced action links.
       $action_link->set('link_style', $this->getPluginId());
 
-      return parent::handleActionRequest(
+      parent::addReplacementsToResponse(
+        $response,
         $action_completed,
         $request,
         $route_match,
@@ -128,21 +139,21 @@ class AjaxEntityField extends Ajax {
         $direction,
         $state,
         $user,
-        ...$parameters
+        $raw_dynamic_parameters,
+        $dynamic_parameters,
       );
     }
 
-    [$entity] = $parameters;
+    $entity = $dynamic_parameters['entity'];
     $field_name = $action_link->getStateActionPlugin()->getTargetFieldName();
 
-    // Create a new AJAX response. We return the rendered field in multiple view
-    // modes, partly because passing the view mode that's being displayed into
-    // the action link route controller is horribly fiddly, as it would have to
-    // be passed into the action link render element lazy builder, but also
-    // because this covers the corner case where a field value is shown on the
-    // page in more than one view mode. Drupal core's ReplaceCommand fails
-    // silently if it does not find the given selector.
-    $response = new AjaxResponse();
+    // We return the rendered field in multiple view modes, partly because
+    // passing the view mode that's being displayed into the action link route
+    // controller is horribly fiddly, as it would have to be passed into the
+    // action link render element lazy builder, but also because this covers the
+    // corner case where a field value is shown on the page in more than one
+    // view mode. Drupal core's ReplaceCommand fails silently if it does not
+    // find the given selector.
 
     // Hardcode the delta since multiple deltas aren't properly supported yet
     // anyway.
@@ -212,11 +223,36 @@ class AjaxEntityField extends Ajax {
     $selector = '.' . $this->displayBuildAlter->getViewModeWrapperCssClass($action_link, $entity, $field_name, $delta, EntityDisplayBase::CUSTOM_MODE);
     $replace = new ReplaceCommand($selector, $this->renderer->renderPlain($field_build[$delta]));
     $response->addCommand($replace);
+  }
 
-    // We only need to consider the case that the action completed.
-    $message = $action_link->getMessage($direction, $state, ...$parameters);
+  /**
+   * {@inheritdoc}
+   */
+  protected function addMessageToResponse(
+    AjaxResponse $response,
+    bool $action_completed,
+    Request $request,
+    RouteMatchInterface $route_match,
+    ActionLinkInterface $action_link,
+    string $direction,
+    string $state,
+    UserInterface $user,
+    $raw_dynamic_parameters,
+    $dynamic_parameters,
+  ): void {
+    if ($action_completed) {
+      $message = $action_link->getMessage($direction, $state, ...array_values($dynamic_parameters));
+    }
+    else {
+      $message = $action_link->getFailureMessage($direction, $state, ...array_values($dynamic_parameters));
+    }
+
+    // Add a message command to the stack.
     if ($message) {
-      // Add a message command to the stack.
+      $entity = $dynamic_parameters['entity'];
+      $field_name = $action_link->getStateActionPlugin()->getTargetFieldName();
+      $delta = 0;
+
       // Put the message on the specific direction link that was clicked, using
       // the CSS class that doesn't include the view mode to save having to
       // add a message for every view mode.
@@ -228,8 +264,6 @@ class AjaxEntityField extends Ajax {
       $message_command = new ActionLinkMessageCommand($message_selector, $message);
       $response->addCommand($message_command);
     }
-
-    return $response;
   }
 
 }

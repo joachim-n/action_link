@@ -115,13 +115,84 @@ class Ajax extends ActionLinkStyleBase implements ContainerFactoryPluginInterfac
     // Key the upcasted parameters array.
     $dynamic_parameters = array_combine($dynamic_parameter_names, $parameters);
 
-    // We have to replace all links for this action link, not just the clicked
-    // one, as the next state will change for all directions.
-    // Replace links even if the action was not completed, as if that is the
-    // case then links on the page are out of date.
+    $this->addReplacementsToResponse(
+      $response,
+      $action_completed,
+      $request,
+      $route_match,
+      $action_link,
+      $direction,
+      $state,
+      $user,
+      $raw_dynamic_parameters,
+      $dynamic_parameters,
+    );
+    $this->addMessageToResponse(
+      $response,
+      $action_completed,
+      $request,
+      $route_match,
+      $action_link,
+      $direction,
+      $state,
+      $user,
+      $raw_dynamic_parameters,
+      $dynamic_parameters,
+    );
+
+    return $response;
+  }
+
+  /**
+   * Adds the AJAX replacements to the response.
+   *
+   * This replaces all links for this action link, not just the clicked one, as
+   * the next state will change for all directions.
+   *
+   * Links are replaced even if the action was not completed, as if that is the
+   * case then the links on the page are out of date and should be updated.
+   *
+   * @param \Drupal\Core\Ajax\AjaxResponse $response
+   *   The AJAX response that will be returned, to which replacement commands
+   *   should be added.
+   * @param bool $action_completed
+   *   Whether the action could be completed. If FALSE, this means that the
+   *   action wasn't operable or the target state wasn't reachable.
+   * @param \Symfony\Component\HttpFoundation\Request $request
+   *   The request.
+   * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
+   *   The route match.
+   * @param \Drupal\action_link\Entity\ActionLinkInterface $action_link
+   *   The action link entity.
+   * @param string $direction
+   *   The direction of the link.
+   * @param string $state
+   *   The target state for the action.
+   * @param \Drupal\user\UserInterface $user
+   *   The user to perform the action. This is not necessarily the current user.
+   * @param array $raw_dynamic_parameters
+   *   An array of the raw values of the dynamic parameters for the state action
+   *   plugin, keyed by parameter name.
+   * @param array $dynamic_parameters
+   *   An array of the upcasted values of the dynamic parameters for the state
+   *   action plugin, keyed by parameter name.
+   */
+  protected function addReplacementsToResponse(
+    AjaxResponse $response,
+    bool $action_completed,
+    Request $request,
+    RouteMatchInterface $route_match,
+    ActionLinkInterface $action_link,
+    string $direction,
+    string $state,
+    UserInterface $user,
+    $raw_dynamic_parameters,
+    $dynamic_parameters,
+  ): void {
     // Get the raw linkset from the plugin rather than the action link entity,
     // so we get the plain render array for each link, and not the lazy builder.
     $links = $action_link->getStateActionPlugin()->buildLinkArray($action_link, $user, $raw_dynamic_parameters, $dynamic_parameters);
+
     foreach (Element::children($links) as $link_direction) {
       // Generate a CSS selector to use in a JQuery Replace command.
       $selector = '.' . $this->createCssIdentifier($action_link, $link_direction, $user, ...array_values($raw_dynamic_parameters));
@@ -134,12 +205,53 @@ class Ajax extends ActionLinkStyleBase implements ContainerFactoryPluginInterfac
       // thing. This skips any attachments, but these are already on the page
       // from its initial load.
     }
+  }
 
+  /**
+   * Adds a success or failure message to the response if applicable.
+   *
+   * @param \Drupal\Core\Ajax\AjaxResponse $response
+   *   The AJAX response that will be returned, to which message commands
+   *   should be added.
+   * @param bool $action_completed
+   *   Whether the action could be completed. If FALSE, this means that the
+   *   action wasn't operable or the target state wasn't reachable.
+   * @param \Symfony\Component\HttpFoundation\Request $request
+   *   The request.
+   * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
+   *   The route match.
+   * @param \Drupal\action_link\Entity\ActionLinkInterface $action_link
+   *   The action link entity.
+   * @param string $direction
+   *   The direction of the link.
+   * @param string $state
+   *   The target state for the action.
+   * @param \Drupal\user\UserInterface $user
+   *   The user to perform the action. This is not necessarily the current user.
+   * @param array $raw_dynamic_parameters
+   *   An array of the raw values of the dynamic parameters for the state action
+   *   plugin, keyed by parameter name.
+   * @param array $dynamic_parameters
+   *   An array of the upcasted values of the dynamic parameters for the state
+   *   action plugin, keyed by parameter name.
+   */
+  protected function addMessageToResponse(
+    AjaxResponse $response,
+    bool $action_completed,
+    Request $request,
+    RouteMatchInterface $route_match,
+    ActionLinkInterface $action_link,
+    string $direction,
+    string $state,
+    UserInterface $user,
+    $raw_dynamic_parameters,
+    $dynamic_parameters,
+  ): void {
     if ($action_completed) {
-      $message = $action_link->getMessage($direction, $state, ...$parameters);
+      $message = $action_link->getMessage($direction, $state, ...array_values($dynamic_parameters));
     }
     else {
-      $message = $action_link->getFailureMessage($direction, $state, ...$parameters);
+      $message = $action_link->getFailureMessage($direction, $state, ...array_values($dynamic_parameters));
     }
 
     if ($message) {
@@ -149,8 +261,6 @@ class Ajax extends ActionLinkStyleBase implements ContainerFactoryPluginInterfac
       $message_command = new ActionLinkMessageCommand($selector, $message);
       $response->addCommand($message_command);
     }
-
-    return $response;
   }
 
   /**
