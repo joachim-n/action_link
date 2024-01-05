@@ -67,7 +67,7 @@ class TestDirections extends StateActionBase {
   /**
    * {@inheritdoc}
    */
-  public function checkOperandAccess(ActionLinkInterface $action_link, string $direction, string $state, AccountInterface $account): AccessResult {
+  public function checkOperandStateAccess(ActionLinkInterface $action_link, string $direction, string $state, AccountInterface $account): AccessResult {
     return AccessResult::allowed();
   }
 

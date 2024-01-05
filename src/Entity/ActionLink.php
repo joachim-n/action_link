@@ -301,7 +301,7 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
 
     $specific_permission_access = $this->getStateActionPlugin()->checkPermissionAccess($this, $direction, $state, $account, ...$parameters);
 
-    $operand_access = $this->getStateActionPlugin()->checkOperandAccess($this, $direction, $state, $account, ...$parameters);
+    $operand_access = $this->getStateActionPlugin()->checkOperandStateAccess($this, $direction, $state, $account, ...$parameters);
 
     $access_result = $main_permission_access->orIf($specific_permission_access);
     $access_result = $access_result->andIf($operand_access);

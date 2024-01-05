@@ -44,7 +44,7 @@ class TestMockedAccess extends StateActionBase {
   /**
    * {@inheritdoc}
    */
-  public function checkOperandAccess(ActionLinkInterface $action_link, string $direction, string $state, AccountInterface $account): AccessResult {
+  public function checkOperandStateAccess(ActionLinkInterface $action_link, string $direction, string $state, AccountInterface $account): AccessResult {
     $access = \Drupal::state()->get('test_mocked_access:access');
     return match ($access) {
       NULL => AccessResult::neutral(),

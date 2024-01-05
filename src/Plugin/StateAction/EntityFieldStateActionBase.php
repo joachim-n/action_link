@@ -212,7 +212,7 @@ abstract class EntityFieldStateActionBase extends StateActionBase implements Con
   /**
    * {@inheritdoc}
    */
-  public function checkOperandAccess(ActionLinkInterface $action_link, string $direction, string $state, AccountInterface $account, EntityInterface $entity = NULL): AccessResult {
+  public function checkOperandStateAccess(ActionLinkInterface $action_link, string $direction, string $state, AccountInterface $account, EntityInterface $entity = NULL): AccessResult {
     // Check access both to edit the entity, and to edit the specific field.
     $entity_access = $entity->access('update', $account, TRUE);
 
