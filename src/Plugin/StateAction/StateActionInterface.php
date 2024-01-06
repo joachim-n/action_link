@@ -216,6 +216,29 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
   public function checkPermissionAccess(ActionLinkInterface $action_link, string $direction, string $state, AccountInterface $account, ...$parameters): AccessResult;
 
   /**
+   * Checks general access to the action's operand.
+   *
+   * This should be implemented by plugins to check access on what the
+   * action is attempting to do, for all states and directions.
+   *
+   * @param \Drupal\action_link\Entity\ActionLinkInterface $action_link
+   *   The action link entity.
+   * @param \Drupal\Core\Session\AccountInterface $account
+   *   The user to perform the action. This is not necessarily the current user.
+   * @param mixed ...
+   *   Additional dynamic parameters.
+   *
+   * @return \Drupal\Core\Access\AccessResult
+   *   The access result. An AccessResultForbidden will deny all access to the
+   *   action link. An AccessResultNeutral or AccessResultAllowed will allow
+   *   access in general, with access to the specific direction still to be
+   *   checked.
+   *
+   * @see self::checkOperandStateAccess()
+   */
+  public function checkOperandGeneralAccess(ActionLinkInterface $action_link, AccountInterface $account): AccessResult;
+
+  /**
    * Checks access to the action's operand: what the action wants to do.
    *
    * This checks whether the thing that the action does is accessible to the

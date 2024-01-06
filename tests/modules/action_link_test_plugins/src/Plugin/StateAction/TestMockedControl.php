@@ -55,6 +55,14 @@ class TestMockedControl extends StateActionBase {
   /**
    * {@inheritdoc}
    */
+  public function checkOperandGeneralAccess(ActionLinkInterface $action_link, AccountInterface $account): AccessResult {
+    $access = \Drupal::state()->get('test_mocked_control:operand_general_access', AccessResult::neutral());
+    return $access;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function checkOperandStateAccess(ActionLinkInterface $action_link, string $direction, string $state, AccountInterface $account): AccessResult {
     $access = \Drupal::state()->get('test_mocked_control:operand_access', AccessResult::neutral());
     return $access;
