@@ -42,6 +42,27 @@ use Drupal\Core\Routing\RouteObjectInterface;
  * ];
  * @endcode
  *
+ * Whether links are output depends on operability of the action link, and
+ * access and reachability of each direction. (For an overview of these
+ * concepts, see the ActionLink entity class.)
+ *
+ * There are three possible outputs for a link:
+ *   - Nothing
+ *   - The link with the action URL
+ *   - The link as an empty span
+ *
+ * The reason for the empty span outut is the case where the direction for the
+ * link is not accessible or reachable. Either of these could change if a
+ * different direction link is used, because the target state in that direction
+ * will then change. With the AJAX link style, the empty link is replaced
+ * with the new, normal link.
+ *
+ * For example, with an 'add to cart' action link,
+ * if the user has no products in their cart, the 'remove' direction is not
+ * reachable. An empty link is output. If the user then clicks the 'add' link,
+ * the empty 'remove' link is replaced by AJAX with a normal 'remove' link
+ * because it is now possible to remove an item from the cart.
+ *
  * The full flow of code is:
  * - (optional) \Drupal\action_link\Entity\ActionLinkInterface::buildLinkSet()
  * - static::preRenderLinkset()

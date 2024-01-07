@@ -189,8 +189,10 @@ class Ajax extends ActionLinkStyleBase implements ContainerFactoryPluginInterfac
     $raw_dynamic_parameters,
     $dynamic_parameters,
   ): void {
-    // Get the raw linkset from the plugin rather than the action link entity,
-    // so we get the plain render array for each link, and not the lazy builder.
+    // Get the links from the plugin rather than the action link entity, so we
+    // get the plain render array for each link, and not the lazy builder.
+    // We get the plain array of links rather than the linkset as we need to
+    // return each link in a separate AJAX command.
     $links = $action_link->getStateActionPlugin()->buildLinkArray($action_link, $user, $raw_dynamic_parameters, $dynamic_parameters);
 
     foreach (Element::children($links) as $link_direction) {

@@ -23,7 +23,7 @@ use Symfony\Component\HttpFoundation\Response;
  * An action link's link style setting affects how links are output, but does
  * not restrict which link styles are responded to. This means that any link
  * style URL will work for an action link entity. This is to allow for graceful
- * degradation of JavaScript line.
+ * degradation of JavaScript links.
  */
 interface ActionLinkStyleInterface extends PluginInspectionInterface, DerivativeInspectionInterface {
 

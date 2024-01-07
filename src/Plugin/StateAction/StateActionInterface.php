@@ -13,6 +13,9 @@ use Symfony\Component\Routing\Route;
 /**
  * Interface for State Action plugins.
  *
+ * State action plugins define what actually happens when a user clicks an
+ * action link.
+ *
  * This is largely internal with respect to callers; in other words, you should
  * probably only call methods on this plugin if you are extending the module in
  * some way. In general, there are corresponding methods on the entity class

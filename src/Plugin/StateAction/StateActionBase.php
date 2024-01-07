@@ -247,10 +247,15 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
   /**
    * Gets the build array for a single link.
    *
+   * Helper for doBuildLinkArray().
+   *
    * This creates a build array rather than return a Link object, because in
    * some cases we want an empty build array with no link, and in some we want
    * nothing at all, and returning a Link object wouldn't capture that
    * distinction.
+   *
+   * This does not check operability: that has already been checked by
+   * doBuildLinkArray().
    *
    * @param \Drupal\action_link\Entity\ActionLinkInterface $action_link
    *   The action link entity.
@@ -266,11 +271,10 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
    *
    * @return array|null
    *   A build array for the link, or NULL if nothing should be output. The
-   *   build array may itself not contain a link and show nothing. The logic is:
-   *    - No access: NULL.
-   *    - No operability: NULL.
-   *    - No reachable state: build array with no link.
-   *    - Everything ok: build array with a link.
+   *   build array may itself not contain a link and show nothing. The principle
+   *   for determining whether to return NULL or an empty link is whether a
+   *   different state could result in the link for the direction in question
+   *   becoming available. See the ActionLinkset class for more details.
    */
   protected function buildLink(ActionLinkInterface $action_link, $direction, AccountInterface $user, array $scalar_parameters, ...$parameters): ?array {
     // Only NULL means there is no valid next state; a string such as '0' is
@@ -280,7 +284,11 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
 
     if ($reachable) {
       // Check access if the state is reachable. If the state is not reachable,
-      // we can't check access but output an empty link anyway.
+      // we can't check access because that requires a state parameter, so we
+      // output an empty link. This is because access is state-specific, and a
+      // user could use a different direction which then causes this direction
+      // to become accessible: for this to work correctly with AJAX, an empty
+      // link must be present to be replaced.
       $access = $action_link->checkAccess($direction, $next_state, $user, ...$parameters);
       if (!$access->isAllowed()) {
         // @todo Show a link to log in if the user doesn't have access but an

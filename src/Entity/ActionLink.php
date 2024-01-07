@@ -35,14 +35,16 @@ use Drupal\Core\Session\AccountInterface;
  *    'add' and 'remove', and an infinite number of states. If the cart has
  *    no items for that product, only one state is reachable, otherwise two
  *    states are reachable: one more of the item and one less.
+ *  - An action link which changes the workflow state of an entity has a state
+ *    for each workflow state. The directions correspond to the transitions
+ *    of the workflow. Reachable states are those which have a transition from
+ *    the current state.
  *
  * Several things determine together whether a user can use a link:
  *  - Operability: Whether the action link makes any sense at all, in any
- *    direction. For example, if an action link toggles a boolean field on an
- *    entity, it is only considered operable when the field on an entity has a
- *    value. The operability of an action link means no directions can be used.
- *    In this situation, only another type of change to the site will allow an
- *    action link to become operable.
+ *    direction. If an action link is not operable, then no directions can be
+ *    used. In this situation, only another type of change to the site will
+ *    allow an action link to become operable.
  *  - Reachability: Whether the given target state makes sense from the current
  *    state. The reachability of a state can change if the action link's state
  *    is changed.
@@ -50,8 +52,32 @@ use Drupal\Core\Session\AccountInterface;
  *    must have to use it. Depending on the plugin there may be permissions to
  *    use particular directions or reach certain states.
  *  - Operand access: The permissions for the thing controlled by the action
- *    link. For example, if an action link controls an entity field, then access
- *    to edit the entity and its field is required.
+ *    link.
+ *
+ * Some examples:
+ *  - An action link which controls the 'published' field on a node is always
+ *    operable. If the node is published, then only the 'unpublished' state is
+ *    reachable, and vice versa. Operand access requires the user to have
+ *    access to publish or unpublish that node.
+ *  - An action link which increments or decrements an integer field on an
+ *    entity is operable if the entity has a value for that field, and not
+ *    operable if the field value is empty. There are two reachable states: the
+ *    next largest and next smallest value from the current value. Operand
+ *    access requires the user to have access to edit that entity and the
+ *    particular field.
+ *  - An add to cart link is always operable, as a user can always at least
+ *    remove an item from their cart. If there are currently none of the product
+ *    in the cart, then only one state is reachable: '1'. If the product is out
+ *    of stock, then only one state is reachable: the state that is 1 less than
+ *    the current number in the cart. Otherwise, two states are reachable: one
+ *    less and one more than the current number in the cart. Operand access
+ *    depends on whether the user has permissions to access the product's store
+ *    and buy the product.
+ *  - An action link which changes the workflow state of an entity is operable
+ *    if the entity is configured to use the workflow. A state is reachable if
+ *    the workflow defines a transition from the current state. Operand access
+ *    requires the user to have access to use the workflow on the entity, and
+ *    to have access for the particular transition.
  *
  * @ConfigEntityType(
  *   id = "action_link",
