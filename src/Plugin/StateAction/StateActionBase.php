@@ -292,7 +292,7 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
       // user could use a different direction which then causes this direction
       // to become accessible: for this to work correctly with AJAX, an empty
       // link must be present to be replaced.
-      $access = $action_link->checkAccess($direction, $next_state, $user, ...$parameters);
+      $access = $action_link->checkStateAccess($direction, $next_state, $user, ...$parameters);
     }
 
     $route_parameters = [

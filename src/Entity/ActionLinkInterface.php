@@ -119,7 +119,7 @@ interface ActionLinkInterface extends ConfigEntityInterface, EntityWithPluginCol
    * @return \Drupal\Core\Access\AccessResult
    *   The access result.
    */
-  public function checkAccess(string $direction, string $state, AccountInterface $account, ...$parameters): AccessResult;
+  public function checkStateAccess(string $direction, string $state, AccountInterface $account, ...$parameters): AccessResult;
 
   /**
    * Advances the state of the action link.

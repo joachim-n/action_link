@@ -147,7 +147,7 @@ class PocSubscribe extends StateActionBase implements ContainerFactoryPluginInte
   /**
    * {@inheritdoc}
    */
-  public function checkAccess(string $direction, string $state, AccountInterface $account, ...$parameters): AccessResult {
+  public function checkStateAccess(string $direction, string $state, AccountInterface $account, ...$parameters): AccessResult {
     // @todo Implement properly!
     return AccessResult::allowed();
   }

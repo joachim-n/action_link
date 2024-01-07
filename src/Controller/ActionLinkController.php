@@ -112,7 +112,7 @@ class ActionLinkController {
       return AccessResult::forbidden();
     }
 
-    return $action_link->checkAccess($direction, $state, $user, ...$parameters);
+    return $action_link->checkStateAccess($direction, $state, $user, ...$parameters);
   }
 
 }

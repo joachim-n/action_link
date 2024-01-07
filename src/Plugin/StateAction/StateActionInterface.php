@@ -209,7 +209,7 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
    * @return \Drupal\Core\Access\AccessResult
    *   The access result.
    *
-   * @see \Drupal\action_link\Entity\ActionLinkInterface::checkAccess()
+   * @see \Drupal\action_link\Entity\ActionLinkInterface::checkStateAccess()
    * @see self::checkOperandStateAccess()
    * @see self::getStateActionPermissions()
    */
@@ -248,7 +248,7 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
    * @return \Drupal\Core\Access\AccessResult
    *   The access result.
    *
-   * @see \Drupal\action_link\Entity\ActionLinkInterface::checkAccess()
+   * @see \Drupal\action_link\Entity\ActionLinkInterface::checkStateAccess()
    * @see self::checkPermissionAccess()
    */
   public function checkOperandStateAccess(ActionLinkInterface $action_link, string $direction, string $state, AccountInterface $account): AccessResult;

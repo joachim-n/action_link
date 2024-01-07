@@ -42,7 +42,7 @@ class TestNull extends StateActionBase {
   /**
    * {@inheritdoc}
    */
-  public function checkAccess(string $direction, string $state, AccountInterface $account, ...$parameters): AccessResult {
+  public function checkStateAccess(string $direction, string $state, AccountInterface $account, ...$parameters): AccessResult {
     return AccessResult::allowed();
   }
 
