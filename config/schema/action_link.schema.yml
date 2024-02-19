@@ -1,4 +1,4 @@
-'action_link.action_link.*':
+action_link.action_link.*:
   type: config_entity
   label: 'Action Link'
   mapping:
