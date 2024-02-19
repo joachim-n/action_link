@@ -3,18 +3,18 @@
   label: 'Action Link'
   mapping:
     id:
-      type: text
+      type: string
       label: 'Machine name'
     label:
       type: label
       label: Name
     plugin_id:
-      type: text
+      type: string
       label: 'Plugin ID'
     plugin_config:
       # @todo expand!
       type: ignore
       label: 'Plugin configuration'
     link_style:
-      type: text
+      type: string
       label: 'Link style'
