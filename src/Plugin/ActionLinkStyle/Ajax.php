@@ -3,19 +3,19 @@
 namespace Drupal\action_link\Plugin\ActionLinkStyle;
 
 use Drupal\action_link\Ajax\ActionLinkMessageCommand;
+use Drupal\action_link\Entity\ActionLinkInterface;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\ReplaceCommand;
-use Drupal\action_link\Entity\ActionLinkInterface;
-use Drupal\Core\Routing\RouteMatchInterface;
-use Drupal\Core\Session\AccountInterface;
-use Drupal\user\UserInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Render\RendererInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\user\UserInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Link style which uses a JavaScript link without reloading the page.

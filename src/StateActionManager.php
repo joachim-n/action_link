@@ -2,12 +2,12 @@
 
 namespace Drupal\action_link;
 
-use Drupal\Core\Cache\CacheBackendInterface;
-use Drupal\Core\Extension\ModuleHandlerInterface;
-use Drupal\Core\Plugin\DefaultPluginManager;
 use Drupal\action_link\Annotation\StateAction;
 use Drupal\action_link\Plugin\StateAction\StateActionInterface;
 use Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException;
+use Drupal\Core\Cache\CacheBackendInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\Plugin\DefaultPluginManager;
 
 /**
  * Manages discovery and instantiation of State Action plugins.

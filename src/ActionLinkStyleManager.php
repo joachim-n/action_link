@@ -2,11 +2,11 @@
 
 namespace Drupal\action_link;
 
+use Drupal\action_link\Annotation\ActionLinkStyle;
+use Drupal\action_link\Plugin\ActionLinkStyle\ActionLinkStyleInterface;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Plugin\DefaultPluginManager;
-use Drupal\action_link\Annotation\ActionLinkStyle;
-use Drupal\action_link\Plugin\ActionLinkStyle\ActionLinkStyleInterface;
 
 /**
  * Manages discovery and instantiation of Action Link Style plugins.

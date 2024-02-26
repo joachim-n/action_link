@@ -2,18 +2,18 @@
 
 namespace Drupal\action_link_poc\Plugin\StateAction;
 
-use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\Core\Routing\RouteMatchInterface;
-use Drupal\Core\Session\AccountInterface;
-use Drupal\Core\State\StateInterface;
 use Drupal\action_link\Entity\ActionLinkInterface;
 use Drupal\action_link\Plugin\StateAction\StateActionBase;
 use Drupal\action_link\Plugin\StateAction\ToggleGeometryTrait;
 use Drupal\Component\Plugin\ConfigurableInterface;
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Plugin\PluginFormInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\State\StateInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 

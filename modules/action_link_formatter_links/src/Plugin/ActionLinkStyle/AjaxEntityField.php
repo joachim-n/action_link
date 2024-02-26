@@ -2,10 +2,10 @@
 
 namespace Drupal\action_link_formatter_links\Plugin\ActionLinkStyle;
 
-use Drupal\action_link_formatter_links\DisplayBuildAlter;
 use Drupal\action_link\Ajax\ActionLinkMessageCommand;
 use Drupal\action_link\Entity\ActionLinkInterface;
 use Drupal\action_link\Plugin\ActionLinkStyle\Ajax;
+use Drupal\action_link_formatter_links\DisplayBuildAlter;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Entity\EntityDisplayBase;

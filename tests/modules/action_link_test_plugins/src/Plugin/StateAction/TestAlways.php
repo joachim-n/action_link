@@ -3,9 +3,9 @@
 namespace Drupal\action_link_test_plugins\Plugin\StateAction;
 
 use Drupal\action_link\Entity\ActionLinkInterface;
-use Drupal\Core\Session\AccountInterface;
 use Drupal\action_link\Plugin\StateAction\StateActionBase;
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Session\AccountInterface;
 
 /**
  * Test action which is always usable.

@@ -8,10 +8,10 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\Tests\user\Traits\UserCreationTrait;
 use Prophecy\Argument;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LoggerTrait;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Tests the entity field state action plugins.

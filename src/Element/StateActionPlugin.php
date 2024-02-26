@@ -2,10 +2,10 @@
 
 namespace Drupal\action_link\Element;
 
+use Drupal\action_link\Utility\NestedArrayRecursive;
 use Drupal\Component\Plugin\ConfigurableInterface;
 use Drupal\Component\Utility\Html;
 use Drupal\Component\Utility\NestedArray;
-use Drupal\action_link\Utility\NestedArrayRecursive;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Form\SubformState;
 use Drupal\Core\Plugin\PluginFormInterface;

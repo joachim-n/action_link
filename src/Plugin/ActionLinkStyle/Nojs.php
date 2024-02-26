@@ -2,16 +2,16 @@
 
 namespace Drupal\action_link\Plugin\ActionLinkStyle;
 
+use Drupal\action_link\Entity\ActionLinkInterface;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\action_link\Entity\ActionLinkInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Url;
 use Drupal\user\UserInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Link style which reloads the page.
