@@ -68,6 +68,7 @@ class ActionLinkForm extends EntityForm {
 
     return $form;
   }
+
   /**
    * {@inheritdoc}
    */

@@ -13,4 +13,3 @@ action_link_form_elements_test.action_plugin:
     _form: \Drupal\action_link_form_elements_test\Form\ActionPluginTestForm
   requirements:
     _access: 'TRUE'
-
