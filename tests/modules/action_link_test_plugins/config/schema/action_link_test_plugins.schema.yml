@@ -1,0 +1,20 @@
+action_link.action_link_plugin.test_mocked_control:
+  type: ignore
+
+action_link.action_link_plugin.test_mocked_access:
+  type: ignore
+
+action_link.action_link_plugin.test_mocked_operability:
+  type: ignore
+
+action_link.action_link_plugin.test_null:
+  type: ignore
+
+action_link.action_link_plugin.test_always:
+  type: ignore
+
+action_link.action_link_plugin.test_directions:
+  type: ignore
+
+action_link.action_link_plugin.test_dynamic_parameters:
+  type: ignore

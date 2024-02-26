@@ -1,3 +1,4 @@
+# Action link config entity.
 action_link.action_link.*:
   type: config_entity
   label: 'Action Link'
@@ -12,9 +13,116 @@ action_link.action_link.*:
       type: string
       label: 'Plugin ID'
     plugin_config:
-      # @todo expand!
-      type: ignore
+      type: 'action_link.action_link_plugin.[%parent.plugin_id]'
       label: 'Plugin configuration'
     link_style:
       type: string
       label: 'Link style'
+
+# Texts schema for toggle geometry.
+# @see \Drupal\action_link\Plugin\StateAction\ToggleGeometryTrait
+action_link.action_link_geometry.toggle:
+  type: mapping
+  mapping:
+    state:
+      type: mapping
+      mapping:
+        'true':
+          type: mapping
+          mapping:
+            link_label:
+              type: label
+              label: 'Link label'
+            message:
+              type: label
+              message: 'Message'
+        'false':
+          type: mapping
+          mapping:
+            link_label:
+              type: label
+              label: 'Link label'
+            message:
+              type: label
+              message: 'Message'
+
+# Texts schema for inc/dec repeatable geometry.
+# @see \Drupal\action_link\Plugin\StateAction\RepeatableGeometryTrait
+action_link.action_link_geometry.inc_dec:
+  type: mapping
+  mapping:
+    direction:
+      type: mapping
+      mapping:
+        inc:
+          type: mapping
+          mapping:
+            link_label:
+              type: label
+              label: 'Link label'
+            message:
+              type: label
+              message: 'Message'
+        dec:
+          type: mapping
+          mapping:
+            link_label:
+              type: label
+              label: 'Link label'
+            message:
+              type: label
+              message: 'Message'
+
+action_link.action_link_plugin.boolean_field:
+  type: mapping
+  mapping:
+    entity_type_id:
+      type: string
+      label: 'Entity type ID'
+    field:
+      type: string
+      label: 'Field'
+    texts:
+      type: action_link.action_link_geometry.toggle
+
+action_link.action_link_plugin.numeric_field:
+  type: mapping
+  mapping:
+    entity_type_id:
+      type: string
+      label: 'Entity type ID'
+    field:
+      type: string
+      label: 'Field'
+    step:
+      type: float
+      label: 'Step'
+    texts:
+      type: action_link.action_link_geometry.inc_dec
+
+action_link.action_link_plugin.options_field:
+  type: mapping
+  mapping:
+    entity_type_id:
+      type: string
+      label: 'Entity type ID'
+    field:
+      type: string
+      label: 'Field'
+    texts:
+      type: action_link.action_link_geometry.inc_dec
+
+action_link.action_link_plugin.date_field:
+  type: mapping
+  mapping:
+    entity_type_id:
+      type: string
+      label: 'Entity type ID'
+    field:
+      type: string
+      label: 'Field'
+    step:
+      type: string
+      label: 'Step'
+    texts:
+      type: action_link.action_link_geometry.inc_dec
