@@ -33,6 +33,16 @@ class DateField extends EntityFieldStateActionBase {
   /**
    * {@inheritdoc}
    */
+  public function defaultConfiguration() {
+    return [
+      'step' => NULL,
+    ]
+    + parent::defaultConfiguration();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function buildConfigurationForm(array $element, FormStateInterface $form_state) {
     $plugin_form = parent::buildConfigurationForm($element, $form_state);
 
