@@ -95,8 +95,8 @@ class ActionLinkKernelTest extends KernelTestBase {
     $this->user = $this->setUpCurrentUser();
   }
 
-  /*
-   * Tests access and operability checks on building and accessing links
+  /**
+   * Tests access and operability checks on building and accessing links.
    */
   public function testLinkAccess() {
     /** @var \Drupal\action_link\Entity\ActionLinkInterface $action_link */

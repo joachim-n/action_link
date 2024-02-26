@@ -154,6 +154,9 @@ class Workflow extends StateActionBase implements ContainerFactoryPluginInterfac
     return AccessResult::allowed();
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function checkOperandAccess(ActionLinkInterface $action_link, string $direction, string $state, AccountInterface $account): AccessResult {
     // @todo Implement this properly.
     return AccessResult::allowed();
@@ -167,6 +170,9 @@ class Workflow extends StateActionBase implements ContainerFactoryPluginInterfac
     return 'Workflow state changed.';
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function getActionRoute(ActionLinkInterface $action_link): Route {
     $route = parent::getActionRoute($action_link);
 

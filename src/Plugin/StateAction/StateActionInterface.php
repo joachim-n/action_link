@@ -132,8 +132,10 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
    *
    * This method is responsible for clearing caches as necessary.
    *
-   * @param [type] $account
-   * @param [type] $state
+   * @param \Drupal\Core\Session\AccountInterface $account
+   *   The user to perform the action. This is not necessarily the current user.
+   * @param string $state
+   *   The state to advance to.
    * @param ...
    *   Dynamic parameters specific to the action link's state action plugin.
    */
@@ -199,7 +201,7 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
    *   The direction for the action.
    * @param string $state
    *   The target state for the action.
-   * @param \Drupal\user\UserInterface $user
+   * @param \Drupal\Core\Session\AccountInterface $account
    *   The user to perform the action. This is not necessarily the current user.
    * @param mixed ...$parameters
    *   The dynamic parameters.
@@ -234,13 +236,11 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
    *
    * @param \Drupal\action_link\Entity\ActionLinkInterface $action_link
    *   The action link entity.
-   * @param string $link_style
-   *   The link style plugin ID.
    * @param string $direction
    *   The direction for the action.
    * @param string $state
    *   The target state for the action.
-   * @param \Drupal\user\UserInterface $user
+   * @param \Drupal\Core\Session\AccountInterface $account
    *   The user to perform the action. This is not necessarily the current user.
    * @param mixed ...
    *   Additional dynamic parameters.
@@ -284,6 +284,7 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
    * label of 'Empty' for the 0 state.
    *
    * @return array
+   *   A numeric array of the state machine names.
    */
   public function getStates(): array;
 

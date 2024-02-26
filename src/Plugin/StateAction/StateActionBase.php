@@ -266,7 +266,7 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
    * @param array $scalar_parameters
    *   The dynamic parameters, downcasted to scalar values, keyed by parameter
    *   name.
-   * @param ...$parameters
+   * @param mixed ...$parameters
    *   The dynamic parameters.
    *
    * @return array|null

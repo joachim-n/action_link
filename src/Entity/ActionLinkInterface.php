@@ -81,9 +81,9 @@ interface ActionLinkInterface extends ConfigEntityInterface, EntityWithPluginCol
    *   The direction for the action.
    * @param string $state
    *   The target state for the action.
-   * @param \Drupal\user\UserInterface $user
+   * @param \Drupal\Core\Session\AccountInterface $account
    *   The user to perform the action. This is not necessarily the current user.
-   * @param ...$parameters
+   * @param mixed ...$parameters
    *   Dynamic parameters specific to this action link's state action plugin.
    *   These are upcasted values.
    *
@@ -110,9 +110,9 @@ interface ActionLinkInterface extends ConfigEntityInterface, EntityWithPluginCol
    *   The direction for the action.
    * @param string $state
    *   The target state for the action.
-   * @param \Drupal\user\UserInterface $user
+   * @param \Drupal\Core\Session\AccountInterface $account
    *   The user to perform the action. This is not necessarily the current user.
-   * @param ...$parameters
+   * @param mixed ...$parameters
    *   Dynamic parameters specific to this action link's state action plugin.
    *   These are upcasted values.
    *
@@ -131,7 +131,7 @@ interface ActionLinkInterface extends ConfigEntityInterface, EntityWithPluginCol
    *   The user to perform the action. This is not necessarily the current user.
    * @param string $state
    *   The state to advance to.
-   * @param ...$parameters
+   * @param mixed ...$parameters
    *   Dynamic parameters specific to this action link's state action plugin.
    */
   public function advanceState(AccountInterface $account, string $state, ...$parameters): void;

@@ -96,6 +96,9 @@ class LinkStylePlugin extends FormElement {
     }
   }
 
+  /**
+   * Element validate callback.
+   */
   public static function validatePlugin(&$element, FormStateInterface $form_state, &$complete_form) {
     $plugin_id = $element['plugin_id']['#value'];
 

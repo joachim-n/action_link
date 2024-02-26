@@ -13,7 +13,7 @@ class StateChangeTokenData {
    * @param \Drupal\action_link\Entity\ActionLinkInterface $actionLink
    *   The action link entity.
    * @param string $direction
-   *   The direction
+   *   The direction.
    * @param string $state
    *   The target state.
    */
