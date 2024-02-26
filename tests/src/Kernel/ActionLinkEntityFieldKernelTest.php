@@ -172,7 +172,7 @@ class ActionLinkEntityFieldKernelTest extends KernelTestBase implements LoggerIn
       ],
       [
         'entity' => $node,
-      ]
+      ],
     ];
 
     // 1. User has no access to an action link that toggles the 'status'
@@ -298,7 +298,7 @@ class ActionLinkEntityFieldKernelTest extends KernelTestBase implements LoggerIn
       ],
       [
         'entity' => $node,
-      ]
+      ],
     ];
 
     // User has no access to the action link, because they can't edit content.
