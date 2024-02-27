@@ -239,7 +239,10 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
   public function checkOperandGeneralAccess(ActionLinkInterface $action_link, AccountInterface $account): AccessResult;
 
   /**
-   * Checks access to the action's operand: what the action wants to do.
+   * Checks access to the action's operand for a specific state.
+   *
+   * This should be implemented by plugins to check access on what the action is
+   * attempting to do, for a specific state and direction.
    *
    * This checks whether the thing that the action does is accessible to the
    * user. For example, if the action changes a value on an entity, this should
