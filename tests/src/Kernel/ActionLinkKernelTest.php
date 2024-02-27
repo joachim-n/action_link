@@ -82,7 +82,6 @@ class ActionLinkKernelTest extends KernelTestBase {
 
     $this->installConfig('user');
     $this->installConfig('system');
-    $this->installSchema('system', 'sequences');
     $this->installEntitySchema('user');
 
     $this->state = $this->container->get('state');

@@ -86,7 +86,6 @@ class ActionLinkEntityFieldKernelTest extends KernelTestBase implements LoggerIn
 
     $this->installConfig('user');
     $this->installConfig('system');
-    $this->installSchema('system', 'sequences');
     $this->installEntitySchema('user');
     $this->installSchema('node', 'node_access');
     $this->installEntitySchema('node');
