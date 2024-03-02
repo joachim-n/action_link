@@ -391,11 +391,14 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
    * {@inheritdoc}
    */
   public function getPermissions(): array {
+    $replacements = [
+      '%label' => $this->label(),
+    ];
+
     // General permission.
     $permissions["use {$this->id()} action links"] = [
-      'title' => t('Use %label action links', [
-        '%label' => $this->label(),
-      ]),
+      'title' => t('Use %label action links', $replacements),
+      'description' => t('Allows use of %label action links in all directions and to all states', $replacements),
     ];
 
     // Permissions from the plugin.
