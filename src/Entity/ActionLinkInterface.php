@@ -93,6 +93,25 @@ interface ActionLinkInterface extends ConfigEntityInterface, EntityWithPluginCol
   public function checkReachable(string $direction, string $state, AccountInterface $account, ...$parameters): bool;
 
   /**
+   * Checks general access for the action link.
+   *
+   * This checks for access without a specific direction or state.
+   *
+   * @param \Drupal\Core\Session\AccountInterface $account
+   *   The user to perform the action. This is not necessarily the current user.
+   * @param mixed ...$parameters
+   *   Dynamic parameters specific to this action link's state action plugin.
+   *   These are upcasted values.
+   *
+   * @return \Drupal\Core\Access\AccessResult
+   *   The access result. An AccessResultForbidden will deny all access to the
+   *   action link. An AccessResultNeutral or AccessResultAllowed will allow
+   *   access in general, with access to the specific direction still to be
+   *   checked.
+   */
+  public function checkGeneralAccess(AccountInterface $account, ...$parameters): AccessResult;
+
+  /**
    * Checks access to use a link.
    *
    * Access to an action link involves checking several different things:
