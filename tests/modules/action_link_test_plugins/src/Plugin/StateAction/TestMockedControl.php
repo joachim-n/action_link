@@ -25,7 +25,7 @@ class TestMockedControl extends StateActionBase {
    * {@inheritdoc}
    */
   public function getNextStateName(string $direction, AccountInterface $user): ?string {
-    $state = \Drupal::state()->get('test_mocked_control:next_state', NULL);
+    $state = \Drupal::state()->get('test_mocked_control:getNextStateName', NULL);
     return $state;
   }
 
@@ -40,7 +40,7 @@ class TestMockedControl extends StateActionBase {
    * {@inheritdoc}
    */
   public function checkOperability(ActionLinkInterface $action_link): bool {
-    $operability = \Drupal::state()->get('test_mocked_control:operability', FALSE);
+    $operability = \Drupal::state()->get('test_mocked_control:checkOperability', FALSE);
     return $operability;
   }
 
@@ -48,7 +48,7 @@ class TestMockedControl extends StateActionBase {
    * {@inheritdoc}
    */
   public function checkPermissionStateAccess(ActionLinkInterface $action_link, string $direction, string $state, AccountInterface $account, ...$parameters): AccessResult {
-    $access = \Drupal::state()->get('test_mocked_control:permission_access', AccessResult::neutral());
+    $access = \Drupal::state()->get('test_mocked_control:checkPermissionStateAccess', AccessResult::neutral());
     return $access;
   }
 
@@ -56,7 +56,7 @@ class TestMockedControl extends StateActionBase {
    * {@inheritdoc}
    */
   public function checkOperandGeneralAccess(ActionLinkInterface $action_link, AccountInterface $account): AccessResult {
-    $access = \Drupal::state()->get('test_mocked_control:operand_general_access', AccessResult::neutral());
+    $access = \Drupal::state()->get('test_mocked_control:checkOperandGeneralAccess', AccessResult::neutral());
     return $access;
   }
 
@@ -64,7 +64,7 @@ class TestMockedControl extends StateActionBase {
    * {@inheritdoc}
    */
   public function checkOperandStateAccess(ActionLinkInterface $action_link, string $direction, string $state, AccountInterface $account): AccessResult {
-    $access = \Drupal::state()->get('test_mocked_control:operand_access', AccessResult::neutral());
+    $access = \Drupal::state()->get('test_mocked_control:checkOperandStateAccess', AccessResult::neutral());
     return $access;
   }
 

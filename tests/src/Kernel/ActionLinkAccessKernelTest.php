@@ -7,6 +7,7 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\CsrfAccessCheck;
 use Drupal\Core\Logger\RfcLoggerTrait;
 use Drupal\Core\Logger\RfcLogLevel;
+use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\Tests\user\Traits\UserCreationTrait;
 use Prophecy\Argument;
@@ -66,6 +67,11 @@ class ActionLinkAccessKernelTest extends KernelTestBase implements LoggerInterfa
    */
   protected $user;
 
+  /**
+   * The action link entity.
+   *
+   * @var \Drupal\action_link\Entity\ActionLinkInterface
+   */
   protected ActionLinkInterface $actionLink;
 
   /**
@@ -227,27 +233,11 @@ class ActionLinkAccessKernelTest extends KernelTestBase implements LoggerInterfa
     elseif (!$user_no_access) {
       $user_no_access = $this->createUser();
     }
-    // TODO: This is badly-named, as it's state-specific, or should be.
-    // TODO document why no access is neutrak not forbidden!
     $this->state->set('test_mocked_control:checkPermissionStateAccess', $permission_access ? AccessResult::allowed() : AccessResult::neutral());
     $this->state->set('test_mocked_control:checkOperandGeneralAccess', $operand_general_access ? AccessResult::allowed() : AccessResult::neutral());
     $this->state->set('test_mocked_control:checkOperandStateAccess', $operand_state_access ? AccessResult::allowed() : AccessResult::neutral());
     $this->state->set('test_mocked_control:checkOperability', $operability);
     $this->state->set('test_mocked_control:getNextStateName', $reachable ? 'cake' : NULL);
-
-    // The different dimensions are:
-    //
-    // - general permission (in the entity, not mocking it, just set the perm.)
-    // - general operand permission -- checkOperandGeneralAccess
-    // - state/direction permission (on the plugin) -- checkPermissionStateAccess
-    // - operand state/direction permission -- checkOperandStateAccess
-
-    // - general logic - operability - checkOperability
-    // - state logic - reachability  - getNextStateName
-
-    // Checking access to routes requires the current user to be set up.
-    // @todo Change this when we add proxy functionality.
-    // $user_no_access = $this->setUpCurrentUser();
 
     // Generate the links.
     $links = $this->actionLink->getStateActionPlugin()->buildLinkArray(
@@ -255,13 +245,8 @@ class ActionLinkAccessKernelTest extends KernelTestBase implements LoggerInterfa
       ($main_permission_access ? $user_with_access : $user_no_access),
     );
 
-
     if (!$operability) {
       $this->assertEmpty($links, "The links array is empty for $set_key.");
-      // ERRRM so no operability is the ONLY case where we get empty links array?
-      // NOT IDEAL FOR PERFORMANCE. We need an overall control switch.
-      // a 'use THIS action link in general'
-      // AND 'use ANY STATE' master permission
     }
     elseif (!$main_permission_access && !$permission_access) {
       // No access to the action link entity, because there is neither the
@@ -285,119 +270,46 @@ class ActionLinkAccessKernelTest extends KernelTestBase implements LoggerInterfa
       $this->assertInstanceOf(\Drupal\Core\Url::class, $links['change']['#link']['#url']);
     }
 
-    $http_kernel = $this->container->get('http_kernel');
-
-    // Make a request to the action link route.
+    // Set the right user and reset things before making a request.
     $this->setCurrentUser($main_permission_access ? $user_with_access : $user_no_access);
     $uid = ($main_permission_access ? $user_with_access : $user_no_access)->id();
+    $this->messenger->deleteAll();
+    $this->state->set('test_mocked_control:set_state', 'start');
+
+    // Make a request to the action link route.
     $request = Request::create("/action-link/test_mocked_control/nojs/change/cake/{$uid}");
+    $http_kernel = $this->container->get('http_kernel');
     $response = $http_kernel->handle($request);
 
-    if (!$operability) {
-      $this->assertEquals(Response::HTTP_FORBIDDEN, $response->getStatusCode(), "Request got a 403 for $set_key.");
-    }
-    elseif (!$main_permission_access && !$permission_access) {
+    if (!$main_permission_access && !$permission_access) {
       $this->assertEquals(Response::HTTP_FORBIDDEN, $response->getStatusCode(), "Request got a 403 for $set_key.");
     }
     elseif (!$operand_general_access && !$operand_state_access) {
       $this->assertEquals(Response::HTTP_FORBIDDEN, $response->getStatusCode(), "Request got a 403 for $set_key.");
     }
+    elseif (!$operability) {
+      $this->assertEquals(Response::HTTP_FOUND, $response->getStatusCode(), "Request got a redirect for $set_key.");
+      $this->assertNotEquals('cake', $this->state->get('test_mocked_control:set_state'), "The state was not advanced for $set_key");
+
+      $messages = $this->messenger->messagesByType(MessengerInterface::TYPE_STATUS);
+      $this->assertEquals([0 => 'Unable to perform the action. The link may be outdated.'], $messages);
+    }
     elseif (!$reachable) {
       $this->assertEquals(Response::HTTP_FOUND, $response->getStatusCode(), "Request got a redirect for $set_key.");
+      $this->assertNotEquals('cake', $this->state->get('test_mocked_control:set_state'), "The state was not advanced for $set_key.");
+
+      $messages = $this->messenger->messagesByType(MessengerInterface::TYPE_STATUS);
+      $this->assertEquals([0 => 'Unable to perform the action. The link may be outdated.'], $messages);
     }
     else {
       $this->assertEquals(Response::HTTP_FOUND, $response->getStatusCode(), "Request got a redirect for $set_key.");
-    }
 
+      $this->assertEquals('cake', $this->state->get('test_mocked_control:set_state'), "The state was advanced for $set_key");
 
-
-    return;
-
-    // Checks which are stateless mean no links.
-    if (!$main_permission_access) {
-      $this->assertEmpty($links, "The links array is empty for $set_key.");
-    }
-    elseif (!$operand_general_access) {
-      $this->assertEmpty($links, "The links array is empty for $set_key.");
-    }
-    elseif (!$operability) {
-      $this->assertEmpty($links, "The links array is empty for $set_key.");
-    }
-    elseif (!$permission_access) {
-      // need to distinguis bet empty link and real link
-      // !!! BUG! Need to 'AND' all the state-specific accesses.
-      // dump(array_keys($links));
-      // dump(array_keys($links['change']));
-      // dump($links['change']['#link']);
-      $this->assertArrayHasKey('change', $links, "The links array has a link for the 'change' direction for $set_key.");
-      return;
-    }
-
-
-
-    return;
-
-
-
-
-    // WTF NO operand_general_access !!!
-    //
-
-    // THis should be simple:
-    //  - not allowed to use general? NOTHING
-    //  - not allower to use a specific state? Empty link
-
-    // Checking access to routes requires the current user to be set up.
-    // @todo Change this when we add proxy functionality.
-    $user_no_access = $this->setUpCurrentUser();
-
-    // Generate the links.
-    $links = $this->actionLink->getStateActionPlugin()->buildLinkArray($this->actionLink, $user_no_access);
-
-    // dump($set_key);
-    if (!$permission_access) {
-      // No permission access always means no links. OR DOES IT? What kind of permissions are we checking
-      // FUCK we are mixing general permission and state permission???
-      $this->assertEmpty($links, "The links array is empty for $set_key.");
-    }
-    elseif (!$operand_general_access) {
-      // No general operand access always means no link
-      $this->assertEmpty($links, "The links array is empty for $set_key.");
-    }
-    elseif (!$operand_state_access) {
-      // dump($links);
-      return;
-    }
-    return;
-
-
-
-    // EXCEPT BAD DESIGN - when no next state, we don't check
-    // operand access!!!
-    if (!$permission_access || !$operand_state_access) {
-      $this->assertEmpty($links, "The links array is empty for $set_key.");
-    }
-    elseif (!$operability) {
-      $this->assertEmpty($links, "The links array is empty for $set_key.");
-    }
-    elseif (!$reachable) {
-      dump($links);
-    }
-    else {
-      dump("NOT CHECKED $set_key");
-    }
-
-
-    $http_kernel = $this->container->get('http_kernel');
-
-    // Make a request to the action link route.
-    $request = Request::create("/action-link/test_mocked_control/nojs/change/cake/{$user_no_access->id()}");
-    $response = $http_kernel->handle($request);
-
-    if (!$permission_access || !$operand_access) {
-      $this->assertEquals(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+      $messages = $this->messenger->messagesByType(MessengerInterface::TYPE_STATUS);
+      $this->assertEquals([0 => 'Changed'], $messages);
+      $this->messenger->deleteAll();
     }
   }
-
 
 }
