@@ -247,6 +247,9 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
   /**
    * Gets the build array for a single link.
    *
+   * @todo Change this to return the Link object and build the render array in
+   * the caller.
+   *
    * Helper for doBuildLinkArray().
    *
    * This creates a build array rather than return a Link object, because in
@@ -290,13 +293,6 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
       // to become accessible: for this to work correctly with AJAX, an empty
       // link must be present to be replaced.
       $access = $action_link->checkAccess($direction, $next_state, $user, ...$parameters);
-      if (!$access->isAllowed()) {
-        // @todo Show a link to log in if the user doesn't have access but an
-        // authenticated user would. Determining this appears to be rather
-        // complicated, as we'd need to mock a user object to pass to access
-        // checks, but isAuthenticated() works by checking for the uid.
-        return NULL;
-      }
     }
 
     $route_parameters = [
@@ -310,28 +306,36 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
     // Add the dynamic parameters to the route parameters.
     $route_parameters += $scalar_parameters;
 
-    if ($reachable) {
+    if ($reachable && $access->isAllowed()) {
       $label = $action_link->getLinkLabel($direction, $next_state, ...$parameters);
 
       $url = Url::fromRoute($action_link->getRouteName(), $route_parameters);
       $link = Link::fromTextAndUrl($label, $url);
     }
+    else {
+      // @todo Show a link to log in if the user doesn't have access but an
+      // authenticated user would. Determining this appears to be rather
+      // complicated, as we'd need to mock a user object to pass to access
+      // checks, but isAuthenticated() works by checking for the uid.
+      $link = NULL;
+    }
 
     // We output an action link even if there is no actual link to show because
-    // the state is not reachable in the given direction. This is so that if a
-    // link in another direction is used over AJAX, and causes the inactive
-    // direction to become available, then the empty SPAN is replaced by the
-    // AJAX with an active link. For example, suppose an action link adds a
-    // product to a shopping cart, with 'add' and 'remove' directions. When
-    // the cart is empty, only the 'add' direction link shows. Clicking this
-    // link takes the site to a state where the 'remove' direction is now
-    // valid and the link for that should show. Therefore, the AJAX
-    // replacement that occurs when the user clicks the 'add' link must
-    // replace both directions. Having an empty SPAN for the 'remove'
-    // direction means there is somewhere for the updated 'remove' link to go.
+    // the state is not reachable in the given direction or there is no access
+    // to the state. This is so that if a link in another direction is used over
+    // AJAX, and causes the inactive direction to become available, then the
+    // empty SPAN is replaced by the AJAX with an active link. For example,
+    // suppose an action link adds a product to a shopping cart, with 'add' and
+    // 'remove' directions. When the cart is empty, only the 'add' direction
+    // link shows. Clicking this link takes the site to a state where the
+    // 'remove' direction is now valid and the link for that should show.
+    // Therefore, the AJAX replacement that occurs when the user clicks the
+    // 'add' link must replace both directions. Having an empty SPAN for the
+    // 'remove' direction means there is somewhere for the updated 'remove' link
+    // to go.
     $build = [
       '#theme' => 'action_link',
-      '#link' => $reachable ? $link->toRenderable() : [],
+      '#link' => $link ? $link->toRenderable() : [],
       '#action_link' => $action_link,
       '#direction' => $direction,
       '#state' => $next_state,
