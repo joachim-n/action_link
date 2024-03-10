@@ -228,6 +228,11 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
       return $build;
     }
 
+    // If general access is denied, show nothing.
+    if ($action_link->checkGeneralAccess($user, ...$indexed_parameters)->isForbidden()) {
+      return $build;
+    }
+
     foreach ($directions as $direction => $direction_label) {
       $link = $this->buildLink($action_link, $direction, $user, $scalar_parameters, ...$indexed_parameters);
       if ($link) {
