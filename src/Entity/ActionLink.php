@@ -310,11 +310,11 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
    * {@inheritdoc}
    */
   public function checkStateAccess(string $direction, string $state, AccountInterface $account, ...$parameters): AccessResult {
-    // This is here rather than in the plugin's checkPermissionAccess so that it
+    // This is here rather than in the plugin's checkPermissionStateAccess so that it
     // cannot be accidentally omitted in a plugin's override of the method.
     $main_permission_access = AccessResult::allowedIfHasPermission($account, "use {$this->id()} action links");
 
-    $specific_permission_access = $this->getStateActionPlugin()->checkPermissionAccess($this, $direction, $state, $account, ...$parameters);
+    $specific_permission_access = $this->getStateActionPlugin()->checkPermissionStateAccess($this, $direction, $state, $account, ...$parameters);
 
     $operand_access = $this->getStateActionPlugin()->checkOperandStateAccess($this, $direction, $state, $account, ...$parameters);
 

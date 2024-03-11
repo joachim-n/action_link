@@ -47,7 +47,7 @@ class TestMockedControl extends StateActionBase {
   /**
    * {@inheritdoc}
    */
-  public function checkPermissionAccess(ActionLinkInterface $action_link, string $direction, string $state, AccountInterface $account, ...$parameters): AccessResult {
+  public function checkPermissionStateAccess(ActionLinkInterface $action_link, string $direction, string $state, AccountInterface $account, ...$parameters): AccessResult {
     $access = \Drupal::state()->get('test_mocked_control:permission_access', AccessResult::neutral());
     return $access;
   }

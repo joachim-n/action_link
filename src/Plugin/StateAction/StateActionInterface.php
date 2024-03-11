@@ -183,7 +183,7 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
   public function checkOperability(ActionLinkInterface $action_link): bool;
 
   /**
-   * Checks the user's access based on this plugin's permissions.
+   * Checks access to a specific state based on this plugin's permissions.
    *
    * This allows a plugin to check access to the permissions it defines in
    * self::getStateActionPermissions(). This allows permissions to use more
@@ -213,7 +213,7 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
    * @see self::checkOperandStateAccess()
    * @see self::getStateActionPermissions()
    */
-  public function checkPermissionAccess(ActionLinkInterface $action_link, string $direction, string $state, AccountInterface $account, ...$parameters): AccessResult;
+  public function checkPermissionStateAccess(ActionLinkInterface $action_link, string $direction, string $state, AccountInterface $account, ...$parameters): AccessResult;
 
   /**
    * Checks general access to the action's operand.
@@ -255,7 +255,7 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
    * publish the node.
    *
    * This does not need to check permissions based on action_link entities, as
-   * that is covered by self::checkPermissionAccess().
+   * that is covered by self::checkPermissionStateAccess().
    *
    * The operand access is ANDed with access based on permissions for the action
    * link entity.
@@ -275,7 +275,7 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
    *   The access result.
    *
    * @see \Drupal\action_link\Entity\ActionLinkInterface::checkStateAccess()
-   * @see self::checkPermissionAccess()
+   * @see self::checkPermissionStateAccess()
    */
   public function checkOperandStateAccess(ActionLinkInterface $action_link, string $direction, string $state, AccountInterface $account): AccessResult;
 
@@ -418,7 +418,7 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
    *   dependencies for the action_link entity or the plugin: those are filled
    *   in by the caller.
    *
-   * @see self::checkPermissionAccess()
+   * @see self::checkPermissionStateAccess()
    */
   public function getStateActionPermissions(ActionLinkInterface $action_link): array;
 
