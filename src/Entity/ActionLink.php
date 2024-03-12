@@ -310,16 +310,26 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
    * {@inheritdoc}
    */
   public function checkStateAccess(string $direction, string $state, AccountInterface $account, ...$parameters): AccessResult {
-    // This is here rather than in the plugin's checkPermissionStateAccess so that it
-    // cannot be accidentally omitted in a plugin's override of the method.
-    $main_permission_access = AccessResult::allowedIfHasPermission($account, "use {$this->id()} action links");
+    $state_action_plugin = $this->getStateActionPlugin();
 
-    $specific_permission_access = $this->getStateActionPlugin()->checkPermissionStateAccess($this, $direction, $state, $account, ...$parameters);
+    // This method calls the general access plugin methods as well as the
+    // state-specific, since the general access plugin access result overrides
+    // the state-specific.
 
-    $operand_access = $this->getStateActionPlugin()->checkOperandStateAccess($this, $direction, $state, $account, ...$parameters);
+    // The check for the action link main permission isn't delegated to the
+    // plugin as it's the same for every action link entity.
+    $general_permission_access = AccessResult::allowedIfHasPermission($account, "use {$this->id()} action links");
+    $state_permission_access = $state_action_plugin->checkPermissionStateAccess($this, $direction, $state, $account, ...$parameters);
 
-    $access_result = $main_permission_access->orIf($specific_permission_access);
-    $access_result = $access_result->andIf($operand_access);
+    $action_link_access = $general_permission_access->orIf($state_permission_access);
+
+    $operand_general_access = $state_action_plugin->checkOperandGeneralAccess($this, $account, ...$parameters);
+    $operand_state_access = $state_action_plugin->checkOperandStateAccess($this, $direction, $state, $account, ...$parameters);
+
+    $operand_access = $operand_general_access->orIf($operand_state_access);
+
+    // Access to both the action link and the operand is required.
+    $access_result = $action_link_access->andIf($operand_access);
 
     return $access_result;
   }
