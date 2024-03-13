@@ -212,7 +212,7 @@ abstract class EntityFieldStateActionBase extends StateActionBase implements Con
   /**
    * {@inheritdoc}
    */
-  public function checkOperandStateAccess(ActionLinkInterface $action_link, string $direction, string $state, AccountInterface $account, EntityInterface $entity = NULL): AccessResult {
+  public function checkOperandGeneralAccess(ActionLinkInterface $action_link, AccountInterface $account, EntityInterface $entity = NULL): AccessResult {
     // Check access both to edit the entity, and to edit the specific field.
     $entity_access = $entity->access('update', $account, TRUE);
 
@@ -221,7 +221,25 @@ abstract class EntityFieldStateActionBase extends StateActionBase implements Con
     $access_control_handler = $this->entityTypeManager->getAccessControlHandler($entity->getEntityTypeId());
     $field_access = $access_control_handler->fieldAccess('edit', $entity->getFieldDefinition($field_name), $account, NULL, TRUE);
 
-    return $entity_access->andIf($field_access);
+    $combined_access = $entity_access->andIf($field_access);
+
+    // If the user doesn't have access, we want to explicitly forbid operand
+    // access.
+    if ($combined_access->isAllowed()) {
+      $operand_access = $combined_access;
+    }
+    else {
+      $operand_access = AccessResult::forbidden()->inheritCacheability($combined_access);
+    }
+    return $operand_access;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function checkPermissionStateAccess(ActionLinkInterface $action_link, string $direction, string $state, AccountInterface $account, ...$parameters): AccessResult {
+    // The entity access system has nothing to say about specific entity values.
+    return AccessResult::neutral();
   }
 
   /**

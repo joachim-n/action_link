@@ -125,7 +125,7 @@ class ActionLinkEntityFieldKernelTest extends KernelTestBase implements LoggerIn
     $message = strtr($message, $context);
 
     // We expect warnings to be logged for requests that result in a 403.
-    if (str_contains($message, 'permission is required')) {
+    if (str_contains($message, 'CacheableAccessDeniedHttpException')) {
       return;
     }
 
@@ -205,7 +205,10 @@ class ActionLinkEntityFieldKernelTest extends KernelTestBase implements LoggerIn
     $user_with_admin_access = $this->createUser(['access content', 'bypass node access', 'administer nodes']);
     $this->setCurrentUser($user_with_admin_access);
     $links = $action_link->getStateActionPlugin()->buildLinkArray($action_link, $user_with_admin_access, ...$parameters_combined);
-    $this->assertEmpty($links);
+    // The link is present but empty because the action link permissions don't
+    // act as a control switch.
+    $this->assertNotEmpty($links);
+    $this->assertEmpty($links['toggle']['#link'], "The action link is empty.");
 
     $request = Request::create("/action-link/test_status/nojs/toggle/false/{$user_with_admin_access->id()}/{$node->id()}");
     $response = $http_kernel->handle($request);
