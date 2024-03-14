@@ -259,6 +259,59 @@ abstract class EntityFieldStateActionBase extends StateActionBase implements Con
   /**
    * {@inheritdoc}
    */
+  public function getNextStateName(string $direction, AccountInterface $user, EntityInterface $entity = NULL): ?string {
+    $next_value = $this->getNextFieldValue($direction, $entity);
+
+    // For the state to be valid, the entity must validate with the new value.
+    $field_name = $this->configuration['field'];
+    $entity->set($field_name, $next_value);
+    $violations = $entity->validate();
+
+    if (count($violations)) {
+      return NULL;
+    }
+    else {
+      return $this->getStateNameFromFieldValue($next_value);
+    }
+  }
+
+  /**
+   * Gets the next field value for the next state in the given direction.
+   *
+   * @param string $direction
+   *   The direction.
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   *   The entity the action operates on.
+   *
+   * @return mixed
+   *   The next entity field value in the given direction. This should be a
+   *   value of the type suitable for setting on the entity, and not a string
+   *   state name. This is so that self::getNextStateName() can use it to
+   *   validate the next state.
+   *
+   * @see self::getStateNameFromFieldValue()
+   */
+  abstract protected function getNextFieldValue(string $direction, EntityInterface $entity = NULL): mixed;
+
+  /**
+   * Gets the state name for a field value.
+   *
+   * In most cases the two will be identical. This method exists to be overriden
+   * for field types where this is not the case.
+   *
+   * @param mixed $value
+   *   The field value.
+   *
+   * @return string
+   *   The state name.
+   */
+  protected function getStateNameFromFieldValue(mixed $value): string {
+    return (string) $value;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getTokenData(EntityInterface $entity = NULL) {
     return [
       $this->configuration['entity_type_id'] => $entity,

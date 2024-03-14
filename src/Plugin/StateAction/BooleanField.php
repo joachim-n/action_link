@@ -49,14 +49,23 @@ class BooleanField extends EntityFieldStateActionBase {
   /**
    * {@inheritdoc}
    */
-  public function getNextStateName(string $direction, AccountInterface $user, EntityInterface $entity = NULL): ?string {
+  protected function getNextFieldValue(string $direction, EntityInterface $entity = NULL): mixed {
     $field_name = $this->configuration['field'];
 
     $value = $entity->get($field_name)->value;
 
-    return match ((bool) $value) {
-      FALSE => 'true',
-      TRUE  => 'false',
+    // We know the field value is not NULL, as if it were the action link would
+    // not be operable.
+    return !$value;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function getStateNameFromFieldValue(mixed $value): string {
+     return match ((bool) $value) {
+      TRUE => 'true',
+      FALSE  => 'false',
     };
   }
 

@@ -88,7 +88,7 @@ class NumericField extends EntityFieldStateActionBase {
   /**
    * {@inheritdoc}
    */
-  public function getNextStateName(string $direction, AccountInterface $user, EntityInterface $entity = NULL): ?string {
+  protected function getNextFieldValue(string $direction, EntityInterface $entity = NULL): mixed {
     $field_name = $this->configuration['field'];
 
     $step = $this->configuration['step'];

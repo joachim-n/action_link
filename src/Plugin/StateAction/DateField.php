@@ -89,7 +89,7 @@ class DateField extends EntityFieldStateActionBase {
   /**
    * {@inheritdoc}
    */
-  public function getNextStateName(string $direction, AccountInterface $user, EntityInterface $entity = NULL): ?string {
+  protected function getNextFieldValue(string $direction, EntityInterface $entity = NULL): mixed {
     $field_name = $this->configuration['field'];
 
     $date_interval = new \DateInterval($this->configuration['step']);
@@ -107,10 +107,19 @@ class DateField extends EntityFieldStateActionBase {
       'dec' => $date_clone->sub($date_interval),
     };
 
-    $next_value = $next_date->format(\DateTimeInterface::W3C);
+    $next_value = $next_date->format(DateTimeItemInterface::DATETIME_STORAGE_FORMAT);
 
     return $next_value;
   }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function getStateNameFromFieldValue(mixed $value): string {
+    $date = \DateTime::createFromFormat(DateTimeItemInterface::DATETIME_STORAGE_FORMAT, $value, timezone_open('UTC'));
+
+    return $date->format(\DateTimeInterface::W3C);
+ }
 
   /**
    * {@inheritdoc}

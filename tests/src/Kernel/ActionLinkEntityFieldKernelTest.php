@@ -5,6 +5,7 @@ namespace Drupal\Tests\action_link\Kernel;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\CsrfAccessCheck;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\Tests\user\Traits\UserCreationTrait;
 use Prophecy\Argument;
@@ -32,6 +33,8 @@ class ActionLinkEntityFieldKernelTest extends KernelTestBase implements LoggerIn
     'system',
     'user',
     'node',
+    'field',
+    'datetime',
     'action_link',
     'action_link_test_plugins',
   ];
@@ -288,6 +291,75 @@ class ActionLinkEntityFieldKernelTest extends KernelTestBase implements LoggerIn
         'entity_type_id' => 'node',
         'field' => 'changed',
         'step' => '1',
+      ],
+      'link_style' => 'nojs',
+    ]);
+    $action_link->save();
+    $this->container->get('router.builder')->rebuildIfNeeded();
+
+    $parameters_combined = [
+      [
+        'entity' => $node->id(),
+      ],
+      [
+        'entity' => $node,
+      ],
+    ];
+
+    // User has no access to the action link, because they can't edit content.
+    $user_no_access = $this->createUser([
+      'use test_changed action links',
+      'access content',
+    ]);
+    $this->setCurrentUser($user_no_access);
+    $links = $action_link->getStateActionPlugin()->buildLinkArray($action_link, $user_no_access, ...$parameters_combined);
+    $this->assertEmpty($links);
+
+    // User who can edit the node has access to the action link.
+    $user_with_edit_access = $this->createUser([
+      'use test_changed action links',
+      'access content',
+      'edit any alpha content',
+    ]);
+    $this->setCurrentUser($user_with_edit_access);
+    $links = $action_link->getStateActionPlugin()->buildLinkArray($action_link, $user_with_edit_access, ...$parameters_combined);
+    $this->assertNotEmpty($links);
+  }
+
+  /**
+   * Tests the date field plugin.
+   */
+  public function testDate() {
+    $date_field_storage_config = $this->entityTypeManager->getStorage('field_storage_config')->create([
+      'type' => 'datetime',
+      'field_name' => 'date_field',
+      'entity_type' => 'node',
+    ]);
+    $date_field_storage_config->save();
+
+    $date_field_config = $this->entityTypeManager->getStorage('field_config')->create([
+      'field_storage' => $date_field_storage_config,
+      'bundle' => 'alpha',
+    ]);
+    $date_field_config->save();
+
+    $node_storage = $this->entityTypeManager->getStorage('node');
+    $node = $node_storage->create([
+      'type' => 'alpha',
+      'title' => '1',
+      'date_field' => '2024-04-02T09:30:00',
+    ]);
+    $node->save();
+
+    /** @var \Drupal\action_link\Entity\ActionLinkInterface $action_link */
+    $action_link = $this->actionLinkStorage->create([
+      'id' => 'test_changed',
+      'label' => 'Test',
+      'plugin_id' => 'date_field',
+      'plugin_config' => [
+        'entity_type_id' => 'node',
+        'field' => 'date_field',
+        'step' => 'PT1H',
       ],
       'link_style' => 'nojs',
     ]);
