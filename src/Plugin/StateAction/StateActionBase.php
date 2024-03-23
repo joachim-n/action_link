@@ -300,18 +300,18 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
       $access = $action_link->checkStateAccess($direction, $next_state, $user, ...$parameters);
     }
 
-    $route_parameters = [
-      'action_link' => $action_link->id(),
-      'link_style' => $action_link->getLinkStylePlugin()->getPluginId(),
-      'direction' => $direction,
-      'state' => $next_state,
-      'user' => $user->id(),
-    ];
-
-    // Add the dynamic parameters to the route parameters.
-    $route_parameters += $scalar_parameters;
-
     if ($reachable && $access->isAllowed()) {
+      $route_parameters = [
+        'action_link' => $action_link->id(),
+        'link_style' => $action_link->getLinkStylePlugin()->getPluginId(),
+        'direction' => $direction,
+        'state' => $next_state,
+        'user' => $user->id(),
+      ];
+
+      // Add the dynamic parameters to the route parameters.
+      $route_parameters += $scalar_parameters;
+
       $label = $action_link->getLinkLabel($direction, $next_state, ...$parameters);
 
       $url = Url::fromRoute($action_link->getRouteName(), $route_parameters);
