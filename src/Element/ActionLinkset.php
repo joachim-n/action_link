@@ -8,13 +8,23 @@ use Drupal\Core\Routing\RouteObjectInterface;
 /**
  * Render element for an action link's linkset.
  *
- * This can be used directly, or obtained from:
+ * This can be used directly, or obtained from one of:
  * @code
  * $action_link_entity->buildLinkSet()
- * @code
+ * $action_link_entity->buildSingleLink()
+ * @endcode
  *
  * This uses a lazy builder as links are per-user and therefore considered
  * uncacheable.
+ *
+ * To obtain an action link without a lazy builder, in a context where this is
+ * being taken care of elsewhere, use the methods on the state action plugin:
+ *
+ * @code
+ * $state_action_plugin = $action_link->getStateActionPlugin();
+ * $state_action_plugin->buildSingleLink()
+ * $state_action_plugin->buildLinkSet()
+ * @endcode
  *
  * Properties:
  *   - #action_link: The action link entity ID.
