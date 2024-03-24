@@ -182,6 +182,7 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
     $directions = $this->getDirections();
     $direction_array = [$direction => $directions[$direction]];
 
+    // Yeah but we get it wrapped, is that even desirable??
     return $this->doBuildLinkArray($action_link, $user, $direction_array, $scalar_parameters);
   }
 
