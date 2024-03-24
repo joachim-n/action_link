@@ -14,3 +14,7 @@ services:
   action_link.dynamic_parameter_upcaster:
     class: Drupal\action_link\DynamicParameterUpcaster
     arguments: ['@router.route_provider', '@paramconverter_manager']
+
+  plugin.manager.action_link_output:
+    class: Drupal\action_link\ActionLinkOutputManager
+    parent: default_plugin_manager
