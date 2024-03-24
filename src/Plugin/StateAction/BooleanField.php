@@ -63,7 +63,7 @@ class BooleanField extends EntityFieldStateActionBase {
    * {@inheritdoc}
    */
   protected function getStateNameFromFieldValue(mixed $value): string {
-     return match ((bool) $value) {
+    return match ((bool) $value) {
       TRUE => 'true',
       FALSE  => 'false',
     };

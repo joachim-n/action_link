@@ -3,7 +3,6 @@
 namespace Drupal\action_link\Element;
 
 use Drupal\Core\Render\Element\RenderElement;
-use Drupal\Core\Routing\RouteObjectInterface;
 
 /**
  * Render element for an action link's linkset.

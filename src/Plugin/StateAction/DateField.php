@@ -119,7 +119,7 @@ class DateField extends EntityFieldStateActionBase {
     $date = \DateTime::createFromFormat(DateTimeItemInterface::DATETIME_STORAGE_FORMAT, $value, timezone_open('UTC'));
 
     return $date->format(\DateTimeInterface::W3C);
- }
+  }
 
   /**
    * {@inheritdoc}
