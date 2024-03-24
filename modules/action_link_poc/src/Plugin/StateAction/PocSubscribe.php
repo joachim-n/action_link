@@ -2,6 +2,7 @@
 
 namespace Drupal\action_link_poc\Plugin\StateAction;
 
+use Drupal\action_link\DynamicParameterUpcaster;
 use Drupal\action_link\Entity\ActionLinkInterface;
 use Drupal\action_link\Plugin\StateAction\StateActionBase;
 use Drupal\action_link\Plugin\StateAction\ToggleGeometryTrait;
@@ -70,6 +71,7 @@ class PocSubscribe extends StateActionBase implements ContainerFactoryPluginInte
       $configuration,
       $plugin_id,
       $plugin_definition,
+      $container->get('action_link.dynamic_parameter_upcaster'),
       $container->get('entity_type.manager'),
       $container->get('state'),
     );
@@ -84,6 +86,8 @@ class PocSubscribe extends StateActionBase implements ContainerFactoryPluginInte
    *   The plugin_id for the plugin instance.
    * @param mixed $plugin_definition
    *   The plugin implementation definition.
+   * @param \Drupal\action_link\DynamicParameterUpcaster $dynamic_parameter_upcaster
+   *   The dynamic parameter upcaster.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
    * @param \Drupal\Core\State\StateInterface $state
@@ -93,10 +97,11 @@ class PocSubscribe extends StateActionBase implements ContainerFactoryPluginInte
     array $configuration,
     $plugin_id,
     $plugin_definition,
+    DynamicParameterUpcaster $dynamic_parameter_upcaster,
     EntityTypeManagerInterface $entity_type_manager,
     StateInterface $state
   ) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition);
+    parent::__construct($configuration, $plugin_id, $plugin_definition, $dynamic_parameter_upcaster);
     $this->entityTypeManager = $entity_type_manager;
     $this->state = $state;
   }

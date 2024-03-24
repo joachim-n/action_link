@@ -41,9 +41,6 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
    * @param array $scalar_parameters
    *   (optional) The scalar values of the dynamic parameters for the state
    *   action plugin, keyed by the parameter names.
-   * @param array $parameters
-   *   (optional) The upcasted values of the dynamic parameters for the state
-   *   action plugin, keyed by the parameter names.
    *
    * @return array
    *   A render array of links. This may be empty if no links are available.
@@ -52,7 +49,7 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
    *   Throws an error if the $parameter don't match up with the dynamic
    *   parameters defined by this plugin.
    */
-  public function buildLinkSet(ActionLinkInterface $action_link, AccountInterface $user, array $scalar_parameters = [], array $parameters = []): array;
+  public function buildLinkSet(ActionLinkInterface $action_link, AccountInterface $user, array $scalar_parameters = []): array;
 
   /**
    * Gets the link for a specific direction.
@@ -70,14 +67,11 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
    * @param array $scalar_parameters
    *   (optional) The scalar values of the dynamic parameters for the state
    *   action plugin, keyed by the parameter names.
-   * @param array $parameters
-   *   (optional) The upcasted values of the dynamic parameters for the state
-   *   action plugin, keyed by the parameter names.
    *
    * @return \Drupal\Core\Link|null
    *   The link object, or NULL if no link is applicable.
    */
-  public function buildSingleLink(ActionLinkInterface $action_link, string $direction, AccountInterface $user, array $scalar_parameters = [], array $parameters = []): array;
+  public function buildSingleLink(ActionLinkInterface $action_link, string $direction, AccountInterface $user, array $scalar_parameters = []): array;
 
   /**
    * Gets a plain render array of all the reachable directions for the user.
@@ -93,9 +87,6 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
    * @param array $scalar_parameters
    *   (optional) The scalar values of the dynamic parameters for the state
    *   action plugin, keyed by the parameter names.
-   * @param array $parameters
-   *   (optional) The upcasted values of the dynamic parameters for the state
-   *   action plugin, keyed by the parameter names.
    *
    * @return array
    *   A render array of links. This may be empty if no links are available.
@@ -104,7 +95,7 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
    *   Throws an error if the $parameter don't match up with the dynamic
    *   parameters defined by this plugin.
    */
-  public function buildLinkArray(ActionLinkInterface $action_link, AccountInterface $user, array $scalar_parameters = [], array $parameters = []): array;
+  public function buildLinkArray(ActionLinkInterface $action_link, AccountInterface $user, array $scalar_parameters = []): array;
 
   /**
    * Gets the next state for the given parameters, or NULL if there is none.

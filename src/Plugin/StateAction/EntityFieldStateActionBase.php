@@ -2,6 +2,7 @@
 
 namespace Drupal\action_link\Plugin\StateAction;
 
+use Drupal\action_link\DynamicParameterUpcaster;
 use Drupal\action_link\Entity\ActionLinkInterface;
 use Drupal\Component\Plugin\ConfigurableInterface;
 use Drupal\Core\Access\AccessResult;
@@ -44,6 +45,7 @@ abstract class EntityFieldStateActionBase extends StateActionBase implements Con
       $configuration,
       $plugin_id,
       $plugin_definition,
+      $container->get('action_link.dynamic_parameter_upcaster'),
       $container->get('entity_type.manager'),
       $container->get('entity_field.manager'),
     );
@@ -58,6 +60,8 @@ abstract class EntityFieldStateActionBase extends StateActionBase implements Con
    *   The plugin_id for the plugin instance.
    * @param mixed $plugin_definition
    *   The plugin implementation definition.
+   * @param \Drupal\action_link\DynamicParameterUpcaster $dynamic_parameter_upcaster
+   *   The dynamic parameter upcaster.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
    * @param \Drupal\Core\Entity\EntityFieldManagerInterface $entity_field_manager
@@ -67,10 +71,11 @@ abstract class EntityFieldStateActionBase extends StateActionBase implements Con
     array $configuration,
     $plugin_id,
     $plugin_definition,
+    DynamicParameterUpcaster $dynamic_parameter_upcaster,
     EntityTypeManagerInterface $entity_type_manager,
     EntityFieldManagerInterface $entity_field_manager
   ) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition);
+    parent::__construct($configuration, $plugin_id, $plugin_definition, $dynamic_parameter_upcaster);
     $this->entityTypeManager = $entity_type_manager;
     $this->entityFieldManager = $entity_field_manager;
   }

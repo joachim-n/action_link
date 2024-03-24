@@ -2,6 +2,7 @@
 
 namespace Drupal\action_link_poc\Plugin\StateAction;
 
+use Drupal\action_link\DynamicParameterUpcaster;
 use Drupal\action_link\Entity\ActionLinkInterface;
 use Drupal\action_link\Plugin\StateAction\StateActionBase;
 use Drupal\Core\Access\AccessResult;
@@ -54,6 +55,7 @@ class PocAddToCart extends StateActionBase implements ContainerFactoryPluginInte
       $configuration,
       $plugin_id,
       $plugin_definition,
+      $container->get('action_link.dynamic_parameter_upcaster'),
       $container->get('state'),
     );
   }
@@ -67,6 +69,8 @@ class PocAddToCart extends StateActionBase implements ContainerFactoryPluginInte
    *   The plugin_id for the plugin instance.
    * @param mixed $plugin_definition
    *   The plugin implementation definition.
+   * @param \Drupal\action_link\DynamicParameterUpcaster $dynamic_parameter_upcaster
+   *   The dynamic parameter upcaster.
    * @param \Drupal\Core\State\StateInterface $state
    *   The state storage service.
    */
@@ -74,9 +78,10 @@ class PocAddToCart extends StateActionBase implements ContainerFactoryPluginInte
     array $configuration,
     $plugin_id,
     $plugin_definition,
+    DynamicParameterUpcaster $dynamic_parameter_upcaster,
     StateInterface $state
   ) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition);
+    parent::__construct($configuration, $plugin_id, $plugin_definition, $dynamic_parameter_upcaster);
     $this->state = $state;
   }
 

@@ -2,16 +2,19 @@
 
 namespace Drupal\action_link\Plugin\StateAction;
 
+use Drupal\action_link\DynamicParameterUpcaster;
 use Drupal\action_link\Entity\ActionLinkInterface;
 use Drupal\Component\Plugin\PluginBase;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Template\Attribute;
 use Drupal\Core\Url;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Routing\Route;
 
 /**
@@ -22,15 +25,49 @@ use Symfony\Component\Routing\Route;
  * @todo Remove methods for ConfigurableInterface when
  * https://www.drupal.org/project/drupal/issues/2852463 gets in.
  */
-abstract class StateActionBase extends PluginBase implements StateActionInterface {
+abstract class StateActionBase extends PluginBase implements StateActionInterface, ContainerFactoryPluginInterface {
 
   use StringTranslationTrait;
 
   /**
+   * The dynamic parameter upcaster.
+   *
+   * @var \Drupal\action_link\DynamicParameterUpcaster
+   */
+  protected $dynamicParameterUpcaster;
+
+  /**
    * {@inheritdoc}
    */
-  public function __construct(array $configuration, $this_id, $this_definition) {
-    parent::__construct($configuration, $this_id, $this_definition);
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    return new static(
+      $configuration,
+      $plugin_id,
+      $plugin_definition,
+      $container->get('action_link.dynamic_parameter_upcaster'),
+    );
+  }
+
+  /**
+   * Constructor.
+   *
+   * @param array $configuration
+   *   A configuration array containing information about the plugin instance.
+   * @param string $plugin_id
+   *   The plugin_id for the plugin instance.
+   * @param mixed $plugin_definition
+   *   The plugin implementation definition.
+   * @param \Drupal\action_link\DynamicParameterUpcaster $dynamic_parameter_upcaster
+   *   The dynamic parameter upcaster.
+   */
+  public function __construct(
+    array $configuration,
+    $plugin_id,
+    $plugin_definition,
+    DynamicParameterUpcaster $dynamic_parameter_upcaster,
+  ) {
+    parent::__construct($configuration, $plugin_id, $plugin_definition);
+    $this->dynamicParameterUpcaster = $dynamic_parameter_upcaster;
 
     $this->setConfiguration($configuration);
   }
@@ -112,16 +149,15 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
     ActionLinkInterface $action_link,
     AccountInterface $user,
     array $scalar_parameters = [],
-    array $parameters = [],
   ): array {
     $directions = $this->getDirections();
 
     $build = [
       '#theme' => 'action_linkset',
-      '#links' => $this->doBuildLinkArray($action_link, $user, $directions, $scalar_parameters, $parameters),
+      '#links' => $this->doBuildLinkArray($action_link, $user, $directions, $scalar_parameters),
       '#action_link' => $action_link,
       '#user' => $user,
-      '#dynamic_parameters' => $parameters,
+      '#dynamic_parameters' => $this->dynamicParameterUpcaster->upcastDynamicParameters($action_link, $scalar_parameters),
       '#attributes' => new Attribute([
         'class' => [
           'action-linkset',
@@ -142,12 +178,11 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
     string $direction,
     AccountInterface $user,
     array $scalar_parameters = [],
-    array $parameters = [],
   ): array {
     $directions = $this->getDirections();
     $direction_array = [$direction => $directions[$direction]];
 
-    return $this->doBuildLinkArray($action_link, $user, $direction_array, $scalar_parameters, $parameters);
+    return $this->doBuildLinkArray($action_link, $user, $direction_array, $scalar_parameters);
   }
 
   /**
@@ -157,11 +192,10 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
     ActionLinkInterface $action_link,
     AccountInterface $user,
     array $scalar_parameters = [],
-    array $parameters = [],
   ): array {
     $directions = $this->getDirections();
 
-    return $this->doBuildLinkArray($action_link, $user, $directions, $scalar_parameters, $parameters);
+    return $this->doBuildLinkArray($action_link, $user, $directions, $scalar_parameters);
   }
 
   /**
@@ -180,39 +214,40 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
    * @param array $scalar_parameters
    *   (optional) The scalar values of the dynamic parameters for the state
    *   action plugin, keyed by the parameter names.
-   * @param array $parameters
-   *   (optional) The upcasted values of the dynamic parameters for the state
-   *   action plugin, keyed by the parameter names.
    */
   protected function doBuildLinkArray(
     ActionLinkInterface $action_link,
     AccountInterface $user,
     $directions,
     array $scalar_parameters,
-    array $parameters,
   ): array {
-    // Check the parameters are keyed.
-    if (!empty($scalar_parameters) && \array_is_list($scalar_parameters)) {
-      throw new \InvalidArgumentException('Parameter $scalar_parameters has numeric keys');
-    }
-    if (!empty($parameters) && \array_is_list($parameters)) {
-      throw new \InvalidArgumentException('Parameter $parameters has numeric keys');
-    }
-
     // Validate the number of dynamic parameters. This must be done before they
     // are validated by the specific plugin class.
     $dynamic_parameter_names = $this->getDynamicParameterNames();
-    if (count($parameters) != count($dynamic_parameter_names)) {
+    if (count($scalar_parameters) != count($dynamic_parameter_names)) {
       throw new \ArgumentCountError(sprintf("State action plugin %s expects %s dynamic parameters (%s), got %s",
         $this->getPluginId(),
         count($dynamic_parameter_names),
         implode(', ', $dynamic_parameter_names),
-        count($parameters),
+        count($scalar_parameters),
       ));
     }
 
-    // Validate parameters.
-    $this->validateParameters($parameters);
+    if (empty($scalar_parameters)) {
+      $parameters = [];
+    }
+    else {
+      // Ensure the parameters are keyed with their parameter names.
+      if (\array_is_list($scalar_parameters)) {
+        $scalar_parameters = array_combine($dynamic_parameter_names, $scalar_parameters);
+      }
+
+      // Get the upcasted the dynamic parameters.
+      $parameters = $this->dynamicParameterUpcaster->upcastDynamicParameters($action_link, $scalar_parameters);
+
+      // Validate parameters.
+      $this->validateParameters($parameters);
+    }
 
     // Strip the keys from the parameters array. This is so that plugin classes
     // can omit implementing methods in this base class that they don't care

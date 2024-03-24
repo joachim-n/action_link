@@ -10,3 +10,7 @@ services:
   action_link.route_provider:
     class: Drupal\action_link\Routing\ActionLinkRouteProvider
     arguments: ['@entity_type.manager']
+
+  action_link.dynamic_parameter_upcaster:
+    class: Drupal\action_link\DynamicParameterUpcaster
+    arguments: ['@router.route_provider', '@paramconverter_manager']

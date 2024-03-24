@@ -2,6 +2,7 @@
 
 namespace Drupal\action_link_workflow\Plugin\StateAction;
 
+use Drupal\action_link\DynamicParameterUpcaster;
 use Drupal\action_link\Entity\ActionLinkInterface;
 use Drupal\action_link\Plugin\StateAction\StateActionBase;
 use Drupal\Core\Access\AccessResult;
@@ -54,6 +55,7 @@ class Workflow extends StateActionBase implements ContainerFactoryPluginInterfac
       $configuration,
       $plugin_id,
       $plugin_definition,
+      $container->get('action_link.dynamic_parameter_upcaster'),
       $container->get('entity_type.manager'),
     );
   }
@@ -67,6 +69,8 @@ class Workflow extends StateActionBase implements ContainerFactoryPluginInterfac
    *   The plugin_id for the plugin instance.
    * @param mixed $plugin_definition
    *   The plugin implementation definition.
+   * @param \Drupal\action_link\DynamicParameterUpcaster $dynamic_parameter_upcaster
+   *   The dynamic parameter upcaster.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
    */
@@ -74,9 +78,10 @@ class Workflow extends StateActionBase implements ContainerFactoryPluginInterfac
     array $configuration,
     $plugin_id,
     $plugin_definition,
+    DynamicParameterUpcaster $dynamic_parameter_upcaster,
     EntityTypeManagerInterface $entity_type_manager
   ) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition);
+    parent::__construct($configuration, $plugin_id, $plugin_definition, $dynamic_parameter_upcaster);
 
     $this->entityTypeManager = $entity_type_manager;
     $this->workflowId = $this->getDerivativeId();

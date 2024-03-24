@@ -174,32 +174,6 @@ class ActionLinkset extends RenderElement {
       $action_link->set('link_style', $link_style);
     }
 
-    if ($scalar_dynamic_parameters) {
-      // Give the dynamic parameters their parameter names as keys.
-      $scalar_dynamic_parameters = array_combine($state_action_plugin->getDynamicParameterNames(), $scalar_dynamic_parameters);
-
-      // Use the routing system to upcast the dynamic parameters.
-      $route_provider = \Drupal::service('router.route_provider');
-      $route = $route_provider->getRouteByName($action_link->getRouteName());
-
-      /** @var \Drupal\Core\ParamConverter\ParamConverterManagerInterface $param_converter_manager */
-      $param_converter_manager = \Drupal::service('paramconverter_manager');
-
-      // Make a dummy defaults array so we can use the parameter converting
-      // system to upcast the dynamic parameters.
-      $dummy_defaults = $scalar_dynamic_parameters;
-      $dummy_defaults[RouteObjectInterface::ROUTE_OBJECT] = $route;
-
-      $converted_defaults = $param_converter_manager->convert($dummy_defaults);
-
-      unset($converted_defaults[RouteObjectInterface::ROUTE_OBJECT]);
-
-      $dynamic_parameters = $converted_defaults;
-    }
-    else {
-      $dynamic_parameters = [];
-    }
-
     if ($user_id) {
       $user = $entity_type_manager->getStorage('user')->load($user_id);
     }
@@ -208,10 +182,10 @@ class ActionLinkset extends RenderElement {
     }
 
     if ($direction) {
-      return $state_action_plugin->buildSingleLink($action_link, $direction, $user, $scalar_dynamic_parameters, $dynamic_parameters);
+      return $state_action_plugin->buildSingleLink($action_link, $direction, $user, $scalar_dynamic_parameters);
     }
     else {
-      return $state_action_plugin->buildLinkSet($action_link, $user, $scalar_dynamic_parameters, $dynamic_parameters);
+      return $state_action_plugin->buildLinkSet($action_link, $user, $scalar_dynamic_parameters);
     }
   }
 
