@@ -1,0 +1,88 @@
+<?php
+
+/**
+ * @file
+ * Contains hook implementations for the Action Link Entity Links module.
+ */
+
+use Drupal\Core\Render\Element;
+use Drupal\node\NodeInterface;
+
+/**
+ * Implements hook_node_links_alter().
+ */
+function action_link_entity_links_node_links_alter(array &$links, NodeInterface $entity, array &$context) {
+  // TODO - view modes need to be a setting
+  $view_mode = $context['view_mode'];
+
+  $user = \Drupal::currentUser();
+  // $action_link_entities = \Drupal::service('entity_type.manager')->getStorage('action_link')->loadMultiple();
+  // $action_link_entity = \Drupal::service('entity_type.manager')->getStorage('action_link')->load('fuck_bool');
+  $action_link_entity = \Drupal::service('entity_type.manager')->getStorage('action_link')->load('has_date');
+
+  $state_action_plugin = $action_link_entity->getStateActionPlugin();
+  $action_links = $state_action_plugin->buildLinkArray(
+    $action_link_entity,
+    $user,
+    [
+      'entity' => $entity->id(),
+    ],
+  );
+  dsm($action_links);
+
+  foreach (Element::children($action_links) as $direction) {
+    $links[$action_link_entity->id() . ':' . $direction] = [
+      '#theme' => 'links__node__action_link',
+      // Doesn't work???
+      '#attributes' => ['class' => ['outer', 'inline']],
+      '#links' => [
+        $direction => [
+          'title' => $action_links[$direction]['#link']['#title'],
+          'url' => $action_links[$direction]['#link']['#url'],
+          'attributes' => ['class' => ['single', 'inline']],
+        ],
+      ],
+    ];
+    // $action_links[$direction]['#link'];
+  }
+
+  // $links['mymodule'] = [
+  //   '#theme' => 'links__node__mymodule',
+  //   '#attributes' => ['class' => ['links', 'inline']],
+  //   '#links' => [
+  //     'node-report' => [
+  //       'title' => t('Report'),
+  //       'url' => Url::fromRoute('node_test.report', ['node' => $entity->id()], ['query' => ['token' => \Drupal::getContainer()->get('csrf_token')->get("node/{$entity->id()}/report")]]),
+  //     ],
+  //   ],
+  // ];
+
+
+  $links['dummy'] = [
+    '#theme' => 'links__node__statistics',
+    '#links' => [
+      'foo' => [
+        'title' => 'OH YEAH THIS IS A LINK',
+      ],
+    ],
+    '#attributes' => ['class' => ['links', 'inline']],
+  ];
+
+
+  // // TODO: for each action link with this set.
+  // // TODO: does it apply to this node bundle?
+  // // TODO: key.
+  // $links['mymodule'] = [
+  //   '#theme' => 'links', // TODO
+  //   '#attributes' => ['class' => ['links', 'inline']],
+  //   '#links' => [
+  //     'node-report' => [
+  //       'title' => t('Report'),
+  //       'url' => Url::fromRoute('node_test.report', ['node' => $entity->id()], ['query' => ['token' => \Drupal::getContainer()->get('csrf_token')->get("node/{$entity->id()}/report")]]),
+  //     ],
+  //   ],
+  // ];
+
+
+  // $links =
+}
