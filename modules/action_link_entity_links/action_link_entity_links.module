@@ -30,21 +30,29 @@ function action_link_entity_links_node_links_alter(array &$links, NodeInterface 
   );
   dsm($action_links);
 
+  $action_link_links = [];
   foreach (Element::children($action_links) as $direction) {
-    $links[$action_link_entity->id() . ':' . $direction] = [
-      '#theme' => 'links__node__action_link',
-      // Doesn't work???
-      '#attributes' => ['class' => ['outer', 'inline']],
-      '#links' => [
-        $direction => [
-          'title' => $action_links[$direction]['#link']['#title'],
-          'url' => $action_links[$direction]['#link']['#url'],
-          'attributes' => ['class' => ['single', 'inline']],
+    $action_link_links['action_link' . ':' . $action_link_entity->id() . ':' . $direction] = [
+      'title' => $action_links[$direction]['#link']['#title'],
+      'url' => $action_links[$direction]['#link']['#url'],
+      // ARGH we can't set $li_attributes FUCK FUCK
+      // need to copy $action_links['dec']['#link']['#attributes']
+      // AND stash $action_links['dec']['#attributes']
+      // for our PP func to move to the LI.
+      'attributes' => [
+        'class' => [
+          // 'single',
+          'inline',
+          $direction,
         ],
       ],
     ];
-    // $action_links[$direction]['#link'];
   }
+
+  $links['action_link'] = [
+    '#theme' => 'links__node__action_link',
+    '#links' => $action_link_links,
+  ];
 
   // $links['mymodule'] = [
   //   '#theme' => 'links__node__mymodule',
@@ -85,4 +93,18 @@ function action_link_entity_links_node_links_alter(array &$links, NodeInterface 
 
 
   // $links =
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for links.
+ */
+function action_link_entity_links_preprocess_links(&$variables) {
+  // Add LI classes here because AAAAARRRRRRRRGH there is no way to set them
+  // with #theme links.
+  // See https://www.drupal.org/project/drupal/issues/3436073.
+  foreach ($variables['links'] as $key => &$link) {
+    $classes = $link['attributes']['class'] ?? [];
+    $classes[] = 'cake';
+    $link['attributes']['class'] = $classes;
+  }
 }
