@@ -254,6 +254,12 @@ abstract class EntityFieldStateActionBase extends StateActionBase implements Con
     // Fail operability if the action link's affected field is empty.
     $field_name = $this->configuration['field'];
 
+    // Guard against output on a bundle that doesn't have the field.
+    if (!$entity->hasField($field_name)) {
+      // @todo Log a warning.
+      return FALSE;
+    }
+
     if ($entity->get($field_name)->isEmpty()) {
       return FALSE;
     }
