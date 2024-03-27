@@ -28,7 +28,6 @@ function action_link_entity_links_node_links_alter(array &$links, NodeInterface 
       'entity' => $entity->id(),
     ],
   );
-  dsm($action_links);
 
   $action_link_links = [];
   foreach (Element::children($action_links) as $direction) {
@@ -43,8 +42,9 @@ function action_link_entity_links_node_links_alter(array &$links, NodeInterface 
       'attributes' => $action_links[$direction]['#link']['#attributes'],
     ];
 
-    $links['#action_link_attributes']['action_link' . ':' . $action_link_entity->id() . ':' . $direction] = $action_links[$direction]['#attributes'];
-
+    // We can't set attributes on the LI element at this point, so stash them in
+    // a fake key in the link attributes for
+    // action_link_entity_links_preprocess_links() to retrieve.
     $action_link_links['action_link' . ':' . $action_link_entity->id() . ':' . $direction]['attributes']['li_class'] = $action_links[$direction]['#attributes']['class'];
   }
 
@@ -53,52 +53,21 @@ function action_link_entity_links_node_links_alter(array &$links, NodeInterface 
     '#links' => $action_link_links,
   ];
 
-  // $links['mymodule'] = [
-  //   '#theme' => 'links__node__mymodule',
-  //   '#attributes' => ['class' => ['links', 'inline']],
+  // $links['dummy'] = [
+  //   '#theme' => 'links__node__statistics',
   //   '#links' => [
-  //     'node-report' => [
-  //       'title' => t('Report'),
-  //       'url' => Url::fromRoute('node_test.report', ['node' => $entity->id()], ['query' => ['token' => \Drupal::getContainer()->get('csrf_token')->get("node/{$entity->id()}/report")]]),
+  //     'foo' => [
+  //       'title' => 'OH YEAH THIS IS A LINK',
   //     ],
   //   ],
-  // ];
-
-
-  $links['dummy'] = [
-    '#theme' => 'links__node__statistics',
-    '#links' => [
-      'foo' => [
-        'title' => 'OH YEAH THIS IS A LINK',
-      ],
-    ],
-    '#attributes' => ['class' => ['links', 'inline']],
-  ];
-
-
-  // // TODO: for each action link with this set.
-  // // TODO: does it apply to this node bundle?
-  // // TODO: key.
-  // $links['mymodule'] = [
-  //   '#theme' => 'links', // TODO
   //   '#attributes' => ['class' => ['links', 'inline']],
-  //   '#links' => [
-  //     'node-report' => [
-  //       'title' => t('Report'),
-  //       'url' => Url::fromRoute('node_test.report', ['node' => $entity->id()], ['query' => ['token' => \Drupal::getContainer()->get('csrf_token')->get("node/{$entity->id()}/report")]]),
-  //     ],
-  //   ],
   // ];
-
-
-  // $links =
 }
 
 /**
  * Implements hook_preprocess_HOOK() for links.
  */
 function action_link_entity_links_preprocess_links(&$variables) {
-  dsm($variables);
   // Add LI classes here because AAAAARRRRRRRRGH there is no way to set them
   // with #theme links.
   // See https://www.drupal.org/project/drupal/issues/3436073.
@@ -112,10 +81,5 @@ function action_link_entity_links_preprocess_links(&$variables) {
     // Unset the stash.
     // @todo Doesn't work WTF.
     unset($link['text_attributes']['li_class']);
-    // $classes = $link['attributes']['class'] ?? [];
-    // $classes[] = 'cake';
-    // $link['attributes']['class'] = $classes;
-    // $link['link']['#attributes']['class'] = $classes;
-
   }
 }
