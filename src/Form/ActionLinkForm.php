@@ -66,6 +66,36 @@ class ActionLinkForm extends EntityForm {
       '#options_element_type' => 'radios',
     ];
 
+    $output_plugin_definitions = \Drupal::service('plugin.manager.action_link_output')->getApplicableDefinitions($action_link);
+    dsm($output_plugin_definitions);
+    $form['output'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Output locations'),
+      '#open' => TRUE,
+    ];
+
+    if ($output_plugin_definitions) {
+      foreach ($output_plugin_definitions as $output_plugin_id => $output_plugin_definition) {
+        $form['output'][$output_plugin_id] = [
+          '#type' => 'details',
+          '#title' => $output_plugin_definition['label'],
+          '#open' => TRUE,
+        ];
+
+        $form['output'][$output_plugin_id]['add'] = [
+          '#type' => 'submit',
+          '#value' => $this->t('Add and configure @label output', [
+            '@label' => $output_plugin_definition['label'],
+          ])
+        ];
+      }
+    }
+    else {
+      $form['output']['no_plugins'] = [
+        '#markup' => $this->t('No ouput location options are available for this action link'),
+      ];
+    }
+
     return $form;
   }
 
