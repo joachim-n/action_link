@@ -203,6 +203,9 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
     return $this->getLinkStylePluginCollection()->get($link_style_to_use);
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function setOverrideLinkStyle(string $link_style_plugin_id) {
     $this->link_style_override = $link_style_plugin_id;
     unset($this->linkStylePluginCollection);
