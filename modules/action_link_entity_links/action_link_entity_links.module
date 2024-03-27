@@ -39,14 +39,13 @@ function action_link_entity_links_node_links_alter(array &$links, NodeInterface 
       // need to copy $action_links['dec']['#link']['#attributes']
       // AND stash $action_links['dec']['#attributes']
       // for our PP func to move to the LI.
-      'attributes' => [
-        'class' => [
-          // 'single',
-          'inline',
-          $direction,
-        ],
-      ],
+      // WTF these end up in fucking TEXT attrbutes like we're a fucking SPAN
+      'attributes' => $action_links[$direction]['#link']['#attributes'],
     ];
+
+    $links['#action_link_attributes']['action_link' . ':' . $action_link_entity->id() . ':' . $direction] = $action_links[$direction]['#attributes'];
+
+    $action_link_links['action_link' . ':' . $action_link_entity->id() . ':' . $direction]['attributes']['li_class'] = $action_links[$direction]['#attributes']['class'];
   }
 
   $links['action_link'] = [
@@ -99,12 +98,24 @@ function action_link_entity_links_node_links_alter(array &$links, NodeInterface 
  * Implements hook_preprocess_HOOK() for links.
  */
 function action_link_entity_links_preprocess_links(&$variables) {
+  dsm($variables);
   // Add LI classes here because AAAAARRRRRRRRGH there is no way to set them
   // with #theme links.
   // See https://www.drupal.org/project/drupal/issues/3436073.
   foreach ($variables['links'] as $key => &$link) {
-    $classes = $link['attributes']['class'] ?? [];
-    $classes[] = 'cake';
-    $link['attributes']['class'] = $classes;
+    if (!str_starts_with($key, 'action_link:')) {
+      continue;
+    }
+
+    $link['attributes']['class'] = $link['text_attributes']['li_class'];
+
+    // Unset the stash.
+    // @todo Doesn't work WTF.
+    unset($link['text_attributes']['li_class']);
+    // $classes = $link['attributes']['class'] ?? [];
+    // $classes[] = 'cake';
+    // $link['attributes']['class'] = $classes;
+    // $link['link']['#attributes']['class'] = $classes;
+
   }
 }
