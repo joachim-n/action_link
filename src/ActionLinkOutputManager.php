@@ -6,6 +6,7 @@ use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Plugin\DefaultPluginManager;
 use Drupal\action_link\Attribute\ActionLinkOutput;
+use Drupal\action_link\Entity\ActionLinkInterface;
 use Drupal\action_link\Plugin\ActionLinkOutput\ActionLinkOutputInterface;
 
 /**
@@ -39,6 +40,20 @@ class ActionLinkOutputManager extends DefaultPluginManager {
 
     $this->alterInfo('action_link_output_info');
     $this->setCacheBackend($cache_backend, 'action_link_output_plugins');
+  }
+
+  /**
+   * TODO
+   *
+   * @param \Drupal\action_link\Entity\ActionLinkInterface $action_link
+   *
+   * @return array
+   */
+  public function getApplicableDefinitions(ActionLinkInterface $action_link): array {
+    return array_filter(
+      $this->getDefinitions(),
+      fn ($definition) => $definition['class']::applies($action_link)
+    );
   }
 
   /**
