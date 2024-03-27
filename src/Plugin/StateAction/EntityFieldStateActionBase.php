@@ -21,7 +21,7 @@ use Symfony\Component\Routing\Route;
  *
  * This expects an 'entity' dynamic parameter.
  */
-abstract class EntityFieldStateActionBase extends StateActionBase implements ConfigurableInterface, PluginFormInterface, ContainerFactoryPluginInterface {
+abstract class EntityFieldStateActionBase extends StateActionBase implements ConfigurableInterface, PluginFormInterface, ContainerFactoryPluginInterface, EntityActionLinkInterface {
 
   /**
    * The entity type manager.
@@ -330,10 +330,7 @@ abstract class EntityFieldStateActionBase extends StateActionBase implements Con
   }
 
   /**
-   * Gets the ID of the entity type the action link works on.
-   *
-   * @return string
-   *   The entity type ID.
+   * {@inheritdoc}
    */
   public function getTargetEntityTypeId(): string {
     return $this->configuration['entity_type_id'];
