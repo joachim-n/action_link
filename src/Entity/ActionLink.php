@@ -166,6 +166,15 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
   protected $link_style;
 
   /**
+   * The overridden link style plugin ID.
+   *
+   * This is for temporary overrides of the link style and is not saved.
+   *
+   * @var string
+   */
+  protected $link_style_override;
+
+  /**
    * The link style plugin collection.
    *
    * @var \Drupal\Component\Plugin\DefaultSingleLazyPluginCollection
@@ -190,7 +199,13 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
    * {@inheritdoc}
    */
   public function getLinkStylePlugin(): ActionLinkStyleInterface {
-    return $this->getLinkStylePluginCollection()->get($this->link_style);
+    $link_style_to_use = $this->link_style_override ?? $this->link_style;
+    return $this->getLinkStylePluginCollection()->get($link_style_to_use);
+  }
+
+  public function setOverrideLinkStyle(string $link_style_plugin_id) {
+    $this->link_style_override = $link_style_plugin_id;
+    unset($this->linkStylePluginCollection);
   }
 
   /**
@@ -239,10 +254,13 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
       return NULL;
     }
 
+
     if (!$this->linkStylePluginCollection && $this->link_style) {
+      $link_style_to_use = $this->link_style_override ?? $this->link_style;
+
       $this->linkStylePluginCollection = new DefaultSingleLazyPluginCollection(
         \Drupal::service('plugin.manager.action_link_style'),
-        $this->link_style,
+        $link_style_to_use,
         []
       );
     }
