@@ -161,12 +161,12 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
   /**
    * The link style plugin ID.
    *
-   * @var [type]
+   * @var string
    */
   protected $link_style;
 
   /**
-   * The link style plugin collecton.
+   * The link style plugin collection.
    *
    * @var \Drupal\Component\Plugin\DefaultSingleLazyPluginCollection
    */
