@@ -20,6 +20,12 @@ function action_link_entity_links_node_links_alter(array &$links, NodeInterface 
   // $action_link_entity = \Drupal::service('entity_type.manager')->getStorage('action_link')->load('fuck_bool');
   $action_link_entity = \Drupal::service('entity_type.manager')->getStorage('action_link')->load('has_date');
 
+  // Replace the ajax plugin with our altered version.
+  // @todo Add a getter for this?
+  if ($action_link_entity->get('link_style') == 'ajax') {
+    $action_link_entity->set('link_style',  'ajax_entity_links');
+  }
+
   $state_action_plugin = $action_link_entity->getStateActionPlugin();
   $action_links = $state_action_plugin->buildLinkArray(
     $action_link_entity,
