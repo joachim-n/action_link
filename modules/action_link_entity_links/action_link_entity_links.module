@@ -52,16 +52,6 @@ function action_link_entity_links_node_links_alter(array &$links, NodeInterface 
     '#theme' => 'links__node__action_link',
     '#links' => $action_link_links,
   ];
-
-  // $links['dummy'] = [
-  //   '#theme' => 'links__node__statistics',
-  //   '#links' => [
-  //     'foo' => [
-  //       'title' => 'OH YEAH THIS IS A LINK',
-  //     ],
-  //   ],
-  //   '#attributes' => ['class' => ['links', 'inline']],
-  // ];
 }
 
 /**
