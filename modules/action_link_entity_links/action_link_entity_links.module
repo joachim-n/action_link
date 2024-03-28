@@ -16,42 +16,42 @@ function action_link_entity_links_node_links_alter(array &$links, NodeInterface 
   $view_mode = $context['view_mode'];
 
   $user = \Drupal::currentUser();
-  // $action_link_entities = \Drupal::service('entity_type.manager')->getStorage('action_link')->loadMultiple();
-  // $action_link_entity = \Drupal::service('entity_type.manager')->getStorage('action_link')->load('fuck_bool');
-  $action_link_entity = \Drupal::service('entity_type.manager')->getStorage('action_link')->load('has_date');
+  $action_link_entities = \Drupal::service('entity_type.manager')->getStorage('action_link')->loadByUsingOutput('entity_links');
+  // dsm($action_link_entities);
+  foreach ($action_link_entities as $action_link_entity) {
+    // Replace the ajax plugin with our altered version.
+    // @todo Add a getter for this?
+    if ($action_link_entity->get('link_style') == 'ajax') {
+      $action_link_entity->set('link_style',  'ajax_entity_links');
+    }
 
-  // Replace the ajax plugin with our altered version.
-  // @todo Add a getter for this?
-  if ($action_link_entity->get('link_style') == 'ajax') {
-    $action_link_entity->set('link_style',  'ajax_entity_links');
-  }
+    $state_action_plugin = $action_link_entity->getStateActionPlugin();
+    $action_links = $state_action_plugin->buildLinkArray(
+      $action_link_entity,
+      $user,
+      [
+        'entity' => $entity->id(),
+      ],
+    );
 
-  $state_action_plugin = $action_link_entity->getStateActionPlugin();
-  $action_links = $state_action_plugin->buildLinkArray(
-    $action_link_entity,
-    $user,
-    [
-      'entity' => $entity->id(),
-    ],
-  );
+    $action_link_links = [];
+    foreach (Element::children($action_links) as $direction) {
+      $action_link_links['action_link' . ':' . $action_link_entity->id() . ':' . $direction] = [
+        'title' => $action_links[$direction]['#link']['#title'],
+        'url' => $action_links[$direction]['#link']['#url'],
+        // ARGH we can't set $li_attributes FUCK FUCK
+        // need to copy $action_links['dec']['#link']['#attributes']
+        // AND stash $action_links['dec']['#attributes']
+        // for our PP func to move to the LI.
+        // WTF these end up in fucking TEXT attrbutes like we're a fucking SPAN
+        'attributes' => $action_links[$direction]['#link']['#attributes'],
+      ];
 
-  $action_link_links = [];
-  foreach (Element::children($action_links) as $direction) {
-    $action_link_links['action_link' . ':' . $action_link_entity->id() . ':' . $direction] = [
-      'title' => $action_links[$direction]['#link']['#title'],
-      'url' => $action_links[$direction]['#link']['#url'],
-      // ARGH we can't set $li_attributes FUCK FUCK
-      // need to copy $action_links['dec']['#link']['#attributes']
-      // AND stash $action_links['dec']['#attributes']
-      // for our PP func to move to the LI.
-      // WTF these end up in fucking TEXT attrbutes like we're a fucking SPAN
-      'attributes' => $action_links[$direction]['#link']['#attributes'],
-    ];
-
-    // We can't set attributes on the LI element at this point, so stash them in
-    // a fake key in the link attributes for
-    // action_link_entity_links_preprocess_links() to retrieve.
-    $action_link_links['action_link' . ':' . $action_link_entity->id() . ':' . $direction]['attributes']['li_class'] = $action_links[$direction]['#attributes']['class'];
+      // We can't set attributes on the LI element at this point, so stash them in
+      // a fake key in the link attributes for
+      // action_link_entity_links_preprocess_links() to retrieve.
+      $action_link_links['action_link' . ':' . $action_link_entity->id() . ':' . $direction]['attributes']['li_class'] = $action_links[$direction]['#attributes']['class'];
+    }
   }
 
   $links['action_link'] = [
