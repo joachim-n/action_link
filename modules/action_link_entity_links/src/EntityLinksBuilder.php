@@ -46,9 +46,22 @@ class EntityLinksBuilder {
 
     // TODO! CACHE STUFF!
     $links['action_link'] = [
-      // '#theme' => 'links__node__action_link',
-      // '#links' => $action_link_links,
-      '#lazy_builder_var' => $placeholder,
+      '#theme' => 'links__node__action_link',
+      '#links' => [
+        'action_link' => [
+          'title' => $placeholder,
+        ],
+      ],
+    ];
+
+    $links['dummy'] = [
+      '#theme' => 'links__node__statistics',
+      '#links' => [
+        'foo' => [
+          'title' => 'OH YEAH THIS IS A LINK',
+        ],
+      ],
+      '#attributes' => ['class' => ['links', 'inline']],
     ];
 
     $links['#attached'] ??= [];
@@ -116,7 +129,17 @@ class EntityLinksBuilder {
       '#theme' => 'links__node__action_link',
       '#links' => $action_link_links,
     ];
-  }
+
+    // $links['dummy'] = [
+    //   '#theme' => 'links__node__statistics',
+    //   '#links' => [
+    //     'foo' => [
+    //       'title' => 'OH YEAH THIS IS A LINK',
+    //     ],
+    //   ],
+    //   '#attributes' => ['class' => ['links', 'inline']],
+    // ];
+    }
 
 
 }
