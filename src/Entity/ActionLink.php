@@ -98,6 +98,7 @@ use Drupal\Core\Session\AccountInterface;
  *       "default" = "Drupal\action_link\Form\ActionLinkForm",
  *       "delete" = "Drupal\Core\Entity\EntityDeleteForm",
  *     },
+ *     "storage" = "Drupal\action_link\Entity\Handler\ActionLinkStorage",
  *     "list_builder" = "Drupal\action_link\Entity\Handler\ActionLinkListBuilder",
  *   },
  *   admin_permission = "administer action_link entities",
