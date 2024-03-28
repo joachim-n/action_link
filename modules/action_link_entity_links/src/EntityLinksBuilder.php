@@ -40,12 +40,41 @@ class EntityLinksBuilder {
    * @param array $context
    */
   public function entityLinksAlter(array &$links, ContentEntityInterface $entity, array &$context) {
-    // @todo Make view modes configurable in the plugin.
     $view_mode = $context['view_mode'];
 
+    $placeholder = Crypt::hashBase64('action_link-entity_links-' . $entity->getEntityTypeId() . '-' . $entity->id() . '-' . $view_mode);
+
+    // TODO! CACHE STUFF!
+    $links['action_link'] = [
+      // '#theme' => 'links__node__action_link',
+      // '#links' => $action_link_links,
+      '#lazy_builder_var' => $placeholder,
+    ];
+
+    $links['#attached'] ??= [];
+    $links['#attached']['placeholders'][$placeholder] = [
+      '#lazy_builder' => [
+        // The lazy builder callback and parameters.
+        'action_link_entity_links.builder:entityLinksLazyBuilder',
+        [
+          $entity->getEntityTypeId(),
+          $entity->id(),
+          $view_mode,
+        ],
+      ],
+    ];
+  }
+
+  /**
+   * Undocumented function
+   */
+  #[TrustedCallback]
+  public function entityLinksLazyBuilder($entity_type_id, $entity_id, $view_mode) {
+    // @todo Make view modes configurable in the plugin.
+    $entity = $this->entityTypeManager->getStorage($entity_type_id)->load($entity_id);
     $user = \Drupal::currentUser();
 
-    $action_link_entities = \Drupal::service('entity_type.manager')->getStorage('action_link')->loadByUsingOutput('entity_links');
+    $action_link_entities = $this->entityTypeManager->getStorage('action_link')->loadByUsingOutput('entity_links');
     foreach ($action_link_entities as $action_link_entity) {
       // Replace the ajax plugin with our altered version.
       // @todo Add a getter for this?
@@ -82,28 +111,11 @@ class EntityLinksBuilder {
       }
     }
 
-    $placeholder = Crypt::hashBase64('action_link-entity_links-node-' . $entity->id() . '-' . $view_mode);
-
-    // TODO! CACHE STUFF!
-    $links['action_link'] = [
+    // dsm(func_get_args());
+    return [
       '#theme' => 'links__node__action_link',
       '#links' => $action_link_links,
-      '#lazy_builder_var' => $placeholder,
     ];
-
-    $links['#attached'] ??= [];
-    $links['#attached']['placeholders'][$placeholder] = [
-      '#lazy_builder' => [
-        // The lazy builder callback and parameters.
-        'action_link_entity_links.builder:entityLinksLazyBuilder',
-        [],
-      ],
-    ];
-  }
-
-  #[TrustedCallback]
-  public function entityLinksLazyBuilder() {
-    return [];
   }
 
 
