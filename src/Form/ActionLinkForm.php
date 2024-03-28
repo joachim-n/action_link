@@ -67,9 +67,9 @@ class ActionLinkForm extends EntityForm {
     ];
 
     $output_plugin_definitions = \Drupal::service('plugin.manager.action_link_output')->getApplicableDefinitions($action_link);
-    dsm($output_plugin_definitions);
     $form['output'] = [
       '#type' => 'details',
+      '#tree' => TRUE,
       '#title' => $this->t('Output locations'),
       '#open' => TRUE,
     ];
@@ -77,16 +77,9 @@ class ActionLinkForm extends EntityForm {
     if ($output_plugin_definitions) {
       foreach ($output_plugin_definitions as $output_plugin_id => $output_plugin_definition) {
         $form['output'][$output_plugin_id] = [
-          '#type' => 'details',
+          '#type' => 'checkbox',
           '#title' => $output_plugin_definition['label'],
-          '#open' => TRUE,
-        ];
-
-        $form['output'][$output_plugin_id]['add'] = [
-          '#type' => 'submit',
-          '#value' => $this->t('Add and configure @label output', [
-            '@label' => $output_plugin_definition['label'],
-          ])
+          '#default_value' => isset($action_link->get('output')[$output_plugin_id]),
         ];
       }
     }
@@ -109,6 +102,12 @@ class ActionLinkForm extends EntityForm {
     $entity->set('plugin_config', $form_state->getValue(['plugin', 'plugin_configuration']) ?? []);
 
     $entity->set('link_style', $form_state->getValue(['link_style']));
+
+    $output_value = [];
+    foreach (array_keys(array_filter($form_state->getValue(['output']))) as $output_plugin_id) {
+      $output_value[$output_plugin_id] = [];
+    }
+    $entity->set('output', $output_value);
   }
 
   /**

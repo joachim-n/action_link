@@ -111,6 +111,7 @@ use Drupal\Core\Session\AccountInterface;
  *     "plugin_id",
  *     "plugin_config",
  *     "link_style",
+ *     "output",
  *   },
  *   links = {
  *     "add-form" = "/admin/structure/action_link/add",
@@ -180,6 +181,13 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
    * @var \Drupal\Component\Plugin\DefaultSingleLazyPluginCollection
    */
   protected $linkStylePluginCollection;
+
+  /**
+   * Plugin configurations for action link output.
+   *
+   * @var array
+   */
+  protected $output;
 
   /**
    * {@inheritdoc}
