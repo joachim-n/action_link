@@ -54,6 +54,7 @@ function action_link_entity_links_node_links_alter(array &$links, NodeInterface 
     }
   }
 
+  // TODO! CACHE STUFF!
   $links['action_link'] = [
     '#theme' => 'links__node__action_link',
     '#links' => $action_link_links,
