@@ -21,7 +21,7 @@ class AjaxEntityLinks extends Ajax {
   /**
    * {@inheritdoc}
    */
-  public function alterLinksBuild(array &$build, ActionLinkInterface $action_link, AccountInterface $user, array $named_parameters, array $scalar_parameters) {
+  public function XXXalterLinksBuild(array &$build, ActionLinkInterface $action_link, AccountInterface $user, array $named_parameters, array $scalar_parameters) {
     parent::alterLinksBuild(
       $build,
       $action_link,

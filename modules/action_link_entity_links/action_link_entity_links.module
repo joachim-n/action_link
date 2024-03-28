@@ -16,8 +16,10 @@ function action_link_entity_links_node_links_alter(array &$links, NodeInterface 
 
 /**
  * Implements hook_preprocess_HOOK() for links.
+ *
+ * poss no longer needed???
  */
-function action_link_entity_links_preprocess_links(&$variables) {
+function XXaction_link_entity_links_preprocess_links(&$variables) {
   // Add LI classes here because AAAAARRRRRRRRGH there is no way to set them
   // with #theme links.
   // See https://www.drupal.org/project/drupal/issues/3436073.

@@ -97,8 +97,6 @@ class EntityLinksBuilder {
       ],
       '#attributes' => ['class' => ['links', 'inline']],
     ];
-
-    dsm($links);
   }
 
   /**
@@ -131,7 +129,7 @@ class EntityLinksBuilder {
       ],
     );
 
-    // dsm($action_link_build);
+    dsm($action_link_build);
     // Why this array??
     return $action_link_build[$direction];
 
