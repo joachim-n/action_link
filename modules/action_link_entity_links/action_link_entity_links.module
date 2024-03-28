@@ -12,12 +12,12 @@ use Drupal\node\NodeInterface;
  * Implements hook_node_links_alter().
  */
 function action_link_entity_links_node_links_alter(array &$links, NodeInterface $entity, array &$context) {
-  // TODO - view modes need to be a setting
+  // @todo Make view modes configurable in the plugin.
   $view_mode = $context['view_mode'];
 
   $user = \Drupal::currentUser();
+
   $action_link_entities = \Drupal::service('entity_type.manager')->getStorage('action_link')->loadByUsingOutput('entity_links');
-  // dsm($action_link_entities);
   foreach ($action_link_entities as $action_link_entity) {
     // Replace the ajax plugin with our altered version.
     // @todo Add a getter for this?
@@ -26,6 +26,11 @@ function action_link_entity_links_node_links_alter(array &$links, NodeInterface 
     }
 
     $state_action_plugin = $action_link_entity->getStateActionPlugin();
+
+    // This is a total hack: we get the render array for the action link, then
+    // cannibalise it for bits to put in the render array for the entity links.
+    // @todo Refactor the action link rendering methods on StateActionBase to
+    // give us things that are more suitable here.
     $action_links = $state_action_plugin->buildLinkArray(
       $action_link_entity,
       $user,
@@ -39,11 +44,6 @@ function action_link_entity_links_node_links_alter(array &$links, NodeInterface 
       $action_link_links['action_link' . ':' . $action_link_entity->id() . ':' . $direction] = [
         'title' => $action_links[$direction]['#link']['#title'],
         'url' => $action_links[$direction]['#link']['#url'],
-        // ARGH we can't set $li_attributes FUCK FUCK
-        // need to copy $action_links['dec']['#link']['#attributes']
-        // AND stash $action_links['dec']['#attributes']
-        // for our PP func to move to the LI.
-        // WTF these end up in fucking TEXT attrbutes like we're a fucking SPAN
         'attributes' => $action_links[$direction]['#link']['#attributes'],
       ];
 
