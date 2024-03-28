@@ -256,7 +256,8 @@ abstract class EntityFieldStateActionBase extends StateActionBase implements Con
 
     // Guard against output on a bundle that doesn't have the field.
     if (!$entity->hasField($field_name)) {
-      // @todo Log a warning.
+      // @todo Log a warning.,
+      // NO catch & throw
       return FALSE;
     }
 
