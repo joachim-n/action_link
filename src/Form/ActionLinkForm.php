@@ -3,9 +3,11 @@
 namespace Drupal\action_link\Form;
 
 use Drupal\Component\Utility\NestedArray;
+use Drupal\Core\Ajax\InsertCommand;
 use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Render\Element;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -91,7 +93,12 @@ class ActionLinkForm extends EntityForm {
       ];
     }
 
-    $form['#after_build'][] = '::afterBuildOurs';
+    // DOESN'T WORK
+    // $form['#after_build'][] = '::afterBuildOurs';
+    //
+    // won't work either, process goes inward, so the StateActionPlugin
+    // is going to clobber this.
+    $form['#process'][] = '::afterBuildOurs';
 
     return $form;
   }
@@ -115,7 +122,14 @@ class ActionLinkForm extends EntityForm {
     // Retrieve the element to be rendered.
     $form = NestedArray::getValue($form, $form_parents);
 
-    return $form;
+    /** @var \Drupal\Core\Ajax\AjaxResponse $response */
+    $routeMatch = \Drupal::routeMatch();
+    $response = \Drupal::service('main_content_renderer.ajax')->renderResponse($form, $request, $routeMatch);
+
+    $response->addCommand(new InsertCommand('#edit-output', '<p>POOP</p>'));
+
+
+    return $response;
   }
 
   /**
