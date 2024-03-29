@@ -22,7 +22,7 @@ class EntityLinksBuilder {
   protected $entityTypeManager;
 
   /**
-   * Creates a EntityLinks instance.
+   * Creates an EntityLinks instance.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
