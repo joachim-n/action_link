@@ -13,25 +13,3 @@ use Drupal\node\NodeInterface;
 function action_link_entity_links_node_links_alter(array &$links, NodeInterface $entity, array &$context) {
   \Drupal::service('action_link_entity_links.builder')->entityLinksAlter($links, $entity, $context);
 }
-
-/**
- * Implements hook_preprocess_HOOK() for links.
- *
- * poss no longer needed???
- */
-function XXaction_link_entity_links_preprocess_links(&$variables) {
-  // Add LI classes here because AAAAARRRRRRRRGH there is no way to set them
-  // with #theme links.
-  // See https://www.drupal.org/project/drupal/issues/3436073.
-  foreach ($variables['links'] as $key => &$link) {
-    if (!str_starts_with($key, 'action_link:')) {
-      continue;
-    }
-
-    $link['attributes']['class'] = $link['text_attributes']['li_class'];
-
-    // Unset the stash.
-    // @todo Doesn't work WTF.
-    unset($link['text_attributes']['li_class']);
-  }
-}
