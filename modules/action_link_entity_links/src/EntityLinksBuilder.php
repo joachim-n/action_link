@@ -111,12 +111,6 @@ class EntityLinksBuilder {
     $action_link_entity = $this->entityTypeManager->getStorage('action_link')->load($action_link_id);
     $user = \Drupal::currentUser();
 
-    // Replace the ajax plugin with our altered version.
-    // @todo Add a getter for this?
-    if ($action_link_entity->get('link_style') == 'ajax') {
-      $action_link_entity->set('link_style',  'ajax_entity_links');
-    }
-
     $state_action_plugin = $action_link_entity->getStateActionPlugin();
 
     // This is a total hack: we get the render array for the action link, then
