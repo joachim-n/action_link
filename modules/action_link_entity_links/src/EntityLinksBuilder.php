@@ -50,6 +50,10 @@ class EntityLinksBuilder {
     /** @var \Drupal\action_link\Entity\ActionLinkInterface $action_link_entity */
     foreach ($action_link_entities as $action_link_id => $action_link_entity) {
       foreach ($action_link_entity->getStateActionPlugin()->getDirections() as $direction => $label) {
+        // theme_links are an abomination but we can use a lazy builder so the
+        // poor cacheability of our action links doesn't pollute all of the
+        // links.
+        // See https://www.drupal.org/project/drupal/issues/2587417.
         $placeholder = Crypt::hashBase64(implode('-', [
           'action_link-entity_links',
           $entity->getEntityTypeId(),
@@ -58,10 +62,19 @@ class EntityLinksBuilder {
           $direction,
         ]));
 
+        // Because individual links aren't passed through the renderer, but
+        // instead have their properties picked out and put into the main links
+        // array, specifying a #lazy_builder attribute here will have no effect.
+        // Instead, we generate the placeholder ourselves and attach the lazy
+        // builder callback. This is the same work that the renderer does for
+        // a #lazy_builder attribute.
+        // Create a link that is just a placeholder: this will cause theme_links
+        // to output just the placeholder string inside the LI.
         $action_link_links["action_link:$action_link_id:$direction"] = [
           'title' => $placeholder,
         ];
 
+        // Register our placeholder and its lazy builder.
         $links['#attached']['placeholders'][$placeholder] = [
           '#lazy_builder' => [
             // The lazy builder callback and parameters.
