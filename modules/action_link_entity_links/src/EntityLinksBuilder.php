@@ -88,15 +88,6 @@ class EntityLinksBuilder {
       '#links' => $action_link_links,
     ];
 
-    $links['dummy'] = [
-      '#theme' => 'links__node__statistics',
-      '#links' => [
-        'foo' => [
-          'title' => 'OH YEAH THIS IS A LINK',
-        ],
-      ],
-      '#attributes' => ['class' => ['links', 'inline']],
-    ];
   }
 
   /**
