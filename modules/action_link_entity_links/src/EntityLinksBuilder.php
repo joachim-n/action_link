@@ -129,9 +129,8 @@ class EntityLinksBuilder {
       ],
     );
 
-    dsm($action_link_build);
-    // Why this array??
-    return $action_link_build[$direction];
+    // dsm($action_link_build);
+    return $action_link_build;
 
     //   $action_link_links = [];
     //   foreach (Element::children($action_links) as $direction) {
