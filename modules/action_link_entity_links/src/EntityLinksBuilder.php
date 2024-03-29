@@ -113,10 +113,6 @@ class EntityLinksBuilder {
 
     $state_action_plugin = $action_link_entity->getStateActionPlugin();
 
-    // This is a total hack: we get the render array for the action link, then
-    // cannibalise it for bits to put in the render array for the entity links.
-    // @todo Refactor the action link rendering methods on StateActionBase to
-    // give us things that are more suitable here.
     $action_link_build = $state_action_plugin->buildSingleLink(
       $action_link_entity,
       $direction,
@@ -126,40 +122,7 @@ class EntityLinksBuilder {
       ],
     );
 
-    // dsm($action_link_build);
     return $action_link_build;
-
-    //   $action_link_links = [];
-    //   foreach (Element::children($action_links) as $direction) {
-    //     $action_link_links['action_link' . ':' . $action_link_entity->id() . ':' . $direction] = [
-    //       'title' => $action_links[$direction]['#link']['#title'],
-    //       'url' => $action_links[$direction]['#link']['#url'],
-    //       'attributes' => $action_links[$direction]['#link']['#attributes'],
-    //     ];
-
-    //     // We can't set attributes on the LI element at this point, so stash them in
-    //     // a fake key in the link attributes for
-    //     // action_link_entity_links_preprocess_links() to retrieve.
-    //     $action_link_links['action_link' . ':' . $action_link_entity->id() . ':' . $direction]['attributes']['li_class'] = $action_links[$direction]['#attributes']['class'];
-    //   }
-    // }
-
-    // dsm(func_get_args());
-    return [
-      '#theme' => 'links__node__action_link',
-      '#links' => $action_link_links,
-    ];
-
-    // $links['dummy'] = [
-    //   '#theme' => 'links__node__statistics',
-    //   '#links' => [
-    //     'foo' => [
-    //       'title' => 'OH YEAH THIS IS A LINK',
-    //     ],
-    //   ],
-    //   '#attributes' => ['class' => ['links', 'inline']],
-    // ];
-    }
-
+  }
 
 }
