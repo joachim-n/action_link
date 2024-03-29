@@ -80,8 +80,6 @@ class EntityLinksBuilder {
       }
     }
 
-    // $placeholder = Crypt::hashBase64('action_link-entity_links-' . $entity->getEntityTypeId() . '-' . $entity->id() . '-' . $view_mode);
-
     $links['action_link'] = [
       '#theme' => 'links__node__action_link',
       '#links' => $action_link_links,
@@ -96,7 +94,16 @@ class EntityLinksBuilder {
   }
 
   /**
-   * Undocumented function
+   * Lazy builder callback for an individual action link in the entity links.
+   *
+   * @param string $entity_type_id
+   *   The entity type ID of the entity the link is for.
+   * @param int $entity_id
+   *   The entity ID.
+   * @param string $action_link_id
+   *   The action link entity ID.
+   * @param string $direction
+   *   The direction to show the link for.
    */
   #[TrustedCallback]
   public function entityLinksLazyBuilder($entity_type_id, $entity_id, $action_link_id, $direction) {
