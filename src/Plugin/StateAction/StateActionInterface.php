@@ -52,7 +52,7 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
   public function buildLinkSet(ActionLinkInterface $action_link, AccountInterface $user, array $scalar_parameters = []): array;
 
   /**
-   * Gets the link for a specific direction.
+   * Gets a plain render array for a specific direction.
    *
    * This render array does not have a lazy builder and is therefore
    * uncacheable. In general, you should instead call buildLinkSet() on an
@@ -74,8 +74,9 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
    *   (optional) The scalar values of the dynamic parameters for the state
    *   action plugin, keyed by the parameter names.
    *
-   * @return \Drupal\Core\Link|null
-   *   The link object, or NULL if no link is applicable.
+   * @return array
+   *   A render array for the single link. If the link is not accessible, the
+   *   render array will be empty.
    */
   public function buildSingleLink(ActionLinkInterface $action_link, string $direction, AccountInterface $user, array $scalar_parameters = []): array;
 
