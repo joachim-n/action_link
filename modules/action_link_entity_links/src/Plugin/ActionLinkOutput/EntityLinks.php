@@ -37,9 +37,7 @@ class EntityLinks extends ActionLinkOutputBase {
       return FALSE;
     }
 
-    // TODO also only on node or comment!!!!! OMG
-    // ARGH this is ony on entity base! will CRASH ON OTHERS
-    // need an interface for this!!!
+    // Only nodes and comments support entity links.
     if (!in_array($state_action_plugin->getTargetEntityTypeId(), ['node', 'comment'])) {
       return FALSE;
     }
