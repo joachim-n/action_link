@@ -41,9 +41,6 @@ class EntityLinksBuilder {
    * @param array $context
    */
   public function entityLinksAlter(array &$links, ContentEntityInterface $entity, array &$context) {
-    // @todo Make view modes configurable in the plugin.
-    $view_mode = $context['view_mode'];
-
     $action_link_entities = $this->entityTypeManager->getStorage('action_link')->loadByUsingOutput('entity_links');
 
     $action_link_links = [];

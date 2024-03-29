@@ -10,6 +10,8 @@ use Drupal\action_link\Plugin\StateAction\EntityActionLinkInterface;
 
 /**
  * Output plugin for showing action links in entity links.
+ *
+ * @todo Make view modes configurable.
  */
 #[ActionLinkOutput(
   id: "entity_links",
