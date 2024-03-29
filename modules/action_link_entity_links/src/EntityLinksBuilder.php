@@ -3,6 +3,7 @@
 namespace Drupal\action_link_entity_links;
 
 use Drupal\Component\Utility\Crypt;
+use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Render\Element;
@@ -81,13 +82,17 @@ class EntityLinksBuilder {
 
     // $placeholder = Crypt::hashBase64('action_link-entity_links-' . $entity->getEntityTypeId() . '-' . $entity->id() . '-' . $view_mode);
 
-    // TODO! CACHE STUFF!
-    // TODO chec $action_link_links not empty!
     $links['action_link'] = [
       '#theme' => 'links__node__action_link',
       '#links' => $action_link_links,
     ];
 
+    // Our links have a cache dependency on the list of action link entities, as
+    // if an action link entity is added, deleted, or updated, the list of links
+    // we return here must change.
+    $cacheable_metadata = new CacheableMetadata();
+    $cacheable_metadata->setCacheTags($this->entityTypeManager->getDefinition('action_link')->getListCacheTags());
+    \Drupal::service('renderer')->addCacheableDependency($links, $cacheable_metadata);
   }
 
   /**
