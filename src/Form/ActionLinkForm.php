@@ -2,9 +2,11 @@
 
 namespace Drupal\action_link\Form;
 
+use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Provides the default form handler for the Action Link entity.
@@ -88,6 +90,30 @@ class ActionLinkForm extends EntityForm {
         '#markup' => $this->t('No ouput location options are available for this action link'),
       ];
     }
+
+    $form['#after_build'][] = '::afterBuildOurs';
+
+    return $form;
+  }
+
+  public function afterBuildOurs(array $element, FormStateInterface $form_state) {
+    dsm($element);
+    $element['plugin']['container']['plugin_id']['#ajax']['callback'] = get_class() . '::pluginDropdownCallback';
+
+    return $element;
+  }
+
+  /**
+   * AJAX callback for the plugin ID select element.
+   */
+  public static function pluginDropdownCallback(&$form, FormStateInterface &$form_state, Request $request) {
+    $form_parents = explode('/', $request->query->get('element_parents'));
+
+    // Sanitize form parents before using them.
+    $form_parents = array_filter($form_parents, [Element::class, 'child']);
+
+    // Retrieve the element to be rendered.
+    $form = NestedArray::getValue($form, $form_parents);
 
     return $form;
   }
