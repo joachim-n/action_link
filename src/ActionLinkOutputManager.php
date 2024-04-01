@@ -43,11 +43,14 @@ class ActionLinkOutputManager extends DefaultPluginManager {
   }
 
   /**
-   * TODO
+   * Gets the definitions of plugins which apply to an action link.
    *
    * @param \Drupal\action_link\Entity\ActionLinkInterface $action_link
+   *   The action link entity.
    *
    * @return array
+   *   An array of the plugin definitions which apply to the given action link
+   *   entity. Keys are plugin IDs.
    */
   public function getApplicableDefinitions(ActionLinkInterface $action_link): array {
     return array_filter(
