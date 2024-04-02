@@ -2,6 +2,7 @@
 
 namespace Drupal\action_link\Form;
 
+use Drupal\action_link\Element\StateActionPlugin;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Ajax\InsertCommand;
 use Drupal\Core\Entity\EntityForm;
@@ -95,17 +96,16 @@ class ActionLinkForm extends EntityForm {
 
     // DOESN'T WORK
     // $form['#after_build'][] = '::afterBuildOurs';
-    //
-    // won't work either, process goes inward, so the StateActionPlugin
-    // is going to clobber this.
-    $form['#process'][] = '::afterBuildOurs';
+    // URGH dependency on plugin class URGH.
+    $form['plugin']['#process'][] = [StateActionPlugin::class, 'processPlugin'];
+    $form['plugin']['#process'][] = '::afterBuildOurs';
 
     return $form;
   }
 
   public function afterBuildOurs(array $element, FormStateInterface $form_state) {
-    dsm($element);
-    $element['plugin']['container']['plugin_id']['#ajax']['callback'] = get_class() . '::pluginDropdownCallback';
+    // dsm($element);
+    $element['container']['plugin_id']['#ajax']['callback'] = get_class() . '::pluginDropdownCallback';
 
     return $element;
   }
