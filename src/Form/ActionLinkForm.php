@@ -3,7 +3,9 @@
 namespace Drupal\action_link\Form;
 
 use Drupal\action_link\Element\StateActionPlugin;
+use Drupal\action_link\Utility\Element as UtilityElement;
 use Drupal\Component\Utility\NestedArray;
+use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\InsertCommand;
 use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Entity\EntityInterface;
@@ -27,6 +29,7 @@ class ActionLinkForm extends EntityForm {
 
     /** @var \Drupal\action_link\Entity\ActionLinkInterface */
     $action_link = $this->entity;
+    // dsm($action_link);
 
     $form['label'] = [
       '#type' => 'textfield',
@@ -62,6 +65,9 @@ class ActionLinkForm extends EntityForm {
       ],
     ];
 
+    // $form['link_style_details'] = [
+    // ];
+
     $form['link_style'] = [
       '#type' => 'action_link_style_plugin',
       '#title' => $this->t('Link style'),
@@ -77,6 +83,9 @@ class ActionLinkForm extends EntityForm {
       '#tree' => TRUE,
       '#title' => $this->t('Output locations'),
       '#open' => TRUE,
+      '#updates_on' => [
+        ['plugin', 'container', 'plugin_id'],
+      ]
     ];
 
     if ($output_plugin_definitions) {
@@ -107,6 +116,15 @@ class ActionLinkForm extends EntityForm {
     // dsm($element);
     $element['container']['plugin_id']['#ajax']['callback'] = get_class() . '::pluginDropdownCallback';
 
+    // ARGH we need to hand over to OUTPUT plugins tp say 'hey what do you need to react to?'
+    // BUT NOT here?
+    // there's 2-level dependency, here we need to add our own ajax
+    // and in our own ajax we need to hand over to plugins
+    // so Links plugin ADDS TOTALLY NEW AJAXYNESS to entity type IF IT'S EVEN IN THE FORM
+    // to say 'yo, ajax react, update the output plugins area'
+    //
+    // FUCKSTICKS
+
     return $element;
   }
 
@@ -114,19 +132,63 @@ class ActionLinkForm extends EntityForm {
    * AJAX callback for the plugin ID select element.
    */
   public static function pluginDropdownCallback(&$form, FormStateInterface &$form_state, Request $request) {
+    $triggering_element = $form_state->getTriggeringElement();
+    $triggering_element_parents = $triggering_element['#array_parents'];
+
     $form_parents = explode('/', $request->query->get('element_parents'));
 
     // Sanitize form parents before using them.
     $form_parents = array_filter($form_parents, [Element::class, 'child']);
 
+    // Walk the entire form recursively, looking for elements which say they
+    // update on the triggering element.
+    $collected_elements = [];
+    UtilityElement::walkChildrenRecursive($form, function($element) use ($triggering_element_parents, &$collected_elements) {
+      if (!isset($element['#updates_on'])) {
+        return;
+      }
+
+      foreach ($element['#updates_on'] as $updates_on) {
+        if ($updates_on == $triggering_element_parents) {
+          $collected_elements[] = $element;
+        }
+      }
+    });
+    // dsm($collected_elements);
+
+    $response = new AjaxResponse();
+
+    foreach ($collected_elements as $collected_element) {
+      $html = $this->renderer->renderRoot($collected_element);
+
+      // TODO location!
+      $response->addCommand(new InsertCommand(NULL, $html));
+
+      $response->addAttachments($collected_element['#attached']);
+    }
+
+    // TOFDO!!!
+
+
+    // TODO: if $collected_elements is empty, there's probably been a problem:
+    // output an AJAX error message?
+    //         $response->addCommand(new AlertCommand($error));
+
+
     // Retrieve the element to be rendered.
-    $form = NestedArray::getValue($form, $form_parents);
+    // $form = NestedArray::getValue($form, $form_parents);
+    //
 
-    /** @var \Drupal\Core\Ajax\AjaxResponse $response */
-    $routeMatch = \Drupal::routeMatch();
-    $response = \Drupal::service('main_content_renderer.ajax')->renderResponse($form, $request, $routeMatch);
 
-    $response->addCommand(new InsertCommand('#edit-output', '<p>POOP</p>'));
+
+    // /** @var \Drupal\Core\Ajax\AjaxResponse $response */
+    // $routeMatch = \Drupal::routeMatch();
+
+
+
+    // $response = \Drupal::service('main_content_renderer.ajax')->renderResponse($form, $request, $routeMatch);
+
+    // $response->addCommand(new InsertCommand('#edit-output', '<p>POOP</p>'));
 
 
     return $response;
@@ -137,6 +199,8 @@ class ActionLinkForm extends EntityForm {
    */
   protected function copyFormValuesToEntity(EntityInterface $entity, array $form, FormStateInterface $form_state) {
     parent::copyFormValuesToEntity($entity, $form, $form_state);
+
+    // dsm($form_state->getValues());
 
     $entity->set('plugin_id', $form_state->getValue(['plugin', 'plugin_id']));
     $entity->set('plugin_config', $form_state->getValue(['plugin', 'plugin_configuration']) ?? []);
@@ -164,7 +228,7 @@ class ActionLinkForm extends EntityForm {
       $this->messenger()->addStatus($this->t('The action link %name has been added.', $t_args));
     }
 
-    $form_state->setRedirectUrl($this->entity->toUrl('collection'));
+    // $form_state->setRedirectUrl($this->entity->toUrl('collection'));
 
     return $status;
   }
