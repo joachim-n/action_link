@@ -78,17 +78,21 @@ class ActionLink extends ComputedFieldBase {
   /**
    * {@inheritdoc}
    */
-  public function attachAsBaseField($fields, EntityTypeInterface $entity_type): bool {
+  public function attachAsBaseField(&$fields, EntityTypeInterface $entity_type): void {
     // Match the scope of the controlled field.
-    return isset($fields[$this->pluginDefinition['attach']['controlled_field']]);
+    if (isset($fields[$this->pluginDefinition['attach']['controlled_field']])) {
+      $fields[$this->getFieldName()] = $this->createComputedFieldDefinition($entity_type);
+    }
   }
 
   /**
    * {@inheritdoc}
    */
-  public function attachAsBundleField($fields, EntityTypeInterface $entity_type, string $bundle): bool {
+  public function attachAsBundleField(&$fields, EntityTypeInterface $entity_type, string $bundle): void {
     // Match the scope and bundle of the controlled field.
-    return isset($fields[$this->pluginDefinition['attach']['controlled_field']]);
+    if (isset($fields[$this->pluginDefinition['attach']['controlled_field']])) {
+      $fields[$this->getFieldName()] = $this->createComputedFieldDefinition($entity_type, $bundle);
+    }
   }
 
 }
