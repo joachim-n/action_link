@@ -123,6 +123,9 @@ class EntityLinksBuilder {
 
     $state_action_plugin = $action_link_entity->getStateActionPlugin();
 
+    // THIS IS BAD because we're building all links, using a LB for EACH link - ok so far
+    // BUT THEN calling buildSingleLink() which SECRETLY BUILDS ALL LINKS.
+    // So calling n^2 links for n links!
     $action_link_build = $state_action_plugin->buildSingleLink(
       $action_link_entity,
       $direction,
