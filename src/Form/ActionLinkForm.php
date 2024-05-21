@@ -97,6 +97,7 @@ class ActionLinkForm extends EntityForm {
         $form['output'][$output_plugin_id] = [
           '#type' => 'checkbox',
           '#title' => $output_plugin_definition['label'],
+          '#description' => $output_plugin_definition['description'],
           '#default_value' => isset($action_link->get('output')[$output_plugin_id]),
         ];
       }
