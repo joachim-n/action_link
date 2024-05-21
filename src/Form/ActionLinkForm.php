@@ -11,6 +11,7 @@ use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
+use Drupal\declarative_form_ajax\FormAjax;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -81,10 +82,13 @@ class ActionLinkForm extends EntityForm {
     $form['output'] = [
       '#type' => 'details',
       '#tree' => TRUE,
-      '#title' => $this->t('Output locations'),
+      '#title' => $this->t('Output locations') . time() . $action_link->get('plugin_id'),
       '#open' => TRUE,
-      '#updates_on' => [
-        ['plugin', 'container', 'plugin_id'],
+      '#ajax' => [
+        'updated_by' => [
+          ['plugin', 'container', 'plugin_id'],
+          ['plugin', 'container', 'plugin_configuration', 'entity_type_field', 'container', 'entity_type_id'],
+        ],
       ]
     ];
 
@@ -103,18 +107,20 @@ class ActionLinkForm extends EntityForm {
       ];
     }
 
-    // DOESN'T WORK
-    // $form['#after_build'][] = '::afterBuildOurs';
-    // URGH dependency on plugin class URGH.
-    $form['plugin']['#process'][] = [StateActionPlugin::class, 'processPlugin'];
-    $form['plugin']['#process'][] = '::afterBuildOurs';
+    $form['#after_build'][] = FormAjax::class .  '::ajaxAfterBuild';
 
     return $form;
   }
 
-  public function afterBuildOurs(array $element, FormStateInterface $form_state) {
+  public function XXafterBuildOurs(array $element, FormStateInterface $form_state) {
+    // walk resurvively.
+    // see if there are any ajax dependencies.
+    // if UPDATES points to TRIGGER,
+    //    set the ajax callback on TRIGGER
+
+
     // dsm($element);
-    $element['container']['plugin_id']['#ajax']['callback'] = get_class() . '::pluginDropdownCallback';
+    // $element['container']['plugin_id']['#ajax']['callback'] = get_class() . '::pluginDropdownCallback';
 
     // ARGH we need to hand over to OUTPUT plugins tp say 'hey what do you need to react to?'
     // BUT NOT here?
@@ -131,7 +137,7 @@ class ActionLinkForm extends EntityForm {
   /**
    * AJAX callback for the plugin ID select element.
    */
-  public static function pluginDropdownCallback(&$form, FormStateInterface &$form_state, Request $request) {
+  public static function XXpluginDropdownCallback(&$form, FormStateInterface &$form_state, Request $request) {
     $triggering_element = $form_state->getTriggeringElement();
     $triggering_element_parents = $triggering_element['#array_parents'];
 
@@ -203,12 +209,20 @@ class ActionLinkForm extends EntityForm {
     // dsm($form_state->getValues());
 
     $entity->set('plugin_id', $form_state->getValue(['plugin', 'plugin_id']));
-    $entity->set('plugin_config', $form_state->getValue(['plugin', 'plugin_configuration']) ?? []);
+    // Getting the crappy 'container' thing here!
+    $plugin_configuration_value = $form_state->getValue(['plugin', 'plugin_configuration'], []);
+
+    // Total hack but I have run out of energy figuring this bug out.
+    if (isset($plugin_configuration_value['entity_type_field'])) {
+      $plugin_configuration_value['entity_type_field'] = $plugin_configuration_value['entity_type_field']['container'];
+    }
+
+    $entity->set('plugin_config', $plugin_configuration_value);
 
     $entity->set('link_style', $form_state->getValue(['link_style']));
 
     $output_value = [];
-    foreach (array_keys(array_filter($form_state->getValue(['output']))) as $output_plugin_id) {
+    foreach (array_keys(array_filter($form_state->getValue(['output'], []))) as $output_plugin_id) {
       $output_value[$output_plugin_id] = [];
     }
     $entity->set('output', $output_value);

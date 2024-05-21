@@ -91,6 +91,16 @@ abstract class EntityFieldStateActionBase extends StateActionBase implements Con
     + parent::defaultConfiguration();
   }
 
+  public function setConfiguration(array $configuration){
+    // AAARGH
+    if (isset($configuration['entity_type_field'])) {
+      $configuration['entity_type_id'] = $configuration['entity_type_field']['entity_type_id'];
+      $configuration['field'] = $configuration['entity_type_field']['field'];
+    }
+
+    parent::setConfiguration($configuration);
+  }
+
   /**
    * {@inheritdoc}
    */
