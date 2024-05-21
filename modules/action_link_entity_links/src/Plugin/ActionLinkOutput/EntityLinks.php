@@ -31,7 +31,7 @@ class EntityLinks extends ActionLinkOutputBase {
     }
 
     // We can only show an action link in entity links if we know how to pass it
-    // dynamic parameter, so only show this which have only the entity as a
+    // dynamic parameter, so only show those which have only the entity as a
     // parameter.
     if ($state_action_plugin->getDynamicParameterNames() != ['entity']) {
       return FALSE;
