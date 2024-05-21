@@ -196,6 +196,23 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
   /**
    * {@inheritdoc}
    */
+  public function set($property_name, $value) {
+    parent::set($property_name, $value);
+
+    // After the plugin ID is set, we need to clear the plugin collection. This
+    // needs to happen after the value is set, as otherwise the plugin instance
+    // will get re-created with the prior plugin ID value. We need to take care
+    // of this ourselves because ConfigEntityBase::set() only handles updating
+    // the configuration of plugin collections, not the plugin IDs.
+    // @todo File a core issue for this.
+    if ($property_name == 'plugin_id') {
+      unset($this->stateActionPluginCollection);
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getPluginCollections() {
     $collections = [];
     if ($this->getStateActionPluginCollection()) {
@@ -215,7 +232,7 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
    *   The action link plugin collection.
    */
   protected function getStateActionPluginCollection() {
-    if (!$this->stateActionPluginCollection && $this->plugin_id) {
+    if (empty($this->stateActionPluginCollection) && $this->plugin_id) {
       $this->stateActionPluginCollection = new DefaultSingleLazyPluginCollection(
         \Drupal::service('plugin.manager.action_link_state_action'),
         $this->plugin_id, $this->plugin_config
