@@ -104,7 +104,7 @@ class ActionLinkForm extends EntityForm {
     }
     else {
       $form['output']['no_plugins'] = [
-        '#markup' => $this->t('No ouput location options are available for this action link'),
+        '#markup' => $this->t('No ouput location options are available for this action link.'),
       ];
     }
 
