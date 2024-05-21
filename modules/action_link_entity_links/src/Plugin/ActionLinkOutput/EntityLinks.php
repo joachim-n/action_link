@@ -16,7 +16,7 @@ use Drupal\action_link\Plugin\StateAction\EntityActionLinkInterface;
 #[ActionLinkOutput(
   id: "entity_links",
   label: new TranslatableMarkup("Entity links"),
-  description: new TranslatableMarkup("Display the action links in node or comment links"),
+  description: new TranslatableMarkup("Displays the action links in node or comment links."),
 )]
 class EntityLinks extends ActionLinkOutputBase {
 
