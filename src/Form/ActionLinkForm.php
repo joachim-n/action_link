@@ -24,7 +24,6 @@ class ActionLinkForm extends EntityForm {
 
     /** @var \Drupal\action_link\Entity\ActionLinkInterface */
     $action_link = $this->entity;
-    // dsm($action_link);
 
     $form['label'] = [
       '#type' => 'textfield',
