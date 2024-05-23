@@ -2,3 +2,5 @@ name: 'Action links'
 type: module
 description: 'Create customised links which perform actions on your site.'
 core_version_requirement: '^9 || ^10'
+dependencies:
+  - declarative_form_ajax:declarative_form_ajax
