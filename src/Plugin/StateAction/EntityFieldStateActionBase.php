@@ -269,8 +269,17 @@ abstract class EntityFieldStateActionBase extends StateActionBase implements Con
 
     // For the state to be valid, the entity must validate with the new value.
     $field_name = $this->configuration['field'];
+
+    // Get the current value so we can restore it, as otherwise the new value
+    // will persist on the entity through subsequent calls to this method from
+    // the same lazy builder for other directions of the action link.
+    $current_value = $entity->get($field_name)->value;
+
     $entity->set($field_name, $next_value);
     $violations = $entity->validate();
+
+    // Restore the value.
+    $entity->set($field_name, $current_value);
 
     if (count($violations)) {
       return NULL;
