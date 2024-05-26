@@ -5,15 +5,15 @@ namespace Drupal\action_link\Entity\Handler;
 use Drupal\Core\Config\Entity\ConfigEntityStorage;
 
 /**
- * Provides the storage handler for the Action Link entity.
+ * Storage handler for the Action Link entity type.
  */
 class ActionLinkStorage extends ConfigEntityStorage {
 
   /**
-   * Loads action link entities that are configured to use the output plugin.
+   * Loads all action link entities configured to use the given output plugin.
    *
    * @param string $output_plugin_id
-   *   An output plugin ID.
+   *   An action link output plugin ID.
    *
    * @return array
    *   An array of all action link entities that are configured to output using
