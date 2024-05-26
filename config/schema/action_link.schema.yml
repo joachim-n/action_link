@@ -86,6 +86,7 @@ action_link.action_link_geometry.inc_dec:
               type: label
               message: 'Message'
 
+# Schemas for action link plugins.
 action_link.action_link_plugin.boolean_field:
   type: mapping
   mapping:
@@ -139,3 +140,8 @@ action_link.action_link_plugin.date_field:
       label: 'Step'
     texts:
       type: action_link.action_link_geometry.inc_dec
+
+# Action link output plugins.
+action_link.action_link_output_plugin.*:
+  type: mapping
+  mapping: {}
