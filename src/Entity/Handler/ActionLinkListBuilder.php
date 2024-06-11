@@ -2,13 +2,13 @@
 
 namespace Drupal\action_link\Entity\Handler;
 
+use Drupal\Core\Config\Entity\ConfigEntityListBuilder;
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\Entity\EntityListBuilder;
 
 /**
  * Provides the list builder handler for the Action Link entity.
  */
-class ActionLinkListBuilder extends EntityListBuilder {
+class ActionLinkListBuilder extends ConfigEntityListBuilder {
 
   /**
    * {@inheritdoc}
