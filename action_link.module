@@ -40,8 +40,6 @@ function action_link_theme($existing, $type, $theme, $path) {
         'user' => NULL,
         'dynamic_parameters' => [],
         'attributes' => NULL,
-        // TODO nothing sets anything else here??
-        'wrapper_tag' => 'SPAN',
       ],
     ],
   ];
