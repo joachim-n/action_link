@@ -53,6 +53,12 @@ class ActionLinkOutputManager extends DefaultPluginManager {
    *   entity. Keys are plugin IDs.
    */
   public function getApplicableDefinitions(ActionLinkInterface $action_link): array {
+    // Can't check for output plugins if the action link has no state action
+    // plugin yet.
+    if (empty($action_link->getStateActionPlugin())) {
+      return [];
+    }
+
     return array_filter(
       $this->getDefinitions(),
       fn ($definition) => $definition['class']::applies($action_link)
