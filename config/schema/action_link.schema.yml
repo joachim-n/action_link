@@ -25,11 +25,11 @@ action_link.action_link.*:
         type: mapping
         label: 'Output'
         mapping:
-          output_plugin_id:
+          plugin_id:
             type: string
             label: 'Plugin ID'
-          output_plugin_config:
-            type: 'action_link.action_link_output_plugin.[%parent.output_plugin_id]'
+          plugin_config:
+            type: 'action_link.action_link_output_plugin.[%parent.plugin_id]'
             label: 'Plugin configuration'
 
 # Texts schema for toggle geometry.
