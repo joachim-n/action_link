@@ -86,12 +86,17 @@ class ActionLinkForm extends EntityForm {
     ];
 
     if ($output_plugin_definitions) {
+      $default_values = [];
+      foreach ($action_link->get('output') as $output_item) {
+        $default_values[$output_item['plugin_id']] = TRUE;
+      }
+
       foreach ($output_plugin_definitions as $output_plugin_id => $output_plugin_definition) {
         $form['output'][$output_plugin_id] = [
           '#type' => 'checkbox',
           '#title' => $output_plugin_definition['label'],
           '#description' => $output_plugin_definition['description'],
-          '#default_value' => isset($action_link->get('output')[$output_plugin_id]),
+          '#default_value' => isset($default_values[$output_plugin_id]),
         ];
       }
     }
@@ -127,7 +132,10 @@ class ActionLinkForm extends EntityForm {
 
     $output_value = [];
     foreach (array_keys(array_filter($form_state->getValue(['output'], []))) as $output_plugin_id) {
-      $output_value[$output_plugin_id] = [];
+      $output_value[] = [
+        'plugin_id' => $output_plugin_id,
+        'settings' => [],
+      ];
     }
     $entity->set('output', $output_value);
   }
