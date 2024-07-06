@@ -186,6 +186,11 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
   /**
    * Plugin configurations for action link output.
    *
+   * A numeric array of items. Each item is an array containing keys:
+   *  - plugin_id: The output plugin ID.
+   *  - plugin_config: The plugin configuration. TODO: Not currently used since
+   *    no plugins use configuration.
+   *
    * @var array
    */
   protected $output;
