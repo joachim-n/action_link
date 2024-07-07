@@ -52,7 +52,7 @@ abstract class EntityFieldStateActionBase extends StateActionBase implements Con
   }
 
   /**
-   * Creates a DummyFieldBase instance.
+   * Creates an EntityFieldStateActionBase instance.
    *
    * @param array $configuration
    *   A configuration array containing information about the plugin instance.
