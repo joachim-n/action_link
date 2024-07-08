@@ -71,7 +71,16 @@ class ActionLinkForm extends EntityForm {
       '#options_element_type' => 'radios',
     ];
 
-    $output_plugin_definitions = \Drupal::service('plugin.manager.action_link_output')->getApplicableDefinitions($action_link);
+
+    // TODO: not getting applicables after ajax on new form. WTF?
+    // See https://www.drupal.org/project/drupal/issues/3450152
+    if ($action_link->get('plugin_id')) {
+      $output_plugin_definitions = \Drupal::service('plugin.manager.action_link_output')->getApplicableDefinitions($action_link);
+    }
+    else {
+      $output_plugin_definitions = [];
+    }
+
     $form['output'] = [
       '#type' => 'details',
       '#tree' => TRUE,
