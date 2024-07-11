@@ -163,7 +163,7 @@ class ActionLinkForm extends EntityForm {
       $this->messenger()->addStatus($this->t('The action link %name has been added.', $t_args));
     }
 
-    // $form_state->setRedirectUrl($this->entity->toUrl('collection'));
+    $form_state->setRedirectUrl($this->entity->toUrl('collection'));
 
     return $status;
   }
