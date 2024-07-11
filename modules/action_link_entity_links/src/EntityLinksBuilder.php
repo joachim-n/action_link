@@ -101,7 +101,8 @@ class EntityLinksBuilder {
     // Our links have a cache dependency on the list of action link entities, as
     // if an action link entity is added, deleted, or updated, the list of links
     // we return here must change.
-    // TODO argh that is getting put on ALL links! can that be done differently? maybe not? dunno!
+    // This cacheability will bubble to all of the entity links, but at least
+    // a dependency on config entities is unlikely to change often.
     $cacheable_metadata = new CacheableMetadata();
     $cacheable_metadata->setCacheTags($this->entityTypeManager->getDefinition('action_link')->getListCacheTags());
     \Drupal::service('renderer')->addCacheableDependency($links, $cacheable_metadata);
