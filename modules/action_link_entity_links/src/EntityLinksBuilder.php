@@ -52,7 +52,19 @@ class EntityLinksBuilder {
 
     /** @var \Drupal\action_link\Entity\ActionLinkInterface $action_link_entity */
     foreach ($action_link_entities as $action_link_id => $action_link_entity) {
-      foreach ($action_link_entity->getStateActionPlugin()->getDirections() as $direction => $label) {
+      $state_action_plugin = $action_link_entity->getStateActionPlugin();
+
+      // Check operability. For action links that target entities (which is what
+      // we are dealing with here), the state action plugin's checkOperability()
+      // will check the entity bundle.
+      // If the operability is based on a config field being present, we don't
+      // have an implicit cache dependency, but changing fields on an entity
+      // type will invalidate all cache tags for that entity type anyway.
+      if (!$state_action_plugin->checkOperability($action_link_entity, $entity)) {
+        continue;
+      }
+
+      foreach ($state_action_plugin->getDirections() as $direction => $label) {
         // theme_links are an abomination but we can use a lazy builder so the
         // poor cacheability of our action links doesn't pollute all of the
         // links.
