@@ -44,6 +44,19 @@ class EntityLinksBuilder {
    *   The context array for the hook.
    */
   public function entityLinksAlter(array &$links, ContentEntityInterface $entity, array &$context) {
+    // The entity links have a cache dependency on the list of action link
+    // entities, as if an action link entity is added, deleted, or updated, the
+    // list of links we return here must change. We still add this cache
+    // dependency even if no action links use the entity links output plugin, as
+    // if an action link is edited to use it, the links we set here will
+    // change.
+    $cacheable_metadata = new CacheableMetadata();
+    $cacheable_metadata->setCacheTags($this->entityTypeManager->getDefinition('action_link')->getListCacheTags());
+    // This cacheability will bubble to all of the entity links, but at least
+    // a dependency on config entities is unlikely to change often.
+    // this needs to be added in ALL cases! even no AL entities! as editing one would change this.
+    \Drupal::service('renderer')->addCacheableDependency($links, $cacheable_metadata);
+
     $action_link_entities = $this->entityTypeManager->getStorage('action_link')->loadByUsingOutput('entity_links');
 
     if (empty($action_link_entities)) {
@@ -109,15 +122,6 @@ class EntityLinksBuilder {
       }
     }
 
-
-    // Our links have a cache dependency on the list of action link entities, as
-    // if an action link entity is added, deleted, or updated, the list of links
-    // we return here must change.
-    // This cacheability will bubble to all of the entity links, but at least
-    // a dependency on config entities is unlikely to change often.
-    $cacheable_metadata = new CacheableMetadata();
-    $cacheable_metadata->setCacheTags($this->entityTypeManager->getDefinition('action_link')->getListCacheTags());
-    \Drupal::service('renderer')->addCacheableDependency($links, $cacheable_metadata);
     if (!empty($action_link_links)) {
       $links['action_link'] = [
         '#theme' => 'links__node__action_link',
