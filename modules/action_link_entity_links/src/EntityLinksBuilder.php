@@ -10,7 +10,7 @@ use Drupal\Core\Render\Element;
 use Drupal\Core\Security\Attribute\TrustedCallback;
 
 /**
- * TODO: class docs.
+ * Builds entity links for hook_node_links_alter() / hook_comment_links_alter().
  */
 class EntityLinksBuilder {
 
@@ -36,9 +36,12 @@ class EntityLinksBuilder {
   /**
    * Delegate for hook_node_links_alter() / hook_comment_links_alter()/
    *
-   * @param array $links
+   * @param array &$links
+   *   The array of links.
    * @param \Drupal\Core\Entity\ContentEntityInterface $entity
+   *   The entity the links are on.
    * @param array $context
+   *   The context array for the hook.
    */
   public function entityLinksAlter(array &$links, ContentEntityInterface $entity, array &$context) {
     $action_link_entities = $this->entityTypeManager->getStorage('action_link')->loadByUsingOutput('entity_links');
