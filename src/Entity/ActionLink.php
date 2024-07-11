@@ -193,7 +193,7 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
    *
    * @var array
    */
-  protected $output;
+  protected $output = [];
 
   /**
    * {@inheritdoc}
