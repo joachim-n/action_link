@@ -46,6 +46,10 @@ class EntityLinksBuilder {
   public function entityLinksAlter(array &$links, ContentEntityInterface $entity, array &$context) {
     $action_link_entities = $this->entityTypeManager->getStorage('action_link')->loadByUsingOutput('entity_links');
 
+    if (empty($action_link_entities)) {
+      return;
+    }
+
     $action_link_links = [];
 
     $links['#attached'] ??= [];
