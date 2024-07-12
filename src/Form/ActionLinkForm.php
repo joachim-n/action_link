@@ -85,6 +85,7 @@ class ActionLinkForm extends EntityForm {
       '#type' => 'details',
       '#tree' => TRUE,
       '#title' => $this->t('Output locations'),
+      '#description' => $this->t('Configure places where links are output. These will use the link style set above unless they are configured to override it. Action links can also be output directly in render arrays.'),
       '#open' => TRUE,
       '#ajax' => [
         'updated_by' => [
