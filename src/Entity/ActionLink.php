@@ -247,6 +247,8 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
    */
   public function getPluginCollections() {
     $collections = [];
+    // Urgh yes this is not the right way of using this method, but things like
+    // AJAX break.
     if ($this->getStateActionPluginCollection()) {
       $collections['plugin_config'] = $this->getStateActionPluginCollection();
     }
