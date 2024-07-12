@@ -86,7 +86,7 @@ action_link.action_link_geometry.inc_dec:
               type: label
               message: 'Message'
 
-# Schemas for action link plugins.
+# State action plugins.
 action_link.action_link_plugin.boolean_field:
   type: mapping
   mapping:
