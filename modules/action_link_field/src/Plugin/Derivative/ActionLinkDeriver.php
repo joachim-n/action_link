@@ -54,6 +54,7 @@ class ActionLinkDeriver extends DeriverBase implements ContainerDeriverInterface
     $action_link_entities = $this->entityTypeManager->getStorage('action_link')->loadMultiple();
     /** @var \Drupal\action_link\Entity\ActionLinkInterface $action_link_entity */
     foreach ($action_link_entities as $action_link_entity_id => $action_link_entity) {
+      // TODO convert this to new setting!
       $computed_field_setting = $action_link_entity->getThirdPartySetting('action_link_field', 'computed_field', FALSE);
       if (!$computed_field_setting) {
         continue;
