@@ -72,7 +72,8 @@ class ActionLinkForm extends EntityForm {
     ];
 
 
-    // TODO: not getting applicables after ajax on new form. WTF?
+    // @todo Not getting applicable output options on a form for a new entity
+    // after the AJAX update for the action link type.
     // See https://www.drupal.org/project/drupal/issues/3450152
     if ($action_link->get('plugin_id')) {
       $output_plugin_definitions = \Drupal::service('plugin.manager.action_link_output')->getApplicableDefinitions($action_link);
