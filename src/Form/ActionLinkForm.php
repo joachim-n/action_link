@@ -84,7 +84,7 @@ class ActionLinkForm extends EntityForm {
     $form['output'] = [
       '#type' => 'details',
       '#tree' => TRUE,
-      '#title' => $this->t('Output locations') . time() . $action_link->get('plugin_id'),
+      '#title' => $this->t('Output locations'),
       '#open' => TRUE,
       '#ajax' => [
         'updated_by' => [
@@ -146,6 +146,7 @@ class ActionLinkForm extends EntityForm {
         'settings' => [],
       ];
     }
+    dsm($output_value);
     $entity->set('output', $output_value);
   }
 
