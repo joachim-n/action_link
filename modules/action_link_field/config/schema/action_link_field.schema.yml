@@ -14,6 +14,7 @@ field.formatter.settings.action_linkset_nojs:
   mapping: {  }
 
 # @todo This is wrong but rabbithole.
+# TODO REMOVE
 action_link.action_link.*.third_party_settings.action_link_field:
   type: mapping
   label: 'Action link field settings'
@@ -21,3 +22,6 @@ action_link.action_link.*.third_party_settings.action_link_field:
     computed_field:
       type: bool
       label: Shows as computed field
+
+# Schemas for action link output plugins.
+# action_link.action_link_output_plugin. ?? // no params!
