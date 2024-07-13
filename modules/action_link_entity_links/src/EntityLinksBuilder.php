@@ -14,6 +14,8 @@ use Drupal\Core\Security\Attribute\TrustedCallback;
  */
 class EntityLinksBuilder {
 
+  protected $actionLinksBuild = [];
+
   /**
    * The entity type manager.
    *
@@ -150,19 +152,39 @@ class EntityLinksBuilder {
 
     $state_action_plugin = $action_link_entity->getStateActionPlugin();
 
-    // THIS IS BAD because we're building all links, using a LB for EACH link - ok so far
-    // BUT THEN calling buildSingleLink() which SECRETLY BUILDS ALL LINKS.
-    // So calling n^2 links for n links!
-    $action_link_build = $state_action_plugin->buildSingleLink(
-      $action_link_entity,
-      $direction,
-      $user,
-      [
-        'entity' => $entity->id(),
-      ],
-    );
+    // Get all the directions for this action link if we haven't already, and
+    // cache them locally. This is because calling
+    // \Drupal\action_link\Plugin\StateAction\StateActionInterface::buildSingleLink()
+    // repeatedly for all directions is not very efficient: see that method's
+    // documentation.
+    if (!isset($this->actionLinksBuild[$entity_type_id][$entity_id][$action_link_id][$direction])) {
+      // DOING! document
+      // TODO: THIS IS BAD because we're building all links, using a LB for EACH link - ok so far
+      // BUT THEN calling buildSingleLink() which SECRETLY BUILDS ALL LINKS.
+      // So calling n^2 links for n links!
+      // ok it's not THAT BAD -- it doesn't build all links! But still, lots of calls.
+      // because there is validation, access check, ANOTHER call to operability
+      // could we instead call buildLinkArray() and statically cache the links??
+      $this->actionLinksBuild[$entity_type_id][$entity_id][$action_link_id] = $state_action_plugin->buildLinkArray(
+        $action_link_entity,
+        $user,
+        [
+          'entity' => $entity->id(),
+        ],
+      );
+    }
 
-    return $action_link_build;
+    // Might not have the direction if no access etc!
+    if (isset($this->actionLinksBuild[$entity_type_id][$entity_id][$action_link_id][$direction])) {
+      $build = $this->actionLinksBuild[$entity_type_id][$entity_id][$action_link_id][$direction];
+
+      // Move the attached items, same as buildSingleLink() does.
+      $build['#attached'] = $this->actionLinksBuild[$entity_type_id][$entity_id][$action_link_id]['#attached'] ?? [];
+    }
+    else {
+      $build = [];
+    }
+    return $build;
   }
 
 }
