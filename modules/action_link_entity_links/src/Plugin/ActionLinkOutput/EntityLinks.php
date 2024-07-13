@@ -23,7 +23,7 @@ class EntityLinks extends ActionLinkOutputBase {
   /**
    * {@inheritdoc}
    */
-  public static function applies(ActionLinkInterface $action_link): bool {
+  public static function appliesToActionLink(ActionLinkInterface $action_link): bool {
     $state_action_plugin = $action_link->getStateActionPlugin();
 
     if (!$state_action_plugin instanceof EntityActionLinkInterface) {

@@ -21,6 +21,6 @@ interface ActionLinkOutputInterface extends PluginInspectionInterface, Derivativ
    *   TRUE if the output plugin can be used with the given action link entity,
    *   FALSE otherwise.
    */
-  public static function applies(ActionLinkInterface $action_link): bool;
+  public static function appliesToActionLink(ActionLinkInterface $action_link): bool;
 
 }

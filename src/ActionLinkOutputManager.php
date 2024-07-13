@@ -61,7 +61,7 @@ class ActionLinkOutputManager extends DefaultPluginManager {
 
     return array_filter(
       $this->getDefinitions(),
-      fn ($definition) => $definition['class']::applies($action_link)
+      fn ($definition) => $definition['class']::appliesToActionLink($action_link)
     );
   }
 
