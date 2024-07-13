@@ -14,6 +14,11 @@ use Drupal\Core\Security\Attribute\TrustedCallback;
  */
 class EntityLinksBuilder {
 
+  /**
+   * Cached render arrays for action link directions.
+   *
+   * @var array
+   */
   protected $actionLinksBuild = [];
 
   /**
@@ -158,13 +163,6 @@ class EntityLinksBuilder {
     // repeatedly for all directions is not very efficient: see that method's
     // documentation.
     if (!isset($this->actionLinksBuild[$entity_type_id][$entity_id][$action_link_id][$direction])) {
-      // DOING! document
-      // TODO: THIS IS BAD because we're building all links, using a LB for EACH link - ok so far
-      // BUT THEN calling buildSingleLink() which SECRETLY BUILDS ALL LINKS.
-      // So calling n^2 links for n links!
-      // ok it's not THAT BAD -- it doesn't build all links! But still, lots of calls.
-      // because there is validation, access check, ANOTHER call to operability
-      // could we instead call buildLinkArray() and statically cache the links??
       $this->actionLinksBuild[$entity_type_id][$entity_id][$action_link_id] = $state_action_plugin->buildLinkArray(
         $action_link_entity,
         $user,
@@ -174,7 +172,8 @@ class EntityLinksBuilder {
       );
     }
 
-    // Might not have the direction if no access etc!
+    // We still need to check the link is present, as the direction might not
+    // be reachable.
     if (isset($this->actionLinksBuild[$entity_type_id][$entity_id][$action_link_id][$direction])) {
       $build = $this->actionLinksBuild[$entity_type_id][$entity_id][$action_link_id][$direction];
 
