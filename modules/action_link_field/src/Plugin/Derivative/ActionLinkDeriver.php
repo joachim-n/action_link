@@ -51,15 +51,9 @@ class ActionLinkDeriver extends DeriverBase implements ContainerDeriverInterface
   public function getDerivativeDefinitions($base_plugin_definition) {
     $this->derivatives = [];
 
-    $action_link_entities = $this->entityTypeManager->getStorage('action_link')->loadMultiple();
+    $action_link_entities = $this->entityTypeManager->getStorage('action_link')->loadByUsingOutput('computed_field');
     /** @var \Drupal\action_link\Entity\ActionLinkInterface $action_link_entity */
     foreach ($action_link_entities as $action_link_entity_id => $action_link_entity) {
-      // TODO convert this to new setting!
-      $computed_field_setting = $action_link_entity->getThirdPartySetting('action_link_field', 'computed_field', FALSE);
-      if (!$computed_field_setting) {
-        continue;
-      }
-
       $action_link_state_action_plugin = $action_link_entity->getStateActionPlugin();
 
       if (empty($action_link_state_action_plugin->getConfiguration()['entity_type_id'])) {
