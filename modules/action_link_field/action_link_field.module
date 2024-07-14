@@ -8,7 +8,6 @@
 use Drupal\action_link\Plugin\StateAction\EntityFieldStateActionBase;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\Form\FormStateInterface;
 
 /**
  * Implements hook_ENTITY_TYPE_insert(): action_link
