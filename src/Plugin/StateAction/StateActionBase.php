@@ -182,7 +182,22 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
     $directions = $this->getDirections();
     $direction_array = [$direction => $directions[$direction]];
 
-    return $this->doBuildLinkArray($action_link, $user, $direction_array, $scalar_parameters);
+    // Bit of a hack: get a link array for one direction and extract the render
+    // array for that direction. It's not ideal, but changing this would mean
+    // ActionLinkStyleInterface::alterLinksBuild() having to work with two
+    // possible structures which would be uglier.
+    $link_array = $this->doBuildLinkArray($action_link, $user, $direction_array, $scalar_parameters);
+
+    if (!isset($link_array[$direction])) {
+      $build = [];
+    }
+    else {
+      $build = $link_array[$direction];
+
+      $build['#attached'] = $link_array['#attached'] ?? [];
+    }
+
+    return $build;
   }
 
   /**

@@ -182,7 +182,9 @@ class ActionLinkset extends RenderElement {
     }
 
     if ($direction) {
-      return $state_action_plugin->buildSingleLink($action_link, $direction, $user, $scalar_dynamic_parameters);
+      return [
+        $direction => $state_action_plugin->buildSingleLink($action_link, $direction, $user, $scalar_dynamic_parameters),
+      ];
     }
     else {
       return $state_action_plugin->buildLinkSet($action_link, $user, $scalar_dynamic_parameters);
