@@ -1,0 +1,6 @@
+name: 'Action Link Entity Links'
+type: module
+description: 'Outputs action links in node and comment entity links.'
+core_version_requirement: '^9 || ^10'
+dependencies:
+  - action_link

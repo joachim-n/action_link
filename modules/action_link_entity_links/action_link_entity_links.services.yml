@@ -1,0 +1,4 @@
+services:
+  action_link_entity_links.builder:
+    class: Drupal\action_link_entity_links\EntityLinksBuilder
+    arguments: ['@entity_type.manager']

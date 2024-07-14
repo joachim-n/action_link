@@ -98,6 +98,7 @@ use Drupal\Core\Session\AccountInterface;
  *       "default" = "Drupal\action_link\Form\ActionLinkForm",
  *       "delete" = "Drupal\Core\Entity\EntityDeleteForm",
  *     },
+ *     "storage" = "Drupal\action_link\Entity\Handler\ActionLinkStorage",
  *     "list_builder" = "Drupal\action_link\Entity\Handler\ActionLinkListBuilder",
  *   },
  *   admin_permission = "administer action_link entities",
@@ -111,6 +112,7 @@ use Drupal\Core\Session\AccountInterface;
  *     "plugin_id",
  *     "plugin_config",
  *     "link_style",
+ *     "output",
  *   },
  *   links = {
  *     "add-form" = "/admin/structure/action_link/add",
@@ -182,6 +184,17 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
   protected $linkStylePluginCollection;
 
   /**
+   * Plugin configurations for action link output.
+   *
+   * A numeric array of items. Each item is an array containing keys:
+   *  - plugin_id: The output plugin ID.
+   *  - plugin_config: The plugin configuration.
+   *
+   * @var array
+   */
+  protected $output = [];
+
+  /**
    * {@inheritdoc}
    */
   public function advanceState(AccountInterface $account, string $state, ...$parameters): void {
@@ -233,6 +246,8 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
    */
   public function getPluginCollections() {
     $collections = [];
+    // Urgh yes this is not the right way of using this method, but things like
+    // AJAX break.
     if ($this->getStateActionPluginCollection()) {
       $collections['plugin_config'] = $this->getStateActionPluginCollection();
     }
@@ -275,7 +290,7 @@ class ActionLink extends ConfigEntityBase implements ActionLinkInterface {
     }
 
 
-    if (!$this->linkStylePluginCollection && $this->link_style) {
+    if (empty($this->linkStylePluginCollection) && $this->link_style) {
       $link_style_to_use = $this->link_style_override ?? $this->link_style;
 
       $this->linkStylePluginCollection = new DefaultSingleLazyPluginCollection(

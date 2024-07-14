@@ -94,6 +94,18 @@ abstract class EntityFieldStateActionBase extends StateActionBase implements Con
   /**
    * {@inheritdoc}
    */
+  public function setConfiguration(array $configuration) {
+    if (isset($configuration['entity_type_field'])) {
+      $configuration['entity_type_id'] ??= $configuration['entity_type_field']['entity_type_id'] ?? NULL;
+      $configuration['field'] ??= $configuration['entity_type_field']['field'] ?? NULL;
+    }
+
+    parent::setConfiguration($configuration);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function buildConfigurationForm(array $element, FormStateInterface $form_state) {
     $element = parent::buildConfigurationForm($element, $form_state);
 
@@ -253,6 +265,12 @@ abstract class EntityFieldStateActionBase extends StateActionBase implements Con
   public function checkOperability(ActionLinkInterface $action_link, EntityInterface $entity = NULL): bool {
     // Fail operability if the action link's affected field is empty.
     $field_name = $this->configuration['field'];
+
+    // For config and bundle fields, an entity might not have the field on its
+    // bundle.
+    if (!$entity->hasField($field_name)) {
+      return FALSE;
+    }
 
     if ($entity->get($field_name)->isEmpty()) {
       return FALSE;

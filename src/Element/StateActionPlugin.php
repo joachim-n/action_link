@@ -101,6 +101,10 @@ class StateActionPlugin extends FormElement {
           ],
         ],
       ],
+      // I have no idea if this even helps at all.
+      '#limit_validation_errors' => [
+        $element['#array_parents'],
+      ],
     ];
 
     // Non-JS support.

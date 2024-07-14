@@ -18,6 +18,19 @@ action_link.action_link.*:
     link_style:
       type: string
       label: 'Link style'
+    output:
+      type: sequence
+      label: 'Output'
+      sequence:
+        type: mapping
+        label: 'Output'
+        mapping:
+          plugin_id:
+            type: string
+            label: 'Plugin ID'
+          plugin_config:
+            type: 'action_link.action_link_output_plugin.[%parent.plugin_id]'
+            label: 'Plugin configuration'
 
 # Texts schema for toggle geometry.
 # @see \Drupal\action_link\Plugin\StateAction\ToggleGeometryTrait
@@ -73,6 +86,7 @@ action_link.action_link_geometry.inc_dec:
               type: label
               message: 'Message'
 
+# State action plugins.
 action_link.action_link_plugin.boolean_field:
   type: mapping
   mapping:
@@ -126,3 +140,8 @@ action_link.action_link_plugin.date_field:
       label: 'Step'
     texts:
       type: action_link.action_link_geometry.inc_dec
+
+# Action link output plugins.
+action_link.action_link_output_plugin.*:
+  type: mapping
+  mapping: {}

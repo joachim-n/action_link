@@ -12,7 +12,9 @@ page reload, or can reload the page.
 
 ## Requirements
 
-This module requires no modules outside of Drupal core.
+This module requires the following modules:
+
+- [Declarative Form Ajax](https://www.drupal.org/project/declarative_form_ajax)
 
 ### Optional modules
 

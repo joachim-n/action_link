@@ -2,9 +2,11 @@
 
 namespace Drupal\action_link\Form;
 
+use Drupal\action_link\Element\StateActionPlugin;
 use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\declarative_form_ajax\FormAjax;
 
 /**
  * Provides the default form handler for the Action Link entity.
@@ -66,6 +68,54 @@ class ActionLinkForm extends EntityForm {
       '#options_element_type' => 'radios',
     ];
 
+
+    // @todo Not getting applicable output options on a form for a new entity
+    // after the AJAX update for the action link type.
+    // See https://www.drupal.org/project/drupal/issues/3450152
+    if ($action_link->get('plugin_id')) {
+      $output_plugin_definitions = \Drupal::service('plugin.manager.action_link_output')->getApplicableDefinitions($action_link);
+    }
+    else {
+      $output_plugin_definitions = [];
+    }
+
+    $form['output'] = [
+      '#type' => 'details',
+      '#tree' => TRUE,
+      '#title' => $this->t('Output locations'),
+      '#description' => $this->t('Configure places where links are output. These will use the link style set above unless they are configured to override it. Action links can also be output directly in render arrays.'),
+      '#open' => TRUE,
+      '#ajax' => [
+        'updated_by' => [
+          ['plugin', 'container', 'plugin_id'],
+          ['plugin', 'container', 'plugin_configuration', 'entity_type_field', 'container', 'entity_type_id'],
+        ],
+      ]
+    ];
+
+    if ($output_plugin_definitions) {
+      $default_values = [];
+      foreach ($action_link->get('output') as $output_item) {
+        $default_values[$output_item['plugin_id']] = TRUE;
+      }
+
+      foreach ($output_plugin_definitions as $output_plugin_id => $output_plugin_definition) {
+        $form['output'][$output_plugin_id] = [
+          '#type' => 'checkbox',
+          '#title' => $output_plugin_definition['label'],
+          '#description' => $output_plugin_definition['description'],
+          '#default_value' => isset($default_values[$output_plugin_id]),
+        ];
+      }
+    }
+    else {
+      $form['output']['no_plugins'] = [
+        '#markup' => $this->t('No ouput location options are available for this action link.'),
+      ];
+    }
+
+    $form['#after_build'][] = FormAjax::class .  '::ajaxAfterBuild';
+
     return $form;
   }
 
@@ -76,9 +126,27 @@ class ActionLinkForm extends EntityForm {
     parent::copyFormValuesToEntity($entity, $form, $form_state);
 
     $entity->set('plugin_id', $form_state->getValue(['plugin', 'plugin_id']));
-    $entity->set('plugin_config', $form_state->getValue(['plugin', 'plugin_configuration']) ?? []);
+    // Getting the crappy 'container' thing here!
+    $plugin_configuration_value = $form_state->getValue(['plugin', 'plugin_configuration'], []);
+
+    // Total hack but I have run out of energy figuring this bug out.
+    if (isset($plugin_configuration_value['entity_type_field'])) {
+      $plugin_configuration_value['entity_type_field'] = $plugin_configuration_value['entity_type_field']['container'];
+    }
+
+    $entity->set('plugin_config', $plugin_configuration_value);
 
     $entity->set('link_style', $form_state->getValue(['link_style']));
+
+    $output_value = [];
+    foreach (array_keys(array_filter($form_state->getValue(['output'], []))) as $output_plugin_id) {
+      $output_value[] = [
+        'plugin_id' => $output_plugin_id,
+        'settings' => [],
+      ];
+    }
+    dsm($output_value);
+    $entity->set('output', $output_value);
   }
 
   /**

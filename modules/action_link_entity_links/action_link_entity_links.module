@@ -1,0 +1,23 @@
+<?php
+
+/**
+ * @file
+ * Contains hook implementations for the Action Link Entity Links module.
+ */
+
+use Drupal\comment\CommentInterface;
+use Drupal\node\NodeInterface;
+
+/**
+ * Implements hook_node_links_alter().
+ */
+function action_link_entity_links_node_links_alter(array &$links, NodeInterface $entity, array &$context) {
+  \Drupal::service('action_link_entity_links.builder')->entityLinksAlter($links, $entity, $context);
+}
+
+/**
+ * Implements hook_comment_links_alter().
+ */
+function action_link_entity_links_comment_links_alter(array &$links, CommentInterface $entity, array &$context) {
+  \Drupal::service('action_link_entity_links.builder')->entityLinksAlter($links, $entity, $context);
+}
