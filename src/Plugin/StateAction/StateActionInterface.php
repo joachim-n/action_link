@@ -58,6 +58,12 @@ interface StateActionInterface extends PluginInspectionInterface, DerivativeInsp
    * uncacheable. In general, you should instead call buildLinkSet() on an
    * action link.
    *
+   * This method should not be called repeatedly to get individual links for all
+   * of an action link's directions. This is because it calls
+   * self::doBuildLinkArray(), which checks operability and access, and those
+   * checks would get repeated for each call. Instead, call self::buildLinkArray()
+   * directly and extract the render array for each link.
+   *
    * @param \Drupal\action_link\Entity\ActionLinkInterface $action_link
    *   The action link entity.
    * @param string $direction
