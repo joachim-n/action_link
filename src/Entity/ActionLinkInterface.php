@@ -206,6 +206,17 @@ interface ActionLinkInterface extends ConfigEntityInterface, EntityWithPluginCol
   public function getLinkStylePlugin(): ActionLinkStyleInterface;
 
   /**
+   * Overrides the link style plugin.
+   *
+   * This allows the link style to be temporarily changed, which allows for
+   * fallbacks and customisations of the ajax link style for different
+   * circumstances.
+   *
+   * @param string $link_style_plugin_id
+   */
+  public function setOverrideLinkStyle(string $link_style_plugin_id);
+
+  /**
    * Defines permissions for the action link.
    *
    * @return array

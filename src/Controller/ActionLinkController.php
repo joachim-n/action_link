@@ -51,6 +51,8 @@ class ActionLinkController {
     // Use the given link style rather than the one configured in the action
     // link entity. This allows for graceful degradation of JS links, and for
     // overriding the action link's configured style in theming.
+    $action_link->setOverrideLinkStyle($link_style);
+
     /** @var \Drupal\action_link\Plugin\ActionLinkStyle\ActionLinkStyleInterface $link_style_plugin */
     $link_style_plugin = \Drupal::service('plugin.manager.action_link_style')->createInstance($link_style);
 
