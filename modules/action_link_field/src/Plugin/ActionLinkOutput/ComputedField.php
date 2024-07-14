@@ -13,7 +13,7 @@ use Drupal\action_link\Plugin\StateAction\EntityActionLinkInterface;
  */
 #[ActionLinkOutput(
   id: "computed_field",
-  label: new TranslatableMarkup("Computed Field"),
+  label: new TranslatableMarkup("Computed field"),
   description: new TranslatableMarkup("Defines a computed field on the entity which shows the action links."),
 )]
 class ComputedField extends ActionLinkOutputBase {
