@@ -5,7 +5,6 @@
  * Contains hook implementations for the Action Link Field module.
  */
 
-use Drupal\action_link\Plugin\StateAction\EntityFieldStateActionBase;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityInterface;
 
