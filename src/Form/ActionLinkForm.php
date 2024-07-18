@@ -142,7 +142,7 @@ class ActionLinkForm extends EntityForm {
     foreach (array_keys(array_filter($form_state->getValue(['output'], []))) as $output_plugin_id) {
       $output_value[] = [
         'plugin_id' => $output_plugin_id,
-        'settings' => [],
+        'plugin_config' => [],
       ];
     }
     dsm($output_value);
