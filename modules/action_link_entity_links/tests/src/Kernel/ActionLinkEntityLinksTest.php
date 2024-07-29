@@ -101,10 +101,7 @@ class ActionLinkEntityLinksTest extends KernelTestBase {
       ],
       'link_style' => 'nojs',
       'output' => [
-        0 => [
-          'plugin_id' => 'entity_links',
-          'plugin_config' => [],
-        ],
+        'entity_links' => [],
       ],
     ]);
     $action_link->save();
@@ -114,6 +111,8 @@ class ActionLinkEntityLinksTest extends KernelTestBase {
    * Tests the action link is shown in the node links.
    */
   public function testNodeEntityLinks() {
+    $this->assertCount(1, $this->entityTypeManager->getStorage('action_link')->loadByUsingOutput('entity_links'));
+
     $node_storage = $this->entityTypeManager->getStorage('node');
 
     // Create a node for which the action link is operable: it is of the bundle

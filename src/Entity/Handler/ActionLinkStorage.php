@@ -24,12 +24,7 @@ class ActionLinkStorage extends ConfigEntityStorage {
     // as the value we are interested in is nested.
     $action_links = $this->loadMultiple();
     return array_filter($action_links, function ($action_link) use ($output_plugin_id) {
-      foreach ($action_link->get('output') as $output) {
-        if ($output['plugin_id'] == $output_plugin_id) {
-          return TRUE;
-        }
-      }
-      return FALSE;
+      return isset($action_link->get('output')[$output_plugin_id]);
     });
   }
 

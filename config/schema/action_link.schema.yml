@@ -22,15 +22,7 @@ action_link.action_link.*:
       type: sequence
       label: 'Output'
       sequence:
-        type: mapping
-        label: 'Output'
-        mapping:
-          plugin_id:
-            type: string
-            label: 'Plugin ID'
-          plugin_config:
-            type: 'action_link.action_link_output_plugin.[%parent.plugin_id]'
-            label: 'Plugin configuration'
+        type: 'action_link.action_link_output_plugin.[%key]'
 
 # Texts schema for toggle geometry.
 # @see \Drupal\action_link\Plugin\StateAction\ToggleGeometryTrait
