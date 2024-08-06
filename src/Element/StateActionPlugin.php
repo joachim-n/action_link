@@ -91,7 +91,7 @@ class StateActionPlugin extends FormElement {
       '#required' => $element['#required'],
       '#default_value' => $selected_plugin_id,
       '#ajax' => [
-        'callback' => get_class() . '::pluginDropdownCallback',
+        'callback' => static::class . '::pluginDropdownCallback',
         'wrapper' => $container_html_id,
         'options' => [
           // Pass the array parents to the AJAX callback in a query parameter,

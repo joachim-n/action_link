@@ -109,7 +109,7 @@ class EntityTypeField extends FormElement {
         [static::class, 'validateEntityType'],
       ],
       '#ajax' => [
-        'callback' => get_class() . '::entityTypeDropdownCallback',
+        'callback' => static::class . '::entityTypeDropdownCallback',
         'wrapper' => $container_html_id,
         'options' => [
           // Pass the array parents to the AJAX callback in a query parameter,
