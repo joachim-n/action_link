@@ -80,7 +80,7 @@ class StateActionPlugin extends FormElement {
     }
     else {
       // If we still don't have anything, use an empty value.
-      $selected_entity_type_id = '';
+      $selected_plugin_id = '';
     }
 
     $element['container']['plugin_id'] = [
