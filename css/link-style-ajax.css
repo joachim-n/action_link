@@ -4,10 +4,21 @@
  *
  * @see action-link.html.twig.
  */
+.action-link {
+  position: relative;
+}
+
 .action-link-ajax-message {
-  display: inline;
-  margin-left: 1.2em;
   animation: action-link-message 3s ease-in-out 1;
+  position: absolute;
+  width: max-content;
+  font-size: .8em;
+  left: 0;
+  top: 1.7em;
+  padding: 0.25em 0.5em;
+  border: 1px solid;
+  background: white;
+  z-index: 1;
 }
 
 @keyframes action-link-message {

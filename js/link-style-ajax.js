@@ -32,7 +32,7 @@
   Drupal.AjaxCommands.prototype.actionLinkAjaxMessage = (ajax, response, status) => {
     if (status === 'success') {
       // Prepare a message element.
-      const para = document.createElement('P');
+      const para = document.createElement('SPAN');
       para.innerText = response.message;
       // Adding this class will initiate a CSS transition.
       para.setAttribute('class', 'action-link-ajax-message');
