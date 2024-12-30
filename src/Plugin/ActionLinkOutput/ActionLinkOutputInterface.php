@@ -8,6 +8,10 @@ use Drupal\Component\Plugin\PluginInspectionInterface;
 
 /**
  * Interface for Action Link Output plugins.
+ *
+ * An Action Link Output plugin provides a place to display an action link.
+ *
+ * An action link can be configured to use one or more output plugins.
  */
 interface ActionLinkOutputInterface extends PluginInspectionInterface, DerivativeInspectionInterface {
 
