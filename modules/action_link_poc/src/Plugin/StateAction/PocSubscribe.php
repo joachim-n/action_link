@@ -38,10 +38,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   directions = {
  *     "toggle" = "toggle",
  *   },
- *   states = {
- *     "sub",
- *     "unsub",
- *   },
  *  )
  */
 class PocSubscribe extends StateActionBase implements ContainerFactoryPluginInterface, ConfigurableInterface, PluginFormInterface {
