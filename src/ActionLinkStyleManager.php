@@ -41,4 +41,11 @@ class ActionLinkStyleManager extends DefaultPluginManager {
     $this->setCacheBackend($cache_backend, 'action_link_style_plugins');
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  protected function getType() {
+    return 'action_link_style';
+  }
+
 }

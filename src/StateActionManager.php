@@ -54,4 +54,11 @@ class StateActionManager extends DefaultPluginManager {
     // - geometry traits need plugin to also implement form interface!
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  protected function getType() {
+    return 'action_link_state_action';
+  }
+
 }
