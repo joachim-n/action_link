@@ -21,6 +21,10 @@ use Drupal\Core\Session\AccountInterface;
  *   directions = {
  *     "toggle" = "toggle",
  *   },
+ *   states = {
+ *     "true",
+ *     "false",
+ *   },
  * )
  */
 class TestDynamicParameters extends StateActionBase {

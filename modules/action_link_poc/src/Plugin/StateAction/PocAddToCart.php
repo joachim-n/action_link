@@ -33,6 +33,7 @@ use Symfony\Component\Routing\Route;
  *     "add" = "add",
  *     "remove" = "remove",
  *   },
+ *   states = {},
  * )
  */
 class PocAddToCart extends StateActionBase implements ContainerFactoryPluginInterface {
