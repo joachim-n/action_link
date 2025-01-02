@@ -5,6 +5,7 @@ namespace Drupal\action_link\Controller;
 use Drupal\action_link\Entity\ActionLinkInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
+use Drupal\Core\EventSubscriber\AjaxResponseSubscriber;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
@@ -42,6 +43,14 @@ class ActionLinkController {
    */
   public function action(Request $request, RouteMatchInterface $route_match, ActionLinkInterface $action_link, string $link_style, string $direction, string $state, UserInterface $user) {
     $state_action_plugin = $action_link->getStateActionPlugin();
+
+    // Graceful degradation: if a link for the 'ajax' style plugin is used with
+    // a non-AJAX request, we handle it as a reload link.
+    // @todo: Remove this when
+    // https://www.drupal.org/project/drupal/issues/2670798 is fixed.
+    if ($link_style == 'ajax' && !$request->get(AjaxResponseSubscriber::AJAX_REQUEST_PARAMETER)) {
+      $link_style = 'nojs';
+    }
 
     // Get the dynamic parameters from the route match. We can't define them in
     // the function signature as this controller callback is shared by all

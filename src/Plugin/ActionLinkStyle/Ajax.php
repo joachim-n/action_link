@@ -80,6 +80,19 @@ class Ajax extends ActionLinkStyleBase implements ContainerFactoryPluginInterfac
    */
   public function alterLinksBuild(array &$build, ActionLinkInterface $action_link, AccountInterface $user, array $named_parameters, array $scalar_parameters) {
     foreach ($build as $direction => $direction_link_build) {
+      // Graceful degradation: change the style plugin in the link URL to 'nojs'
+      // so that if JavaScript is not enabled, the reload page plugin is used
+      // instead. Drupal's AJAX system will replace this path component with
+      // 'ajax' if JavaScript is enabled.
+      // @todo This won't work because the link URL being changed by JavaScript
+      // means that the CSRF token is invalid. Uncomment this when
+      // https://www.drupal.org/project/drupal/issues/2670798 is fixed.
+      // if (isset($build[$direction]['#link']['#url'])) {
+      //   $route_parameters = $build[$direction]['#link']['#url']->getRouteParameters();
+      //   $route_parameters['link_style'] = 'nojs';
+      //   $build[$direction]['#link']['#url']->setRouteParameters($route_parameters);
+      // }
+
       // Add the 'use-ajax' class to the link. This makes core handle the link
       // using a JS request and degrades gracefully to be handled by the nojs
       // link style plugin.
