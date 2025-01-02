@@ -19,6 +19,10 @@ use Symfony\Component\HttpFoundation\Response;
  * Link style which reloads the page.
  *
  * The action link message is shown as a standard Drupal status message.
+ *
+ * The plugin ID 'nojs' is so that core's system for graceful degradation of
+ * AJAX links works automatically to change links that use our 'ajax' plugin
+ * into using this plugin instead.
  */
 #[ActionLinkStyle(
   id: 'nojs',
