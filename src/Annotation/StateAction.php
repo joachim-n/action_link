@@ -61,4 +61,18 @@ class StateAction extends Plugin {
    */
   public $dynamic_parameters = [];
 
+  /**
+   * The states for this plugin, if they are finite and fixed.
+   *
+   * This property may be omitted, in particular it cannot be used in the
+   * following cases:
+   *  - plugins which have dynamic states, which should override
+   *    StateActionInterface::getStates()
+   *  - plugins which have infinite states, which should override
+   *    StateActionInterface::getStateLabel()
+   *
+   * @var array
+   */
+  public $states = [];
+
 }
