@@ -2,7 +2,7 @@
 
 namespace Drupal\action_link;
 
-use Drupal\action_link\Annotation\ActionLinkStyle;
+use Drupal\action_link\Attribute\ActionLinkStyle;
 use Drupal\action_link\Plugin\ActionLinkStyle\ActionLinkStyleInterface;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;

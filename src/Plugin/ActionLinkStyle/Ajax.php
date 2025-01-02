@@ -2,6 +2,8 @@
 
 namespace Drupal\action_link\Plugin\ActionLinkStyle;
 
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\action_link\Attribute\ActionLinkStyle;
 use Drupal\action_link\Ajax\ActionLinkMessageCommand;
 use Drupal\action_link\Entity\ActionLinkInterface;
 use Drupal\Component\Utility\Html;
@@ -24,13 +26,12 @@ use Symfony\Component\HttpFoundation\Response;
  *
  * This gracefully degrades to the Nojs link style if JavaScript is not
  * available.
- *
- * @ActionLinkStyle(
- *   id = "ajax",
- *   label = @Translation("JavaScript"),
- *   description = @Translation("A link which makes an AJAX JavaScript request without reloading the page.")
- * )
  */
+#[ActionLinkStyle(
+  id: 'ajax',
+  label: new TranslatableMarkup('JavaScript'),
+  description: new TranslatableMarkup('A link which makes an AJAX JavaScript request without reloading the page.'),
+)]
 class Ajax extends ActionLinkStyleBase implements ContainerFactoryPluginInterface {
 
   /**

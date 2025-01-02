@@ -2,6 +2,8 @@
 
 namespace Drupal\action_link\Plugin\ActionLinkStyle;
 
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\action_link\Attribute\ActionLinkStyle;
 use Drupal\action_link\Entity\ActionLinkInterface;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
@@ -17,13 +19,12 @@ use Symfony\Component\HttpFoundation\Response;
  * Link style which reloads the page.
  *
  * The action link message is shown as a standard Drupal status message.
- *
- * @ActionLinkStyle(
- *   id = "nojs",
- *   label = @Translation("Reload"),
- *   description = @Translation("A link which makes normal non-JavaScript request which reloads the current page.")
- * )
  */
+#[ActionLinkStyle(
+  id: 'nojs',
+  label: new TranslatableMarkup('Reload'),
+  description: new TranslatableMarkup('A link which makes normal non-JavaScript request which reloads the current page.'),
+)]
 class Nojs extends ActionLinkStyleBase implements ContainerFactoryPluginInterface {
 
   /**

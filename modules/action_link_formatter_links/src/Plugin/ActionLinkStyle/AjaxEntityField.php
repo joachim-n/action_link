@@ -3,6 +3,7 @@
 namespace Drupal\action_link_formatter_links\Plugin\ActionLinkStyle;
 
 use Drupal\action_link\Ajax\ActionLinkMessageCommand;
+use Drupal\action_link\Attribute\ActionLinkStyle;
 use Drupal\action_link\Entity\ActionLinkInterface;
 use Drupal\action_link\Plugin\ActionLinkStyle\Ajax;
 use Drupal\action_link_formatter_links\DisplayBuildAlter;
@@ -27,13 +28,13 @@ use Symfony\Component\HttpFoundation\Request;
  * If the field is output using custom display options, the returned field is
  * rendered using the default display settings, as there is no way to know
  * what custom display settings were used.
- *
- * @ActionLinkStyle(
- *   id = "ajax_entity_field",
- *   label = @Translation("Ajax Entity Field"),
- *   no_ui = TRUE,
- * )
  */
+#[ActionLinkStyle(
+  id: 'ajax_entity_field',
+  label: new \Drupal\Core\StringTranslation\TranslatableMarkup('Ajax Entity Field'),
+  description: new \Drupal\Core\StringTranslation\TranslatableMarkup('Ajax Entity Field'),
+  no_ui: true,
+)]
 class AjaxEntityField extends Ajax {
 
   /**
