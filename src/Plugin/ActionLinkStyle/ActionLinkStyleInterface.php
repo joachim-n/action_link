@@ -55,16 +55,20 @@ interface ActionLinkStyleInterface extends PluginInspectionInterface, Derivative
    *
    * Action link style plugins should produce feedback which either announces
    * success or that the action could not be carried out. The status of this is
-   * given by the $action_completed parameter.
+   * given by the $success parameter.
    *
    * An action not being operable happens typically when the link is out of date
    * and the site no longer in the state that the link's parameters assume.
    * Unlike a denial of access where we fail silently, the user should be shown
    * helpful feedback to explain why the link is not doing what they expect.
    *
-   * @param bool $action_completed
+   * @param bool $success
    *   Whether the action could be completed. If FALSE, this means that the
-   *   action wasn't operable or the target state wasn't reachable.
+   *   action wasn't operable or the target state wasn't reachable. This
+   *   parameter should be used to determine what message to show the user.
+   *   Additionally, if a plugin sets 'handle_state_change: TRUE' in its
+   *   definition, then the value of this parameter must be used to determine
+   *   whether to advance the action state.
    * @param \Symfony\Component\HttpFoundation\Request $request
    *   The request.
    * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
@@ -80,9 +84,9 @@ interface ActionLinkStyleInterface extends PluginInspectionInterface, Derivative
    * @param mixed ...$parameters
    *   Additional parameters specific to the action link plugin.
    *
-   * @return \Symfony\Component\HttpFoundation\Response
-   *   The response.
+   * @return \Symfony\Component\HttpFoundation\Response|array
+   *   The response or a render array to return as a response.
    */
-  public function handleActionRequest(bool $action_completed, Request $request, RouteMatchInterface $route_match, ActionLinkInterface $action_link, string $direction, string $state, UserInterface $user, ...$parameters): Response;
+  public function handleActionRequest(bool $success, Request $request, RouteMatchInterface $route_match, ActionLinkInterface $action_link, string $direction, string $state, UserInterface $user, ...$parameters): Response|array;
 
 }

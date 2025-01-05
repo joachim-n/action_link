@@ -79,7 +79,12 @@ class ActionLinkController {
     $reachable = $action_link->checkReachable($direction, $state, $user, ...$parameters);
 
     if ($operable && $reachable) {
-      $action_link->advanceState($user, $state, ...$parameters);
+      // Advance the state, unless the link style plugin is taking
+      // responsibility for doing that itself.
+      $link_style_plugin_definition = $link_style_plugin->getPluginDefinition();
+      if (!$link_style_plugin_definition['handle_state_change']) {
+        $action_link->advanceState($user, $state, ...$parameters);
+      }
     }
 
     return $link_style_plugin->handleActionRequest(

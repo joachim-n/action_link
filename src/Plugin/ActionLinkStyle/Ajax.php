@@ -108,7 +108,7 @@ class Ajax extends ActionLinkStyleBase implements ContainerFactoryPluginInterfac
   /**
    * {@inheritdoc}
    */
-  public function handleActionRequest(bool $action_completed, Request $request, RouteMatchInterface $route_match, ActionLinkInterface $action_link, string $direction, string $state, UserInterface $user, ...$parameters): Response {
+  public function handleActionRequest(bool $success, Request $request, RouteMatchInterface $route_match, ActionLinkInterface $action_link, string $direction, string $state, UserInterface $user, ...$parameters): Response {
     // Create a new AJAX response.
     $response = new AjaxResponse();
 
@@ -131,7 +131,7 @@ class Ajax extends ActionLinkStyleBase implements ContainerFactoryPluginInterfac
 
     $this->addReplacementsToResponse(
       $response,
-      $action_completed,
+      $success,
       $request,
       $route_match,
       $action_link,
@@ -143,7 +143,7 @@ class Ajax extends ActionLinkStyleBase implements ContainerFactoryPluginInterfac
     );
     $this->addMessageToResponse(
       $response,
-      $action_completed,
+      $success,
       $request,
       $route_match,
       $action_link,
@@ -169,7 +169,7 @@ class Ajax extends ActionLinkStyleBase implements ContainerFactoryPluginInterfac
    * @param \Drupal\Core\Ajax\AjaxResponse $response
    *   The AJAX response that will be returned, to which replacement commands
    *   should be added.
-   * @param bool $action_completed
+   * @param bool $success
    *   Whether the action could be completed. If FALSE, this means that the
    *   action wasn't operable or the target state wasn't reachable.
    * @param \Symfony\Component\HttpFoundation\Request $request
@@ -193,7 +193,7 @@ class Ajax extends ActionLinkStyleBase implements ContainerFactoryPluginInterfac
    */
   protected function addReplacementsToResponse(
     AjaxResponse $response,
-    bool $action_completed,
+    bool $success,
     Request $request,
     RouteMatchInterface $route_match,
     ActionLinkInterface $action_link,
@@ -229,7 +229,7 @@ class Ajax extends ActionLinkStyleBase implements ContainerFactoryPluginInterfac
    * @param \Drupal\Core\Ajax\AjaxResponse $response
    *   The AJAX response that will be returned, to which message commands
    *   should be added.
-   * @param bool $action_completed
+   * @param bool $success
    *   Whether the action could be completed. If FALSE, this means that the
    *   action wasn't operable or the target state wasn't reachable.
    * @param \Symfony\Component\HttpFoundation\Request $request
@@ -253,7 +253,7 @@ class Ajax extends ActionLinkStyleBase implements ContainerFactoryPluginInterfac
    */
   protected function addMessageToResponse(
     AjaxResponse $response,
-    bool $action_completed,
+    bool $success,
     Request $request,
     RouteMatchInterface $route_match,
     ActionLinkInterface $action_link,
@@ -263,7 +263,7 @@ class Ajax extends ActionLinkStyleBase implements ContainerFactoryPluginInterfac
     $raw_dynamic_parameters,
     $dynamic_parameters,
   ): void {
-    if ($action_completed) {
+    if ($success) {
       $message = $action_link->getMessage($direction, $state, ...array_values($dynamic_parameters));
     }
     else {

@@ -111,7 +111,7 @@ class AjaxEntityField extends Ajax {
    */
   protected function addReplacementsToResponse(
     AjaxResponse $response,
-    bool $action_completed,
+    bool $success,
     Request $request,
     RouteMatchInterface $route_match,
     ActionLinkInterface $action_link,
@@ -126,14 +126,14 @@ class AjaxEntityField extends Ajax {
     // It's likely that if the action didn't complete, the displayed value is
     // out of date, but changing that would look weird since we're also
     // telling the user that the link has had no effect.
-    if (!$action_completed) {
+    if (!$success) {
       // Switch the link style so we get the right link link style on the
       // replaced action links.
       $action_link->set('link_style', $this->getPluginId());
 
       parent::addReplacementsToResponse(
         $response,
-        $action_completed,
+        $success,
         $request,
         $route_match,
         $action_link,
@@ -231,7 +231,7 @@ class AjaxEntityField extends Ajax {
    */
   protected function addMessageToResponse(
     AjaxResponse $response,
-    bool $action_completed,
+    bool $success,
     Request $request,
     RouteMatchInterface $route_match,
     ActionLinkInterface $action_link,
@@ -241,7 +241,7 @@ class AjaxEntityField extends Ajax {
     $raw_dynamic_parameters,
     $dynamic_parameters,
   ): void {
-    if ($action_completed) {
+    if ($success) {
       $message = $action_link->getMessage($direction, $state, ...array_values($dynamic_parameters));
     }
     else {
