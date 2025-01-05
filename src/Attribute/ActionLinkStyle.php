@@ -10,9 +10,7 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
  *
  * Plugin namespace: ActionLinkStyle.
  */
-#[\Attribute(
-  \Attribute::TARGET_CLASS,
-)]
+#[\Attribute(\Attribute::TARGET_CLASS)]
 class ActionLinkStyle extends Plugin {
 
   /**
