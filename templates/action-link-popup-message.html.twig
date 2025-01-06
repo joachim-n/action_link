@@ -1,0 +1,32 @@
+{#
+/**
+ * @file
+ * Default theme implementation for an AJAX pop-up message.
+ *
+ * Available variables:
+ * - message: The message to show the user.
+ * - success: A boolean indicating whether the action has been completed or has
+ *   failed.
+ * - action_link: The action link entity.
+ * - direction: The direction.
+ * - state: The target state of the link.
+ * - user: The user the link is for.
+ * - dynamic_parameters: The dynamic parameters.
+ * - attributes: The HTML attributes for the containing element. By default,
+ *   this has the following CSS classes:
+ *   - action-link-ajax-message
+ *   - action-link-ajax-message-id-ACTION_LINK_ENTITY_ID
+ *   - action-link-ajax-message-plugin-STATE_ACTION_PLUGIN_ID
+ *   - action-link-ajax-message-direction-DIRECTION
+ *   - action-link-ajax-message-state-TARGET_STATE
+ *   - action-link-ajax-message-success if a link is shown
+ *   - action-link-ajax-message-failure if there is no link shown
+ *
+ * @ingroup themeable
+ *
+ * @see \Drupal\action_link\Plugin\ActionLinkStyle\Ajax
+ */
+#}
+<span {{ attributes }}>
+  {{ message }}
+</span>

@@ -42,5 +42,17 @@ function action_link_theme($existing, $type, $theme, $path) {
         'attributes' => NULL,
       ],
     ],
+    'action_link_popup_message' => [
+      'variables' => [
+        'message' => '',
+        'success' => NULL,
+        'action_link' => NULL,
+        'direction' => NULL,
+        'state' => NULL,
+        'user' => NULL,
+        'dynamic_parameters' => [],
+        'attributes' => NULL,
+      ],
+    ],
   ];
 }

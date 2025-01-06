@@ -4,16 +4,17 @@ namespace Drupal\action_link\Plugin\ActionLinkStyle;
 
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\action_link\Attribute\ActionLinkStyle;
-use Drupal\action_link\Ajax\ActionLinkMessageCommand;
 use Drupal\action_link\Entity\ActionLinkInterface;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\AppendCommand;
 use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Template\Attribute;
 use Drupal\user\UserInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,6 +27,8 @@ use Symfony\Component\HttpFoundation\Response;
  *
  * This gracefully degrades to the Nojs link style if JavaScript is not
  * available.
+ *
+ * @see templates/action-link-popup-message.html.twig
  */
 #[ActionLinkStyle(
   id: 'ajax',
@@ -271,12 +274,61 @@ class Ajax extends ActionLinkStyleBase implements ContainerFactoryPluginInterfac
     }
 
     if ($message) {
-      $selector = '.' . $this->createCssIdentifier($action_link, $direction, $user, ...array_values($raw_dynamic_parameters));
+      $build = [
+        '#theme' => 'action_link_popup_message',
+        '#message' => $message,
+        '#success' => $success,
+        '#action_link' => $action_link,
+        '#direction' => $direction,
+        '#state' => $state,
+        '#user' => $user,
+        '#dynamic_parameters' => $dynamic_parameters,
+        '#attributes' => new Attribute([
+          'class' => [
+            'action-link-ajax-message',
+            'action-link-ajax-message-id-' . $action_link->id(),
+            'action-link-ajax-message-plugin-' . $this->getPluginId(),
+            'action-link-ajax-message-direction-' . $direction,
+            'action-link-ajax-message-state-' . $state,
+            'action-link-ajax-message-' . ($success ? 'success' : 'failure'),
+          ],
+        ]),
+      ];
+
+      $selector = $this->getMessageCommandSelector($action_link, $direction, $user, $raw_dynamic_parameters, $dynamic_parameters);
 
       // Add a message command to the stack.
-      $message_command = new ActionLinkMessageCommand($selector, $message);
+      $message_command = new AppendCommand(
+        selector: $selector,
+        content: $build,
+      );
       $response->addCommand($message_command);
     }
+  }
+
+  /**
+   * Gets the CSS selector for the AJAX message command.
+   *
+   * @param \Drupal\action_link\Entity\ActionLinkInterface $action_link
+   *   The action link entity.
+   * @param string $direction
+   *   The direction of the link.
+   * @param string $state
+   *   The target state for the action.
+   * @param \Drupal\user\UserInterface $user
+   *   The user to perform the action. This is not necessarily the current user.
+   * @param array $raw_dynamic_parameters
+   *   An array of the raw values of the dynamic parameters for the state action
+   *   plugin, keyed by parameter name.
+   * @param array $dynamic_parameters
+   *   An array of the upcasted values of the dynamic parameters for the state
+   *   action plugin, keyed by parameter name.
+   *
+   * @return string
+   *   The CSS selector for the element on which the message should be appended.
+   */
+  protected function getMessageCommandSelector(ActionLinkInterface $action_link, string $direction, UserInterface $user, $raw_dynamic_parameters, $dynamic_parameters): string {
+    return '.' . $this->createCssIdentifier($action_link, $direction, $user, ...array_values($raw_dynamic_parameters));
   }
 
   /**

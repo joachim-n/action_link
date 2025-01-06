@@ -2,7 +2,6 @@
 
 namespace Drupal\action_link_formatter_links\Plugin\ActionLinkStyle;
 
-use Drupal\action_link\Ajax\ActionLinkMessageCommand;
 use Drupal\action_link\Attribute\ActionLinkStyle;
 use Drupal\action_link\Entity\ActionLinkInterface;
 use Drupal\action_link\Plugin\ActionLinkStyle\Ajax;
@@ -229,42 +228,21 @@ class AjaxEntityField extends Ajax {
   /**
    * {@inheritdoc}
    */
-  protected function addMessageToResponse(
-    AjaxResponse $response,
-    bool $success,
-    Request $request,
-    RouteMatchInterface $route_match,
-    ActionLinkInterface $action_link,
-    string $direction,
-    string $state,
-    UserInterface $user,
-    $raw_dynamic_parameters,
-    $dynamic_parameters,
-  ): void {
-    if ($success) {
-      $message = $action_link->getMessage($direction, $state, ...array_values($dynamic_parameters));
-    }
-    else {
-      $message = $action_link->getFailureMessage($direction, $state, ...array_values($dynamic_parameters));
-    }
+  protected function getMessageCommandSelector(ActionLinkInterface $action_link, string $direction, UserInterface $user, $raw_dynamic_parameters, $dynamic_parameters): string {
+    $entity = $dynamic_parameters['entity'];
+    $field_name = $action_link->getStateActionPlugin()->getTargetFieldName();
+    $delta = 0;
 
-    // Add a message command to the stack.
-    if ($message) {
-      $entity = $dynamic_parameters['entity'];
-      $field_name = $action_link->getStateActionPlugin()->getTargetFieldName();
-      $delta = 0;
+    // Put the message on the specific direction link that was clicked, using
+    // the CSS class that doesn't include the view mode to save having to
+    // add a message for every view mode.
+    $message_selector =
+      '.' .
+      $this->displayBuildAlter->getGenericWrapperCssClass($action_link, $entity, $field_name, $delta) .
+      ' ' .
+      ".action-link-direction-{$direction}";
 
-      // Put the message on the specific direction link that was clicked, using
-      // the CSS class that doesn't include the view mode to save having to
-      // add a message for every view mode.
-      $message_selector =
-        '.' .
-        $this->displayBuildAlter->getGenericWrapperCssClass($action_link, $entity, $field_name, $delta) .
-        ' ' .
-        ".action-link-direction-{$direction}";
-      $message_command = new ActionLinkMessageCommand($message_selector, $message);
-      $response->addCommand($message_command);
-    }
+    return $message_selector;
   }
 
 }
