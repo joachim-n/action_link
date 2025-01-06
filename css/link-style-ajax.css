@@ -9,7 +9,6 @@
 }
 
 .action-link-ajax-message {
-  animation: action-link-message 3s ease-in-out 1;
   position: absolute;
   width: max-content;
   font-size: .8em;
@@ -21,11 +20,35 @@
   z-index: 1;
 }
 
-@keyframes action-link-message {
+.action-link-ajax-message-success {
+  animation: action-link-message-success 3s ease-in-out 1;
+}
+
+@keyframes action-link-message-success {
   0% {
     opacity: 0;
   }
   50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Show a failure message for longer as there might be more text to read. */
+.action-link-ajax-message-failure {
+  animation: action-link-message-failure 10s ease-in-out 1;
+}
+
+@keyframes action-link-message-failure {
+  0% {
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  85% {
     opacity: 1;
   }
   100% {
