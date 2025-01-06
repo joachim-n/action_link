@@ -3,6 +3,7 @@
  * Specific styles for action links.
  *
  * @see action-link.html.twig.
+ * @see action-link-popup-message.html.twig.
  */
 .action-link {
   position: relative;
