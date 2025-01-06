@@ -74,7 +74,7 @@ class AjaxEntityField extends Ajax {
   }
 
   /**
-   * Creates a AjaxEntityField instance.
+   * Creates an AjaxEntityField instance.
    *
    * @param array $configuration
    *   A configuration array containing information about the plugin instance.

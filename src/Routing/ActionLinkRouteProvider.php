@@ -22,7 +22,7 @@ class ActionLinkRouteProvider {
   protected $entityTypeManager;
 
   /**
-   * Creates a RouteProvider instance.
+   * Creates an ActionLinkRouteProvider instance.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.

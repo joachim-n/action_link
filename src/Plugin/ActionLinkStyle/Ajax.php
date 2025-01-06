@@ -54,7 +54,7 @@ class Ajax extends ActionLinkStyleBase implements ContainerFactoryPluginInterfac
   }
 
   /**
-   * Creates a Ajax instance.
+   * Creates an Ajax instance.
    *
    * @param array $configuration
    *   A configuration array containing information about the plugin instance.
