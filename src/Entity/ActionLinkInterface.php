@@ -48,7 +48,9 @@ interface ActionLinkInterface extends ConfigEntityInterface, EntityWithPluginCol
    *   Dynamic parameters specific to the action link's state action plugin.
    *
    * @return array
-   *   A render array of links. This may be empty if no links are available.
+   *   A render array for the single link. This has the same structure as the
+   *   render array returned from buildLinkSet(), but contains only the link for
+   *   the specified direction.
    *
    * @throws \ArgumentCountError
    *   Throws an error if the $parameter don't match up with the dynamic
