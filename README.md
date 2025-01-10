@@ -7,8 +7,14 @@ For example, an action link could toggle a node's published status, or change
 a field value on an entity, or add a product to the user's shopping cart. Custom
 actions can be defined in code with plugins, and customized in the UI.
 
-Action links can be configured to use a JavaScript link which doesn't cause a
-page reload, or can reload the page.
+An action link can be configured to use one of:
+- a JavaScript link which doesn't cause a page reload
+- a normal link which reloads the current page
+- a link which takes the user to a confirmation form, which then returns the
+  user to the original page.
+
+Action links can be output directly in render arrays, or automatically with one
+of this project's submodules.
 
 ## Requirements
 
@@ -32,7 +38,61 @@ information, see
 
 1. Go to Administration › Structure › Action Links.
 2. Click 'Add action link' to create an action link.
-3. Configure permissions to use the action link at the normal permissions page.
+3. Select the action type, and configure other options for the action link.
+4. Configure permissions to use the action link at the normal permissions page.
+
+## Displaying action links
+
+### Render arrays
+
+Action links can be output in any render array as follows:
+
+```
+$build['action_link'] = [
+  '#type' => 'action_linkset',
+  '#action_link' => 'my_action_link',
+  '#dynamic_parameters' => [
+    // Array of dynamic parameter values.
+  ],
+];
+```
+
+This outputs a set of links for all the directions of the action link. A
+directions which is not currently reachable outputs an empty <SPAN>, so that
+an AJAX link's response can populate it with an active link if necessary.
+
+The same render array can also be obtained from the action link entity:
+
+```
+$build['action_link'] = $action_link->buildLinkSet($user, $parameter_1, $parameter_2, ...);
+```
+
+See \Drupal\action_link\Element\ActionLinkset for more details.
+
+### Automatic output
+
+The Action Link Entity Links submodule allows action links that operate on
+nodes or comments to be output automatically in the entity links section of
+those entities.
+
+The Action Link Formatter Links submodule allows action links that target
+entities to be output within the field's formatter.
+
+The Action Link Field submodule allows action links that target entities to be
+output as computed fields on entities.
+
+See the README files of those submodules for more details.
+
+### Theming
+
+A set of action links is themed with the action-linkset.html.twig template, and
+each individual link within that set is themed with the action-link.html.twig
+template.
+
+If the action link uses the AJAX link style, the pop-up message is themed with
+the action-link-popup-message.html.twig template.
+
+See those template files for more details.
 
 ## Developers
 
