@@ -392,6 +392,7 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
       '#theme' => 'action_link',
       '#link' => $link ? $link->toRenderable() : [],
       '#action_link' => $action_link,
+      '#present' => $reachable,
       '#direction' => $direction,
       '#state' => $next_state,
       '#user' => $user,

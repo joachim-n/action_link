@@ -35,6 +35,7 @@ function action_link_theme($existing, $type, $theme, $path) {
       'variables' => [
         'link' => [],
         'action_link' => NULL,
+        'present' => NULL,
         'direction' => NULL,
         'state' => NULL,
         'user' => NULL,
