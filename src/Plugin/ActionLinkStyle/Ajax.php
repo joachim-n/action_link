@@ -81,7 +81,7 @@ class Ajax extends ActionLinkStyleBase implements ContainerFactoryPluginInterfac
   /**
    * {@inheritdoc}
    */
-  public function alterLinksBuild(array &$build, ActionLinkInterface $action_link, AccountInterface $user, array $named_parameters, array $scalar_parameters) {
+  public function alterLinksBuild(array &$build, ActionLinkInterface $action_link, AccountInterface $user, array $dynamic_parameters, array $scalar_parameters) {
     foreach ($build as $direction => $direction_link_build) {
       // Graceful degradation: change the style plugin in the link URL to 'nojs'
       // so that if JavaScript is not enabled, the reload page plugin is used

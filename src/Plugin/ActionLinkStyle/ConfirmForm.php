@@ -104,7 +104,7 @@ class ConfirmForm extends ActionLinkStyleBase implements FormInterface, Containe
   /**
    * {@inheritdoc}
    */
-  public function alterLinksBuild(array &$build, ActionLinkInterface $action_link, AccountInterface $user, array $named_parameters, array $scalar_parameters) {
+  public function alterLinksBuild(array &$build, ActionLinkInterface $action_link, AccountInterface $user, array $dynamic_parameters, array $scalar_parameters) {
     // Add a destination query parameter to links for this plugin, so that the
     // form submission returns to the original page.
     foreach ($build as $direction => $direction_link_build) {

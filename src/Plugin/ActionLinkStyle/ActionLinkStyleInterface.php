@@ -38,13 +38,13 @@ interface ActionLinkStyleInterface extends PluginInspectionInterface, Derivative
    *   The action link entity.
    * @param \Drupal\Core\Session\AccountInterface $user
    *   The user account the links are for.
-   * @param array $named_parameters
+   * @param array $dynamic_parameters
    *   The aditional dynamic parameters specific to the action link's state
    *   action plugin, as upcasted objects. Keys are the parameter names.
    * @param array $scalar_parameters
    *   The raw values of the dynamic parameters.
    */
-  public function alterLinksBuild(array &$build, ActionLinkInterface $action_link, AccountInterface $user, array $named_parameters, array $scalar_parameters);
+  public function alterLinksBuild(array &$build, ActionLinkInterface $action_link, AccountInterface $user, array $dynamic_parameters, array $scalar_parameters);
 
   /**
    * Handle the request for an action link.
