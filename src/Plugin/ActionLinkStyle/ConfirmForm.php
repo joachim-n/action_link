@@ -28,9 +28,9 @@ use Symfony\Component\HttpFoundation\Response;
  * redirected to the original page where they clicked the action link.
  */
 #[ActionLinkStyle(
-  id: 'confirm_form',
+  id: 'confirm_form_page',
   label: new TranslatableMarkup('Confirmation form'),
-  description: new TranslatableMarkup('A link which takes the user to a confirmation form'),
+  description: new TranslatableMarkup('A link which takes the user to a page showing a confirmation form.'),
   handle_state_change: TRUE,
 )]
 class ConfirmForm extends ActionLinkStyleBase implements FormInterface, ContainerFactoryPluginInterface {
