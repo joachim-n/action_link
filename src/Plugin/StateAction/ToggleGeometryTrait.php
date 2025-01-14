@@ -35,7 +35,10 @@ trait ToggleGeometryTrait {
   public function stringsDefaultConfiguration() {
     $defaults = [];
 
-    [$set_state, $unset_state] = $this->getStates();
+    $states = $this->getStates();
+    assert(count($states) == 2, sprintf('Plugin %s has incorrect number of states for use with ToggleGeometryTrait', $this->getPluginId()));
+
+    [$set_state, $unset_state] = $states;
 
     $defaults['texts']['state'][$set_state]['link_label'] = 'Change state';
     $defaults['texts']['state'][$set_state]['message'] = 'Value set to TRUE';
