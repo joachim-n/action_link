@@ -2,6 +2,8 @@
 
 namespace Drupal\action_link_test_plugins\Plugin\StateAction;
 
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\action_link\Attribute\StateAction;
 use Drupal\action_link\Entity\ActionLinkInterface;
 use Drupal\action_link\Plugin\StateAction\StateActionBase;
 use Drupal\Core\Access\AccessResult;
@@ -9,14 +11,13 @@ use Drupal\Core\Session\AccountInterface;
 
 /**
  * Test action which has no directions and no states.
- *
- * @StateAction(
- *   id = "test_null",
- *   label = @Translation("Test Null"),
- *   description = @Translation("Does nothing"),
- *   directions = {},
- * )
  */
+#[StateAction(
+  id: 'test_null',
+  label: new TranslatableMarkup('Test Null'),
+  description: new TranslatableMarkup('Does nothing'),
+  directions: [],
+)]
 class TestNull extends StateActionBase {
 
   /**

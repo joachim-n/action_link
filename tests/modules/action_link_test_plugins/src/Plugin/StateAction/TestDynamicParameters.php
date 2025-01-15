@@ -2,6 +2,8 @@
 
 namespace Drupal\action_link_test_plugins\Plugin\StateAction;
 
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\action_link\Attribute\StateAction;
 use Drupal\action_link\Plugin\StateAction\StateActionBase;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
@@ -11,22 +13,22 @@ use Drupal\Core\Session\AccountInterface;
  *
  * Defines just a single direction, so internally this is actually a 2-state
  * loop rather than a toggle.
- *
- * @StateAction(
- *   id = "test_dynamic_parameters",
- *   label = @Translation("Test dynamic parameters"),
- *   dynamic_parameters = {
- *     "entity"
- *   },
- *   directions = {
- *     "toggle" = "toggle",
- *   },
- *   states = {
- *     "true",
- *     "false",
- *   },
- * )
  */
+#[StateAction(
+  id: 'test_dynamic_parameters',
+  label: new TranslatableMarkup('Test dynamic parameters'),
+  description: new TranslatableMarkup(''),
+  dynamic_parameters: [
+    'entity',
+  ],
+  directions: [
+    'toggle' => 'toggle',
+  ],
+  states: [
+    'true',
+    'false',
+  ],
+)]
 class TestDynamicParameters extends StateActionBase {
 
   /**

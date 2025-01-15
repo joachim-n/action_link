@@ -2,6 +2,8 @@
 
 namespace Drupal\action_link_test_plugins\Plugin\StateAction;
 
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\action_link\Attribute\StateAction;
 use Drupal\action_link\Entity\ActionLinkInterface;
 use Drupal\action_link\Plugin\StateAction\StateActionBase;
 use Drupal\Core\Access\AccessResult;
@@ -9,16 +11,15 @@ use Drupal\Core\Session\AccountInterface;
 
 /**
  * Test plugin which returns operability based on state value.
- *
- * @StateAction(
- *   id = "test_mocked_operability",
- *   label = @Translation("Test mocked operability"),
- *   description = @Translation("Mocked operability"),
- *   directions = {
- *     "change" = "change",
- *   },
- * )
  */
+#[StateAction(
+  id: 'test_mocked_operability',
+  label: new TranslatableMarkup('Test mocked operability'),
+  description: new TranslatableMarkup('Mocked operability'),
+  directions: [
+    'change' => 'change',
+  ],
+)]
 class TestMockedOperability extends StateActionBase {
 
   /**

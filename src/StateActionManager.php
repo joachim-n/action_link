@@ -2,7 +2,7 @@
 
 namespace Drupal\action_link;
 
-use Drupal\action_link\Annotation\StateAction;
+use Drupal\action_link\Attribute\StateAction;
 use Drupal\action_link\Plugin\StateAction\StateActionInterface;
 use Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException;
 use Drupal\Core\Cache\CacheBackendInterface;

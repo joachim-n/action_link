@@ -2,6 +2,8 @@
 
 namespace Drupal\action_link\Plugin\StateAction;
 
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\action_link\Attribute\StateAction;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
@@ -9,20 +11,19 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
  * State action for incrementing or decrementing a numeric field on an entity.
- *
- * @StateAction(
- *   id = "numeric_field",
- *   label = @Translation("Numeric field"),
- *   description = @Translation("Changes the value of a numeric field"),
- *   dynamic_parameters = {
- *     "entity",
- *   },
- *   directions = {
- *     "dec" = "decrease",
- *     "inc" = "increase",
- *   },
- * )
  */
+#[StateAction(
+  id: 'numeric_field',
+  label: new TranslatableMarkup('Numeric field'),
+  description: new TranslatableMarkup('Changes the value of a numeric field'),
+  dynamic_parameters: [
+    'entity',
+  ],
+  directions: [
+    'dec' => 'decrease',
+    'inc' => 'increase',
+  ],
+)]
 class NumericField extends EntityFieldStateActionBase {
 
   use RepeatableGeometryTrait;

@@ -2,6 +2,8 @@
 
 namespace Drupal\action_link\Plugin\StateAction;
 
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\action_link\Attribute\StateAction;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
@@ -11,23 +13,22 @@ use Drupal\Core\Session\AccountInterface;
  *
  * Defines just a single direction, so internally this is actually a 2-state
  * loop rather than a toggle.
- *
- * @StateAction(
- *   id = "boolean_field",
- *   label = @Translation("Boolean field"),
- *   description = @Translation("Action link to control the value of a boolean field."),
- *   dynamic_parameters = {
- *     "entity",
- *   },
- *   directions = {
- *     "toggle" = "toggle",
- *   },
- *   states = {
- *     "true",
- *     "false",
- *   },
- * )
  */
+#[StateAction(
+  id: 'boolean_field',
+  label: new TranslatableMarkup('Boolean field'),
+  description: new TranslatableMarkup('Action link to control the value of a boolean field.'),
+  dynamic_parameters: [
+    'entity',
+  ],
+  directions: [
+    'toggle' => 'toggle',
+  ],
+  states: [
+    'true',
+    'false',
+  ],
+)]
 class BooleanField extends EntityFieldStateActionBase {
 
   use ToggleGeometryTrait;

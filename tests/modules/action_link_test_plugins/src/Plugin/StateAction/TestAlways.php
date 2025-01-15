@@ -2,6 +2,8 @@
 
 namespace Drupal\action_link_test_plugins\Plugin\StateAction;
 
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\action_link\Attribute\StateAction;
 use Drupal\action_link\Entity\ActionLinkInterface;
 use Drupal\action_link\Plugin\StateAction\StateActionBase;
 use Drupal\Core\Access\AccessResult;
@@ -9,16 +11,15 @@ use Drupal\Core\Session\AccountInterface;
 
 /**
  * Test action which is always usable.
- *
- * @StateAction(
- *   id = "test_always",
- *   label = @Translation("Test Always"),
- *   description = @Translation("Test Always"),
- *   directions = {
- *     "change" = "change",
- *   },
- * )
  */
+#[StateAction(
+  id: 'test_always',
+  label: new TranslatableMarkup('Test Always'),
+  description: new TranslatableMarkup('Test Always'),
+  directions: [
+    'change' => 'change',
+  ],
+)]
 class TestAlways extends StateActionBase {
 
   /**

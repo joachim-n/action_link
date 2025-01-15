@@ -2,6 +2,8 @@
 
 namespace Drupal\action_link_test_plugins\Plugin\StateAction;
 
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\action_link\Attribute\StateAction;
 use Drupal\action_link\Entity\ActionLinkInterface;
 use Drupal\action_link\Plugin\StateAction\StateActionBase;
 use Drupal\Core\Access\AccessResult;
@@ -10,16 +12,16 @@ use Drupal\Core\Session\AccountInterface;
 
 /**
  * Test state action for directions.
- *
- * @StateAction(
- *   id = "test_directions",
- *   label = @Translation("Test directions"),
- *   directions = {
- *     "up" = "up",
- *     "down" = "down",
- *   },
- * )
  */
+#[StateAction(
+  id: 'test_directions',
+  label: new TranslatableMarkup('Test directions'),
+  description: new TranslatableMarkup(''),
+  directions: [
+    'up' => 'up',
+    'down' => 'down',
+  ],
+)]
 class TestDirections extends StateActionBase {
 
   /**

@@ -2,6 +2,8 @@
 
 namespace Drupal\action_link_poc\Plugin\StateAction;
 
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\action_link\Attribute\StateAction;
 use Drupal\action_link\DynamicParameterUpcaster;
 use Drupal\action_link\Entity\ActionLinkInterface;
 use Drupal\action_link\Plugin\StateAction\StateActionBase;
@@ -26,24 +28,23 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * the path parameters we need the entity type ID as well as the entity ID. This
  * could be made more elegant with a route enhancer which takes both values in
  * a single path parameter.
- *
- * @StateAction(
- *   id = "poc_subscribe",
- *   label = @Translation("Subscribe (proof-of-concept)"),
- *   description = @Translation("Action link to subscribe to an entity."),
- *   dynamic_parameters = {
- *     "entity_type",
- *     "entity_id",
- *   },
- *   directions = {
- *     "toggle" = "toggle",
- *   },
- *   states = {
- *     "sub",
- *     "unsub",
- *   },
- *  )
  */
+#[StateAction(
+  id: 'poc_subscribe',
+  label: new TranslatableMarkup('Subscribe (proof-of-concept)'),
+  description: new TranslatableMarkup('Action link to subscribe to an entity.'),
+  dynamic_parameters: [
+    'entity_type',
+    'entity_id',
+  ],
+  directions: [
+    'toggle' => 'toggle',
+  ],
+  states: [
+    'sub',
+    'unsub',
+  ],
+)]
 class PocSubscribe extends StateActionBase implements ContainerFactoryPluginInterface, ConfigurableInterface, PluginFormInterface {
 
   use StringTranslationTrait;

@@ -2,6 +2,8 @@
 
 namespace Drupal\action_link_test_plugins\Plugin\StateAction;
 
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\action_link\Attribute\StateAction;
 use Drupal\action_link\Entity\ActionLinkInterface;
 use Drupal\action_link\Plugin\StateAction\StateActionBase;
 use Drupal\Core\Access\AccessResult;
@@ -19,16 +21,15 @@ use Drupal\Core\Session\AccountInterface;
  *
  * When advanceState() is called, the test_mocked_control:set_state state key
  * is set with the new state.
- *
- * @StateAction(
- *   id = "test_mocked_control",
- *   label = @Translation("Test mocked control"),
- *   description = @Translation("Mocked control"),
- *   directions = {
- *     "change" = "change",
- *   },
- * )
  */
+#[StateAction(
+  id: 'test_mocked_control',
+  label: new TranslatableMarkup('Test mocked control'),
+  description: new TranslatableMarkup('Mocked control'),
+  directions: [
+    'change' => 'change',
+  ],
+)]
 class TestMockedControl extends StateActionBase {
 
   /**

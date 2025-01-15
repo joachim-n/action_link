@@ -2,6 +2,8 @@
 
 namespace Drupal\action_link_poc\Plugin\StateAction;
 
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\action_link\Attribute\StateAction;
 use Drupal\action_link\DynamicParameterUpcaster;
 use Drupal\action_link\Entity\ActionLinkInterface;
 use Drupal\action_link\Plugin\StateAction\StateActionBase;
@@ -21,21 +23,19 @@ use Symfony\Component\Routing\Route;
  *
  * The entity parameter would represent the product, but it's not used in the
  * demo logic.
- *
- * @StateAction(
- *   id = "poc_add_to_cart",
- *   label = @Translation("Add to cart (proof-of-concept)"),
- *   description = @Translation("Action link to add a product to a shopping cart."),
- *   dynamic_parameters = {
- *     "entity"
- *   },
- *   directions = {
- *     "add" = "add",
- *     "remove" = "remove",
- *   },
- *   states = {},
- * )
  */
+#[StateAction(
+  id: 'poc_add_to_cart',
+  label: new TranslatableMarkup('Add to cart (proof-of-concept)'),
+  description: new TranslatableMarkup('Action link to add a product to a shopping cart.'),
+  dynamic_parameters: [
+    'entity',
+  ],
+  directions: [
+    'add' => 'add',
+    'remove' => 'remove',
+  ],
+)]
 class PocAddToCart extends StateActionBase implements ContainerFactoryPluginInterface {
 
   use StringTranslationTrait;

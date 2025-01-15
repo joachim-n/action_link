@@ -2,6 +2,8 @@
 
 namespace Drupal\action_link\Plugin\StateAction;
 
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\action_link\Attribute\StateAction;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
@@ -10,20 +12,19 @@ use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
 
 /**
  * State action for incrementing or decrementing a date field on an entity.
- *
- * @StateAction(
- *   id = "date_field",
- *   label = @Translation("Date field"),
- *   description = @Translation("Action link to control the value of a date field."),
- *   dynamic_parameters = {
- *     "entity",
- *   },
- *   directions = {
- *     "dec" = "decrease",
- *     "inc" = "increase",
- *   },
- * )
  */
+#[StateAction(
+  id: 'date_field',
+  label: new TranslatableMarkup('Date field'),
+  description: new TranslatableMarkup('Action link to control the value of a date field.'),
+  dynamic_parameters: [
+    'entity',
+  ],
+  directions: [
+    'dec' => 'decrease',
+    'inc' => 'increase',
+  ],
+)]
 class DateField extends EntityFieldStateActionBase {
 
   use RepeatableGeometryTrait;

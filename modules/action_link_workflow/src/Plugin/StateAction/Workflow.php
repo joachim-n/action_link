@@ -2,6 +2,9 @@
 
 namespace Drupal\action_link_workflow\Plugin\StateAction;
 
+use Drupal\action_link_workflow\Plugin\Derivative\WorkflowActionLinkDeriver;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\action_link\Attribute\StateAction;
 use Drupal\action_link\DynamicParameterUpcaster;
 use Drupal\action_link\Entity\ActionLinkInterface;
 use Drupal\action_link\Plugin\StateAction\StateActionBase;
@@ -19,18 +22,17 @@ use Symfony\Component\Routing\Route;
  *
  * Directions are not declared in the annotation, but are derived from the
  * associated workflow entity's transitions.
- *
- * @StateAction(
- *   id = "workflow",
- *   label = @Translation("Workflow"),
- *   description = @Translation("Workflow"),
- *   directions = {},
- *   dynamic_parameters = {
- *     "entity",
- *   },
- *   deriver = "Drupal\action_link_workflow\Plugin\Derivative\WorkflowActionLinkDeriver"
- * )
  */
+#[StateAction(
+  id: 'workflow',
+  label: new TranslatableMarkup('Workflow'),
+  description: new TranslatableMarkup('Workflow'),
+  directions: [],
+  dynamic_parameters: [
+    'entity',
+  ],
+  deriver: WorkflowActionLinkDeriver::class,
+)]
 class Workflow extends StateActionBase implements ContainerFactoryPluginInterface {
 
   /**

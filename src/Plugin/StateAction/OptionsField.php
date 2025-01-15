@@ -2,6 +2,8 @@
 
 namespace Drupal\action_link\Plugin\StateAction;
 
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\action_link\Attribute\StateAction;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
@@ -9,20 +11,19 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
  * State action for cycling through an options field on an entity.
- *
- * @StateAction(
- *   id = "options_field",
- *   label = @Translation("Options field"),
- *   description = @Translation("Action link to control the value of an options field."),
- *   dynamic_parameters = {
- *     "entity",
- *   },
- *   directions = {
- *     "inc" = "forward",
- *     "dec" = "back",
- *   },
- * )
  */
+#[StateAction(
+  id: 'options_field',
+  label: new TranslatableMarkup('Options field'),
+  description: new TranslatableMarkup('Action link to control the value of an options field.'),
+  dynamic_parameters: [
+    'entity',
+  ],
+  directions: [
+    'inc' => 'forward',
+    'dec' => 'back',
+  ],
+)]
 class OptionsField extends EntityFieldStateActionBase {
 
   use RepeatableGeometryTrait;
