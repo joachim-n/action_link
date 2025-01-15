@@ -5,6 +5,7 @@ namespace Drupal\Tests\action_link\Kernel;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\CsrfAccessCheck;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\EventSubscriber\AjaxResponseSubscriber;
 use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\Tests\user\Traits\UserCreationTrait;
@@ -258,7 +259,13 @@ class ActionLinkEntityFieldKernelTest extends KernelTestBase implements LoggerIn
     $this->assertEquals(TRUE, $node->isPublished());
 
     // Check the action with the Ajax link type.
-    $request = Request::create("/action-link/test_status/ajax/toggle/false/{$user_with_access->id()}/{$node->id()}");
+    $request = Request::create(
+      uri: "/action-link/test_status/ajax/toggle/false/{$user_with_access->id()}/{$node->id()}",
+      // We need to make ActionLinkController think this is an AJAX request.
+      parameters: [
+        AjaxResponseSubscriber::AJAX_REQUEST_PARAMETER => 1,
+      ],
+    );
     $response = $http_kernel->handle($request);
     $this->assertInstanceOf(\Drupal\Core\Ajax\AjaxResponse::class, $response);
     $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
