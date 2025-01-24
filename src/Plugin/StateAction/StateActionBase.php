@@ -153,7 +153,7 @@ abstract class StateActionBase extends PluginBase implements StateActionInterfac
     $directions = $this->getDirections();
 
     $build = [
-      '#theme' => 'action_linkset',
+      '#theme' => 'action_linkset__' . $this->getPluginId() . '__' . $action_link->id(),
       '#links' => $this->doBuildLinkArray($action_link, $user, $directions, $scalar_parameters),
       '#action_link' => $action_link,
       '#user' => $user,
