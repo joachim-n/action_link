@@ -5,7 +5,9 @@ namespace Drupal\action_link\Plugin\StateAction;
 use Drupal\action_link\DynamicParameterUpcaster;
 use Drupal\action_link\Entity\ActionLinkInterface;
 use Drupal\Component\Plugin\ConfigurableInterface;
+use Drupal\Component\Plugin\DependentPluginInterface;
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Config\Entity\ConfigEntityInterface;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -21,7 +23,7 @@ use Symfony\Component\Routing\Route;
  *
  * This expects an 'entity' dynamic parameter.
  */
-abstract class EntityFieldStateActionBase extends StateActionBase implements ConfigurableInterface, PluginFormInterface, ContainerFactoryPluginInterface, EntityActionLinkInterface {
+abstract class EntityFieldStateActionBase extends StateActionBase implements ConfigurableInterface, PluginFormInterface, ContainerFactoryPluginInterface, EntityActionLinkInterface, DependentPluginInterface {
 
   /**
    * The entity type manager.
@@ -365,6 +367,35 @@ abstract class EntityFieldStateActionBase extends StateActionBase implements Con
    */
   public function getTargetFieldName(): string {
     return $this->configuration['field'];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function calculateDependencies() {
+    $dependencies = [];
+
+    if ($this->getTargetEntityTypeId()) {
+      // Depend on the module providing the host entity type.
+      $host_entity_type = $this->entityTypeManager->getDefinition($this->getTargetEntityTypeId());
+      $dependencies['module'][] = $host_entity_type->getProvider();
+
+      if ($this->getTargetFieldName()) {
+        $field_storage_definition = $this->entityFieldManager->getFieldStorageDefinitions($this->getTargetEntityTypeId())[$this->getTargetFieldName()];
+        if ($field_storage_definition instanceof ConfigEntityInterface) {
+          // Depend on the field if it's a config field.
+          $dependencies['config'][] = $field_storage_definition->getConfigDependencyName();
+        }
+        else {
+          // Depend on the provider if it's a code-defined field.
+          if ($provider = $host_entity_type->getProvider()) {
+            $dependencies['module'][] = $provider;
+          }
+        }
+      }
+    }
+
+    return $dependencies;
   }
 
 }

@@ -273,6 +273,18 @@ class ActionLinkEntityFieldKernelTest extends KernelTestBase implements LoggerIn
     $this->assertCount(2, $ajax_commands);
     $this->assertEquals('insert', $ajax_commands[0]['command']);
     $this->assertEquals('.action-link-test-status-toggle-' . $user_with_access->id() . '-' . $node->id(), $ajax_commands[0]['selector']);
+
+    // Clean up and uninstall node module.
+    $node->delete();
+    // This table is needed by user_modules_uninstalled() but not by any of the
+    // other tests, so install it just in time.
+    $this->installSchema('user', 'users_data');
+    $this->container->get('module_installer')->uninstall(['node']);
+
+    // The action link was deleted because it has a dependency on the module
+    // that provides its target entity type.
+    $action_link = $this->reloadEntity($action_link);
+    $this->assertNull($action_link);
   }
 
   /**
@@ -400,6 +412,15 @@ class ActionLinkEntityFieldKernelTest extends KernelTestBase implements LoggerIn
     $this->setCurrentUser($user_with_edit_access);
     $links = $action_link->getStateActionPlugin()->buildLinkArray($action_link, $user_with_edit_access, ...$parameters_combined);
     $this->assertNotEmpty($links);
+
+    // Delete the date field. This also deletes the field storage, which is what
+    // the action link depends on.
+    $date_field_config->delete();
+
+    // The action link was deleted because it has a dependency on the config
+    // field it targets.
+    $action_link = $this->reloadEntity($action_link);
+    $this->assertNull($action_link);
   }
 
   /**
